@@ -43,6 +43,29 @@ LOCK TABLES `academic_rank` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `authority`
+--
+
+DROP TABLE IF EXISTS `authority`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `authority` (
+  `authority_id` int NOT NULL,
+  `title` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`authority_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `authority`
+--
+
+LOCK TABLES `authority` WRITE;
+/*!40000 ALTER TABLE `authority` DISABLE KEYS */;
+/*!40000 ALTER TABLE `authority` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `class`
 --
 
@@ -155,6 +178,58 @@ LOCK TABLES `teaching_staff` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `user`
+--
+
+DROP TABLE IF EXISTS `user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user` (
+  `user_id` int NOT NULL,
+  `username` varchar(45) DEFAULT NULL,
+  `name` varchar(45) DEFAULT NULL,
+  `surname` varchar(45) DEFAULT NULL,
+  `password` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user`
+--
+
+LOCK TABLES `user` WRITE;
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user_authorities`
+--
+
+DROP TABLE IF EXISTS `user_authorities`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user_authorities` (
+  `authority_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  PRIMARY KEY (`authority_id`),
+  KEY `user_id_idx` (`user_id`),
+  CONSTRAINT `authority_id` FOREIGN KEY (`authority_id`) REFERENCES `authority` (`authority_id`),
+  CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_authorities`
+--
+
+LOCK TABLES `user_authorities` WRITE;
+/*!40000 ALTER TABLE `user_authorities` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_authorities` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `workload`
 --
 
@@ -208,4 +283,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-01-05 15:26:20
+-- Dump completed on 2025-01-05 16:03:30
