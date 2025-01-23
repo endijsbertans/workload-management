@@ -22,12 +22,14 @@ co.section AS 'Programmas daļa',
 co.registration_type AS 'Reģistrācija',
 fCourse.faculty_name AS 'Priekšmeta fakultāte',
 fClass.faculty_name AS 'kursa fakultāte',
-cl.program AS 'Programma',
+program AS 'Programma',
 co.study_level AS 'Studiju līmenis',
-cl.name AS 'Grupa semestra grafikam',
+w.group_for_semester AS 'Grupa semestra grafikam',
+-- grupa MANY TO MANY????
+GROUP_CONCAT(class.name SEPARATOR ', ') AS classes,
 w.comments AS 'Komentāri',
 w.budget_position AS 'budžeta pozīcija',
-cl.student_amount AS 'Studentu skaits',
+GROUP_CONCAT(class.student_amount SEPARATOR ', ') AS 'Studentu skaits',
 aStaff.salary AS 'Alga',
 w.industry_coefficiant AS 'Nozares koef.',
 w.salary_per_month AS 'Alga mēnesī',
@@ -37,11 +39,14 @@ w.expected_salary AS 'Algai paredzētais'
 
 FROM workload AS w
 JOIN teaching_staff AS t ON w.teaching_staff_id = t.teaching_staff_id
-JOIN class AS cl ON cl.class_id = w.class_id
 JOIN status_type AS s ON s.status_type_id = w.status_type_id
 JOIN course AS co ON co.course_id = w.course_id
 JOIN academic_rank AS aCourse ON aCourse.academic_rank_id = co.necessary_academic_rank_id
 JOIN academic_rank AS aStaff ON aStaff.academic_rank_id = w.academic_rank_id
 JOIN faculty AS fStaff ON fstaff.faculty_id = t.staff_faculty_id
 JOIN faculty AS fCourse ON fCourse.faculty_id = co.necessary_academic_rank_id
-JOIN faculty AS fClass ON fClass.faculty_id = cl.class_faculty_id
+JOIN class_junction AS classId ON classId.workload_junction_id = w.workload_id
+JOIN class AS class ON class.class_id = classId.class_junction_id
+JOIN faculty AS fClass ON fClass.faculty_id = class.class_faculty_id
+GROUP BY
+w.workload_id
