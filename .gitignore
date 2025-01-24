@@ -1,0 +1,35 @@
+C:\Users\cice3\Desktop\BAKALAURS\Backend\Workload Management\.idea
+/Backend/Workload Management/.mvn/
+/Backend/Workload Management/target/
+/Backend/Workload Management/!.mvn/wrapper/maven-wrapper.jar
+/Backend/Workload Management/!**/src/main/**/target/
+/Backend/Workload Management/**/src/test/**/target/
+/Backend/Workload Management/HELP.md
+
+### STS ###
+/Backend/Workload Management/apt_generated
+/Backend/Workload Management/classpath
+/Backend/Workload Management/factorypath
+/Backend/Workload Management/project
+/Backend/Workload Management/settings
+/Backend/Workload Management/springBeans
+/Backend/Workload Management/sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+/Backend/Workload Management/*.iws
+/Backend/Workload Management/*.iml
+/Backend/Workload Management/*.ipr
+
+### NetBeans ###
+/Backend/Workload Management/nbproject/private/
+/Backend/Workload Management/nbbuild/
+/Backend/Workload Management/dist/
+/Backend/Workload Management/nbdist/
+/Backend/Workload Management/.nb-gradle/
+/Backend/Workload Management/build/
+/Backend/Workload Management/!**/src/main/**/build/
+/Backend/Workload Management/!**/src/test/**/build/
+
+### VS Code ###
+/Backend/Workload Management/.vscode/
