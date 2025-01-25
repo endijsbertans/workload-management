@@ -15,23 +15,24 @@ import java.util.Collection;
 @Setter
 @NoArgsConstructor
 @ToString
-@Table(name = "AuthorityTable")
+@Table(name = "authority")
 @Entity
 public class MyAuthority {
-    @Column(name = "Ida")
+    @Column(name = "authority_id")
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int ida;
 
     @NotNull
     @Pattern(regexp = "[A-Z]{4,8}", message = "Only letters and space")
-    @Column(name = "Title")
+    @Column(name = "authority_title")
     private String title;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "UserAuthorityTable",
-            joinColumns = @JoinColumn(name="Ida"),
-            inverseJoinColumns = @JoinColumn(name = "Idu"))
+    @JoinTable(name = "User_Authority_Table",
+            joinColumns = @JoinColumn(name="ida"),
+            inverseJoinColumns = @JoinColumn(name = "idu"))
     @ToString.Exclude
     private Collection<MyUser> users = new ArrayList<MyUser>();
 

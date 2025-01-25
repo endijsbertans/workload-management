@@ -16,14 +16,14 @@ import java.util.Collection;
 @Setter
 @NoArgsConstructor
 @ToString
-@Table(name="UserTable")
+@Table(name="user")
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class MyUser {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
+    private int id;
 
     @NotNull
     @Pattern(regexp = "[A-Za-z.]+")
