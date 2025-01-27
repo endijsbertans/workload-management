@@ -24,5 +24,7 @@ public class StatusType{
     })
     @Column(name = "status_type_name")
     private String statusTypeName;
-
+    public StatusType(String statusTypeName){
+        this.statusTypeName = statusTypeName;
+    }
 }

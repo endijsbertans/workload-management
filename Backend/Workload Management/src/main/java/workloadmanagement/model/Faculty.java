@@ -32,4 +32,9 @@ public class Faculty {
             @Size(max = 45, message = "{validation.name.size.too_long}")
     })
     private String faculty_full_name;
+
+    public Faculty(String facultyName, String faculty_full_name) {
+        this.facultyName = facultyName;
+        this.faculty_full_name = faculty_full_name;
+    }
 }

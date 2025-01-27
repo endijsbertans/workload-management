@@ -55,4 +55,11 @@ public class AcademicRank {
     @Min(value = 0, message = "cp.too.low")
 
     private BigDecimal salary;
+    public AcademicRank( String rankName, BigDecimal cpForSpring, BigDecimal cpForAutumn, String abbreviation, BigDecimal salary){
+        this.rankName = rankName;
+        this.cpForSpring = cpForSpring;
+        this.cpForAutumn = cpForAutumn;
+        this.abbreviation = abbreviation;
+        this.salary = salary;
+    }
 }

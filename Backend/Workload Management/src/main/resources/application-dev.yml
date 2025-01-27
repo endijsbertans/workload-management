@@ -1,0 +1,38 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/mydatabase
+    username: "myuser"
+    password: "secret"
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  mail:
+    host: localhost
+    port: 1025
+    username: Endijs
+    password: Bertans
+    properties:
+      mail:
+        smtp:
+          trust: '*'
+          auth: true
+          starttls:
+            enable: true
+          connectiontimeout: 5000
+          timeout: 3000
+          write-timeout: 5000
+
+application:
+  security:
+    jwt:
+      secret-key: 92e84894f28a3acd33654f9965bd304e3c113722918863956580dc1e2dd956d63a44c502f355db926184dba089ae666f6a3c4d32b0e64055b415aaf05528f5b6379a149b2db58e992c265ada55e748cedee189e48f36fc532bb3c21625bafce216d6d137303ecd1e1ef484e8853e8f5cd267ab54c7feaf037e650857ea7eb601
+      expiration: 8640000
+
+  mailing:
+    frontend:
+      activation-url: http://localhost:4200/activate-account
+server:
+  port: 8088

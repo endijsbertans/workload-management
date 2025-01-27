@@ -61,4 +61,24 @@ public class Course {
     })
     @Column(name = "section")
     private String section;
+
+    public Course (String courseCode, String courseName, BigDecimal creditPoints, AcademicRank necessaryRankId, String registrationType, int studyLevel, String section){
+        this.courseCode = courseCode;
+        this.courseName = courseName;
+        this.creditPoints = creditPoints;
+        this.necessaryRankId = necessaryRankId;
+        this.registrationType = registrationType;
+        this.studyLevel = studyLevel;
+        this.section = section;
+    }
+    public Course (String courseCode, String courseName, BigDecimal creditPoints, AcademicRank necessaryRankId, String registrationType, String section){
+        this.courseCode = courseCode;
+        this.courseName = courseName;
+        this.creditPoints = creditPoints;
+        this.necessaryRankId = necessaryRankId;
+        this.registrationType = registrationType;
+        this.section = section;
+    }
+
+
 }

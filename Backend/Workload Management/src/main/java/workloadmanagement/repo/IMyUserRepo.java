@@ -1,9 +1,12 @@
 package workloadmanagement.repo;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import workloadmanagement.model.MyUser;
+import workloadmanagement.model.security.MyUser;
+
+import java.util.Optional;
+
 @Repository
-public interface IMyUserRepo extends CrudRepository<MyUser, Integer> {
-    MyUser findByUsername(String username);
+public interface IMyUserRepo extends JpaRepository<MyUser, Integer> {
+    Optional<MyUser> findByEmail(String email);
 }

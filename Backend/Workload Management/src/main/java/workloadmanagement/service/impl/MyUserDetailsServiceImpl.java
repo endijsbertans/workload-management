@@ -1,28 +1,23 @@
 package workloadmanagement.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import workloadmanagement.config.MyUserDetails;
-import workloadmanagement.model.MyUser;
+import workloadmanagement.model.security.MyUser;
 import workloadmanagement.repo.IMyUserRepo;
 
 @Service
+@RequiredArgsConstructor
 public class MyUserDetailsServiceImpl implements UserDetailsService {
-
-    @Autowired
-    private IMyUserRepo userRepo;
+    private final IMyUserRepo myUserRepo;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        MyUser user = userRepo.findByUsername(username);
-
-        if(user == null) throw new UsernameNotFoundException(username + " is not found");
-
-        MyUserDetails userDet = new MyUserDetails(user);
-        return userDet;
+    @Transactional // To load authorities also
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return myUserRepo.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
-
 }

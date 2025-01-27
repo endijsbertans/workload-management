@@ -2,8 +2,9 @@ package workloadmanagement.repo;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import workloadmanagement.model.Class;
+import workloadmanagement.model.MyClass;
+
 
 @Repository
-public interface IClassRepo extends CrudRepository<Class, Integer> {
+public interface IMyClassRepo extends CrudRepository<MyClass, Integer> {
 }
