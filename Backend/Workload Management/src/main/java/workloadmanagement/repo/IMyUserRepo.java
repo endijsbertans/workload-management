@@ -2,7 +2,7 @@ package workloadmanagement.repo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import workloadmanagement.model.security.MyUser;
+import workloadmanagement.security.MyUser;
 
 import java.util.Optional;
 

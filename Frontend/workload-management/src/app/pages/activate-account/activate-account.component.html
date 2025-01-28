@@ -1,0 +1,22 @@
+<div class="container">
+@if (submitted && codeOk) {
+  <div>
+    <p>Tavs profils ir aktivizēts</p>
+    <button (click)="redirectToLogin()"> Pieslēgties</button>
+  </div>
+} @else if(submitted && !codeOk){
+  <h2>{{message}}</h2>
+  <button (click)="onTryAgain()"> Mēģināt velreiz</button>
+
+}@else{
+
+    <h2> Type Your Activation Code</h2>
+    <code-input [isCodeHidden]="false"
+                [codeLength]="6"
+                [code]="'number'"
+                (codeCompleted)="onCodeCompleted($event)">
+
+    </code-input>
+}
+</div>
+

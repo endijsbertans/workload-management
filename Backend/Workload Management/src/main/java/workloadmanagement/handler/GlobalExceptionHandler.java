@@ -28,7 +28,7 @@ public class GlobalExceptionHandler {
                         ExceptionResponse.builder()
                                 .businessErrorCode(ACCOUNT_LOCKED.getCode())
                                 .businessErrorDescription(ACCOUNT_LOCKED.getDescription())
-                                .error(exp.getMessage())
+                                .errorMsg(exp.getMessage())
                                 .build()
                 );
     }
@@ -41,7 +41,7 @@ public class GlobalExceptionHandler {
                         ExceptionResponse.builder()
                                 .businessErrorCode(ACCOUNT_DISABLED.getCode())
                                 .businessErrorDescription(ACCOUNT_DISABLED.getDescription())
-                                .error(exp.getMessage())
+                                .errorMsg(exp.getMessage())
                                 .build()
                 );
     }
@@ -55,7 +55,7 @@ public class GlobalExceptionHandler {
                         ExceptionResponse.builder()
                                 .businessErrorCode(BAD_CREDENTIALS.getCode())
                                 .businessErrorDescription(BAD_CREDENTIALS.getDescription())
-                                .error("Login and / or Password is incorrect")
+                                .errorMsg("Login and / or Password is incorrect")
                                 .build()
                 );
     }
@@ -66,7 +66,7 @@ public class GlobalExceptionHandler {
                 .status(INTERNAL_SERVER_ERROR)
                 .body(
                         ExceptionResponse.builder()
-                                .error(exp.getMessage())
+                                .errorMsg(exp.getMessage())
                                 .build()
                 );
     }
@@ -100,7 +100,7 @@ public class GlobalExceptionHandler {
                 .body(
                         ExceptionResponse.builder()
                                 .businessErrorDescription("Internal error, please contact the admin")
-                                .error(exp.getMessage())
+                                .errorMsg(exp.getMessage())
                                 .build()
                 );
     }

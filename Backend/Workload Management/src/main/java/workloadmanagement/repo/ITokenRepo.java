@@ -1,7 +1,7 @@
 package workloadmanagement.repo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import workloadmanagement.model.security.MyToken;
+import workloadmanagement.security.MyToken;
 
 import java.util.Optional;
 

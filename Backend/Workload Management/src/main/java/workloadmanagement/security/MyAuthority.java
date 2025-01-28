@@ -1,14 +1,13 @@
-package workloadmanagement.model.security;
+package workloadmanagement.security;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.annotation.Resource;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import workloadmanagement.model.security.MyUser;
+
 import java.util.ArrayList;
 import java.util.Collection;
 

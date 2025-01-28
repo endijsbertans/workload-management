@@ -1,17 +1,18 @@
-package workloadmanagement.model;
+package workloadmanagement.teachingstaff;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import workloadmanagement.model.security.MyUser;
+import lombok.*;
+import workloadmanagement.model.AcademicRank;
+import workloadmanagement.model.Faculty;
+import workloadmanagement.security.MyUser;
 
 @Getter
 @Setter
 @ToString
 @Entity
+@AllArgsConstructor
+@Builder
 @NoArgsConstructor
 @Table(name="teaching_staff")
 public class TeachingStaff {
@@ -40,10 +41,7 @@ public class TeachingStaff {
     @JoinColumn(name="staff_academic_rank_id")
     private AcademicRank staffAcademicRankId;
 
-    public TeachingStaff(MyUser user, String positionTitle, Faculty staffFacultyId, AcademicRank staffAcademicRankId){
-        this.user = user;
-        this.positionTitle = positionTitle;
-        this.staffFacultyId = staffFacultyId;
-        this.staffAcademicRankId = staffAcademicRankId;
-    }
+    private String staffPhoto;
+
+
 }

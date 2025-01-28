@@ -3,10 +3,7 @@ package workloadmanagement.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,6 +12,8 @@ import java.util.Collection;
 @Table(name = "academic_class")
 @Getter
 @Setter
+@AllArgsConstructor
+@Builder
 @NoArgsConstructor
 public class MyClass {
     @Id
@@ -43,25 +42,7 @@ public class MyClass {
     private String classYear;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "workload_clases",
-            joinColumns = @JoinColumn(name= "class_id"),
-            inverseJoinColumns = @JoinColumn(name = "workload_id"))
     @ToString.Exclude
     private Collection<Workload> myWorkloads = new ArrayList<>();
-    public MyClass(String className, int studyYear, int studentAmount, Faculty classFacultyId, String classYear){
-        this.className = className;
-        this.studyYear = studyYear;
-        this.studentAmount = studentAmount;
-        this.classFacultyId = classFacultyId;
-        this.classYear = classYear;
-    }
-    public void addWorkload(Workload Tworkload) {
-        if (!myWorkloads.contains(Tworkload))
-            myWorkloads.add(Tworkload);
-    }
 
-    public void removeWorkload(Workload Tworkload) {
-        if (myWorkloads.contains(Tworkload))
-            myWorkloads.remove(Tworkload);
-    }
 }

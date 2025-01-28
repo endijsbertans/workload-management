@@ -1,4 +1,4 @@
-package workloadmanagement.model.security;
+package workloadmanagement.security;
 
 import jakarta.persistence.*;
 import lombok.*;

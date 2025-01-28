@@ -4,10 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+import workloadmanagement.teachingstaff.TeachingStaff;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -17,6 +15,8 @@ import java.util.Collection;
 @Table(name = "workload")
 @Getter
 @Setter
+@AllArgsConstructor
+@Builder
 @NoArgsConstructor
 public class Workload {
     @Id
@@ -121,37 +121,4 @@ public class Workload {
     @ManyToMany(mappedBy = "myWorkloads", fetch = FetchType.EAGER)
     private Collection<MyClass> academicClasses = new ArrayList<MyClass>();
 
-    public void addAcademicClass(MyClass tClass) {
-        if(!academicClasses.contains(tClass))
-            academicClasses.add(tClass);
-    }
-
-    public void removeAcademicClass(MyClass tClass) {
-        if(academicClasses.contains(tClass))
-            academicClasses.remove(tClass);
-    }
-    public Workload(TeachingStaff teachingStaffid, StatusType statusTypeId, String semester, BigDecimal creditPointsPerHour, BigDecimal creditPointsPerGroup, String comments, String includeInBudget, boolean budgetPosition, BigDecimal industryCoefficient, BigDecimal salaryPerMonth, int vacationMonths, int workingMonths, BigDecimal expectedSalary, int groupAmount, BigDecimal cpProportionOnFullTime, BigDecimal contactHours, String program, String groupForSemester, Course courseId, AcademicRank academicRankId,MyClass... a){
-        this.teachingStaffid = teachingStaffid;
-        this.statusTypeId = statusTypeId;
-        this.semester = semester;
-        this.creditPointsPerHour = creditPointsPerHour;
-        this.creditPointsPerGroup = creditPointsPerGroup;
-        this.comments = comments;
-        this.includeInBudget = includeInBudget;
-        this.budgetPosition = budgetPosition;
-        this.industryCoefficient = industryCoefficient;
-        this.salaryPerMonth = salaryPerMonth;
-        this.vacationMonths = vacationMonths;
-        this.workingMonths = workingMonths;
-        this.expectedSalary = expectedSalary;
-        this.groupAmount = groupAmount;
-        this.cpProportionOnFullTime = cpProportionOnFullTime;
-        this.contactHours = contactHours;
-        this.program = program;
-        this.groupForSemester = groupForSemester;
-        this.courseId = courseId;
-        this.academicRankId = academicRankId;
-        for (MyClass tempA : a)
-            addAcademicClass(tempA);
-    }
 }

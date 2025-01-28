@@ -1,4 +1,4 @@
-package workloadmanagement.model.security;
+package workloadmanagement.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

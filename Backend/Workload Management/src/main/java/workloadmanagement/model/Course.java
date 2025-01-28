@@ -5,9 +5,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 
@@ -15,6 +13,8 @@ import java.math.BigDecimal;
 @Table(name = "course")
 @Getter
 @Setter
+@AllArgsConstructor
+@Builder
 @NoArgsConstructor
 public class Course {
 
@@ -61,24 +61,5 @@ public class Course {
     })
     @Column(name = "section")
     private String section;
-
-    public Course (String courseCode, String courseName, BigDecimal creditPoints, AcademicRank necessaryRankId, String registrationType, int studyLevel, String section){
-        this.courseCode = courseCode;
-        this.courseName = courseName;
-        this.creditPoints = creditPoints;
-        this.necessaryRankId = necessaryRankId;
-        this.registrationType = registrationType;
-        this.studyLevel = studyLevel;
-        this.section = section;
-    }
-    public Course (String courseCode, String courseName, BigDecimal creditPoints, AcademicRank necessaryRankId, String registrationType, String section){
-        this.courseCode = courseCode;
-        this.courseName = courseName;
-        this.creditPoints = creditPoints;
-        this.necessaryRankId = necessaryRankId;
-        this.registrationType = registrationType;
-        this.section = section;
-    }
-
 
 }

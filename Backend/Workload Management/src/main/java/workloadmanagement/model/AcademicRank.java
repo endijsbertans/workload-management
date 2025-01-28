@@ -5,9 +5,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 
@@ -15,6 +13,8 @@ import java.math.BigDecimal;
 @Table(name = "academic_rank")
 @Getter
 @Setter
+@AllArgsConstructor
+@Builder
 @NoArgsConstructor
 public class AcademicRank {
     @Id
@@ -55,11 +55,5 @@ public class AcademicRank {
     @Min(value = 0, message = "cp.too.low")
 
     private BigDecimal salary;
-    public AcademicRank( String rankName, BigDecimal cpForSpring, BigDecimal cpForAutumn, String abbreviation, BigDecimal salary){
-        this.rankName = rankName;
-        this.cpForSpring = cpForSpring;
-        this.cpForAutumn = cpForAutumn;
-        this.abbreviation = abbreviation;
-        this.salary = salary;
-    }
+
 }

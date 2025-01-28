@@ -1,7 +1,6 @@
 package workloadmanagement.auth;
 
 import jakarta.mail.MessagingException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -12,10 +11,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import workloadmanagement.email.EmailService;
 import workloadmanagement.email.EmailTemplateName;
-import workloadmanagement.model.security.JwtService;
-import workloadmanagement.model.security.MyToken;
+import workloadmanagement.security.JwtService;
+import workloadmanagement.security.MyToken;
 import workloadmanagement.repo.IMyAuthorityRepo;
-import workloadmanagement.model.security.MyUser;
+import workloadmanagement.security.MyUser;
 import workloadmanagement.repo.IMyUserRepo;
 import workloadmanagement.repo.ITokenRepo;
 
@@ -38,8 +37,7 @@ public class AuthenticationService {
     private String activationUrl;
     public void register(RegistrationRequest request) throws MessagingException {
         var authorities = authorityRepository.findByTitle("USER")
-                //TODO BETTER EXCEPTION HANDLING
-                .orElseThrow(() -> new IllegalStateException("Role usr not found"));
+                .orElseThrow(() -> new IllegalStateException("Role user not found"));
         var user = MyUser.builder()
                 .name(request.getFirstName())
                 .surname(request.getLastName())

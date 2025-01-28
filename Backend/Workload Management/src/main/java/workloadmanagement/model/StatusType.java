@@ -2,13 +2,12 @@ package workloadmanagement.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@Builder
 @NoArgsConstructor
 @ToString
 @Table(name="status_type")
@@ -24,7 +23,5 @@ public class StatusType{
     })
     @Column(name = "status_type_name")
     private String statusTypeName;
-    public StatusType(String statusTypeName){
-        this.statusTypeName = statusTypeName;
-    }
+
 }

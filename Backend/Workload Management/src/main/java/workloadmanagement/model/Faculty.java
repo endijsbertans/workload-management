@@ -3,14 +3,14 @@ package workloadmanagement.model;
 import jakarta.persistence.*;
 
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "Faculty")
 @Getter
 @Setter
+@AllArgsConstructor
+@Builder
 @NoArgsConstructor
 public class Faculty {
 
@@ -33,8 +33,4 @@ public class Faculty {
     })
     private String faculty_full_name;
 
-    public Faculty(String facultyName, String faculty_full_name) {
-        this.facultyName = facultyName;
-        this.faculty_full_name = faculty_full_name;
-    }
 }

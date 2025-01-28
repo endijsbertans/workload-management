@@ -1,4 +1,4 @@
-package workloadmanagement.model.security;
+package workloadmanagement.security;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -70,25 +70,6 @@ public class MyUser implements UserDetails, Principal {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.authorities.stream().map(r-> new SimpleGrantedAuthority(r.getTitle())).collect(Collectors.toList());
     }
-    public MyUser(String name, String surname, String email, String password, MyAuthority... auths) {
-        setName(name);
-        setSurname(surname);
-        setEmail(email);
-        setPassword(password);
-        for (MyAuthority tempA : auths)
-            addAuthority(tempA);
-    }
-
-    public void addAuthority(MyAuthority authority) {
-        if (!authorities.contains(authority))
-            authorities.add(authority);
-    }
-
-    public void removeAuthority(MyAuthority authority) {
-        if (authorities.contains(authority))
-            authorities.remove(authority);
-    }
-
     @Override
     public String getName() {
         return email;
