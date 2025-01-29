@@ -1,6 +1,7 @@
 package workloadmanagement.auth;
 
 import jakarta.mail.MessagingException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -100,7 +101,7 @@ public class AuthenticationService {
                 .token(jwtToken)
                 .build();
     }
-    //@Transactional
+    @Transactional
     public void activateAccount(String token) throws MessagingException {
         MyToken savedToken = tokenRepo.findByToken(token)
                 .orElseThrow(() -> new RuntimeException("Token not found"));

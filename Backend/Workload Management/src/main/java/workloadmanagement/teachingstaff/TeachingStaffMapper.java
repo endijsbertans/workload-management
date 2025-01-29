@@ -14,4 +14,15 @@ public class TeachingStaffMapper {
                 .staffPhoto(request.staffPhoto())
                 .build();
     }
+
+    public TeachingStaffResponse toTeachingStaffResponse(TeachingStaff teachingStaff) {
+        return TeachingStaffResponse.builder()
+                .teachingStaffId(teachingStaff.getTeachingStaffId())
+                .user(teachingStaff.getUser())
+                .positionTitle(teachingStaff.getPositionTitle())
+                .staffFacultyId(teachingStaff.getStaffFacultyId())
+                .staffAcademicRankId(teachingStaff.getStaffAcademicRankId())
+                //.staffPhoto() TODO
+                .build();
+    }
 }

@@ -1,4 +1,4 @@
-package workloadmanagement.controllers;
+package workloadmanagement.teachingstaff;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -6,12 +6,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import workloadmanagement.teachingstaff.TeachingStaffRequest;
-import workloadmanagement.teachingstaff.TeachingStaffService;
+import org.springframework.web.bind.annotation.*;
+
+
+import java.util.List;
 
 
 @RestController
@@ -28,5 +26,14 @@ public class TeachingStaffController {
             ){
         return ResponseEntity.ok(tStaffService.save(request));
     }
-
+    @GetMapping("{tstaff-id}")
+    public ResponseEntity<TeachingStaffResponse> findTeachingStaffById(
+            @PathVariable("tstaff-id") Integer tstaffId
+    ){
+        return ResponseEntity.ok(tStaffService.findById(tstaffId));
+    }
+    @GetMapping
+    public ResponseEntity<List<TeachingStaffResponse>> findAllTeachingStaff(){
+        return ResponseEntity.ok(tStaffService.findAllTeachingStaff());
+    }
 }

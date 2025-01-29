@@ -3,8 +3,8 @@ package workloadmanagement.teachingstaff;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import workloadmanagement.model.AcademicRank;
-import workloadmanagement.model.Faculty;
+import workloadmanagement.academicrank.AcademicRank;
+import workloadmanagement.faculty.Faculty;
 import workloadmanagement.security.MyUser;
 
 @Getter
@@ -27,10 +27,6 @@ public class TeachingStaff {
     private MyUser user;
 
     @Column(name = "position_title")
-    @Size.List({
-            @Size(min = 1, message = "{validation.name.size.too_short}"),
-            @Size(max = 45, message = "{validation.name.size.too_long}")
-    })
     private String positionTitle;
 
     @ManyToOne
@@ -42,6 +38,4 @@ public class TeachingStaff {
     private AcademicRank staffAcademicRankId;
 
     private String staffPhoto;
-
-
 }

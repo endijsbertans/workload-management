@@ -1,4 +1,4 @@
-package workloadmanagement.model;
+package workloadmanagement.statustype;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
@@ -10,18 +10,15 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @ToString
-@Table(name="status_type")
 @Entity
+@Table(name="status_type")
 public class StatusType{
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "status_type_id")
     private int statusTypeId;
-    @Size.List({
-            @Size(min = 1, message = "{validation.name.size.too_short}"),
-            @Size(max = 45, message = "{validation.name.size.too_long}")
-    })
+
     @Column(name = "status_type_name")
     private String statusTypeName;
-
 }

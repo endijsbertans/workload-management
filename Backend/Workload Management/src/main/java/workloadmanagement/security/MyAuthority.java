@@ -6,53 +6,39 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
-@Table(name = "authority")
 @Entity
 @SuperBuilder
 @EntityListeners(AuditingEntityListener.class)
+@Table(name = "authority")
 public class MyAuthority {
+
     @Column(name = "authority_id")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int ida;
 
     @NotNull
-    @Pattern(regexp = "[A-Z]{4,8}", message = "Only letters and space")
+    @Pattern(regexp = "^[A-Z ]+$", message = "ONLY UPPERCASE LETTERS AND SPACES")
     @Column(name = "authority_title", unique = true)
     private String title;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "User_Authority_Table",
-            joinColumns = @JoinColumn(name="ida"),
-            inverseJoinColumns = @JoinColumn(name = "idu"))
-    @ToString.Exclude
     @JsonIgnore
-    private Collection<MyUser> users = new ArrayList<MyUser>();
+    private List<MyUser> users = new ArrayList<MyUser>();
 
-
-    public MyAuthority(String title)
-    {
-        setTitle(title);
-    }
-
-
-
-    public void addUser(MyUser user) {
-        if(!users.contains(user))
-            users.add(user);
-    }
-
-    public void removeUser(MyUser user) {
-        if(users.contains(user))
-            users.remove(user);
-    }
+    @LastModifiedDate
+    @Column(insertable = false)
+    private LocalDateTime lastModifiedDate;
 }

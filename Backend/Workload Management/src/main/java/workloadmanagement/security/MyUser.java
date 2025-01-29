@@ -36,36 +36,32 @@ public class MyUser implements UserDetails, Principal {
     private int id;
 
     @NotNull
-    @Size(min = 3, max = 45)
     @Column(name = "email", unique = true)
     private String email;
 
-    @NotNull
-    @Pattern(regexp = "[A-Za-z.]+")
-    @Size(min = 3, max = 20)
     @Column(name = "name")
     private String name;
 
-    @NotNull
-    @Pattern(regexp = "[A-Za-z.]+")
-    @Size(min = 3, max = 20)
     @Column(name = "surname")
     private String surname;
 
-    @NotNull
     @Column(name = "password")
     private String password;
+
     private boolean accountLocked;
+
     private boolean enabled;
+
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdDate;
+
     @LastModifiedDate
     @Column(insertable = false)
     private LocalDateTime lastModifiedDate;
 
     @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
-    private Collection<MyAuthority> authorities = new ArrayList<>();
+    private Collection<MyAuthority> authorities;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.authorities.stream().map(r-> new SimpleGrantedAuthority(r.getTitle())).collect(Collectors.toList());

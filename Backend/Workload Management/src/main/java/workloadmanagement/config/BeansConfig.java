@@ -21,8 +21,6 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import static org.springframework.http.HttpHeaders.*;
-
-
 @Configuration
 @RequiredArgsConstructor
 public class BeansConfig {
@@ -64,6 +62,5 @@ public class BeansConfig {
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
-
 }
 

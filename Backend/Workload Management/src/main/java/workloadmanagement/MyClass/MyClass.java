@@ -1,37 +1,33 @@
-package workloadmanagement.model;
+package workloadmanagement.MyClass;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Size;
 import lombok.*;
+import workloadmanagement.faculty.Faculty;
+import workloadmanagement.workload.Workload;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-@Entity
-@Table(name = "academic_class")
 @Getter
 @Setter
 @AllArgsConstructor
-@Builder
 @NoArgsConstructor
+@Builder
+@Entity
+@Table(name = "_class")
 public class MyClass {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "class_id")
     private int classId;
-    @Size.List({
-            @Size(min = 1, message = "{validation.name.size.too_short}"),
-            @Size(max = 45, message = "{validation.name.size.too_long}")
-    })
+
     @Column(name = "class_name")
     private String className;
 
-    @Min(0)
     @Column(name = "study_year")
     private int studyYear;
 
-    @Min(0)
     @Column(name = "student_amount")
     private int studentAmount;
 

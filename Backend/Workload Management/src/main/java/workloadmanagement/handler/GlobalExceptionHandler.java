@@ -1,8 +1,6 @@
 package workloadmanagement.handler;
 
 import jakarta.mail.MessagingException;
-import org.hibernate.validator.internal.engine.messageinterpolation.parser.MessageDescriptorFormatException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -10,10 +8,8 @@ import org.springframework.security.authentication.LockedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
 import java.util.HashSet;
 import java.util.Set;
-
 import static org.springframework.http.HttpStatus.*;
 import static workloadmanagement.handler.BusinessErrorCode.*;
 
@@ -46,7 +42,6 @@ public class GlobalExceptionHandler {
                 );
     }
 
-
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ExceptionResponse> handleException() {
         return ResponseEntity
@@ -70,8 +65,6 @@ public class GlobalExceptionHandler {
                                 .build()
                 );
     }
-
-
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ExceptionResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException exp) {

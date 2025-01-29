@@ -1,4 +1,4 @@
-package workloadmanagement.model;
+package workloadmanagement.academicrank;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
@@ -30,16 +30,10 @@ public class AcademicRank {
     private String rankName;
 
     @NotNull
-    @Column(name = "cp_for_spring", precision = 6, scale = 3)
-    @Max(value = 9999, message = "cp.too.high")
-    @Min(value = 0, message = "cp.too.low")
-    private BigDecimal  cpForSpring;
+    private double  cpForSpring;
 
     @NotNull
-    @Column(name = "cp_for_Autumn", precision = 6, scale = 3)
-    @Max(value = 9999, message = "cp.too.high")
-    @Min(value = 0, message = "cp.too.low")
-    private BigDecimal cpForAutumn;
+    private double cpForAutumn;
 
     @NotNull
     @Column(name = "abbreviation")
@@ -50,10 +44,6 @@ public class AcademicRank {
     private String abbreviation;
 
     @NotNull
-    @Column(name = "salary", precision = 6, scale = 2)
-    @Max(value = 9999, message = "cp.too.high")
-    @Min(value = 0, message = "cp.too.low")
-
-    private BigDecimal salary;
+    private double salary;
 
 }
