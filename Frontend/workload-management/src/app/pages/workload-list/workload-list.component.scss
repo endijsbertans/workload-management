@@ -1,0 +1,24 @@
+$table-header-color: green;
+$table-row-color: lightgreen;
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  color:black;
+
+  th {
+    background-color: $table-header-color;
+    color: white;
+    padding: 10px;
+    text-align: left;
+  }
+
+  td {
+    padding: 10px;
+    border: 1px solid #ccc;
+  }
+
+  tr:nth-child(even) {
+    background-color: $table-row-color;
+  }
+}

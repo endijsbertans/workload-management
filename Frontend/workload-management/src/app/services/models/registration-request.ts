@@ -4,7 +4,7 @@
 
 export interface RegistrationRequest {
   email: string;
-  firstName: string;
-  lastName: string;
+  name: string;
   password: string;
+  surname: string;
 }

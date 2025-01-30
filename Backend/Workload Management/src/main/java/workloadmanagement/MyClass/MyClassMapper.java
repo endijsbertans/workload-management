@@ -8,9 +8,8 @@ public class MyClassMapper {
     public MyClass toMyClass(MyClassRequest request){
         return MyClass.builder()
                 .className(request.className())
-                .studyYear(request.studyYear())
                 .studentAmount(request.studentAmount())
-                .classFacultyId(request.classFacultyId())
+                .classFaculty(request.classFaculty())
                 .classYear(request.classYear())
                 .build();
     }
@@ -19,9 +18,8 @@ public class MyClassMapper {
         return MyClassResponse.builder()
                 .classId(myClass.getClassId())
                 .className(myClass.getClassName())
-                .studyYear(myClass.getStudyYear())
                 .studentAmount(myClass.getStudentAmount())
-                .classFacultyId(myClass.getClassFacultyId())
+                .classFaculty(myClass.getClassFaculty())
                 .classYear(myClass.getClassYear())
                 .build();
     }

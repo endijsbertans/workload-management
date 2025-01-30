@@ -6,173 +6,145 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.scheduling.annotation.EnableAsync;
-
-import workloadmanagement.security.MyAuthority;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import workloadmanagement.MyClass.MyClass;
+import workloadmanagement.academicrank.AcademicRank;
+import workloadmanagement.auth.security.MyAuthority;
+import workloadmanagement.auth.security.MyUser;
+import workloadmanagement.config.course.Course;
+import workloadmanagement.faculty.Faculty;
 import workloadmanagement.repo.*;
+import workloadmanagement.statustype.StatusType;
+import workloadmanagement.teachingstaff.TeachingStaff;
+import workloadmanagement.workload.Workload;
+
+import java.util.List;
 
 @EnableJpaAuditing()
 @SpringBootApplication
 @EnableAsync
 public class WorkloadManagementApplication {
-//	@Value("${pass2}")
-//	private String pass;
-
-
 	public static void main(String[] args) {
 		SpringApplication.run(WorkloadManagementApplication.class, args);
 	}
 
 	@Bean
 	public CommandLineRunner testDatabaseLayer(
-			IMyAuthorityRepo myAuthorityRepo
-	){
-		return args->{
-			if(myAuthorityRepo.findByTitle("USER").isEmpty()){
-				myAuthorityRepo.save(MyAuthority.builder().title("USER").build());
-			}
-		};
+			IMyAuthorityRepo myAuthorityRepo,
+			IMyUserRepo userRepo,
+			IAcademicRankRepo academicRankRepo,
+			IFacultyRepo facultyRepo,
+			IMyClassRepo myClassRepo,
+			ICourseRepo courseRepo,
+			IStatusTypeRepo statusTypeRepo,
+			ITeachingStaffRepo teachingStaffRepo,
+			IWorkloadRepo workloadRepo,
+			PasswordEncoder passwordEncoder
+	) {
+		return args -> {
+//			if (myAuthorityRepo.findByTitle("USER").isEmpty()) {
+//				//myAuthorityRepo.save(MyAuthority.builder().title("USER").build());
+//			}
+					var authorities = myAuthorityRepo.save(MyAuthority.builder().title("USER").build());
+
+					MyUser u1 = MyUser.builder()
+							.email("endijsbertans@gmail.com")
+							.name("Endijs")
+							.surname("Bertāns")
+							.password(passwordEncoder.encode("123456789"))
+							.accountLocked(false)
+							.enabled(true)
+							.authorities((List.of(authorities)))
+							.build();
+					userRepo.save(u1);
+					myAuthorityRepo.save(authorities);
+					AcademicRank ar1 = AcademicRank.builder()
+							.rankName("Profesori")
+							.cpForSpring(9.580)
+							.cpForAutumn(14.370)
+							.abbreviation("prof.")
+							.salary(2712)
+							.build();
+
+					AcademicRank ar2 = AcademicRank.builder()
+							.rankName("Asociētie profesori")
+							.cpForSpring(12.310)
+							.cpForAutumn(18.465)
+							.abbreviation("asoc.prof")
+							.salary(2172)
+							.build();
+					academicRankRepo.save(ar1);
+					academicRankRepo.save(ar2);
+
+					Faculty f1 =  Faculty.builder()
+							.facultyName("ITF")
+							.faculty_full_name("Informācijas tehnoloģiju fakultāte")
+							.build();
+					facultyRepo.save(f1);
+
+					MyClass ac1 = MyClass.builder()
+							.className("3EIB")
+							.classFaculty(f1)
+							.studentAmount(22)
+							.classYear("s22")
+							.build();
+					myClassRepo.save(ac1);
+					MyClass ac2 = MyClass.builder()
+							.className("1ITB")
+							.classFaculty(f1)
+							.studentAmount(27)
+							.classYear("s21")
+							.build();
+					myClassRepo.save(ac2);
+
+					Course c1 =  Course.builder()
+							.courseCode("MateB008")
+							.courseName("Algoritmu teorija")
+							.necessaryRank(ar1)
+							.registrationType("automātiska")
+							.section("Nozares pamatnoz")
+							.creditPoints(3.0)
+							.build();
+					courseRepo.save(c1);
+
+					StatusType st1 = StatusType.builder()
+							.statusTypeName("ievēlētie")
+							.build();
+					statusTypeRepo.save(st1);
+
+
+					TeachingStaff ts1 = TeachingStaff.builder()
+							.user(u1)
+							.positionTitle("doc")
+							.staffFaculty(f1)
+							.staffAcademicRank(ar1)
+							.build();
+					teachingStaffRepo.save(ts1);
+
+					Workload w1 = Workload.builder()
+									.teachingStaff(ts1)
+									.statusType(st1)
+									.semester("rudens")
+									.comments("praktiskie darbi")
+									.includeInBudget("1")
+									.budgetPosition(false)
+									.industryCoefficient(1)
+									.vacationMonths(0)
+									.workingMonths(5)
+									.expectedSalary(577)
+									.groupAmount(1)
+									.contactHours(1)
+									.program("ITB")
+									.groupForSemester("1ITB")
+									.course(c1)
+									.academicRank(ar1)
+									.myClasses(List.of(ac1,ac2))
+									.build();
+					workloadRepo.save(w1);
+					myClassRepo.save(ac1);
+					System.out.println(w1);
+
+
+			};
+		}
 	}
-//			IMyAuthorityRepo authRepo,
-//			IMyUserRepo userRepo,
-//			IAcademicRank academicRankRepo,
-//			IFacultyRepo facultyRepo,
-//			IMyClassRepo myClassRepo,
-//			ICourseRepo courseRepo,
-//			IStatusTypeRepo statusTypeRepo,
-//			ITeachingStaff teachingStaffRepo,
-//			IWorkload workloadRepo
-//	)
-//	{
-//
-//	return new CommandLineRunner() {
-//		@Override
-//		public void run(String... args) throws Exception {
-//			MyAuthority a1 = new MyAuthority("DOCENTS");
-//			authRepo.save(a1);
-//
-//			PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-//			MyUser u1 = new MyUser("Vairis", "Caune", "VCaune", encoder.encode(pass), a1);
-//			userRepo.save(u1);
-//			a1.addUser(u1);
-//			authRepo.save(a1);
-//			System.out.println("All users: " + userRepo.findAll());
-//			System.out.println("All Auths: " + authRepo.findAll());
-//			AcademicRank ar1 = new AcademicRank(
-//					"Profesori",
-//					BigDecimal.valueOf(9.580),
-//					BigDecimal.valueOf(14.370),
-//					"prof.",
-//					BigDecimal.valueOf(2712));
-//
-//			AcademicRank ar2 = new AcademicRank(
-//					"Asociētie profesori",
-//					BigDecimal.valueOf(12.310),
-//					BigDecimal.valueOf(18.465),
-//					"asoc.prof",
-//					BigDecimal.valueOf(2171.00));
-//			AcademicRank ar3 = new AcademicRank(
-//					"docenti",
-//					BigDecimal.valueOf(15.050),
-//					BigDecimal.valueOf(22.575),
-//					"doc.",
-//					BigDecimal.valueOf(1738.00));
-//			AcademicRank ar4 = new AcademicRank(
-//					"lektori",
-//					BigDecimal.valueOf(16.420),
-//					BigDecimal.valueOf(24.630),
-//					"lekt.",
-//					BigDecimal.valueOf(1392.00));
-//			AcademicRank ar5 = new AcademicRank(
-//					"asistenti",
-//					BigDecimal.valueOf(16.420),
-//					BigDecimal.valueOf(24.630),
-//					"asist.",
-//					BigDecimal.valueOf(1109.00));
-//			academicRankRepo.save(ar1);
-//			academicRankRepo.save(ar2);
-//			academicRankRepo.save(ar3);
-//			academicRankRepo.save(ar4);
-//			academicRankRepo.save(ar5);
-//			Faculty f1 = new Faculty("ITF", "Informācijas tehnoloģiju fakultāte");
-//			Faculty f2 = new Faculty("TSF", "Tulkošanas studiju fakultāte");
-//			Faculty f3 = new Faculty("EPF", "Ekonomikas un pārvaldības fakultāte");
-//			Faculty f4 = new Faculty("VeA", "Ventspils Augstskola");
-//			facultyRepo.save(f1);
-//			facultyRepo.save(f2);
-//			facultyRepo.save(f3);
-//			facultyRepo.save(f4);
-//			MyClass ac1 = new MyClass("3EIB", 3, 27, f1, "S22");
-//			MyClass ac2 = new MyClass("1TIB", 1, 22, f1, "S22");
-//			myClassRepo.save(ac1);
-//			myClassRepo.save(ac2);
-//			Course c1 = new Course("MateB008","Algoritmu teorija", BigDecimal.valueOf(3.0), ar3,"automātiska" , "Nozares pamatnoz");
-//			courseRepo.save(c1);
-//			StatusType st1 = new StatusType("ievēlētie");
-//			StatusType st2 = new StatusType("neievēlētie");
-//			StatusType st3 = new StatusType("autoratl. līg.");
-//			StatusType st4 = new StatusType("projekts 8.2.2.");
-//			statusTypeRepo.save(st1);
-//			statusTypeRepo.save(st2);
-//			statusTypeRepo.save(st3);
-//			statusTypeRepo.save(st4);
-//			TeachingStaff ts1 = new TeachingStaff(u1,"doc", f1, ar1);
-//			teachingStaffRepo.save(ts1);
-//			Workload w1 = new Workload(
-//					ts1,
-//					st1,
-//					"rudens",
-//					BigDecimal.valueOf(1.0),
-//					BigDecimal.valueOf(1.5),
-//					"praktiskie darbi",
-//					"1",
-//					false,
-//					BigDecimal.valueOf(1),
-//					BigDecimal.valueOf(115.482),
-//					0,
-//					5,
-//					BigDecimal.valueOf(577.409),
-//					1,
-//					BigDecimal.valueOf(0.0664),
-//					BigDecimal.valueOf(1.5),
-//					"ITB",
-//					"1ITB",
-//					c1,
-//					ar3,
-//					ac1, ac2);
-//			ac1.addWorkload(w1);
-//			ac2.addWorkload(w1);
-//			workloadRepo.save(w1);
-//			myClassRepo.save(ac1);
-//			myClassRepo.save(ac2);
-//
-//			Workload w2 = new Workload(
-//					ts1,
-//					st1,
-//					"rudens",
-//					BigDecimal.valueOf(1.0),
-//					BigDecimal.valueOf(1.5),
-//					"lekcijas",
-//					"1",
-//					false,
-//					BigDecimal.valueOf(1),
-//					BigDecimal.valueOf(115.482),
-//					0,
-//					5,
-//					BigDecimal.valueOf(577.409),
-//					1,
-//					BigDecimal.valueOf(0.0664),
-//					BigDecimal.valueOf(1.5),
-//					"ITB",
-//					"1ITB",
-//					c1,
-//					ar3,
-//					ac1);
-//			ac1.addWorkload(w2);
-//			workloadRepo.save(w2);
-//			myClassRepo.save(ac1);
-//		}
-//
-//	};
-//
-//	}
-}

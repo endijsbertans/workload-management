@@ -8,11 +8,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import workloadmanagement.MyClass.MyClass;
 import workloadmanagement.common.PageResponse;
 import workloadmanagement.repo.IWorkloadRepo;
 
-
 import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -30,22 +31,21 @@ public class WorkloadService {
                 .orElseThrow(() -> new EntityNotFoundException("Teaching staff with id: " + tstaffId + " not found."));
     }
     public PageResponse<WorkloadResponse> findAllWorkloads(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("teachingStaff.lastName").descending());
-        Page<Workload> workloads = (Page<Workload>) workloadRepo.findAll();
+//        Workload workload = new Workload();
+//        workload.getTeachingStaff()
+        Pageable pageable = PageRequest.of(page, size, Sort.by("teachingStaff").descending());
+        Page<Workload> workloads = workloadRepo.findAllWorkloads(pageable);  // Pass pageable here
         List<WorkloadResponse> workloadResponse = workloads.stream()
                 .map(workloadMapper::toWorkloadResponse)
                 .toList();
         return new PageResponse<>(
-            workloadResponse,
-            workloads.getNumber(),
-            workloads.getSize(),
-            workloads.getTotalElements(),
-            workloads.getTotalPages(),
-            workloads.isFirst(),
-            workloads.isLast()
-            );
-
+                workloadResponse,
+                workloads.getNumber(),
+                workloads.getSize(),
+                workloads.getTotalElements(),
+                workloads.getTotalPages(),
+                workloads.isFirst(),
+                workloads.isLast()
+        );
     }
-
-
 }

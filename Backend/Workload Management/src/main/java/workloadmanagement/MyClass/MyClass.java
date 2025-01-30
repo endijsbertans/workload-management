@@ -1,5 +1,6 @@
 package workloadmanagement.MyClass;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import workloadmanagement.faculty.Faculty;
@@ -7,6 +8,7 @@ import workloadmanagement.workload.Workload;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Getter
 @Setter
@@ -14,31 +16,27 @@ import java.util.Collection;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "_class")
+@ToString
 public class MyClass {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "class_id")
     private int classId;
 
-    @Column(name = "class_name")
     private String className;
 
-    @Column(name = "study_year")
-    private int studyYear;
+    private String classYear;
 
-    @Column(name = "student_amount")
     private int studentAmount;
 
     @ManyToOne
     @JoinColumn(name="class_faculty_id")
-    private Faculty classFacultyId;
+    private Faculty classFaculty;
 
-    private String classYear;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @ToString.Exclude
-    private Collection<Workload> myWorkloads = new ArrayList<>();
+    @ManyToMany(mappedBy = "myClasses")
+    @JsonIgnore
+    private List<Workload> myWorkloads = new ArrayList<>();
+
 
 }

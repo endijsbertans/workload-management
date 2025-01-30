@@ -3,7 +3,7 @@ package workloadmanagement.teachingstaff;
 import lombok.*;
 import workloadmanagement.academicrank.AcademicRank;
 import workloadmanagement.faculty.Faculty;
-import workloadmanagement.security.MyUser;
+import workloadmanagement.auth.security.MyUser;
 
 @Getter
 @Setter
@@ -14,8 +14,10 @@ public class TeachingStaffResponse {
 
     private int teachingStaffId;
     private MyUser user;
-    private Faculty staffFacultyId;
+    private Faculty staffFaculty;
     private String positionTitle;
-    private AcademicRank staffAcademicRankId;
+    private AcademicRank staffAcademicRank;
     private byte[] staffPhoto;
+    private String staffFullName;
+    private String rankFullName;
 }

@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import workloadmanagement.academicrank.AcademicRank;
 import workloadmanagement.faculty.Faculty;
-import workloadmanagement.security.MyUser;
+import workloadmanagement.auth.security.MyUser;
 
 public record TeachingStaffRequest(
         @NotNull(message = "100")
@@ -19,10 +19,10 @@ public record TeachingStaffRequest(
         String positionTitle,
         @NotNull(message = "102")
         @NotEmpty(message = "102")
-        Faculty staffFacultyId,
+        Faculty staffFaculty,
         @NotNull(message = "103")
         @NotEmpty(message = "103")
-        AcademicRank staffAcademicRankId,
+        AcademicRank staffAcademicRank,
         @NotNull(message = "104")
         @NotEmpty(message = "104")
         String staffPhoto

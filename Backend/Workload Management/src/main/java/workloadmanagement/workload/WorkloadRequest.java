@@ -5,12 +5,13 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import workloadmanagement.academicrank.AcademicRank;
-import workloadmanagement.course.Course;
+import workloadmanagement.config.course.Course;
 import workloadmanagement.MyClass.MyClass;
 import workloadmanagement.statustype.StatusType;
 import workloadmanagement.teachingstaff.TeachingStaff;
 
 import java.util.Collection;
+import java.util.List;
 
 public record WorkloadRequest (
     @NotNull(message = "110")
@@ -19,7 +20,7 @@ public record WorkloadRequest (
 
     @NotNull(message = "111")
     @NotEmpty(message = "111")
-    StatusType statusTypeId,
+    StatusType statusType,
 
     @Size.List({
             @Size(min = 1, message = "112"),
@@ -95,14 +96,14 @@ public record WorkloadRequest (
 
     @NotNull(message = "124")
     @NotEmpty(message = "124")
-    Course courseId,
+    Course course,
 
     @NotNull(message = "124")
     @NotEmpty(message = "124")
-    AcademicRank academicRankId,
+    AcademicRank academicRank,
 
     @NotNull(message = "125")
     @NotEmpty(message = "125")
-    Collection<MyClass> myClasses
+    List<MyClass> myClasses
 
 ){}

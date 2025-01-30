@@ -7,7 +7,7 @@ public class WorkloadMapper {
     public Workload toWorkload(WorkloadRequest request) {
         return Workload.builder()
                 .teachingStaff(request.teachingStaff())
-                .statusTypeId(request.statusTypeId())
+                .statusType(request.statusType())
                 .semester(request.semester())
                 .comments(request.comments())
                 .includeInBudget(request.includeInBudget())
@@ -20,8 +20,8 @@ public class WorkloadMapper {
                 .contactHours(request.contactHours())
                 .program(request.program())
                 .groupForSemester(request.groupForSemester())
-                .courseId(request.courseId())
-                .academicRankId(request.academicRankId())
+                .course(request.course())
+                .academicRank(request.academicRank())
                 .myClasses(request.myClasses())
                 .build();
     }
@@ -29,7 +29,7 @@ public class WorkloadMapper {
         return WorkloadResponse.builder()
                 .workloadId(workload.getWorkloadId())
                 .teachingStaff(workload.getTeachingStaff())
-                .statusTypeId(workload.getStatusTypeId())
+                .statusType(workload.getStatusType())
                 .semester(workload.getSemester())
                 .comments(workload.getComments())
                 .includeInBudget(workload.getIncludeInBudget())
@@ -41,13 +41,15 @@ public class WorkloadMapper {
                 .contactHours(workload.getContactHours())
                 .program(workload.getProgram())
                 .groupForSemester(workload.getGroupForSemester())
-                .courseId(workload.getCourseId())
-                .academicRankId(workload.getAcademicRankId())
+                .course(workload.getCourse())
+                .academicRank(workload.getAcademicRank())
                 // Calculated values
-                .academicClasses(workload.getMyClasses())
+                .myClasses(workload.getMyClasses())
                 .creditPointsPerHour(workload.getCreditPointsPerHour())
+                .creditPointsPerGroup(workload.getCreditPointsPerGroup())
                 .salaryPerMonth(workload.getSalaryPerMonth())
                 .cpProportionOnFullTime(workload.getCpProportionOnFullTime())
+                .cpForFullTime(workload.getCpForFullTime())
                 .build();
     }
 

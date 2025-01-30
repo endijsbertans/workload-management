@@ -9,8 +9,8 @@ public class TeachingStaffMapper {
         return TeachingStaff.builder()
                 .user(request.user())
                 .positionTitle(request.positionTitle())
-                .staffFacultyId(request.staffFacultyId())
-                .staffAcademicRankId(request.staffAcademicRankId())
+                .staffFaculty(request.staffFaculty())
+                .staffAcademicRank(request.staffAcademicRank())
                 .staffPhoto(request.staffPhoto())
                 .build();
     }
@@ -20,8 +20,10 @@ public class TeachingStaffMapper {
                 .teachingStaffId(teachingStaff.getTeachingStaffId())
                 .user(teachingStaff.getUser())
                 .positionTitle(teachingStaff.getPositionTitle())
-                .staffFacultyId(teachingStaff.getStaffFacultyId())
-                .staffAcademicRankId(teachingStaff.getStaffAcademicRankId())
+                .staffFaculty(teachingStaff.getStaffFaculty())
+                .staffAcademicRank(teachingStaff.getStaffAcademicRank())
+                .staffFullName(teachingStaff.getStaffFullName())
+                .rankFullName(teachingStaff.getRankFullName())
                 //.staffPhoto() TODO
                 .build();
     }

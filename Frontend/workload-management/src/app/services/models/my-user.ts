@@ -14,8 +14,8 @@ export interface MyUser {
   enabled?: boolean;
   id?: number;
   lastModifiedDate?: string;
-  name: string;
-  password: string;
-  surname: string;
+  name?: string;
+  password?: string;
+  surname?: string;
   username?: string;
 }

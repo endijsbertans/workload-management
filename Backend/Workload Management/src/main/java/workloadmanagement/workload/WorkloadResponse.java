@@ -2,7 +2,7 @@ package workloadmanagement.workload;
 
 import lombok.*;
 import workloadmanagement.academicrank.AcademicRank;
-import workloadmanagement.course.Course;
+import workloadmanagement.config.course.Course;
 import workloadmanagement.MyClass.MyClass;
 import workloadmanagement.statustype.StatusType;
 import workloadmanagement.teachingstaff.TeachingStaff;
@@ -17,7 +17,7 @@ import java.util.Collection;
 public class WorkloadResponse {
     private int workloadId;
     private TeachingStaff teachingStaff;
-    private StatusType statusTypeId;
+    private StatusType statusType;
     private String semester;
     private String comments;
     private String includeInBudget;
@@ -30,12 +30,13 @@ public class WorkloadResponse {
     private double contactHours;
     private String program;
     private String groupForSemester;
-    private Course courseId;
-    private AcademicRank academicRankId;
-    private Collection<MyClass> academicClasses;
+    private Course course;
+    private AcademicRank academicRank;
+    private String myClasses;
     // Calculated values
     private double creditPointsPerHour;
     private double creditPointsPerGroup;
     private double salaryPerMonth;
     private double cpProportionOnFullTime;
+    private double cpForFullTime;
 }

@@ -13,6 +13,6 @@ public class MyClassResponse {
     private String className;
     private int studyYear;
     private int studentAmount;
-    private Faculty classFacultyId;
+    private Faculty classFaculty;
     private String classYear;
 }

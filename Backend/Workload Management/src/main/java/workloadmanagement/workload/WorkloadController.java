@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import workloadmanagement.common.PageResponse;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("workload")
@@ -33,4 +35,5 @@ public class WorkloadController {
     ){
         return ResponseEntity.ok(workloadService.findAllWorkloads(page, size));
     }
+
 }

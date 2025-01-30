@@ -17,6 +17,337 @@
     }
   ],
   "paths": {
+    "/workload": {
+      "get": {
+        "tags": [
+          "Workload"
+        ],
+        "operationId": "findAllWorkloads",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageResponseWorkloadResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Workload"
+        ],
+        "operationId": "saveWorkload",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkloadRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/teaching-staff": {
+      "get": {
+        "tags": [
+          "TeachingStaff"
+        ],
+        "operationId": "findAllTeachingStaff",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TeachingStaffResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "TeachingStaff"
+        ],
+        "operationId": "saveBook",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TeachingStaffRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/status-type": {
+      "get": {
+        "tags": [
+          "StatusType"
+        ],
+        "operationId": "findAllStatusTypes",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StatusTypeResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "StatusType"
+        ],
+        "operationId": "saveStatusType",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StatusTypeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/my-class": {
+      "get": {
+        "tags": [
+          "MyClass"
+        ],
+        "operationId": "findAllMyClass",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MyClassResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "MyClass"
+        ],
+        "operationId": "saveMyClass",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MyClassRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/faculty": {
+      "get": {
+        "tags": [
+          "Faculty"
+        ],
+        "operationId": "getFaculties",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FacultyResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Faculty"
+        ],
+        "operationId": "saveFaculty",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FacultyRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/course": {
+      "get": {
+        "tags": [
+          "Course"
+        ],
+        "operationId": "findAllCourses",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CourseResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Course"
+        ],
+        "operationId": "saveWorkload_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CourseRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/auth/register": {
       "post": {
         "tags": [
@@ -77,17 +408,38 @@
         }
       }
     },
-    "/api/login": {
+    "/academic-rank": {
+      "get": {
+        "tags": [
+          "AcademicRank"
+        ],
+        "operationId": "findAllAcademicRank",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AcademicRankResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "post": {
         "tags": [
-          "auth-controller"
+          "AcademicRank"
         ],
-        "operationId": "login",
+        "operationId": "saveAcademicRank",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/MyUser"
+                "$ref": "#/components/schemas/AcademicRankRequest"
               }
             }
           },
@@ -99,7 +451,194 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/workload/{workload-id}": {
+      "get": {
+        "tags": [
+          "Workload"
+        ],
+        "operationId": "findTeachingStaffById",
+        "parameters": [
+          {
+            "name": "workload-id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkloadResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/teaching-staff/{tstaff-id}": {
+      "get": {
+        "tags": [
+          "TeachingStaff"
+        ],
+        "operationId": "findTeachingStaffById_1",
+        "parameters": [
+          {
+            "name": "tstaff-id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TeachingStaffResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/status-type/{statusTypeId}": {
+      "get": {
+        "tags": [
+          "StatusType"
+        ],
+        "operationId": "findStatusTypeById",
+        "parameters": [
+          {
+            "name": "statusTypeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusTypeResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/my-class/{myclass-id}": {
+      "get": {
+        "tags": [
+          "MyClass"
+        ],
+        "operationId": "findMyClassById",
+        "parameters": [
+          {
+            "name": "myclass-id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MyClassResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/faculty/{facultyId}": {
+      "get": {
+        "tags": [
+          "Faculty"
+        ],
+        "operationId": "getFaculty",
+        "parameters": [
+          {
+            "name": "facultyId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FacultyResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/course/{course-id}": {
+      "get": {
+        "tags": [
+          "Course"
+        ],
+        "operationId": "findCourseById",
+        "parameters": [
+          {
+            "name": "course-id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CourseResponse"
                 }
               }
             }
@@ -130,19 +669,20 @@
         }
       }
     },
-    "/api/user": {
+    "/academic-rank/{academic-rank-id}": {
       "get": {
         "tags": [
-          "auth-controller"
+          "AcademicRank"
         ],
-        "operationId": "getUserData",
+        "operationId": "findAcademicRankById",
         "parameters": [
           {
-            "name": "username",
-            "in": "query",
+            "name": "academic-rank-id",
+            "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "integer",
+              "format": "int32"
             }
           }
         ],
@@ -152,7 +692,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/AcademicRankResponse"
                 }
               }
             }
@@ -163,19 +703,537 @@
   },
   "components": {
     "schemas": {
-      "RegistrationRequest": {
+      "AcademicRank": {
         "required": [
-          "email",
-          "firstName",
-          "lastName",
-          "password"
+          "abbreviation",
+          "cpForAutumn",
+          "cpForSpring",
+          "rankName",
+          "salary"
         ],
         "type": "object",
         "properties": {
-          "firstName": {
+          "academicRankId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rankName": {
             "type": "string"
           },
-          "lastName": {
+          "cpForSpring": {
+            "type": "number",
+            "format": "double"
+          },
+          "cpForAutumn": {
+            "type": "number",
+            "format": "double"
+          },
+          "abbreviation": {
+            "type": "string"
+          },
+          "salary": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "Course": {
+        "type": "object",
+        "properties": {
+          "courseId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "courseCode": {
+            "type": "string"
+          },
+          "courseName": {
+            "type": "string"
+          },
+          "creditPoints": {
+            "type": "number",
+            "format": "double"
+          },
+          "necessaryRank": {
+            "$ref": "#/components/schemas/AcademicRank"
+          },
+          "registrationType": {
+            "type": "string"
+          },
+          "studyLevel": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "section": {
+            "type": "string"
+          }
+        }
+      },
+      "Faculty": {
+        "type": "object",
+        "properties": {
+          "facultyId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "facultyName": {
+            "type": "string"
+          },
+          "faculty_full_name": {
+            "type": "string"
+          }
+        }
+      },
+      "GrantedAuthority": {
+        "type": "object",
+        "properties": {
+          "authority": {
+            "type": "string"
+          }
+        }
+      },
+      "MyClass": {
+        "type": "object",
+        "properties": {
+          "classId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "className": {
+            "type": "string"
+          },
+          "classYear": {
+            "type": "string"
+          },
+          "studentAmount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "classFaculty": {
+            "$ref": "#/components/schemas/Faculty"
+          },
+          "myWorkloads": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Workload"
+            }
+          }
+        }
+      },
+      "MyUser": {
+        "required": [
+          "email"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "email": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "surname": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "accountLocked": {
+            "type": "boolean"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastModifiedDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "authorities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GrantedAuthority"
+            }
+          },
+          "username": {
+            "type": "string"
+          },
+          "credentialsNonExpired": {
+            "type": "boolean"
+          },
+          "accountNonExpired": {
+            "type": "boolean"
+          },
+          "accountNonLocked": {
+            "type": "boolean"
+          }
+        }
+      },
+      "StatusType": {
+        "type": "object",
+        "properties": {
+          "statusTypeId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "statusTypeName": {
+            "type": "string"
+          }
+        }
+      },
+      "TeachingStaff": {
+        "type": "object",
+        "properties": {
+          "teachingStaffId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "user": {
+            "$ref": "#/components/schemas/MyUser"
+          },
+          "positionTitle": {
+            "type": "string"
+          },
+          "staffFaculty": {
+            "$ref": "#/components/schemas/Faculty"
+          },
+          "staffAcademicRank": {
+            "$ref": "#/components/schemas/AcademicRank"
+          },
+          "staffPhoto": {
+            "type": "string"
+          },
+          "rankFullName": {
+            "type": "string"
+          },
+          "staffFullName": {
+            "type": "string"
+          }
+        }
+      },
+      "Workload": {
+        "required": [
+          "academicRank",
+          "course"
+        ],
+        "type": "object",
+        "properties": {
+          "workloadId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "teachingStaff": {
+            "$ref": "#/components/schemas/TeachingStaff"
+          },
+          "statusType": {
+            "$ref": "#/components/schemas/StatusType"
+          },
+          "semester": {
+            "type": "string"
+          },
+          "comments": {
+            "type": "string"
+          },
+          "includeInBudget": {
+            "type": "string"
+          },
+          "budgetPosition": {
+            "type": "boolean"
+          },
+          "industryCoefficient": {
+            "type": "number",
+            "format": "double"
+          },
+          "vacationMonths": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "workingMonths": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "expectedSalary": {
+            "type": "number",
+            "format": "double"
+          },
+          "groupAmount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "contactHours": {
+            "type": "number",
+            "format": "double"
+          },
+          "program": {
+            "type": "string"
+          },
+          "groupForSemester": {
+            "type": "string"
+          },
+          "course": {
+            "$ref": "#/components/schemas/Course"
+          },
+          "academicRank": {
+            "$ref": "#/components/schemas/AcademicRank"
+          },
+          "myClasses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MyClass"
+            }
+          },
+          "salaryPerMonth": {
+            "type": "number",
+            "format": "double"
+          },
+          "cpForFullTime": {
+            "type": "number",
+            "format": "double"
+          },
+          "creditPointsPerHour": {
+            "type": "number",
+            "format": "double"
+          },
+          "creditPointsPerGroup": {
+            "type": "number",
+            "format": "double"
+          },
+          "cpProportionOnFullTime": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "WorkloadRequest": {
+        "required": [
+          "academicRank",
+          "budgetPosition",
+          "comments",
+          "contactHours",
+          "course",
+          "expectedSalary",
+          "groupAmount",
+          "groupForSemester",
+          "includeInBudget",
+          "industryCoefficient",
+          "myClasses",
+          "program",
+          "semester",
+          "statusType",
+          "teachingStaff",
+          "vacationMonths",
+          "workingMonths"
+        ],
+        "type": "object",
+        "properties": {
+          "teachingStaff": {
+            "$ref": "#/components/schemas/TeachingStaff"
+          },
+          "statusType": {
+            "$ref": "#/components/schemas/StatusType"
+          },
+          "semester": {
+            "type": "string"
+          },
+          "comments": {
+            "type": "string"
+          },
+          "includeInBudget": {
+            "type": "string"
+          },
+          "budgetPosition": {
+            "type": "boolean"
+          },
+          "industryCoefficient": {
+            "type": "number",
+            "format": "double"
+          },
+          "vacationMonths": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          },
+          "workingMonths": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          },
+          "expectedSalary": {
+            "minimum": 0,
+            "type": "number",
+            "format": "double"
+          },
+          "groupAmount": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          },
+          "contactHours": {
+            "minimum": 0,
+            "type": "number",
+            "format": "double"
+          },
+          "program": {
+            "type": "string"
+          },
+          "groupForSemester": {
+            "type": "string"
+          },
+          "course": {
+            "$ref": "#/components/schemas/Course"
+          },
+          "academicRank": {
+            "$ref": "#/components/schemas/AcademicRank"
+          },
+          "myClasses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MyClass"
+            }
+          }
+        }
+      },
+      "TeachingStaffRequest": {
+        "required": [
+          "positionTitle",
+          "staffAcademicRank",
+          "staffFaculty",
+          "staffPhoto",
+          "user"
+        ],
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/MyUser"
+          },
+          "positionTitle": {
+            "type": "string"
+          },
+          "staffFaculty": {
+            "$ref": "#/components/schemas/Faculty"
+          },
+          "staffAcademicRank": {
+            "$ref": "#/components/schemas/AcademicRank"
+          },
+          "staffPhoto": {
+            "type": "string"
+          }
+        }
+      },
+      "StatusTypeRequest": {
+        "required": [
+          "statusTypeName"
+        ],
+        "type": "object",
+        "properties": {
+          "statusTypeName": {
+            "type": "string"
+          }
+        }
+      },
+      "MyClassRequest": {
+        "required": [
+          "classFaculty",
+          "className",
+          "classYear",
+          "studyYear"
+        ],
+        "type": "object",
+        "properties": {
+          "className": {
+            "type": "string"
+          },
+          "studyYear": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          },
+          "studentAmount": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          },
+          "classFaculty": {
+            "$ref": "#/components/schemas/Faculty"
+          },
+          "classYear": {
+            "type": "string"
+          }
+        }
+      },
+      "FacultyRequest": {
+        "required": [
+          "facultyName",
+          "faculty_full_name"
+        ],
+        "type": "object",
+        "properties": {
+          "facultyName": {
+            "type": "string"
+          },
+          "faculty_full_name": {
+            "type": "string"
+          }
+        }
+      },
+      "CourseRequest": {
+        "required": [
+          "courseCode",
+          "courseName",
+          "creditPoints",
+          "necessaryRankId",
+          "registrationType",
+          "section",
+          "studyLevel"
+        ],
+        "type": "object",
+        "properties": {
+          "courseCode": {
+            "type": "string"
+          },
+          "courseName": {
+            "type": "string"
+          },
+          "creditPoints": {
+            "type": "number",
+            "format": "double"
+          },
+          "necessaryRankId": {
+            "$ref": "#/components/schemas/AcademicRank"
+          },
+          "registrationType": {
+            "type": "string"
+          },
+          "studyLevel": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          },
+          "section": {
+            "type": "string"
+          }
+        }
+      },
+      "RegistrationRequest": {
+        "required": [
+          "email",
+          "name",
+          "password",
+          "surname"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "surname": {
             "type": "string"
           },
           "email": {
@@ -213,78 +1271,299 @@
           }
         }
       },
-      "GrantedAuthority": {
+      "AcademicRankRequest": {
+        "required": [
+          "abbreviation",
+          "academicRankId",
+          "cpForAutumn",
+          "cpForSpring",
+          "rankName",
+          "salary"
+        ],
         "type": "object",
         "properties": {
-          "authority": {
+          "academicRankId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rankName": {
+            "type": "string"
+          },
+          "cpForSpring": {
+            "type": "number",
+            "format": "double"
+          },
+          "cpForAutumn": {
+            "type": "number",
+            "format": "double"
+          },
+          "abbreviation": {
+            "type": "string"
+          },
+          "salary": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "PageResponseWorkloadResponse": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WorkloadResponse"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          }
+        }
+      },
+      "WorkloadResponse": {
+        "type": "object",
+        "properties": {
+          "workloadId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "teachingStaff": {
+            "$ref": "#/components/schemas/TeachingStaff"
+          },
+          "statusType": {
+            "$ref": "#/components/schemas/StatusType"
+          },
+          "semester": {
+            "type": "string"
+          },
+          "comments": {
+            "type": "string"
+          },
+          "includeInBudget": {
+            "type": "string"
+          },
+          "budgetPosition": {
+            "type": "boolean"
+          },
+          "industryCoefficient": {
+            "type": "number",
+            "format": "double"
+          },
+          "vacationMonths": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "workingMonths": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "expectedSalary": {
+            "type": "number",
+            "format": "double"
+          },
+          "groupAmount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "contactHours": {
+            "type": "number",
+            "format": "double"
+          },
+          "program": {
+            "type": "string"
+          },
+          "groupForSemester": {
+            "type": "string"
+          },
+          "course": {
+            "$ref": "#/components/schemas/Course"
+          },
+          "academicRank": {
+            "$ref": "#/components/schemas/AcademicRank"
+          },
+          "academicClasses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MyClass"
+            }
+          },
+          "creditPointsPerHour": {
+            "type": "number",
+            "format": "double"
+          },
+          "creditPointsPerGroup": {
+            "type": "number",
+            "format": "double"
+          },
+          "salaryPerMonth": {
+            "type": "number",
+            "format": "double"
+          },
+          "cpProportionOnFullTime": {
+            "type": "number",
+            "format": "double"
+          },
+          "cpForFullTime": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "TeachingStaffResponse": {
+        "type": "object",
+        "properties": {
+          "teachingStaffId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "user": {
+            "$ref": "#/components/schemas/MyUser"
+          },
+          "staffFaculty": {
+            "$ref": "#/components/schemas/Faculty"
+          },
+          "positionTitle": {
+            "type": "string"
+          },
+          "staffAcademicRank": {
+            "$ref": "#/components/schemas/AcademicRank"
+          },
+          "staffPhoto": {
+            "type": "string",
+            "format": "byte"
+          },
+          "staffFullName": {
+            "type": "string"
+          },
+          "rankFullName": {
             "type": "string"
           }
         }
       },
-      "MyUser": {
-        "required": [
-          "email",
-          "name",
-          "password",
-          "surname"
-        ],
+      "StatusTypeResponse": {
         "type": "object",
         "properties": {
-          "id": {
+          "statusTypeId": {
             "type": "integer",
             "format": "int32"
           },
-          "email": {
-            "maxLength": 45,
-            "minLength": 3,
+          "statusTypeName": {
+            "type": "string"
+          }
+        }
+      },
+      "MyClassResponse": {
+        "type": "object",
+        "properties": {
+          "classId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "className": {
             "type": "string"
           },
-          "name": {
-            "maxLength": 20,
-            "minLength": 3,
-            "pattern": "[A-Za-z.]+",
+          "studyYear": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "studentAmount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "classFaculty": {
+            "$ref": "#/components/schemas/Faculty"
+          },
+          "classYear": {
+            "type": "string"
+          }
+        }
+      },
+      "FacultyResponse": {
+        "type": "object",
+        "properties": {
+          "facultyId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "facultyName": {
             "type": "string"
           },
-          "surname": {
-            "maxLength": 20,
-            "minLength": 3,
-            "pattern": "[A-Za-z.]+",
+          "faculty_full_name": {
+            "type": "string"
+          }
+        }
+      },
+      "CourseResponse": {
+        "type": "object",
+        "properties": {
+          "courseId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "courseCode": {
             "type": "string"
           },
-          "password": {
+          "courseName": {
             "type": "string"
           },
-          "accountLocked": {
-            "type": "boolean"
+          "creditPoints": {
+            "type": "number",
+            "format": "double"
           },
-          "enabled": {
-            "type": "boolean"
+          "necessaryRankId": {
+            "$ref": "#/components/schemas/AcademicRank"
           },
-          "createdDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "lastModifiedDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "authorities": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/GrantedAuthority"
-            }
-          },
-          "username": {
+          "registrationType": {
             "type": "string"
           },
-          "credentialsNonExpired": {
-            "type": "boolean"
+          "studyLevel": {
+            "type": "integer",
+            "format": "int32"
           },
-          "accountNonExpired": {
-            "type": "boolean"
+          "section": {
+            "type": "string"
+          }
+        }
+      },
+      "AcademicRankResponse": {
+        "type": "object",
+        "properties": {
+          "academicRankId": {
+            "type": "integer",
+            "format": "int32"
           },
-          "accountNonLocked": {
-            "type": "boolean"
+          "rankName": {
+            "type": "string"
+          },
+          "maxCP": {
+            "type": "number",
+            "format": "double"
+          },
+          "abbreviation": {
+            "type": "string"
+          },
+          "salary": {
+            "type": "number",
+            "format": "double"
           }
         }
       }

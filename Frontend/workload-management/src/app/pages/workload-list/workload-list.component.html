@@ -1,0 +1,60 @@
+<h2>Noslodzes saraksts</h2>
+<hr>
+
+<div>
+  <table>
+    <tr>
+      <td>Vārds</td>
+      <td>Uzvārds</td>
+      <td>Vārds, Uzvārds</td>
+      <td>Amats, Vārds, Uzvārds</td>
+      <td>KP pilnai slodzei</td>
+      <td>Slodzes daļa</td>
+      <td>Amata nosaukums</td>
+      <td>Amata grupa</td>
+      <td>Statuss</td>
+      <td>Iekļaut budžetā</td>
+      <td>Pasniedzēja fakultāte</td>
+      <td>Semestris</td>
+      <td>Priekšmeta nosaukums</td>
+      <td>KP/stundas</td>
+      <td>Priekšmeta KP</td>
+      <td>KP skaits grupai</td>
+      <td>Grupu skaits</td>
+      <td>Kontakt stundas</td>
+      <td>Lais kods</td>
+      <td>Programmas Daļa</td>
+      <td>Reģistrācija</td>
+      <td>Fakultāte</td>
+
+    </tr>
+    @for (wResponse of workloadResponse.content; track workloadResponse.content) {
+      <tr>
+        <td> {{ wResponse.teachingStaff?.user?.name }}</td>
+        <td> {{ wResponse.teachingStaff?.user?.surname }}</td>
+        <td> {{ wResponse.teachingStaff?.staffFullName }}</td>
+        <td> {{ wResponse.teachingStaff?.rankFullName }}</td>
+        <td> {{ wResponse.cpForFullTime }}</td>
+        <td> {{ wResponse.cpProportionOnFullTime }}</td>
+        <td> {{ wResponse.teachingStaff?.positionTitle }}</td>
+        <td> {{ wResponse.teachingStaff?.staffAcademicRank?.rankName }}</td>
+        <td> {{ wResponse.statusType?.statusTypeName }}</td>
+        <td> {{ wResponse.includeInBudget }}</td>
+        <td> {{ wResponse.teachingStaff?.staffFaculty?.facultyName }}</td>
+        <td> {{ wResponse.semester }}</td>
+        <td> {{ wResponse.course?.courseName }}</td>
+        <td> {{ wResponse.creditPointsPerHour }}</td>
+        <td> {{ wResponse.course?.creditPoints }}</td>
+        <td> {{ wResponse.creditPointsPerGroup }}</td>
+        <td> placeholder</td>
+        <td> {{ wResponse.contactHours }}</td>
+        <td> {{ wResponse.course?.courseCode }}</td>
+        <td> {{ wResponse.course?.section }}</td>
+        <td> {{ wResponse.course?.registrationType }}</td>
+        <td> {{ wResponse.academicClasses?.join(', ') }}</td>
+
+
+      </tr>
+    }
+  </table>
+</div>

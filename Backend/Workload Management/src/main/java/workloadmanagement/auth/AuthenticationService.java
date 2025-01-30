@@ -12,10 +12,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import workloadmanagement.email.EmailService;
 import workloadmanagement.email.EmailTemplateName;
-import workloadmanagement.security.JwtService;
-import workloadmanagement.security.MyToken;
+import workloadmanagement.auth.security.JwtService;
+import workloadmanagement.auth.security.MyToken;
 import workloadmanagement.repo.IMyAuthorityRepo;
-import workloadmanagement.security.MyUser;
+import workloadmanagement.auth.security.MyUser;
 import workloadmanagement.repo.IMyUserRepo;
 import workloadmanagement.repo.ITokenRepo;
 
@@ -39,15 +39,18 @@ public class AuthenticationService {
     public void register(RegistrationRequest request) throws MessagingException {
         var authorities = authorityRepository.findByTitle("USER")
                 .orElseThrow(() -> new IllegalStateException("Role user not found"));
+
+        System.out.println(request);
         var user = MyUser.builder()
-                .name(request.getFirstName())
-                .surname(request.getLastName())
+                .name(request.getName())
+                .surname(request.getSurname())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .accountLocked(false)
                 .enabled(false)
                 .authorities(List.of(authorities))
                 .build();
+        System.out.println(user);
         userRepo.save(user);
         sendValidationEmail(user);
     }
@@ -57,7 +60,7 @@ public class AuthenticationService {
                 user.getEmail(),
                 user.fullName(),
                 EmailTemplateName.ACTIVATE_ACCOUNT,
-                "http://localhost:8080/api/v1/registration/confirm?token=" + newToken,
+                "http://localhost:4200/activate-account=" + newToken,
                 newToken,
                 "Account activation"
         );

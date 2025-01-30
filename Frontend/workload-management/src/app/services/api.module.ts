@@ -6,8 +6,14 @@ import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core
 import { HttpClient } from '@angular/common/http';
 import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
+import { WorkloadService } from './services/workload.service';
+import { TeachingStaffService } from './services/teaching-staff.service';
+import { StatusTypeService } from './services/status-type.service';
+import { MyClassService } from './services/my-class.service';
+import { FacultyService } from './services/faculty.service';
+import { CourseService } from './services/course.service';
 import { AuthenticationService } from './services/authentication.service';
-import { AuthControllerService } from './services/auth-controller.service';
+import { AcademicRankService } from './services/academic-rank.service';
 
 /**
  * Module that provides all services and configuration.
@@ -17,8 +23,14 @@ import { AuthControllerService } from './services/auth-controller.service';
   exports: [],
   declarations: [],
   providers: [
+    WorkloadService,
+    TeachingStaffService,
+    StatusTypeService,
+    MyClassService,
+    FacultyService,
+    CourseService,
     AuthenticationService,
-    AuthControllerService,
+    AcademicRankService,
     ApiConfiguration
   ],
 })

@@ -24,7 +24,7 @@ public record MyClassRequest (
     int studentAmount,
     @NotNull(message = "132")
     @NotEmpty(message = "132")
-    Faculty classFacultyId,
+    Faculty classFaculty,
 
     @NotNull(message = "133")
     @NotEmpty(message = "133")
