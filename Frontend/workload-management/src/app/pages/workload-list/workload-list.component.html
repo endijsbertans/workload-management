@@ -1,34 +1,51 @@
 <h2>Noslodzes saraksts</h2>
 <hr>
 
-<div>
-  <table>
+<div style="overflow-x: auto;">
+  <table border="1">
     <tr>
-      <td>Vārds</td>
-      <td>Uzvārds</td>
-      <td>Vārds, Uzvārds</td>
-      <td>Amats, Vārds, Uzvārds</td>
-      <td>KP pilnai slodzei</td>
-      <td>Slodzes daļa</td>
-      <td>Amata nosaukums</td>
-      <td>Amata grupa</td>
-      <td>Statuss</td>
-      <td>Iekļaut budžetā</td>
-      <td>Pasniedzēja fakultāte</td>
-      <td>Semestris</td>
-      <td>Priekšmeta nosaukums</td>
-      <td>KP/stundas</td>
-      <td>Priekšmeta KP</td>
-      <td>KP skaits grupai</td>
-      <td>Grupu skaits</td>
-      <td>Kontakt stundas</td>
-      <td>Lais kods</td>
-      <td>Programmas Daļa</td>
-      <td>Reģistrācija</td>
-      <td>Fakultāte</td>
-
+      <th colspan="2">Docents</th>
+      <th colspan="2">Amats</th>
+      <th colspan="2">Slodze</th>
+      <th colspan="5">Informācija par kursu</th>
+      <th colspan="2">Klase</th>
+      <th colspan="3">Budžets</th>
+      <th colspan="4">Alga</th>
     </tr>
-    @for (wResponse of workloadResponse.content; track workloadResponse.content) {
+    <tr>
+      <th>Vārds</th>
+      <th>Uzvārds</th>
+      <th>Vārds, Uzvārds</th>
+      <th>Amats, Vārds, Uzvārds</th>
+      <th>KP pilnai slodzei</th>
+      <th>Slodzes daļa</th>
+      <th>Amata nosaukums</th>
+      <th>Amata grupa</th>
+      <th>Statuss</th>
+      <th>Iekļaut budžetā</th>
+      <th>Pasniedzēja fakultāte</th>
+      <th>Semestris</th>
+      <th>Priekšmeta nosaukums</th>
+      <th>KP/stundas</th>
+      <th>Priekšmeta KP</th>
+      <th>KP skaits grupai</th>
+      <th>Grupu skaits</th>
+      <th>Kontakt stundas</th>
+      <th>Lais kods</th>
+      <th>Programmas Daļa</th>
+      <th>Reģistrācija</th>
+      <th>Fakultāte</th>
+      <th>Komentāri</th>
+      <th>Budžeta pozīcija</th>
+      <th>Studentu skaits</th>
+      <th>Alga</th>
+      <th>Nozares koeficents</th>
+      <th>Alga mēnesī</th>
+      <th>Vai atvaļinājums ieskaitās</th>
+      <th>Mēnešu skaits</th>
+      <th>Algai paredzēts</th>
+    </tr>
+    @for (wResponse of workloadResponse.content; track wResponse.workloadId) {
       <tr>
         <td> {{ wResponse.teachingStaff?.user?.name }}</td>
         <td> {{ wResponse.teachingStaff?.user?.surname }}</td>
@@ -51,9 +68,23 @@
         <td> {{ wResponse.course?.courseCode }}</td>
         <td> {{ wResponse.course?.section }}</td>
         <td> {{ wResponse.course?.registrationType }}</td>
-        <td> {{ wResponse.academicClasses?.join(', ') }}</td>
-
-
+        <td>
+        @for(classes of wResponse.myClasses; track classes.classId){
+            {{classes.className}}
+        }
+        <td> {{ wResponse.comments }}</td>
+        <td> {{ wResponse.budgetPosition }}</td>
+        <td>
+          @for(classes of wResponse.myClasses; track classes.classId){
+            {{classes.studentAmount +","}}
+          }
+        </td>
+        <td> {{ wResponse.teachingStaff?.staffAcademicRank?.salary }}</td>
+        <td> {{ wResponse.industryCoefficient }}</td>
+        <td> {{ wResponse.salaryPerMonth}}</td>
+        <td> {{ wResponse.vacationMonths}}</td>
+        <td> {{ wResponse.monthSum}}</td>
+        <td> {{ wResponse.expectedSalary}}</td>
       </tr>
     }
   </table>

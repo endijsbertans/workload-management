@@ -811,12 +811,6 @@
           },
           "classFaculty": {
             "$ref": "#/components/schemas/Faculty"
-          },
-          "myWorkloads": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Workload"
-            }
           }
         }
       },
@@ -915,99 +909,6 @@
           },
           "staffFullName": {
             "type": "string"
-          }
-        }
-      },
-      "Workload": {
-        "required": [
-          "academicRank",
-          "course"
-        ],
-        "type": "object",
-        "properties": {
-          "workloadId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "teachingStaff": {
-            "$ref": "#/components/schemas/TeachingStaff"
-          },
-          "statusType": {
-            "$ref": "#/components/schemas/StatusType"
-          },
-          "semester": {
-            "type": "string"
-          },
-          "comments": {
-            "type": "string"
-          },
-          "includeInBudget": {
-            "type": "string"
-          },
-          "budgetPosition": {
-            "type": "boolean"
-          },
-          "industryCoefficient": {
-            "type": "number",
-            "format": "double"
-          },
-          "vacationMonths": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "workingMonths": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "expectedSalary": {
-            "type": "number",
-            "format": "double"
-          },
-          "groupAmount": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "contactHours": {
-            "type": "number",
-            "format": "double"
-          },
-          "program": {
-            "type": "string"
-          },
-          "groupForSemester": {
-            "type": "string"
-          },
-          "course": {
-            "$ref": "#/components/schemas/Course"
-          },
-          "academicRank": {
-            "$ref": "#/components/schemas/AcademicRank"
-          },
-          "myClasses": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/MyClass"
-            }
-          },
-          "salaryPerMonth": {
-            "type": "number",
-            "format": "double"
-          },
-          "cpForFullTime": {
-            "type": "number",
-            "format": "double"
-          },
-          "creditPointsPerHour": {
-            "type": "number",
-            "format": "double"
-          },
-          "creditPointsPerGroup": {
-            "type": "number",
-            "format": "double"
-          },
-          "cpProportionOnFullTime": {
-            "type": "number",
-            "format": "double"
           }
         }
       },
@@ -1372,10 +1273,6 @@
             "type": "integer",
             "format": "int32"
           },
-          "workingMonths": {
-            "type": "integer",
-            "format": "int32"
-          },
           "expectedSalary": {
             "type": "number",
             "format": "double"
@@ -1400,7 +1297,7 @@
           "academicRank": {
             "$ref": "#/components/schemas/AcademicRank"
           },
-          "academicClasses": {
+          "myClasses": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/MyClass"
@@ -1423,6 +1320,10 @@
             "format": "double"
           },
           "cpForFullTime": {
+            "type": "number",
+            "format": "double"
+          },
+          "monthSum": {
             "type": "number",
             "format": "double"
           }

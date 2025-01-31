@@ -3,17 +3,13 @@ package workloadmanagement.workload;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import workloadmanagement.academicrank.AcademicRank;
-import workloadmanagement.auth.security.MyAuthority;
 import workloadmanagement.config.course.Course;
 import workloadmanagement.MyClass.MyClass;
 import workloadmanagement.statustype.StatusType;
 import workloadmanagement.teachingstaff.TeachingStaff;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,14 +27,6 @@ public class Workload {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int workloadId;
 
-    @ManyToOne
-    @JoinColumn(name="teaching_staff_id")
-    private TeachingStaff teachingStaff;
-
-    @ManyToOne
-    @JoinColumn(name="status_type_id")
-    private StatusType statusType;
-
     private String semester;
 
     private String comments;
@@ -50,8 +38,7 @@ public class Workload {
     private double industryCoefficient;
 
     private int vacationMonths;
-
-    private int workingMonths;
+    private int workingMonths = 5;
 
     private double expectedSalary;
 
@@ -62,6 +49,14 @@ public class Workload {
     private String program;
 
     private String groupForSemester;
+
+    @ManyToOne
+    @JoinColumn(name="teaching_staff_id")
+    private TeachingStaff teachingStaff;
+
+    @ManyToOne
+    @JoinColumn(name="status_type_id")
+    private StatusType statusType;
 
     @NotNull
     @ManyToOne
@@ -76,10 +71,12 @@ public class Workload {
     @ManyToMany(fetch = EAGER)
     private List<MyClass> myClasses = new ArrayList<>();
 
-    public String getMyClasses(){
-        return myClasses.stream().map(MyClass::getClassName).collect(Collectors.joining(", "));
-    }
+//    public String getMyClasses(){
+//        return myClasses.stream().map(MyClass::getClassName).collect(Collectors.joining(", "));
+//    }
 
+    @Transient
+    public double getMonthSum(){ return workingMonths + vacationMonths;}
     @Transient
     public double getCreditPointsPerHour(){
         return course.getCreditPoints()/contactHours;

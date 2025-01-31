@@ -8,6 +8,7 @@ import workloadmanagement.statustype.StatusType;
 import workloadmanagement.teachingstaff.TeachingStaff;
 
 import java.util.Collection;
+import java.util.List;
 
 @Getter
 @Setter
@@ -24,7 +25,7 @@ public class WorkloadResponse {
     private boolean budgetPosition;
     private double industryCoefficient;
     private int vacationMonths;
-    private int workingMonths;
+//    private int workingMonths;
     private double expectedSalary;
     private int groupAmount;
     private double contactHours;
@@ -32,11 +33,13 @@ public class WorkloadResponse {
     private String groupForSemester;
     private Course course;
     private AcademicRank academicRank;
-    private String myClasses;
+    private List<MyClass> myClasses;
+
     // Calculated values
     private double creditPointsPerHour;
     private double creditPointsPerGroup;
     private double salaryPerMonth;
     private double cpProportionOnFullTime;
     private double cpForFullTime;
+    private double monthSum;
 }

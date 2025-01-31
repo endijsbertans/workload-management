@@ -50,6 +50,7 @@ public class WorkloadMapper {
                 .salaryPerMonth(workload.getSalaryPerMonth())
                 .cpProportionOnFullTime(workload.getCpProportionOnFullTime())
                 .cpForFullTime(workload.getCpForFullTime())
+                .monthSum(workload.getMonthSum())
                 .build();
     }
 

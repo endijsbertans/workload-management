@@ -33,10 +33,7 @@ public class MyClass {
     @JoinColumn(name="class_faculty_id")
     private Faculty classFaculty;
 
-
     @ManyToMany(mappedBy = "myClasses")
     @JsonIgnore
     private List<Workload> myWorkloads = new ArrayList<>();
-
-
 }

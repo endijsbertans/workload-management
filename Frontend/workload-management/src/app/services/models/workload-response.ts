@@ -8,7 +8,6 @@ import { MyClass } from '../models/my-class';
 import { StatusType } from '../models/status-type';
 import { TeachingStaff } from '../models/teaching-staff';
 export interface WorkloadResponse {
-  academicClasses?: Array<MyClass>;
   academicRank?: AcademicRank;
   budgetPosition?: boolean;
   comments?: string;
@@ -23,12 +22,13 @@ export interface WorkloadResponse {
   groupForSemester?: string;
   includeInBudget?: string;
   industryCoefficient?: number;
+  monthSum?: number;
+  myClasses?: Array<MyClass>;
   program?: string;
   salaryPerMonth?: number;
   semester?: string;
   statusType?: StatusType;
   teachingStaff?: TeachingStaff;
   vacationMonths?: number;
-  workingMonths?: number;
   workloadId?: number;
 }

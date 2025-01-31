@@ -1,13 +1,20 @@
-$table-header-color: green;
-$table-row-color: lightgreen;
+$table-header-color: #147b73;
+$table-row-color: #147b73;
+
 
 table {
   width: 100%;
   border-collapse: collapse;
-  color:black;
+  color: black;
+  overflow-x: auto;
 
   th {
     background-color: $table-header-color;
+
+    position: sticky;
+    top: 0;
+    z-index: 2;
+
     color: white;
     padding: 10px;
     text-align: left;

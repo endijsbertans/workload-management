@@ -26,6 +26,5 @@ export { StatusTypeResponse } from './models/status-type-response';
 export { TeachingStaff } from './models/teaching-staff';
 export { TeachingStaffRequest } from './models/teaching-staff-request';
 export { TeachingStaffResponse } from './models/teaching-staff-response';
-export { Workload } from './models/workload';
 export { WorkloadRequest } from './models/workload-request';
 export { WorkloadResponse } from './models/workload-response';
