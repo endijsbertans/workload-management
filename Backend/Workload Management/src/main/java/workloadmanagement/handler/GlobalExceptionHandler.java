@@ -50,7 +50,7 @@ public class GlobalExceptionHandler {
                         ExceptionResponse.builder()
                                 .businessErrorCode(BAD_CREDENTIALS.getCode())
                                 .businessErrorDescription(BAD_CREDENTIALS.getDescription())
-                                .errorMsg("Login and / or Password is incorrect")
+                                .errorMsg("Profils ar ievadīto ēpastu un vai paroli nēeksistē")
                                 .build()
                 );
     }

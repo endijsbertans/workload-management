@@ -1,10 +1,14 @@
-import {Component, DestroyRef, inject} from '@angular/core';
+import {Component, DestroyRef, inject, signal} from '@angular/core';
 import {AuthenticationRequest} from "../../../services/models/authentication-request";
-import {AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {debounceTime, of} from "rxjs";
 import {Router} from "@angular/router";
 import {AuthenticationService} from "../../../services/services/authentication.service";
 import {TokenService} from "../../../services/token/token.service";
+import {MatFormField, MatFormFieldModule} from "@angular/material/form-field";
+import {MatInput, MatInputModule} from "@angular/material/input";
+import {MatIcon} from "@angular/material/icon";
+import {MatFabButton, MatIconButton} from "@angular/material/button";
 
 let initialEmailValue = '';
 const savedForm = window.localStorage.getItem('saved-login-form');
@@ -12,16 +16,19 @@ if (savedForm) {
   const loadedForm = JSON.parse(savedForm);
   initialEmailValue = loadedForm.email;
 }
-function emailIsUnique(control: AbstractControl) { /// fake backend check
-  if (control.value !== 'test@example.com') {
-    return of(null);
-  }
-  return of({notUnique: true});
-}
+
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [
+    ReactiveFormsModule,
+    MatFormFieldModule, // Add MatFormFieldModule
+    MatInputModule,     // Add MatInputModule
+    FormsModule,
+    MatIcon,
+    MatFabButton,
+    MatIconButton
+  ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 
@@ -29,11 +36,14 @@ function emailIsUnique(control: AbstractControl) { /// fake backend check
 export class LoginComponent {
   private destroyRef = inject(DestroyRef);
   authRequest: AuthenticationRequest = {email: '', password: ''};
+  errorMessage = signal('');
   errorMsg: Array<string> = [];
+  hide = signal(true);
+
+
   form = new FormGroup({
     email: new FormControl(initialEmailValue, {
-      validators: [Validators.email, Validators.required],
-      asyncValidators: [emailIsUnique]
+      validators: [Validators.email, Validators.required]
     }),
     password: new FormControl('', {
       validators: [
@@ -41,17 +51,31 @@ export class LoginComponent {
         Validators.required],
     }),
   });
-  get emailIsInvalid() {
-    return (this.form.controls.email.touched &&
-      this.form.controls.email.dirty &&
-      this.form.controls.email.invalid);
+  updateErrorMessage() {
+
+    if (this.form.controls.email.hasError('required')) {
+      this.errorMessage.set('Ēpasts ir obligāts');
+    } else if (this.form.controls.email.hasError('email')) {
+      this.errorMessage.set('Nepareizs ēpasts');
+    } else {
+      this.errorMessage.set('');
+    }
+  }
+  updateErrorMessagePass() {
+    if (this.form.controls.password.hasError('required')) {
+      return 'Parole ir obligāta';
+    } else if (this.form.controls.password.hasError('minlength')) {
+      return'Parole pārāk īsa';
+    } else {
+      return'';
+    }
+  }
+  clickEvent(event: MouseEvent) {
+    this.hide.set(!this.hide());
+    event.preventDefault()
+    event.stopPropagation();
   }
 
-  get passwordIsInvalid() {
-    return (this.form.controls.password.touched &&
-      this.form.controls.password.dirty &&
-      this.form.controls.password.invalid);
-  }
   constructor(
     private router: Router,
     private authService: AuthenticationService,
