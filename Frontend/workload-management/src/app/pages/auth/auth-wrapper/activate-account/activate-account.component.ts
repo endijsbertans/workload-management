@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {Router} from "@angular/router";
-import {AuthenticationService} from "../../../services/services/authentication.service";
+import {AuthenticationService} from "../../../../services/services/authentication.service";
 import {CodeInputModule} from "angular-code-input";
 
 @Component({

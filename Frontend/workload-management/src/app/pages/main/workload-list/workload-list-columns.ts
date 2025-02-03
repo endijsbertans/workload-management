@@ -4,7 +4,49 @@ export interface ColumnNames {
   collection: string
 }
 
+export const CollapseData: ColumnNames[] = [
+
+  {
+    name: 'Amats, Vārds, Uzvārds',
+    pathTo: 'teachingStaff.rankFullName',
+    collection: 'ColumnsForTeacher'
+  },
+  {
+    name: 'Priekšmeta nosaukums',
+    pathTo: 'course.courseName',
+    collection: 'ColumnsForCourse'
+  },
+  {
+    name: 'Priekšmeta KP',
+    pathTo: 'course.creditPoints',
+    collection: 'ColumnsForCalc'
+  },
+  {
+    name: 'Alga',
+    pathTo: 'teachingStaff.staffAcademicRank.salary',
+    collection: 'ColumnsForSalary'
+  }
+]
+export const ColumnsForActions: ColumnNames[] = [
+  {
+    name: 'delete',
+    pathTo: 'delete',
+    collection: 'actions'
+  },
+  {
+    name: 'edit',
+    pathTo: 'edit',
+    collection: 'actions'
+  }
+]
+
 export const ColumnsForTeacher: ColumnNames[] = [
+
+  {
+    name: 'Amats, Vārds, Uzvārds',
+    pathTo: 'teachingStaff.rankFullName',
+    collection: 'ColumnsForTeacher'
+  },
   {
     name: 'Vārds',
     pathTo: 'teachingStaff.user.name',
@@ -63,7 +105,6 @@ export const ColumnsForCourse: ColumnNames[] = [
     name: 'Priekšmeta nosaukums',
     pathTo: 'course.courseName',
     collection: 'ColumnsForCourse'
-
   }
   , {
     name: 'Programmas Daļa',
@@ -110,22 +151,22 @@ export const ColumnsForCalc: ColumnNames[] = [
 
 ];
 export const ColumnsForGeneralInfo: ColumnNames[] = [
-   {
+  {
     name: 'Kursi',
     pathTo: 'myClasses',
-     collection: 'ColumnsForGeneralInfo'
+    collection: 'ColumnsForGeneralInfo'
   }
   , {
     name: 'Komentāri',
     pathTo: 'comments',
     collection: 'ColumnsForGeneralInfo'
   }
-  ]
+]
 export const ColumnsForSalary: ColumnNames[] = [
- {
+  {
     name: 'Budžeta pozīcija',
     pathTo: 'budgetPosition',
-   collection: 'ColumnsForSalary'
+    collection: 'ColumnsForSalary'
   }
   , {
     name: 'Alga',

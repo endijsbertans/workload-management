@@ -1,10 +1,10 @@
 import {Component, DestroyRef, inject} from '@angular/core';
-import {RegistrationRequest} from "../../../services/models/registration-request";
+import {RegistrationRequest} from "../../../../services/models/registration-request";
 
 import {AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
-import {AuthenticationService} from "../../../services/services/authentication.service";
-import {TokenService} from "../../../services/token/token.service";
+import {AuthenticationService} from "../../../../services/services/authentication.service";
+import {TokenService} from "../../../../services/token/token.service";
 import {debounceTime, of} from "rxjs";
 
 function emailIsUnique(control: AbstractControl) { /// fake backend check

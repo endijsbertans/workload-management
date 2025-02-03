@@ -4,7 +4,6 @@
 html {
   @include mat.theme((
     color: (
-
       primary: my-theme.$primary-palette,
       tertiary: my-theme.$tertiary-palette,
     ),
@@ -12,7 +11,9 @@ html {
     density: 0
 
   ));
-
+}
+body {
+  margin: 0px 0px 0px 0px;
 }
 body {
   background: var(--mat-sys-surface);

@@ -29,9 +29,6 @@ public class MyAuthority {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int ida;
 
-
-
-
     @LastModifiedDate
     @Column(insertable = false)
     private LocalDateTime lastModifiedDate;

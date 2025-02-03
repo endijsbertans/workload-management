@@ -1,0 +1,26 @@
+@use '@angular/material' as mat;
+header{
+  padding: 1rem;
+  background-color: var(--mat-sys-primary);
+}
+.flex{
+  @include mat.fab-overrides((
+    container-color: var(--mat-sys-surface)
+  ));
+  display: flex;
+  padding-top: 1rem;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+  a{
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+
+}
+.VeaLogo {
+  position: absolute;
+  justify-content: left;
+  max-height: 5rem;
+}
