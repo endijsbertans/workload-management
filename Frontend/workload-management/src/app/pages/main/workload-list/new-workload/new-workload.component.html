@@ -1,0 +1,48 @@
+<mat-stepper [linear]="true" #stepper>
+  <mat-step [stepControl]="form" >
+    <form [formGroup]="form">
+      <mat-form-field >
+        <mat-select [formControl]="form.controls.tStaffCtrl" placeholder="Docents" #singleSelect>
+          <mat-option>
+            <ngx-mat-select-search [formControl]="form.controls.tStaffFilterCtrl"
+                                   placeholderLabel="Meklēt personu"
+                                   noEntriesFoundLabel="Persona nav atrasta">
+            </ngx-mat-select-search>
+          </mat-option>
+          @for (tStaff of filteredTeachingStaff | async; track tStaff.teachingStaffId) {
+            <mat-option [value]="tStaff">
+              {{ tStaff.staffFullName }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+<!--      TODO add to SCSS-->
+      <div style="display: flex">
+        <button mat-button matStepperNext>Tālāk</button>
+        <button mat-button routerLink="..">Atcelt</button>
+
+        <button mat-button routerLink="new-user">Izveidot jaunu</button>
+      </div>
+    </form>
+    <router-outlet/>
+  </mat-step>
+  <mat-step [stepControl]="form">
+    <form [formGroup]="form">
+      <mat-form-field>
+        <mat-select [formControl]="form.controls.tStaffCtrl" placeholder="Docents" #singleSelect>
+          <mat-option>
+            <ngx-mat-select-search [formControl]="form.controls.tStaffFilterCtrl"
+                                   placeholderLabel="Meklēt personu"
+                                   noEntriesFoundLabel="Persona nav atrasta">
+            </ngx-mat-select-search>
+          </mat-option>
+          @for (tStaff of filteredTeachingStaff | async; track tStaff.teachingStaffId) {
+            <mat-option [value]="tStaff">
+              {{ tStaff.staffFullName }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </form>
+  </mat-step>
+</mat-stepper>

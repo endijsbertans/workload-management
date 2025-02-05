@@ -1,0 +1,28 @@
+.backdrop {
+  background-color: rgba(0, 0, 0, 0.9);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 3;
+}
+
+dialog {
+  width: 90%;
+  max-width: 30rem;
+  background-color: var(--mat-sys-primary);
+  border-radius: 6px;
+  border: none;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  padding: 1rem;
+  top: 5rem;
+  z-index: 4;
+}
+
+@media (min-width: 768px) {
+  dialog {
+    padding: 2rem;
+  }
+}
