@@ -1,3 +1,6 @@
+
+
+
 <h2>Noslodzes saraksts</h2>
 <hr>
 
@@ -7,10 +10,13 @@
       <mat-label>Meklēt (ciparus neatrod)</mat-label>
       <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
     </mat-form-field>
-    <button mat-raised-button routerLink="" class="button">
+    <button mat-raised-button routerLink="new-workload" type="button" >
       Pievienot datus
     </button>
   </div>
+
+  <router-outlet/>
+
   <table mat-table [dataSource]="dataSource" fixedLayout>
     @for (col of columnsToDisplay; track col) {
       @if(col.collection == 'actions'){
@@ -37,7 +43,6 @@
       </ng-container>
         }
     }
-
     <tr mat-header-row *matHeaderRowDef="mapDisplayedColumns()"></tr>
     <tr mat-row *matRowDef="let myRowData; columns: mapDisplayedColumns()"></tr>
   </table>

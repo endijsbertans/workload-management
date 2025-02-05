@@ -49,8 +49,6 @@ public class WorkloadManagementApplication {
 
 					MyUser u1 = MyUser.builder()
 							.email("endijsbertans@gmail.com")
-							.name("Endijs")
-							.surname("Bertāns")
 							.password(passwordEncoder.encode("123456789"))
 							.accountLocked(false)
 							.enabled(true)
@@ -115,6 +113,8 @@ public class WorkloadManagementApplication {
 
 					TeachingStaff ts1 = TeachingStaff.builder()
 							.user(u1)
+							.name("Endijs")
+							.surname("Bertāns")
 							.positionTitle("doc")
 							.staffFaculty(f1)
 							.staffAcademicRank(ar1)

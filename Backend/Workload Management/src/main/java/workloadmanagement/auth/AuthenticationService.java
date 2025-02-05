@@ -42,8 +42,6 @@ public class AuthenticationService {
 
         System.out.println(request);
         var user = MyUser.builder()
-                .name(request.getName())
-                .surname(request.getSurname())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .accountLocked(false)
@@ -58,7 +56,7 @@ public class AuthenticationService {
         var newToken = generateAndSaveActivationToken(user);
         emailService.sendEmail(
                 user.getEmail(),
-                user.fullName(),
+                user.getTeachingStaff().getStaffFullName(),
                 EmailTemplateName.ACTIVATE_ACCOUNT,
                 "http://localhost:4200/activate-account=" + newToken,
                 newToken,
@@ -98,7 +96,7 @@ public class AuthenticationService {
         );
         var claims = new HashMap<String, Object>();
         var user = ((MyUser) auth.getPrincipal());
-        claims.put("fullName", user.fullName());
+        claims.put("fullName", user.getTeachingStaff().getStaffFullName());
         var jwtToken = jwtService.generateToken(claims, user);
 
         return AuthenticationResponse.builder()

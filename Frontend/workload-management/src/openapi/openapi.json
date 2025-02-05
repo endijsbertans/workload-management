@@ -827,11 +827,8 @@
           "email": {
             "type": "string"
           },
-          "name": {
-            "type": "string"
-          },
-          "surname": {
-            "type": "string"
+          "teachingStaff": {
+            "$ref": "#/components/schemas/TeachingStaff"
           },
           "password": {
             "type": "string"
@@ -856,13 +853,16 @@
               "$ref": "#/components/schemas/GrantedAuthority"
             }
           },
+          "name": {
+            "type": "string"
+          },
           "username": {
             "type": "string"
           },
-          "credentialsNonExpired": {
+          "accountNonExpired": {
             "type": "boolean"
           },
-          "accountNonExpired": {
+          "credentialsNonExpired": {
             "type": "boolean"
           },
           "accountNonLocked": {
@@ -892,6 +892,12 @@
           "user": {
             "$ref": "#/components/schemas/MyUser"
           },
+          "name": {
+            "type": "string"
+          },
+          "surname": {
+            "type": "string"
+          },
           "positionTitle": {
             "type": "string"
           },
@@ -904,10 +910,10 @@
           "staffPhoto": {
             "type": "string"
           },
-          "rankFullName": {
+          "staffFullName": {
             "type": "string"
           },
-          "staffFullName": {
+          "rankFullName": {
             "type": "string"
           }
         }

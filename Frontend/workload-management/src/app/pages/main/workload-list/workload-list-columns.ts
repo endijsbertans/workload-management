@@ -49,12 +49,12 @@ export const ColumnsForTeacher: ColumnNames[] = [
   },
   {
     name: 'Vārds',
-    pathTo: 'teachingStaff.user.name',
+    pathTo: 'teachingStaff.name',
     collection: 'ColumnsForTeacher'
   },
   {
     name: 'Uzvārds',
-    pathTo: 'teachingStaff.user.surname',
+    pathTo: 'teachingStaff.surname',
     collection: 'ColumnsForTeacher'
   },
   {

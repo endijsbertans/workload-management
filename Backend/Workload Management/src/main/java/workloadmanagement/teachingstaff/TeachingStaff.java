@@ -1,5 +1,6 @@
 package workloadmanagement.teachingstaff;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import workloadmanagement.academicrank.AcademicRank;
@@ -19,9 +20,14 @@ public class TeachingStaff {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int teachingStaffId;
 
-    @ManyToOne
+    @OneToOne
+    @JsonIgnore
     @JoinColumn(name = "user_id", nullable = false)
     private MyUser user;
+
+    private String name;
+
+    private String surname;
 
     private String positionTitle;
 
@@ -35,7 +41,7 @@ public class TeachingStaff {
 
     private String staffPhoto;
     public String getStaffFullName(){
-        return user.getName() + " " + user.getSurname();
+        return name + " " + surname;
     }
     public String getRankFullName(){
         return staffAcademicRank.getAbbreviation() + getStaffFullName();

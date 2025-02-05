@@ -3,6 +3,8 @@ import {LoginComponent} from "./pages/auth/auth-wrapper/login/login.component";
 import {RegisterComponent} from "./pages/auth/auth-wrapper/register/register.component";
 import {ActivateAccountComponent} from "./pages/auth/auth-wrapper/activate-account/activate-account.component";
 import {WorkloadListComponent} from "./pages/main/workload-list/workload-list.component";
+import {NewWorkloadComponent} from "./pages/main/workload-list/new-workload/new-workload.component";
+import {NewUserComponent} from "./pages/main/workload-list/new-workload/new-user/new-user.component";
 
 
 
@@ -28,8 +30,17 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/main/main.component').then(m=>m.MainComponent),
     children: [{
       path: 'workload',
-      component: WorkloadListComponent
-    }]
+      component: WorkloadListComponent,
+      children: [{
+        path: 'new-workload',
+        component: NewWorkloadComponent,
+        children: [{
+          path: 'new-user',
+          component: NewUserComponent
+        }]
+      }]
+    }
+    ]
   }
 
 ];

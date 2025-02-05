@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, inject, OnInit, signal, ViewChild} from '@angular/core';
 import {WorkloadService} from "../../../services/services";
-import {Router, RouterLink} from "@angular/router";
+import {Router, RouterLink, RouterOutlet} from "@angular/router";
 import {MatTableDataSource, MatTableModule} from "@angular/material/table";
 import {WorkloadResponse} from "../../../services/models/workload-response";
 import {MatSort, MatSortModule} from "@angular/material/sort";
@@ -33,6 +33,7 @@ import {MatInputModule} from "@angular/material/input";
     MatInputModule,
     RouterLink,
     MatButton,
+    RouterOutlet,
   ],
   templateUrl: './workload-list.component.html',
   styleUrl: './workload-list.component.scss'
@@ -45,6 +46,7 @@ export class WorkloadListComponent implements OnInit, AfterViewInit {
   columnsToDisplay?: ColumnNames[];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  isAddingWorkload = false;
   public page = 0;
   public size = 10;
   columnsForTeacher = signal(true);
@@ -172,7 +174,9 @@ export class WorkloadListComponent implements OnInit, AfterViewInit {
     }
     this.displayedColumns();
   }
-
+  onCancelAddWorkload(){
+    this.isAddingWorkload = false;
+  }
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     console.log(this.dataSource);
@@ -217,5 +221,9 @@ export class WorkloadListComponent implements OnInit, AfterViewInit {
         ) ?? false)
       );
     };
+  }
+
+  onAddWorkload() {
+    this.isAddingWorkload = true;
   }
 }

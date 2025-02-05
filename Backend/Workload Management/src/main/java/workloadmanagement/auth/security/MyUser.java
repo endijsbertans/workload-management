@@ -10,6 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import workloadmanagement.teachingstaff.TeachingStaff;
 
 import javax.security.auth.Subject;
 import java.security.Principal;
@@ -37,10 +38,9 @@ public class MyUser implements UserDetails, Principal {
     @NotNull
     @Column(unique = true)
     private String email;
+    @OneToOne(mappedBy = "user")
+    private TeachingStaff teachingStaff;
 
-    private String name;
-
-    private String surname;
 
     private String password;
 
@@ -67,7 +67,7 @@ public class MyUser implements UserDetails, Principal {
     }
     @Override
     public String getName() {
-        return name;
+        return email;
     }
 
     @Override
@@ -98,8 +98,6 @@ public class MyUser implements UserDetails, Principal {
     public boolean implies(Subject subject) {
         return enabled;
     }
-    public String fullName(){
-        return name + " " + surname;
-    }
+
 
 }
