@@ -6,9 +6,10 @@ import { AcademicRank } from '../models/academic-rank';
 import { Faculty } from '../models/faculty';
 import { MyUser } from '../models/my-user';
 export interface TeachingStaffRequest {
+  name: string;
   positionTitle: string;
   staffAcademicRank: AcademicRank;
   staffFaculty: Faculty;
-  staffPhoto: string;
+  surname: string;
   user: MyUser;
 }

@@ -19,12 +19,12 @@ public class FacultyController {
         return ResponseEntity.ok(facultyService.save(request));
     }
     @GetMapping("{facultyId}")
-    public ResponseEntity<FacultyResponse> getFaculty(
+    public ResponseEntity<FacultyResponse> findFacultyById(
             @PathVariable Integer facultyId){
-        return ResponseEntity.ok(facultyService.getFaculty(facultyId));
+        return ResponseEntity.ok(facultyService.findFacultyById(facultyId));
     }
     @GetMapping
-    public ResponseEntity<List<FacultyResponse>> getFaculties(){
+    public ResponseEntity<List<FacultyResponse>> findAllFaculties(){
         return ResponseEntity.ok(facultyService.findAllFaculties());
     }
 }

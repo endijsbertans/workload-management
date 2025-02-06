@@ -18,5 +18,5 @@ public record FacultyRequest (
     })
     @NotNull(message = "151")
     @NotEmpty(message = "151")
-    String faculty_full_name
+    String facultyFullName
 ){}

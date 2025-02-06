@@ -18,6 +18,6 @@ public class Faculty {
 
     private String facultyName;
 
-    private String faculty_full_name;
+    private String facultyFullName;
 
 }

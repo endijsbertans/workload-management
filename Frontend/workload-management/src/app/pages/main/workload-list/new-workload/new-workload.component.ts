@@ -9,7 +9,7 @@ import {NgxMatSelectSearchModule} from "ngx-mat-select-search";
 import {AsyncPipe} from "@angular/common";
 import {MatButton} from "@angular/material/button";
 import {RouterLink, RouterOutlet} from "@angular/router";
-import {NewUserComponent} from "./new-user/new-user.component";
+import {NewUserComponent} from "../../new-objects/new-user/new-user.component";
 
 @Component({
   selector: 'app-new-workload',

@@ -43,7 +43,7 @@ public class AuthenticationService {
         System.out.println(request);
         var user = MyUser.builder()
                 .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
+                .password(passwordEncoder.encode(generateActivationCode(6))) // random 6 digit temp password
                 .accountLocked(false)
                 .enabled(false)
                 .authorities(List.of(authorities))
@@ -114,7 +114,7 @@ public class AuthenticationService {
         var user = userRepo.findById(savedToken.getUser().getId())
                 //TODO BETTER EXCEPTION HANDLING
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        user.setEnabled(true);
+        //user.setEnabled(true); // TODO ENABLE USER
         userRepo.save(user);
         savedToken.setValidatedAt(LocalDateTime.now());
         tokenRepo.save(savedToken);

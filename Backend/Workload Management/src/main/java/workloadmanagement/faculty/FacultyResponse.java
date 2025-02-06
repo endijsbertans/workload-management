@@ -10,5 +10,5 @@ import lombok.*;
 public class FacultyResponse {
     private int facultyId;
     private String facultyName;
-    private String faculty_full_name;
+    private String facultyFullName;
 }

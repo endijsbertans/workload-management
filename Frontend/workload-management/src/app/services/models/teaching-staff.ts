@@ -4,7 +4,6 @@
 
 import { AcademicRank } from '../models/academic-rank';
 import { Faculty } from '../models/faculty';
-import { MyUser } from '../models/my-user';
 export interface TeachingStaff {
   name?: string;
   positionTitle?: string;
@@ -15,5 +14,4 @@ export interface TeachingStaff {
   staffPhoto?: string;
   surname?: string;
   teachingStaffId?: number;
-  user?: MyUser;
 }

@@ -76,7 +76,7 @@ public class WorkloadManagementApplication {
 
 					Faculty f1 =  Faculty.builder()
 							.facultyName("ITF")
-							.faculty_full_name("Informācijas tehnoloģiju fakultāte")
+							.facultyFullName("Informācijas tehnoloģiju fakultāte")
 							.build();
 					facultyRepo.save(f1);
 

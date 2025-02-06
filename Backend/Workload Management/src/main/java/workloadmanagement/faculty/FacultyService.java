@@ -17,7 +17,7 @@ public class FacultyService {
         return facultyRepo.save(faculty).getFacultyId();
     }
 
-    public FacultyResponse getFaculty(Integer facultyId) {
+    public FacultyResponse findFacultyById(Integer facultyId) {
         return facultyRepo.findById(facultyId)
                 .map(facultyMapper::toFacultyResponse)
                 .orElseThrow(() -> new RuntimeException("Faculty with id: " + facultyId + " not found."));

@@ -12,10 +12,10 @@ import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
 import { FacultyResponse } from '../models/faculty-response';
-import { getFaculties } from '../fn/faculty/get-faculties';
-import { GetFaculties$Params } from '../fn/faculty/get-faculties';
-import { getFaculty } from '../fn/faculty/get-faculty';
-import { GetFaculty$Params } from '../fn/faculty/get-faculty';
+import { findAllFaculties } from '../fn/faculty/find-all-faculties';
+import { FindAllFaculties$Params } from '../fn/faculty/find-all-faculties';
+import { findFacultyById } from '../fn/faculty/find-faculty-by-id';
+import { FindFacultyById$Params } from '../fn/faculty/find-faculty-by-id';
 import { saveFaculty } from '../fn/faculty/save-faculty';
 import { SaveFaculty$Params } from '../fn/faculty/save-faculty';
 
@@ -25,27 +25,27 @@ export class FacultyService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `getFaculties()` */
-  static readonly GetFacultiesPath = '/faculty';
+  /** Path part for operation `findAllFaculties()` */
+  static readonly FindAllFacultiesPath = '/faculty';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getFaculties()` instead.
+   * To access only the response body, use `findAllFaculties()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getFaculties$Response(params?: GetFaculties$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<FacultyResponse>>> {
-    return getFaculties(this.http, this.rootUrl, params, context);
+  findAllFaculties$Response(params?: FindAllFaculties$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<FacultyResponse>>> {
+    return findAllFaculties(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getFaculties$Response()` instead.
+   * To access the full response (for headers, for example), `findAllFaculties$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getFaculties(params?: GetFaculties$Params, context?: HttpContext): Observable<Array<FacultyResponse>> {
-    return this.getFaculties$Response(params, context).pipe(
+  findAllFaculties(params?: FindAllFaculties$Params, context?: HttpContext): Observable<Array<FacultyResponse>> {
+    return this.findAllFaculties$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<FacultyResponse>>): Array<FacultyResponse> => r.body)
     );
   }
@@ -75,27 +75,27 @@ export class FacultyService extends BaseService {
     );
   }
 
-  /** Path part for operation `getFaculty()` */
-  static readonly GetFacultyPath = '/faculty/{facultyId}';
+  /** Path part for operation `findFacultyById()` */
+  static readonly FindFacultyByIdPath = '/faculty/{facultyId}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getFaculty()` instead.
+   * To access only the response body, use `findFacultyById()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getFaculty$Response(params: GetFaculty$Params, context?: HttpContext): Observable<StrictHttpResponse<FacultyResponse>> {
-    return getFaculty(this.http, this.rootUrl, params, context);
+  findFacultyById$Response(params: FindFacultyById$Params, context?: HttpContext): Observable<StrictHttpResponse<FacultyResponse>> {
+    return findFacultyById(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getFaculty$Response()` instead.
+   * To access the full response (for headers, for example), `findFacultyById$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getFaculty(params: GetFaculty$Params, context?: HttpContext): Observable<FacultyResponse> {
-    return this.getFaculty$Response(params, context).pipe(
+  findFacultyById(params: FindFacultyById$Params, context?: HttpContext): Observable<FacultyResponse> {
+    return this.findFacultyById$Response(params, context).pipe(
       map((r: StrictHttpResponse<FacultyResponse>): FacultyResponse => r.body)
     );
   }

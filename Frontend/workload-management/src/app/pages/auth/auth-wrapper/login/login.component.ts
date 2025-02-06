@@ -22,8 +22,8 @@ if (savedForm) {
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    MatFormFieldModule, // Add MatFormFieldModule
-    MatInputModule,     // Add MatInputModule
+    MatFormFieldModule,
+    MatInputModule,
     FormsModule,
     MatIcon,
     MatFabButton,
@@ -34,7 +34,10 @@ if (savedForm) {
 
 })
 export class LoginComponent {
-  private destroyRef = inject(DestroyRef);
+  private readonly router =  inject(Router);
+  private readonly authService =  inject(AuthenticationService);
+  private readonly tokenService = inject(TokenService);
+  private readonly destroyRef = inject(DestroyRef);
   authRequest: AuthenticationRequest = {email: '', password: ''};
   errorMessage = signal('');
   errorMsg: Array<string> = [];
@@ -76,11 +79,6 @@ export class LoginComponent {
     event.stopPropagation();
   }
 
-  constructor(
-    private router: Router,
-    private authService: AuthenticationService,
-    private tokenService: TokenService
-  ){}
   onSubmit()
   {
     this.authRequest.email = this.form.value.email ?? '';

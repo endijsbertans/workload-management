@@ -1,5 +1,7 @@
 package workloadmanagement.teachingstaff;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import workloadmanagement.academicrank.AcademicRank;
 import workloadmanagement.faculty.Faculty;
@@ -14,6 +16,8 @@ public class TeachingStaffResponse {
 
     private int teachingStaffId;
     private MyUser user;
+    private String name;
+    private String surname;
     private Faculty staffFaculty;
     private String positionTitle;
     private AcademicRank staffAcademicRank;

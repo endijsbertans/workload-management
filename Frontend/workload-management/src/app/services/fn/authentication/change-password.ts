@@ -8,24 +8,25 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { FacultyResponse } from '../../models/faculty-response';
 
-export interface GetFaculties$Params {
+export interface ChangePassword$Params {
+  password: string;
 }
 
-export function getFaculties(http: HttpClient, rootUrl: string, params?: GetFaculties$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<FacultyResponse>>> {
-  const rb = new RequestBuilder(rootUrl, getFaculties.PATH, 'get');
+export function changePassword(http: HttpClient, rootUrl: string, params: ChangePassword$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  const rb = new RequestBuilder(rootUrl, changePassword.PATH, 'get');
   if (params) {
+    rb.query('password', params.password, {});
   }
 
   return http.request(
-    rb.build({ responseType: 'json', accept: 'application/json', context })
+    rb.build({ responseType: 'text', accept: '*/*', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<FacultyResponse>>;
+      return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
     })
   );
 }
 
-getFaculties.PATH = '/faculty';
+changePassword.PATH = '/auth/activate-account/change-password';

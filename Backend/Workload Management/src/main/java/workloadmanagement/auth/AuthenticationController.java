@@ -35,4 +35,10 @@ public class AuthenticationController {
     ) throws MessagingException {
         service.activateAccount(token);
     }
+    @GetMapping("/activate-account/change-password")
+    public void changePassword(
+            @RequestParam String password
+    ) throws MessagingException {
+        // TODO PASSWORD CHANGE
+    }
 }

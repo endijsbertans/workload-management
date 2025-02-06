@@ -207,8 +207,8 @@ export class WorkloadListComponent implements OnInit, AfterViewInit {
         (data.teachingStaff?.staffFaculty?.facultyName?.toLowerCase().includes(lowercaseFilter) ?? false) ||
 
         // Nested user filtering inside TeachingStaff
-        (data.teachingStaff?.user?.username?.toLowerCase().includes(lowercaseFilter) ?? false) ||
-        (data.teachingStaff?.user?.email?.toLowerCase().includes(lowercaseFilter) ?? false) ||
+        (data.teachingStaff?.name?.toLowerCase().includes(lowercaseFilter) ?? false) ||
+        (data.teachingStaff?.surname?.toLowerCase().includes(lowercaseFilter) ?? false) ||
 
         // Status Type filtering
         (data.statusType?.statusTypeName?.toLowerCase().includes(lowercaseFilter) ?? false) ||

@@ -1,0 +1,31 @@
+<h2>Pievienot jaunu fakultāti</h2>
+<form [formGroup]="facultyForm" (ngSubmit)="onSubmit()">
+  <mat-form-field appearance="outline">
+    @if (facultyForm.controls.name.invalid) {
+      <mat-error>{{ errorOnName() }}</mat-error>
+    }
+    <mat-label>Ievadi fakultātes abreviatūru</mat-label>
+    <input
+      matInput
+      placeholder="abreviatūra"
+      [formControl]="facultyForm.controls.name"
+      (blur)="updateErrorOnName()"
+      required
+    />
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    @if (facultyForm.controls.fullName.invalid) {
+      <mat-error>{{ errorOnFullName() }}</mat-error>
+    }
+    <mat-label>Ievadi fakultātes pilno nosaukumu</mat-label>
+    <input
+      matInput
+      placeholder="pilnais nosaukums"
+      [formControl]="facultyForm.controls.fullName"
+      (blur)="updateErrorOnFullName()"
+      required
+    />
+  </mat-form-field>
+  <button type="button" routerLink="..">Cancel</button>
+  <button mat-fab extended type="submit" [disabled]="facultyForm.invalid"> Izveidot</button>
+</form>

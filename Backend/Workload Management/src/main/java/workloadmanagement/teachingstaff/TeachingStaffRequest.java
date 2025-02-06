@@ -7,13 +7,14 @@ import workloadmanagement.faculty.Faculty;
 import workloadmanagement.auth.security.MyUser;
 
 public record TeachingStaffRequest(
-        @NotNull(message = "100")
+
         @NotEmpty(message = "100")
         MyUser user,
         @Size.List({
                 @Size(min = 1, message = "101"),
                 @Size(max = 45, message = "101")
         })
+
         @NotNull(message = "101")
         @NotEmpty(message = "101")
         String positionTitle,
@@ -23,8 +24,14 @@ public record TeachingStaffRequest(
         @NotNull(message = "103")
         @NotEmpty(message = "103")
         AcademicRank staffAcademicRank,
-        @NotNull(message = "104")
-        @NotEmpty(message = "104")
-        String staffPhoto
+//        @NotNull(message = "104")
+//        @NotEmpty(message = "104")
+//        String staffPhoto,
+        @NotNull(message = "105")
+        @NotEmpty(message = "105")
+        String name,
+        @NotNull(message = "106")
+        @NotEmpty(message = "106")
+        String surname
 ){}
 

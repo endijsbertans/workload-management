@@ -10,14 +10,12 @@ import { RequestBuilder } from '../../request-builder';
 
 import { FacultyResponse } from '../../models/faculty-response';
 
-export interface GetFaculty$Params {
-  facultyId: number;
+export interface FindAllFaculties$Params {
 }
 
-export function getFaculty(http: HttpClient, rootUrl: string, params: GetFaculty$Params, context?: HttpContext): Observable<StrictHttpResponse<FacultyResponse>> {
-  const rb = new RequestBuilder(rootUrl, getFaculty.PATH, 'get');
+export function findAllFaculties(http: HttpClient, rootUrl: string, params?: FindAllFaculties$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<FacultyResponse>>> {
+  const rb = new RequestBuilder(rootUrl, findAllFaculties.PATH, 'get');
   if (params) {
-    rb.path('facultyId', params.facultyId, {});
   }
 
   return http.request(
@@ -25,9 +23,9 @@ export function getFaculty(http: HttpClient, rootUrl: string, params: GetFaculty
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<FacultyResponse>;
+      return r as StrictHttpResponse<Array<FacultyResponse>>;
     })
   );
 }
 
-getFaculty.PATH = '/faculty/{facultyId}';
+findAllFaculties.PATH = '/faculty';
