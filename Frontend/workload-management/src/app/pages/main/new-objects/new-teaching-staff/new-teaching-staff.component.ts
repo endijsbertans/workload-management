@@ -3,9 +3,8 @@ import {FacultyService} from "../../../../services/services";
 import {FacultyResponse} from "../../../../services/models/faculty-response";
 
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {RouterLink, RouterOutlet} from "@angular/router";
-import {register} from "../../../../services/fn/authentication/register";
-import {NewUserComponent} from "../new-user/new-user.component";
+import {RouterLink} from "@angular/router";
+
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatOption} from "@angular/material/core";
@@ -13,7 +12,9 @@ import {MatSelect} from "@angular/material/select";
 import {MatButton} from "@angular/material/button";
 import {NewFacultyComponent} from "../new-faculty/new-faculty.component";
 import {FacultyRequest} from "../../../../services/models/faculty-request";
-import {teeth} from "@igniteui/material-icons-extended";
+import {NewUserComponent} from "../new-user/new-user.component";
+import {RegistrationRequest} from "../../../../services/models/registration-request";
+
 
 
 @Component({
@@ -27,6 +28,7 @@ import {teeth} from "@igniteui/material-icons-extended";
     MatSelect,
     MatButton,
     NewFacultyComponent,
+    NewUserComponent,
   ],
   templateUrl: './new-teaching-staff.component.html',
   standalone: true,
@@ -39,7 +41,9 @@ export class NewTeachingStaffComponent implements OnInit {
   faculties = signal<FacultyResponse[] | undefined>(undefined);
   errorMessage = signal('');
   onNewFaculty = signal(false);
-  onAddAuthority = signal(false);
+  onAddUserAuthDetails = signal(false);
+  userAuthDetails = signal< RegistrationRequest | undefined>(undefined);
+  authButtonText = signal("Izveidot autentifikācijas detaļas");
   errorMsg: Array<string> = [];
   teachingStaffForm = new FormGroup({
     name: new FormControl('', {
@@ -81,9 +85,6 @@ export class NewTeachingStaffComponent implements OnInit {
     }
   }
 
-  protected readonly register = register;
-  protected readonly NewUserComponent = NewUserComponent;
-
   onSubmit() {
 
   }
@@ -91,21 +92,17 @@ export class NewTeachingStaffComponent implements OnInit {
   addNewFaculty() {
     this.onNewFaculty.set(!this.onNewFaculty());
   }
-
   onEmittedFaculty(event: FacultyRequest) {
     this.onNewFaculty.set(false);
 
     this.fetchFaculties().then(() => {
       const faculties = this.faculties();
-      console.log("TEAAAA1");
       if (faculties) {
         const faculty = faculties.find(faculty => faculty.facultyName == event.facultyName);
         console.log(faculties);
         console.log(faculty);
         if (faculty) {
-          // Set the form control value and suppress emission to avoid triggering view changes
           this.teachingStaffForm.controls.staffFaculty.setValue(faculty, { emitModelToViewChange: false });
-          console.log("TEAAAA");
           console.log(this.teachingStaffForm.controls.staffFaculty);
         }
       }
@@ -136,5 +133,18 @@ export class NewTeachingStaffComponent implements OnInit {
         subscription.unsubscribe();
       });
     });
+  }
+
+  onEmittedUserAuthDetails(authDetails: RegistrationRequest) {
+    this.onAddUserAuthDetails.set(false);
+    this.userAuthDetails.set(authDetails);
+    console.log("auth:")
+    console.log(authDetails);
+    this.onAddUserAuthDetails.set(false);
+    this.authButtonText.set("rediģēt ēpastu");
+  }
+
+  addUserAuthDetails() {
+    this.onAddUserAuthDetails.set(!this.onAddUserAuthDetails());
   }
 }

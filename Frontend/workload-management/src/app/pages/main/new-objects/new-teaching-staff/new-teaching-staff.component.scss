@@ -7,24 +7,42 @@ form{
   @include mat.form-field-overrides((
     outlined-outline-width: 2px,
     outlined-caret-color: var(--mat-sys-surface),
+
     outlined-focus-label-text-color: var(--mat-sys-surface),
     outlined-hover-label-text-color: var(--mat-sys-surface),
+
     outlined-label-text-color: var(--mat-sys-surface),
     outlined-input-text-color: var(--mat-sys-surface),
-    outlined-error-label-text-color:var(--mat-sys-error),
+
+    outlined-hover-outline-color:var(--mat-sys-surface),
+
+    outlined-error-label-text-color:var(--mat-sys-surface),
     outlined-error-hover-label-text-color:var(--mat-sys-surface),
+    outlined-error-focus-label-text-color:var(--mat-sys-surface),
+    error-text-color: var(--mat-sys-surface),
   ));
-  display: flex;
-  flex-direction: column;
+  @include mat.fab-overrides((
+    container-color: var(--mat-sys-surface),
+
+  ));
+    display: flex;
+    flex-direction: column;
+}
+.inserted{
+  padding: 1rem;
+  border: 1px solid white;
 }
 .flex-faculty{
   display:flex;
   align-items: center;
   justify-content: space-evenly;
+  flex-direction:row;
 }
 .input-flex{
   flex-grow:3;
-  padding-right: 1rem;
+}
+.action-wrapper{
+  margin-top:1.5rem;
 }
 .backdrop {
   background-color: rgba(0, 0, 0, 0.9);
@@ -50,6 +68,12 @@ dialog {
 }
 h2{
   color: var(--mat-sys-on-primary);
+}
+p{
+  color: var(--mat-sys-on-primary)
+}
+#auth-details-button{
+  margin:1rem;
 }
 @media (min-width: 768px) {
   dialog {

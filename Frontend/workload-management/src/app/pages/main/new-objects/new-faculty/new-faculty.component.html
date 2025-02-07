@@ -1,5 +1,6 @@
 <h2>Pievienot jaunu fakultāti</h2>
 <form [formGroup]="facultyForm" (ngSubmit)="onSubmit()">
+  <div class="form-field-wrapper">
   <mat-form-field appearance="outline">
     @if (facultyForm.controls.name.invalid) {
       <mat-error>{{ errorOnName() }}</mat-error>
@@ -26,6 +27,7 @@
       required
     />
   </mat-form-field>
-  <button type="button" routerLink="..">Cancel</button>
-  <button mat-fab extended type="submit" [disabled]="facultyForm.invalid"> Izveidot</button>
+  </div>
+  <button mat-raised-button type="button" routerLink="..">Cancel</button>
+  <button mat-raised-button type="submit" [disabled]="facultyForm.invalid"> Izveidot</button>
 </form>

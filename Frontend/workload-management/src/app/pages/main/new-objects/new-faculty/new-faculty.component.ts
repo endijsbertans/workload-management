@@ -3,7 +3,7 @@ import {FacultyService} from "../../../../services/services/faculty.service";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatInput} from "@angular/material/input";
 import {ActivatedRoute, Router, RouterLink} from "@angular/router";
-import {MatFabButton} from "@angular/material/button";
+import {MatButton} from "@angular/material/button";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {FacultyRequest} from "../../../../services/models/faculty-request";
 
@@ -11,10 +11,10 @@ import {FacultyRequest} from "../../../../services/models/faculty-request";
   selector: 'app-new-faculty',
   imports: [
     ReactiveFormsModule,
+    MatFormFieldModule,
     MatInput,
     RouterLink,
-    MatFabButton,
-    MatFormFieldModule,
+    MatButton,
   ],
   templateUrl: './new-faculty.component.html',
   standalone: true,

@@ -1,52 +1,45 @@
-import {Component, DestroyRef, inject, OnInit, signal} from '@angular/core';
-import {RouterLink} from "@angular/router";
-import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {MatError, MatFormField, MatInput, MatLabel} from "@angular/material/input";
-import {RegistrationRequest} from "../../../../services/models/registration-request";
-import {NgxMatSelectSearchModule} from "ngx-mat-select-search";
-import {FacultyResponse} from "../../../../services/models/faculty-response";
-import {FacultyService} from "../../../../services/services/faculty.service";
-import {MatFabButton} from "@angular/material/button";
-
-
+import { Component, DestroyRef, EventEmitter, inject, OnInit, Output, signal } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import { RegistrationRequest } from "../../../../services/models/registration-request";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
+import { RouterLink } from "@angular/router";
+import { MatButtonModule } from "@angular/material/button";
 
 @Component({
   selector: 'app-new-user',
   imports: [
-    RouterLink,
-    MatInput,
-    FormsModule,
-    MatError,
-    MatFormField,
-    MatLabel,
     ReactiveFormsModule,
-    NgxMatSelectSearchModule,
-    MatFabButton
+    MatFormFieldModule,
+    RouterLink,
+    MatButtonModule,
+    MatInputModule
   ],
   templateUrl: './new-user.component.html',
   standalone: true,
-  styleUrl: './new-user.component.scss'
+  styleUrls: ['./new-user.component.scss']
 })
 export class NewUserComponent implements OnInit {
+  @Output() emitUserAuthDetails = new EventEmitter<RegistrationRequest>();
   private readonly destroyRef = inject(DestroyRef);
+  authDetailsRequest: RegistrationRequest = { email: '' };
   errorMessage = signal('');
   errorMsg: Array<string> = [];
+
   userForm = new FormGroup({
-    email: new FormControl('', {
+    email: new FormControl<string | null>(null, {
       validators: [Validators.email, Validators.required]
     }),
-
   });
 
-  ngOnInit(): void {
-    //asdasdasd
-  }
+  ngOnInit(): void {}
 
   updateErrorMessage() {
+    const emailControl = this.userForm.controls.email;
 
-    if (this.userForm.controls.email.hasError('required')) {
+    if (emailControl.hasError('required')) {
       this.errorMessage.set('Ēpasts ir obligāts');
-    } else if (this.userForm.controls.email.hasError('email')) {
+    } else if (emailControl.hasError('email')) {
       this.errorMessage.set('Nepareizs ēpasts');
     } else {
       this.errorMessage.set('');
@@ -54,6 +47,10 @@ export class NewUserComponent implements OnInit {
   }
 
   onSubmit() {
-
+    const emailValue = this.userForm.controls.email.value;
+    if (emailValue) {
+      this.authDetailsRequest.email = emailValue;
+      this.emitUserAuthDetails.emit({ ...this.authDetailsRequest });
+    }
   }
 }

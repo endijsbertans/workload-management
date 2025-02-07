@@ -8,12 +8,19 @@ main {
   @include mat.form-field-overrides((
     outlined-outline-width: 2px,
     outlined-caret-color: var(--mat-sys-surface),
+
     outlined-focus-label-text-color: var(--mat-sys-surface),
     outlined-hover-label-text-color: var(--mat-sys-surface),
+
     outlined-label-text-color: var(--mat-sys-surface),
     outlined-input-text-color: var(--mat-sys-surface),
-    outlined-error-label-text-color:var(--mat-sys-error),
+
+    outlined-hover-outline-color:var(--mat-sys-surface),
+
+    outlined-error-label-text-color:var(--mat-sys-surface),
     outlined-error-hover-label-text-color:var(--mat-sys-surface),
+    outlined-error-focus-label-text-color:var(--mat-sys-surface),
+    error-text-color: var(--mat-sys-surface),
   ));
 
   background-color: var(--mat-sys-on-primary-fixed-variant);
