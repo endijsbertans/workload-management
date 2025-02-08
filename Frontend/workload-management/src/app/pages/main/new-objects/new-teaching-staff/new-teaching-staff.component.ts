@@ -1,9 +1,9 @@
 import {Component, DestroyRef, inject, OnInit, signal} from '@angular/core';
-import {FacultyService} from "../../../../services/services";
+import {FacultyService, TeachingStaffService} from "../../../../services/services";
 import {FacultyResponse} from "../../../../services/models/faculty-response";
 
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {RouterLink} from "@angular/router";
+import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
@@ -14,6 +14,7 @@ import {NewFacultyComponent} from "../new-faculty/new-faculty.component";
 import {FacultyRequest} from "../../../../services/models/faculty-request";
 import {NewUserComponent} from "../new-user/new-user.component";
 import {RegistrationRequest} from "../../../../services/models/registration-request";
+import {TeachingStaffRequest} from "../../../../services/models/teaching-staff-request";
 
 
 
@@ -36,7 +37,11 @@ import {RegistrationRequest} from "../../../../services/models/registration-requ
 })
 export class NewTeachingStaffComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
+  private readonly router = inject(Router);
+  private readonly activeRoute = inject(ActivatedRoute);
+  private readonly teachingStaffService = inject(TeachingStaffService)
   private readonly facultyService = inject(FacultyService)
+
   isFetching = signal(false);
   faculties = signal<FacultyResponse[] | undefined>(undefined);
   errorMessage = signal('');
@@ -44,6 +49,9 @@ export class NewTeachingStaffComponent implements OnInit {
   onAddUserAuthDetails = signal(false);
   userAuthDetails = signal< RegistrationRequest | undefined>(undefined);
   authButtonText = signal("Izveidot autentifikācijas detaļas");
+
+  teachingStaffRequest: TeachingStaffRequest =
+    {name: '', surname: '', positionTitle: '', staffFaculty: {facultyName: '', facultyFullName: ''}, authDetails:undefined}
   errorMsg: Array<string> = [];
   teachingStaffForm = new FormGroup({
     name: new FormControl('', {
@@ -86,7 +94,34 @@ export class NewTeachingStaffComponent implements OnInit {
   }
 
   onSubmit() {
+      console.log(this.teachingStaffForm.controls);
+      if (this.teachingStaffForm.value.name &&
+        this.teachingStaffForm.value.surname &&
+        this.teachingStaffForm.value.positionTitle &&
+        this.teachingStaffForm.value.staffFaculty
+      ) {
+        this.teachingStaffRequest.name = this.teachingStaffForm.value.name;
+        this.teachingStaffRequest.surname = this.teachingStaffForm.value.surname;
+        this.teachingStaffRequest.positionTitle = this.teachingStaffForm.value.positionTitle;
+        this.teachingStaffRequest.staffFaculty = this.teachingStaffForm.value.staffFaculty;
+        if(this.userAuthDetails()){
+          this.teachingStaffRequest.authDetails = this.userAuthDetails();
+        }
+        this.teachingStaffService.saveTeachingStaff({
+          body: this.teachingStaffRequest
+        }).subscribe({
+          next: () => {
 
+          },
+          error: (err) => {
+            console.log(this.errorMsg);
+            this.errorMsg = err.error.validationErrors;
+
+          }
+        })
+      }
+
+      this.router.navigate(['..'], { relativeTo: this.activeRoute });
   }
 
   addNewFaculty() {
@@ -99,8 +134,6 @@ export class NewTeachingStaffComponent implements OnInit {
       const faculties = this.faculties();
       if (faculties) {
         const faculty = faculties.find(faculty => faculty.facultyName == event.facultyName);
-        console.log(faculties);
-        console.log(faculty);
         if (faculty) {
           this.teachingStaffForm.controls.staffFaculty.setValue(faculty, { emitModelToViewChange: false });
           console.log(this.teachingStaffForm.controls.staffFaculty);
@@ -138,13 +171,11 @@ export class NewTeachingStaffComponent implements OnInit {
   onEmittedUserAuthDetails(authDetails: RegistrationRequest) {
     this.onAddUserAuthDetails.set(false);
     this.userAuthDetails.set(authDetails);
-    console.log("auth:")
-    console.log(authDetails);
     this.onAddUserAuthDetails.set(false);
     this.authButtonText.set("rediģēt ēpastu");
   }
 
-  addUserAuthDetails() {
+  closeOrOpenAuthDetails() {
     this.onAddUserAuthDetails.set(!this.onAddUserAuthDetails());
   }
 }

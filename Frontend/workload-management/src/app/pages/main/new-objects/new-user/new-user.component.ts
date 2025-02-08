@@ -3,7 +3,6 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angula
 import { RegistrationRequest } from "../../../../services/models/registration-request";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
-import { RouterLink } from "@angular/router";
 import { MatButtonModule } from "@angular/material/button";
 
 @Component({
@@ -11,7 +10,6 @@ import { MatButtonModule } from "@angular/material/button";
   imports: [
     ReactiveFormsModule,
     MatFormFieldModule,
-    RouterLink,
     MatButtonModule,
     MatInputModule
   ],
@@ -21,6 +19,7 @@ import { MatButtonModule } from "@angular/material/button";
 })
 export class NewUserComponent implements OnInit {
   @Output() emitUserAuthDetails = new EventEmitter<RegistrationRequest>();
+  @Output() emitCancel = new EventEmitter();
   private readonly destroyRef = inject(DestroyRef);
   authDetailsRequest: RegistrationRequest = { email: '' };
   errorMessage = signal('');
@@ -52,5 +51,9 @@ export class NewUserComponent implements OnInit {
       this.authDetailsRequest.email = emailValue;
       this.emitUserAuthDetails.emit({ ...this.authDetailsRequest });
     }
+  }
+
+  onCancel() {
+    this.emitCancel.emit();
   }
 }

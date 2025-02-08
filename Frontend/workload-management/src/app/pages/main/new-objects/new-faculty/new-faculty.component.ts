@@ -2,7 +2,6 @@ import {Component, DestroyRef, EventEmitter, inject, Output, signal} from '@angu
 import {FacultyService} from "../../../../services/services/faculty.service";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatInput} from "@angular/material/input";
-import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {MatButton} from "@angular/material/button";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {FacultyRequest} from "../../../../services/models/faculty-request";
@@ -13,7 +12,6 @@ import {FacultyRequest} from "../../../../services/models/faculty-request";
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInput,
-    RouterLink,
     MatButton,
   ],
   templateUrl: './new-faculty.component.html',
@@ -22,8 +20,7 @@ import {FacultyRequest} from "../../../../services/models/faculty-request";
 })
 export class NewFacultyComponent {
   @Output() emitFaculty = new EventEmitter<FacultyRequest>();
-  private readonly router = inject(Router);
-  private readonly activeRoute = inject(ActivatedRoute);
+
   private readonly destroyRef = inject(DestroyRef);
   private readonly facultyService = inject(FacultyService)
   facultyRequest: FacultyRequest = {facultyName: '', facultyFullName: ''};

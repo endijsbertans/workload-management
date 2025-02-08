@@ -15,8 +15,8 @@ import { findAllTeachingStaff } from '../fn/teaching-staff/find-all-teaching-sta
 import { FindAllTeachingStaff$Params } from '../fn/teaching-staff/find-all-teaching-staff';
 import { findTeachingStaffById1 } from '../fn/teaching-staff/find-teaching-staff-by-id-1';
 import { FindTeachingStaffById1$Params } from '../fn/teaching-staff/find-teaching-staff-by-id-1';
-import { saveBook } from '../fn/teaching-staff/save-book';
-import { SaveBook$Params } from '../fn/teaching-staff/save-book';
+import { saveTeachingStaff } from '../fn/teaching-staff/save-teaching-staff';
+import { SaveTeachingStaff$Params } from '../fn/teaching-staff/save-teaching-staff';
 import { TeachingStaffResponse } from '../models/teaching-staff-response';
 
 @Injectable({ providedIn: 'root' })
@@ -50,27 +50,27 @@ export class TeachingStaffService extends BaseService {
     );
   }
 
-  /** Path part for operation `saveBook()` */
-  static readonly SaveBookPath = '/teaching-staff';
+  /** Path part for operation `saveTeachingStaff()` */
+  static readonly SaveTeachingStaffPath = '/teaching-staff';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `saveBook()` instead.
+   * To access only the response body, use `saveTeachingStaff()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  saveBook$Response(params: SaveBook$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
-    return saveBook(this.http, this.rootUrl, params, context);
+  saveTeachingStaff$Response(params: SaveTeachingStaff$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return saveTeachingStaff(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `saveBook$Response()` instead.
+   * To access the full response (for headers, for example), `saveTeachingStaff$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  saveBook(params: SaveBook$Params, context?: HttpContext): Observable<number> {
-    return this.saveBook$Response(params, context).pipe(
+  saveTeachingStaff(params: SaveTeachingStaff$Params, context?: HttpContext): Observable<number> {
+    return this.saveTeachingStaff$Response(params, context).pipe(
       map((r: StrictHttpResponse<number>): number => r.body)
     );
   }

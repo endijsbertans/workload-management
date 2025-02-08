@@ -114,7 +114,7 @@
         "tags": [
           "TeachingStaff"
         ],
-        "operationId": "saveBook",
+        "operationId": "saveTeachingStaff",
         "requestBody": {
           "content": {
             "application/json": {
@@ -866,10 +866,10 @@
           "staffPhoto": {
             "type": "string"
           },
-          "staffFullName": {
+          "rankFullName": {
             "type": "string"
           },
-          "rankFullName": {
+          "staffFullName": {
             "type": "string"
           }
         }
@@ -963,67 +963,29 @@
           }
         }
       },
-      "GrantedAuthority": {
+      "FacultyResponse": {
         "type": "object",
         "properties": {
-          "authority": {
+          "facultyId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "facultyName": {
+            "type": "string"
+          },
+          "facultyFullName": {
             "type": "string"
           }
         }
       },
-      "MyUser": {
+      "RegistrationRequest": {
         "required": [
           "email"
         ],
         "type": "object",
         "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
           "email": {
             "type": "string"
-          },
-          "teachingStaff": {
-            "$ref": "#/components/schemas/TeachingStaff"
-          },
-          "password": {
-            "type": "string"
-          },
-          "accountLocked": {
-            "type": "boolean"
-          },
-          "enabled": {
-            "type": "boolean"
-          },
-          "createdDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "lastModifiedDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "authorities": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/GrantedAuthority"
-            }
-          },
-          "name": {
-            "type": "string"
-          },
-          "username": {
-            "type": "string"
-          },
-          "credentialsNonExpired": {
-            "type": "boolean"
-          },
-          "accountNonExpired": {
-            "type": "boolean"
-          },
-          "accountNonLocked": {
-            "type": "boolean"
           }
         }
       },
@@ -1031,24 +993,19 @@
         "required": [
           "name",
           "positionTitle",
-          "staffAcademicRank",
           "staffFaculty",
-          "surname",
-          "user"
+          "surname"
         ],
         "type": "object",
         "properties": {
-          "user": {
-            "$ref": "#/components/schemas/MyUser"
+          "authDetails": {
+            "$ref": "#/components/schemas/RegistrationRequest"
           },
           "positionTitle": {
             "type": "string"
           },
           "staffFaculty": {
-            "$ref": "#/components/schemas/Faculty"
-          },
-          "staffAcademicRank": {
-            "$ref": "#/components/schemas/AcademicRank"
+            "$ref": "#/components/schemas/FacultyResponse"
           },
           "name": {
             "type": "string"
@@ -1148,17 +1105,6 @@
             "format": "int32"
           },
           "section": {
-            "type": "string"
-          }
-        }
-      },
-      "RegistrationRequest": {
-        "required": [
-          "email"
-        ],
-        "type": "object",
-        "properties": {
-          "email": {
             "type": "string"
           }
         }
@@ -1345,6 +1291,70 @@
           }
         }
       },
+      "GrantedAuthority": {
+        "type": "object",
+        "properties": {
+          "authority": {
+            "type": "string"
+          }
+        }
+      },
+      "MyUser": {
+        "required": [
+          "email"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "email": {
+            "type": "string"
+          },
+          "teachingStaff": {
+            "$ref": "#/components/schemas/TeachingStaff"
+          },
+          "password": {
+            "type": "string"
+          },
+          "accountLocked": {
+            "type": "boolean"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastModifiedDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "authorities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GrantedAuthority"
+            }
+          },
+          "name": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "accountNonLocked": {
+            "type": "boolean"
+          },
+          "accountNonExpired": {
+            "type": "boolean"
+          },
+          "credentialsNonExpired": {
+            "type": "boolean"
+          }
+        }
+      },
       "TeachingStaffResponse": {
         "type": "object",
         "properties": {
@@ -1416,21 +1426,6 @@
             "$ref": "#/components/schemas/Faculty"
           },
           "classYear": {
-            "type": "string"
-          }
-        }
-      },
-      "FacultyResponse": {
-        "type": "object",
-        "properties": {
-          "facultyId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "facultyName": {
-            "type": "string"
-          },
-          "facultyFullName": {
             "type": "string"
           }
         }

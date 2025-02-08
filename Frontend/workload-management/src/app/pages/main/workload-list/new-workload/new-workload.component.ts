@@ -9,7 +9,6 @@ import {NgxMatSelectSearchModule} from "ngx-mat-select-search";
 import {AsyncPipe} from "@angular/common";
 import {MatButton} from "@angular/material/button";
 import {RouterLink, RouterOutlet} from "@angular/router";
-import {NewUserComponent} from "../../new-objects/new-user/new-user.component";
 
 @Component({
   selector: 'app-new-workload',
@@ -48,16 +47,7 @@ export class NewWorkloadComponent implements OnInit{
 
   isLinear = false;
   ngOnInit() {
-    console.log(this.form.controls);
-    // set initial selection
-    //this.tStaffCtrl.setValue(this.tStaffCtrl[0]);
     this.findAllTeachingStaff();
-    // load the initial bank list
-
-    console.log("LOADINGIN LIST");
-    console.log(this.filteredTeachingStaff)
-    // listen for search field value changes
-
     this.form.controls.tStaffFilterCtrl.valueChanges
       .pipe(takeUntil(this._onDestroy))
       .subscribe(() => {
@@ -86,7 +76,6 @@ export class NewWorkloadComponent implements OnInit{
     this.filteredTeachingStaff
       .pipe(take(1), takeUntil(this._onDestroy))
       .subscribe(() => {
-
         this.singleSelect.compareWith = (a: TeachingStaffResponse, b: TeachingStaffResponse) => a && b && a.teachingStaffId === b.teachingStaffId;
       });
   }
@@ -94,7 +83,7 @@ export class NewWorkloadComponent implements OnInit{
     if (!this.tStaff) {
       return;
     }
-    // get the search keyword
+
     let search = this.form.controls.tStaffFilterCtrl.value;
     if (!search) {
       this.filteredTeachingStaff.next(this.tStaff.slice());
@@ -102,9 +91,11 @@ export class NewWorkloadComponent implements OnInit{
     } else {
       search = search.toLowerCase();
     }
-    // filter the banks
+    // filter the staff
     this.filteredTeachingStaff.next(
-      this.tStaff.filter(tStaff => tStaff.user && tStaff.user.name && tStaff.user.name.toLowerCase().indexOf(search) > -1)
+      this.tStaff.filter((tStaff) => {
+        return tStaff.user && tStaff.user.name && tStaff.user.name.toLowerCase().indexOf(search) > -1;
+      })
     );
   }
 }
