@@ -1,8 +1,15 @@
 package workloadmanagement.teachingstaff;
 
+import jakarta.mail.MessagingException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
+import workloadmanagement.auth.AuthenticationService;
+import workloadmanagement.auth.security.MyUser;
+import workloadmanagement.auth.security.MyUserService;
+import workloadmanagement.faculty.Faculty;
+import workloadmanagement.faculty.FacultyService;
 import workloadmanagement.repo.ITeachingStaffRepo;
 import java.util.List;
 
@@ -12,10 +19,22 @@ import java.util.List;
 public class TeachingStaffService{
     private final TeachingStaffMapper tStaffMapper;
     private final ITeachingStaffRepo tStaffRepo;
+    private final AuthenticationService authService;
+    private final MyUserService userService;
+    private final FacultyService facultyService;
+    private final UserDetailsService userDetailsService;
+    public Integer save(TeachingStaffRequest request) throws MessagingException {
 
-    public Integer save(TeachingStaffRequest request) {
-        TeachingStaff tStaff = tStaffMapper.toTeachingStaff(request);
+
+        Faculty faculty = facultyService.findFacultyFromResponse(request.staffFaculty());
+
+        TeachingStaff tStaff = tStaffMapper.toTeachingStaff(request, faculty);
+        tStaffRepo.save(tStaff);
+        authService.registerTeachingStaff(request.authDetails(), tStaff);
+        MyUser user = userService.findByEmail(request.authDetails().getEmail());
+        tStaff.setUser(user);
         return tStaffRepo.save(tStaff).getTeachingStaffId();
+
     }
 
     public TeachingStaffResponse findById(Integer tstaffId) {

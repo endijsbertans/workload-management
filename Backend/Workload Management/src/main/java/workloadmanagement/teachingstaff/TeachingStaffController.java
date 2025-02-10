@@ -2,6 +2,7 @@ package workloadmanagement.teachingstaff;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -21,9 +22,9 @@ public class TeachingStaffController {
     // MyUser user = ((User) connectedUser.getPrincipal())
     private final TeachingStaffService tStaffService;
     @PostMapping
-    public ResponseEntity<Integer> saveBook(
+    public ResponseEntity<Integer> saveTeachingStaff(
             @Valid @RequestBody TeachingStaffRequest request
-            ){
+            ) throws MessagingException {
         return ResponseEntity.ok(tStaffService.save(request));
     }
     @GetMapping("{tstaff-id}")

@@ -1,6 +1,8 @@
 package workloadmanagement.faculty;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+import workloadmanagement.repo.IFacultyRepo;
 
 @Service
 public class FacultyMapper {
@@ -17,4 +19,5 @@ public class FacultyMapper {
                 .facultyFullName(faculty.getFacultyFullName())
                 .build();
     }
+
 }

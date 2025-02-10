@@ -18,6 +18,7 @@ import workloadmanagement.repo.IMyAuthorityRepo;
 import workloadmanagement.auth.security.MyUser;
 import workloadmanagement.repo.IMyUserRepo;
 import workloadmanagement.repo.ITokenRepo;
+import workloadmanagement.teachingstaff.TeachingStaff;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
@@ -37,6 +38,7 @@ public class AuthenticationService {
     @Value("${application.mailing.frontend.activation-url}")
     private String activationUrl;
     public void register(RegistrationRequest request) throws MessagingException {
+        // TODO Make admin role and in future use this as adminRegistration
         var authorities = authorityRepository.findByTitle("USER")
                 .orElseThrow(() -> new IllegalStateException("Role user not found"));
 
@@ -44,6 +46,24 @@ public class AuthenticationService {
         var user = MyUser.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(generateActivationCode(6))) // random 6 digit temp password
+                .accountLocked(false)
+                .enabled(false)
+                .authorities(List.of(authorities))
+                .build();
+        System.out.println(user);
+        userRepo.save(user);
+        sendValidationEmail(user);
+    }
+    public void registerTeachingStaff(RegistrationRequest request, TeachingStaff tStaff) throws MessagingException {
+        // TODO Make admin role and in future use this as adminRegistration
+        var authorities = authorityRepository.findByTitle("USER")
+                .orElseThrow(() -> new IllegalStateException("Role user not found"));
+
+        System.out.println(request);
+        var user = MyUser.builder()
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(generateActivationCode(6))) // random 6 digit temp password
+                .teachingStaff(tStaff)
                 .accountLocked(false)
                 .enabled(false)
                 .authorities(List.of(authorities))
