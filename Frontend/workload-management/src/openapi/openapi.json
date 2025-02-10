@@ -322,7 +322,7 @@
         "tags": [
           "Course"
         ],
-        "operationId": "saveWorkload_1",
+        "operationId": "saveCourse",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1103,7 +1103,7 @@
           "courseCode",
           "courseName",
           "creditPoints",
-          "necessaryRankId",
+          "necessaryAcademicRank",
           "registrationType",
           "section",
           "studyLevel"
@@ -1120,8 +1120,8 @@
             "type": "number",
             "format": "double"
           },
-          "necessaryRankId": {
-            "$ref": "#/components/schemas/AcademicRank"
+          "necessaryAcademicRank": {
+            "$ref": "#/components/schemas/AcademicRankResponse"
           },
           "registrationType": {
             "type": "string"
@@ -1368,17 +1368,17 @@
           "name": {
             "type": "string"
           },
-          "username": {
-            "type": "string"
-          },
-          "accountNonExpired": {
+          "accountNonLocked": {
             "type": "boolean"
           },
           "credentialsNonExpired": {
             "type": "boolean"
           },
-          "accountNonLocked": {
+          "accountNonExpired": {
             "type": "boolean"
+          },
+          "username": {
+            "type": "string"
           }
         }
       },
@@ -1474,7 +1474,7 @@
             "type": "number",
             "format": "double"
           },
-          "necessaryRankId": {
+          "necessaryAcademicRank": {
             "$ref": "#/components/schemas/AcademicRank"
           },
           "registrationType": {

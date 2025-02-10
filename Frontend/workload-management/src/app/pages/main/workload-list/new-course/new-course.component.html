@@ -1,1 +1,112 @@
-<p>new-course works!</p>
+<div class="backdrop"></div>
+<dialog open>
+  <form [formGroup]="courseForm" (ngSubmit)="onSubmit()">
+    <h2>Pievienot jaunu kursu</h2>
+
+    <mat-form-field appearance="outline">
+      @if (courseForm.controls.name.invalid) {
+        <mat-error>{{ errorMessage() }}</mat-error>
+      }
+      <mat-label>Ievadi kursa nosaukumu</mat-label>
+      <input
+        matInput
+        placeholder="Algoritmu teorija"
+        [formControl]="courseForm.controls.name"
+        (blur)="updateErrorMessage()"
+        required
+      />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      @if (courseForm.controls.courseCode.invalid) {
+        <mat-error>{{ errorMessage() }}</mat-error>
+      }
+      <mat-label>Lais kods</mat-label>
+      <input
+        matInput
+        placeholder="MateB008"
+        [formControl]="courseForm.controls.courseCode"
+        (blur)="updateErrorMessage()"
+        required
+      />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      @if (courseForm.controls.creditPoints.invalid) {
+        <mat-error>{{ errorMessage() }}</mat-error>
+      }
+      <mat-label>Kredītpunkti</mat-label>
+      <input
+        matInput
+        placeholder="2"
+        [formControl]="courseForm.controls.creditPoints"
+        (blur)="updateErrorMessage()"
+        required
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      @if (courseForm.controls.registrationType.invalid) {
+        <mat-error>{{ errorMessage() }}</mat-error>
+      }
+      <mat-label>Reģistrācija</mat-label>
+      <input
+        matInput
+        placeholder="Automātiska"
+        [formControl]="courseForm.controls.registrationType"
+        (blur)="updateErrorMessage()"
+        required
+      />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      @if (courseForm.controls.section.invalid) {
+        <mat-error>{{ errorMessage() }}</mat-error>
+      }
+      <mat-label>Programmas daļa</mat-label>
+      <input
+        matInput
+        placeholder="Vispārizglītojošie..."
+        [formControl]="courseForm.controls.section"
+        (blur)="updateErrorMessage()"
+        required
+      />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      @if (courseForm.controls.studyLevel.invalid) {
+        <mat-error>{{ errorMessage() }}</mat-error>
+      }
+      <mat-label>Studiju līmenis</mat-label>
+      <input
+        matInput
+        placeholder="2"
+        [formControl]="courseForm.controls.studyLevel"
+        (blur)="updateErrorMessage()"
+        required
+      />
+    </mat-form-field>
+    <mat-form-field class="input-flex">
+      <mat-select required [formControl]="courseForm.controls.academicRank">
+        @if (isFetchingAcademicRanks()) {
+          <mat-option>
+            Lādē datus...
+          </mat-option>
+        }
+        @if (academicRanks()) {
+          @for (rank of academicRanks(); track rank.academicRankId) {
+            <mat-option [value]="rank">
+              {{ rank.rankName }}
+            </mat-option>
+          }
+        } @else {
+          <p>Izveidojiet Akademiskos rangus</p>
+        }
+      </mat-select>
+      <mat-label><em> Izvēlies akadēmisko rangu</em></mat-label>
+    </mat-form-field>
+
+    <div class="action-wrapper">
+      <button mat-raised-button type="button" routerLink="..">Cancel</button>
+      <button mat-raised-button type="Submit">Create</button>
+    </div>
+  </form>
+
+
+</dialog>

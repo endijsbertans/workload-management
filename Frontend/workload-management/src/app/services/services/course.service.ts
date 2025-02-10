@@ -16,8 +16,8 @@ import { findAllCourses } from '../fn/course/find-all-courses';
 import { FindAllCourses$Params } from '../fn/course/find-all-courses';
 import { findCourseById } from '../fn/course/find-course-by-id';
 import { FindCourseById$Params } from '../fn/course/find-course-by-id';
-import { saveWorkload1 } from '../fn/course/save-workload-1';
-import { SaveWorkload1$Params } from '../fn/course/save-workload-1';
+import { saveCourse } from '../fn/course/save-course';
+import { SaveCourse$Params } from '../fn/course/save-course';
 
 @Injectable({ providedIn: 'root' })
 export class CourseService extends BaseService {
@@ -50,27 +50,27 @@ export class CourseService extends BaseService {
     );
   }
 
-  /** Path part for operation `saveWorkload1()` */
-  static readonly SaveWorkload1Path = '/course';
+  /** Path part for operation `saveCourse()` */
+  static readonly SaveCoursePath = '/course';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `saveWorkload1()` instead.
+   * To access only the response body, use `saveCourse()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  saveWorkload1$Response(params: SaveWorkload1$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
-    return saveWorkload1(this.http, this.rootUrl, params, context);
+  saveCourse$Response(params: SaveCourse$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return saveCourse(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `saveWorkload1$Response()` instead.
+   * To access the full response (for headers, for example), `saveCourse$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  saveWorkload1(params: SaveWorkload1$Params, context?: HttpContext): Observable<number> {
-    return this.saveWorkload1$Response(params, context).pipe(
+  saveCourse(params: SaveCourse$Params, context?: HttpContext): Observable<number> {
+    return this.saveCourse$Response(params, context).pipe(
       map((r: StrictHttpResponse<number>): number => r.body)
     );
   }

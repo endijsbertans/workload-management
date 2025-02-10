@@ -37,7 +37,7 @@ import {AcademicRankResponse} from "../../../../services/models/academic-rank-re
   styleUrl: './new-teaching-staff.component.scss'
 })
 export class NewTeachingStaffComponent implements OnInit {
-  @Output() emitTeachingStaff = new EventEmitter<TeachingStaffRequest>();
+  @Output() emitTeachingStaff = new EventEmitter<number>();
   private readonly destroyRef = inject(DestroyRef);
   private readonly router = inject(Router);
   private readonly activeRoute = inject(ActivatedRoute);
@@ -56,6 +56,7 @@ export class NewTeachingStaffComponent implements OnInit {
   authButtonText = signal("Izveidot autentifikācijas detaļas");
 
   teachingStaffRequest?: TeachingStaffRequest;
+  //TODO THIS WONT WORK
   errorMsg: Array<string> = [];
   teachingStaffForm = new FormGroup({
     name: new FormControl('', {
@@ -122,8 +123,8 @@ export class NewTeachingStaffComponent implements OnInit {
         this.teachingStaffService.saveTeachingStaff({
           body: this.teachingStaffRequest
         }).subscribe({
-          next: () => {
-            this.emitTeachingStaff.emit( this.teachingStaffRequest );
+          next: (id) => {
+            this.emitTeachingStaff.emit( id );
           },
           error: (err) => {
             console.log(this.errorMsg);

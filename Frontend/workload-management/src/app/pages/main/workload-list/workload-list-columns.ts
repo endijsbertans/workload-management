@@ -100,6 +100,11 @@ export const ColumnsForCourse: ColumnNames[] = [
     name: 'Semestris',
     pathTo: 'semester',
     collection: 'ColumnsForCourse'
+  },
+  {
+    name: 'Studiju līmenis',
+    pathTo: 'course.studyLevel',
+    collection: 'ColumnsForCourse'
   }
   , {
     name: 'Priekšmeta nosaukums',

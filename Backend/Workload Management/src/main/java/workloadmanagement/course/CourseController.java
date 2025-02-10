@@ -12,7 +12,7 @@ import java.util.List;
 public class CourseController {
     private final CourseService courseService;
     @PostMapping
-    public ResponseEntity<Integer> saveWorkload(
+    public ResponseEntity<Integer> saveCourse(
             @Valid @RequestBody CourseRequest request) {
         return ResponseEntity.ok(courseService.save(request));
     }

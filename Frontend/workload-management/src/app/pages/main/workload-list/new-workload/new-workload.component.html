@@ -11,20 +11,17 @@
           </mat-option>
           @for (tStaff of filteredTeachingStaff | async; track tStaff.teachingStaffId) {
             <mat-option [value]="tStaff">
-              {{ tStaff.staffFullName }}
+              {{ tStaff.rankFullName }}
             </mat-option>
           }
         </mat-select>
       </mat-form-field>
-<!--      TODO add to SCSS-->
       <div style="display: flex">
         <button mat-button matStepperNext>Tālāk</button>
         <button mat-button routerLink="..">Atcelt</button>
-
         <button mat-button routerLink="new-teaching-staff">Izveidot jaunu</button>
       </div>
     </form>
-    <router-outlet (activate)="subscribeToChildEmitter($event)"/>
   </mat-step>
   <mat-step [stepControl]="courseForm">
     <form [formGroup]="courseForm">
@@ -43,6 +40,12 @@
           }
         </mat-select>
       </mat-form-field>
+      <div style="display: flex">
+        <button mat-button matStepperNext>Tālāk</button>
+        <button mat-button routerLink="..">Atcelt</button>
+        <button mat-button routerLink="new-course">Izveidot jaunu</button>
+      </div>
     </form>
   </mat-step>
 </mat-stepper>
+<router-outlet (activate)="subscribeToChildEmitter($event)"/>

@@ -4,6 +4,7 @@ import {ActivateAccountComponent} from "./pages/auth/auth-wrapper/activate-accou
 import {WorkloadListComponent} from "./pages/main/workload-list/workload-list.component";
 import {NewWorkloadComponent} from "./pages/main/workload-list/new-workload/new-workload.component";
 import {NewTeachingStaffComponent} from "./pages/main/new-objects/new-teaching-staff/new-teaching-staff.component";
+import {NewCourseComponent} from "./pages/main/workload-list/new-course/new-course.component";
 
 
 export const routes: Routes = [
@@ -31,8 +32,12 @@ export const routes: Routes = [
         children: [{
             path: 'new-teaching-staff',
             component: NewTeachingStaffComponent
-
-        }]
+          },
+          {
+            path: 'new-course',
+            component: NewCourseComponent
+          }
+        ]
       }]
     }
     ]

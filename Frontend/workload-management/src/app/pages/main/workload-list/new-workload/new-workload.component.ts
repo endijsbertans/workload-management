@@ -13,6 +13,7 @@ import {NewTeachingStaffComponent} from "../../new-objects/new-teaching-staff/ne
 import {TeachingStaffRequest} from "../../../../services/models/teaching-staff-request";
 import {CourseService} from "../../../../services/services";
 import {CourseResponse} from "../../../../services/models/course-response";
+import {NewCourseComponent} from "../new-course/new-course.component";
 
 @Component({
   selector: 'app-new-workload',
@@ -118,32 +119,39 @@ export class NewWorkloadComponent implements OnInit, AfterViewInit, OnDestroy{
     } else {
       search = search.toLowerCase();
     }
-    // filter the staff
     this.filteredTeachingStaff.next(
-      this.tStaff.filter((tStaff) => {
-        return tStaff.name && tStaff.name && tStaff.name.toLowerCase().indexOf(search) > -1;
-      })
+      this.tStaff.filter((tStaff) =>
+        tStaff.rankFullName?.toLowerCase().includes(search)
+      )
     );
   }
 
   subscribeToChildEmitter(componentRef: any) {
-    if(componentRef instanceof NewTeachingStaffComponent){
+    if (componentRef instanceof NewTeachingStaffComponent) {
       console.log(componentRef);
-      componentRef.emitTeachingStaff.subscribe((res: TeachingStaffRequest) => {
-
-        console.log(res);
+      componentRef.emitTeachingStaff.subscribe((id: number) => {
 
         this.findAllTeachingStaff(() => {
-          const teachingStaff = this.tStaff.find(t => t.name == res.name && t.surname == res.surname);
-          if(teachingStaff) {
+          const teachingStaff = this.tStaff.find(t => t.teachingStaffId == id);
+          if (teachingStaff) {
             this.tStaffForm.controls.tStaffCtrl.setValue(teachingStaff, {emitModelToViewChange: false});
           }
         });
-        console.log(this.tStaffForm.controls.tStaffFilterCtrl.value);
       })
+    }
+    if (componentRef instanceof NewCourseComponent) {
+      console.log(componentRef);
+      componentRef.emitCourse.subscribe((id: number) => {
 
-  }}
-
+        this.findAllCourses(() => {
+          const course = this.courses.find(c => c.courseId == id);
+          if (course) {
+            this.courseForm.controls.courseCtrl.setValue(course, {emitModelToViewChange: false});
+          }
+        });
+      })
+    }
+  }
   private findAllCourses(callback?: () => void) {
     this.courseService.findAllCourses().subscribe({
       next: (courses) => {
@@ -167,11 +175,11 @@ export class NewWorkloadComponent implements OnInit, AfterViewInit, OnDestroy{
     } else {
       search = search.toLowerCase();
     }
-    // filter the staff
+
     this.filteredCourses.next(
-      this.courses.filter((course) => {
-        return course.courseName && course.courseName && course.courseName.toLowerCase().indexOf(search) > -1;
-      })
+      this.courses.filter((course) =>
+        course.courseName?.toLowerCase().includes(search)
+      )
     );
   }
 }

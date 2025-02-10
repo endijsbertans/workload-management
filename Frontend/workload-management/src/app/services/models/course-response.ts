@@ -8,7 +8,7 @@ export interface CourseResponse {
   courseId?: number;
   courseName?: string;
   creditPoints?: number;
-  necessaryRankId?: AcademicRank;
+  necessaryAcademicRank?: AcademicRank;
   registrationType?: string;
   section?: string;
   studyLevel?: number;

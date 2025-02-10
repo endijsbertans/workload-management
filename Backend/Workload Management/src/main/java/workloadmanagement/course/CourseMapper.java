@@ -1,13 +1,15 @@
 package workloadmanagement.course;
 import org.springframework.stereotype.Service;
+import workloadmanagement.academicrank.AcademicRank;
+
 @Service
 public class CourseMapper {
-    public Course toCourse(CourseRequest request) {
+    public Course toCourse(CourseRequest request, AcademicRank necessaryRank) {
         return Course.builder()
                 .courseCode(request.courseCode())
                 .courseName(request.courseName())
                 .creditPoints(request.creditPoints())
-                .necessaryRank(request.necessaryRankId())
+                .necessaryRank(necessaryRank)
                 .registrationType(request.registrationType())
                 .studyLevel(request.studyLevel())
                 .section(request.section())
@@ -19,7 +21,7 @@ public class CourseMapper {
                 .courseCode(course.getCourseCode())
                 .courseName(course.getCourseName())
                 .creditPoints(course.getCreditPoints())
-                .necessaryRankId(course.getNecessaryRank())
+                .necessaryAcademicRank(course.getNecessaryRank())
                 .registrationType(course.getRegistrationType())
                 .studyLevel(course.getStudyLevel())
                 .section(course.getSection())

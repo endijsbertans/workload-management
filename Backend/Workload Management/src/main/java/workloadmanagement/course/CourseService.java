@@ -2,6 +2,8 @@ package workloadmanagement.course;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import workloadmanagement.academicrank.AcademicRank;
+import workloadmanagement.academicrank.AcademicRankService;
 import workloadmanagement.repo.ICourseRepo;
 
 
@@ -12,8 +14,10 @@ import java.util.List;
 public class CourseService {
     private final CourseMapper courseMapper;
     private final ICourseRepo courseRepo;
+    private final AcademicRankService academicRankService;
     public Integer save(CourseRequest request) {
-        Course course = courseMapper.toCourse(request);
+        AcademicRank necessaryAcademicRank = academicRankService.findAcademicRankFromResponse(request.necessaryAcademicRank());
+        Course course = courseMapper.toCourse(request, necessaryAcademicRank);
         return courseRepo.save(course).getCourseId();
     }
     public CourseResponse findById(Integer courseId) {

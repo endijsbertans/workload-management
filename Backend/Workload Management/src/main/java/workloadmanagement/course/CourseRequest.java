@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import workloadmanagement.academicrank.AcademicRank;
+import workloadmanagement.academicrank.AcademicRankResponse;
 
 public record CourseRequest (
     @Size.List({
@@ -22,11 +23,9 @@ public record CourseRequest (
     @NotEmpty(message = "141")
     String courseName,
     @NotNull(message = "142")
-    @NotEmpty(message = "142")
     double creditPoints,
     @NotNull(message = "143")
-    @NotEmpty(message = "143")
-    AcademicRank necessaryRankId,
+    AcademicRankResponse necessaryAcademicRank,
     @Size.List({
             @Size(min = 1, message = "144"),
             @Size(max = 45, message = "144")
@@ -36,7 +35,6 @@ public record CourseRequest (
     String registrationType,
     @Min(value = 0, message = "145")
     @NotNull(message = "145")
-    @NotEmpty(message = "145")
     int studyLevel,
 
     @Size.List({
