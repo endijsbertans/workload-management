@@ -1,5 +1,5 @@
-import {Component, DestroyRef, inject, OnInit, signal} from '@angular/core';
-import {FacultyService, TeachingStaffService} from "../../../../services/services";
+import {Component, DestroyRef, EventEmitter, inject, OnInit, Output, signal} from '@angular/core';
+import {AcademicRankService, FacultyService, TeachingStaffService} from "../../../../services/services";
 import {FacultyResponse} from "../../../../services/models/faculty-response";
 
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
@@ -15,6 +15,7 @@ import {FacultyRequest} from "../../../../services/models/faculty-request";
 import {NewUserComponent} from "../new-user/new-user.component";
 import {RegistrationRequest} from "../../../../services/models/registration-request";
 import {TeachingStaffRequest} from "../../../../services/models/teaching-staff-request";
+import {AcademicRankResponse} from "../../../../services/models/academic-rank-response";
 
 
 
@@ -36,22 +37,25 @@ import {TeachingStaffRequest} from "../../../../services/models/teaching-staff-r
   styleUrl: './new-teaching-staff.component.scss'
 })
 export class NewTeachingStaffComponent implements OnInit {
+  @Output() emitTeachingStaff = new EventEmitter<TeachingStaffRequest>();
   private readonly destroyRef = inject(DestroyRef);
   private readonly router = inject(Router);
   private readonly activeRoute = inject(ActivatedRoute);
   private readonly teachingStaffService = inject(TeachingStaffService)
   private readonly facultyService = inject(FacultyService)
+  private readonly academicRankService = inject(AcademicRankService)
 
-  isFetching = signal(false);
+  isFetchingFaculties = signal(false);
+  isFetchingAcademicRanks = signal(false);
   faculties = signal<FacultyResponse[] | undefined>(undefined);
+  academicRanks = signal<AcademicRankResponse[] | undefined>(undefined);
   errorMessage = signal('');
   onNewFaculty = signal(false);
   onAddUserAuthDetails = signal(false);
   userAuthDetails = signal< RegistrationRequest | undefined>(undefined);
   authButtonText = signal("Izveidot autentifikācijas detaļas");
 
-  teachingStaffRequest: TeachingStaffRequest =
-    {name: '', surname: '', positionTitle: '', staffFaculty: {facultyName: '', facultyFullName: ''}, authDetails:undefined}
+  teachingStaffRequest?: TeachingStaffRequest;
   errorMsg: Array<string> = [];
   teachingStaffForm = new FormGroup({
     name: new FormControl('', {
@@ -71,15 +75,18 @@ export class NewTeachingStaffComponent implements OnInit {
     }),
     staffFaculty: new FormControl<FacultyResponse | undefined>(undefined, {
       validators: [
-        Validators.minLength(3),
+        Validators.required],
+    }),
+    academicRank: new FormControl<AcademicRankResponse | undefined>(undefined, {
+      validators: [
         Validators.required],
     }),
   });
 
   ngOnInit(): void {
-    this.isFetching.set(true);
-    this.fetchFaculties();
 
+    this.fetchFaculties();
+    this.fetchAcademicRanks();
   }
 
   updateErrorMessage() {
@@ -98,12 +105,17 @@ export class NewTeachingStaffComponent implements OnInit {
       if (this.teachingStaffForm.value.name &&
         this.teachingStaffForm.value.surname &&
         this.teachingStaffForm.value.positionTitle &&
-        this.teachingStaffForm.value.staffFaculty
+        this.teachingStaffForm.value.staffFaculty &&
+        this.teachingStaffForm.value.academicRank
       ) {
-        this.teachingStaffRequest.name = this.teachingStaffForm.value.name;
-        this.teachingStaffRequest.surname = this.teachingStaffForm.value.surname;
-        this.teachingStaffRequest.positionTitle = this.teachingStaffForm.value.positionTitle;
-        this.teachingStaffRequest.staffFaculty = this.teachingStaffForm.value.staffFaculty;
+        this.teachingStaffRequest = {
+          name: this.teachingStaffForm.value.name,
+          surname: this.teachingStaffForm.value.surname,
+          positionTitle: this.teachingStaffForm.value.positionTitle,
+          staffFaculty: this.teachingStaffForm.value.staffFaculty,
+          staffAcademicRank: this.teachingStaffForm.value.academicRank,
+          authDetails: this.userAuthDetails() || undefined
+        };
         if(this.userAuthDetails()){
           this.teachingStaffRequest.authDetails = this.userAuthDetails();
         }
@@ -111,7 +123,7 @@ export class NewTeachingStaffComponent implements OnInit {
           body: this.teachingStaffRequest
         }).subscribe({
           next: () => {
-
+            this.emitTeachingStaff.emit( this.teachingStaffRequest );
           },
           error: (err) => {
             console.log(this.errorMsg);
@@ -121,7 +133,9 @@ export class NewTeachingStaffComponent implements OnInit {
         })
       }
 
-      this.router.navigate(['..'], { relativeTo: this.activeRoute });
+      this.router.navigate(['..'], {
+        relativeTo: this.activeRoute,
+        replaceUrl: true});
   }
 
   addNewFaculty() {
@@ -146,15 +160,17 @@ export class NewTeachingStaffComponent implements OnInit {
 
 
   private fetchFaculties():Promise<void> {
+    this.isFetchingFaculties.set(true);
     return new Promise((resolve, reject) => {
       const subscription = this.facultyService.findAllFaculties().subscribe({
+
         next: (faculties) => {
           if (faculties) {
             this.faculties.set(faculties);
           }
         },
         complete: () => {
-          this.isFetching.set(false);
+          this.isFetchingFaculties.set(false);
           resolve();
         },
         error: (err) => {
@@ -167,7 +183,29 @@ export class NewTeachingStaffComponent implements OnInit {
       });
     });
   }
+  private fetchAcademicRanks():Promise<void> {
+    this.isFetchingAcademicRanks.set(true);
+    return new Promise((resolve, reject) => {
+      const subscription = this.academicRankService.findAllAcademicRank().subscribe({
+        next: (ranks) => {
+          if (ranks) {
+            this.academicRanks.set(ranks);
+          }
+        },
+        complete: () => {
+          this.isFetchingAcademicRanks.set(false);
+          resolve();
+        },
+        error: (err) => {
+          reject(err);
+        }
+      });
 
+      this.destroyRef.onDestroy(() => {
+        subscription.unsubscribe();
+      });
+    });
+  }
   onEmittedUserAuthDetails(authDetails: RegistrationRequest) {
     this.onAddUserAuthDetails.set(false);
     this.userAuthDetails.set(authDetails);

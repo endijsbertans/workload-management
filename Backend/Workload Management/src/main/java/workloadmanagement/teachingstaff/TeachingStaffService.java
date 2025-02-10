@@ -5,6 +5,8 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
+import workloadmanagement.academicrank.AcademicRank;
+import workloadmanagement.academicrank.AcademicRankService;
 import workloadmanagement.auth.AuthenticationService;
 import workloadmanagement.auth.security.MyUser;
 import workloadmanagement.auth.security.MyUserService;
@@ -22,17 +24,17 @@ public class TeachingStaffService{
     private final AuthenticationService authService;
     private final MyUserService userService;
     private final FacultyService facultyService;
-    private final UserDetailsService userDetailsService;
+    private final AcademicRankService academicRankService;
     public Integer save(TeachingStaffRequest request) throws MessagingException {
-
-
         Faculty faculty = facultyService.findFacultyFromResponse(request.staffFaculty());
-
-        TeachingStaff tStaff = tStaffMapper.toTeachingStaff(request, faculty);
+        AcademicRank staffAcademicRank = academicRankService.findAcademicRankFromResponse(request.staffAcademicRank());
+        TeachingStaff tStaff = tStaffMapper.toTeachingStaff(request, faculty, staffAcademicRank);
         tStaffRepo.save(tStaff);
-        authService.registerTeachingStaff(request.authDetails(), tStaff);
-        MyUser user = userService.findByEmail(request.authDetails().getEmail());
-        tStaff.setUser(user);
+        if(request.authDetails() != null) {
+            authService.registerTeachingStaff(request.authDetails(), tStaff);
+            MyUser user = userService.findByEmail(request.authDetails().getEmail());
+            tStaff.setUser(user);
+        }
         return tStaffRepo.save(tStaff).getTeachingStaffId();
 
     }

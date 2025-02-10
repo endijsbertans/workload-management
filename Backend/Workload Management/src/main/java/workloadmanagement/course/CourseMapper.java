@@ -1,4 +1,4 @@
-package workloadmanagement.config.course;
+package workloadmanagement.course;
 import org.springframework.stereotype.Service;
 @Service
 public class CourseMapper {

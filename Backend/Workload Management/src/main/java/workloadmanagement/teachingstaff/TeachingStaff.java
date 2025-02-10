@@ -22,7 +22,7 @@ public class TeachingStaff {
 
     @OneToOne
     @JsonIgnore
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     private MyUser user;
 
     private String name;

@@ -1,6 +1,8 @@
 package workloadmanagement.academicrank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import workloadmanagement.faculty.Faculty;
+import workloadmanagement.faculty.FacultyResponse;
 import workloadmanagement.repo.IAcademicRankRepo;
 import java.util.List;
 @Service
@@ -13,6 +15,10 @@ public class AcademicRankService {
         return academicRankRepo.save(academicRank).getAcademicRankId();
     }
 
+    public AcademicRank findAcademicRankFromResponse(AcademicRankResponse response) {
+        return academicRankRepo.findById(response.getAcademicRankId())
+                .orElseThrow(() -> new RuntimeException("Academic Rank with id: " + response.getAcademicRankId() + " not found."));
+    }
     public AcademicRankResponse findById(Integer academicRankId) {
         return academicRankRepo.findById(academicRankId)
                 .map(academicRankMapper::toAcademicRankResponse)

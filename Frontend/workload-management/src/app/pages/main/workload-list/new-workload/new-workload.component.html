@@ -1,10 +1,10 @@
 <mat-stepper [linear]="true" #stepper>
-  <mat-step [stepControl]="form" >
-    <form [formGroup]="form">
+  <mat-step [stepControl]="tStaffForm" >
+    <form [formGroup]="tStaffForm">
       <mat-form-field >
-        <mat-select [formControl]="form.controls.tStaffCtrl" placeholder="Docents" #singleSelect>
+        <mat-select [formControl]="tStaffForm.controls.tStaffCtrl" placeholder="Docents" #singleSelect>
           <mat-option>
-            <ngx-mat-select-search [formControl]="form.controls.tStaffFilterCtrl"
+            <ngx-mat-select-search [formControl]="tStaffForm.controls.tStaffFilterCtrl"
                                    placeholderLabel="Meklēt personu"
                                    noEntriesFoundLabel="Persona nav atrasta">
             </ngx-mat-select-search>
@@ -24,21 +24,21 @@
         <button mat-button routerLink="new-teaching-staff">Izveidot jaunu</button>
       </div>
     </form>
-    <router-outlet/>
+    <router-outlet (activate)="subscribeToChildEmitter($event)"/>
   </mat-step>
-  <mat-step [stepControl]="form">
-    <form [formGroup]="form">
+  <mat-step [stepControl]="courseForm">
+    <form [formGroup]="courseForm">
       <mat-form-field>
-        <mat-select [formControl]="form.controls.tStaffCtrl" placeholder="Docents" #singleSelect>
+        <mat-select [formControl]="courseForm.controls.courseCtrl" placeholder="Kurss" #singleSelect>
           <mat-option>
-            <ngx-mat-select-search [formControl]="form.controls.tStaffFilterCtrl"
-                                   placeholderLabel="Meklēt personu"
-                                   noEntriesFoundLabel="Persona nav atrasta">
+            <ngx-mat-select-search [formControl]="courseForm.controls.courseFilterCtrl"
+                                   placeholderLabel="Meklēt kursu"
+                                   noEntriesFoundLabel="Kurss Nav atrasts">
             </ngx-mat-select-search>
           </mat-option>
-          @for (tStaff of filteredTeachingStaff | async; track tStaff.teachingStaffId) {
-            <mat-option [value]="tStaff">
-              {{ tStaff.staffFullName }}
+          @for (course of filteredCourses | async; track course.courseId) {
+            <mat-option [value]="course">
+              {{ course.courseName }}
             </mat-option>
           }
         </mat-select>

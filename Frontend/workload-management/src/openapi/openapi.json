@@ -866,10 +866,10 @@
           "staffPhoto": {
             "type": "string"
           },
-          "rankFullName": {
+          "staffFullName": {
             "type": "string"
           },
-          "staffFullName": {
+          "rankFullName": {
             "type": "string"
           }
         }
@@ -963,6 +963,29 @@
           }
         }
       },
+      "AcademicRankResponse": {
+        "type": "object",
+        "properties": {
+          "academicRankId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rankName": {
+            "type": "string"
+          },
+          "maxCP": {
+            "type": "number",
+            "format": "double"
+          },
+          "abbreviation": {
+            "type": "string"
+          },
+          "salary": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
       "FacultyResponse": {
         "type": "object",
         "properties": {
@@ -993,6 +1016,7 @@
         "required": [
           "name",
           "positionTitle",
+          "staffAcademicRank",
           "staffFaculty",
           "surname"
         ],
@@ -1006,6 +1030,9 @@
           },
           "staffFaculty": {
             "$ref": "#/components/schemas/FacultyResponse"
+          },
+          "staffAcademicRank": {
+            "$ref": "#/components/schemas/AcademicRankResponse"
           },
           "name": {
             "type": "string"
@@ -1344,13 +1371,13 @@
           "username": {
             "type": "string"
           },
-          "accountNonLocked": {
-            "type": "boolean"
-          },
           "accountNonExpired": {
             "type": "boolean"
           },
           "credentialsNonExpired": {
+            "type": "boolean"
+          },
+          "accountNonLocked": {
             "type": "boolean"
           }
         }
@@ -1459,29 +1486,6 @@
           },
           "section": {
             "type": "string"
-          }
-        }
-      },
-      "AcademicRankResponse": {
-        "type": "object",
-        "properties": {
-          "academicRankId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "rankName": {
-            "type": "string"
-          },
-          "maxCP": {
-            "type": "number",
-            "format": "double"
-          },
-          "abbreviation": {
-            "type": "string"
-          },
-          "salary": {
-            "type": "number",
-            "format": "double"
           }
         }
       }

@@ -1,4 +1,4 @@
-package workloadmanagement.config.course;
+package workloadmanagement.course;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;

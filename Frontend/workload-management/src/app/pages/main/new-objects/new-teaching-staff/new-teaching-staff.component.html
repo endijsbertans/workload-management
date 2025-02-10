@@ -43,61 +43,65 @@
         required
       />
     </mat-form-field>
-    <div class="flex-faculty">
-      <mat-form-field class="input-flex">
+    <mat-form-field class="input-flex">
 
-        <mat-select required [formControl]="teachingStaffForm.controls.staffFaculty">
-          @if (isFetching()) {
+      <mat-select required [formControl]="teachingStaffForm.controls.staffFaculty">
+        @if (isFetchingFaculties()) {
           <mat-option>
             Lādē datus...
           </mat-option>
+        }
+        @if (faculties()) {
+          @for (faculties of faculties(); track faculties.facultyId) {
+            <mat-option [value]="faculties">
+              {{ faculties.facultyName }}
+            </mat-option>
           }
-          @if (faculties()) {
-            @for (faculties of faculties(); track faculties.facultyName) {
-              <mat-option [value]="faculties">
-                {{ faculties.facultyId }}
-              </mat-option>
-            }
-          } @else {
-            <p>Izveidojiet fakultātes!</p>
+        } @else {
+          <p>Izveidojiet fakultātes!</p>
+        }
+      </mat-select>
+      <mat-label><em> Izvēlies fakultāti</em></mat-label>
+    </mat-form-field>
+    <!--      <button mat-raised-button type="button" (click)="addNewFaculty()">Izveidot jaunu fakultāti</button>-->
+    <mat-form-field class="input-flex">
+      <mat-select required [formControl]="teachingStaffForm.controls.academicRank">
+        @if (isFetchingAcademicRanks()) {
+          <mat-option>
+            Lādē datus...
+          </mat-option>
+        }
+        @if (academicRanks()) {
+          @for (rank of academicRanks(); track rank.academicRankId) {
+            <mat-option [value]="rank">
+              {{ rank.rankName }}
+            </mat-option>
           }
-        </mat-select>
-        <mat-label><em> Izvēlies fakultāti</em></mat-label>
-
-<!--        <mat-select [formControl]="teachingStaffForm.controls.staffFaculty" placeholder="Fakultāte" #singleSelect>-->
-<!--          @if (isFetching()) {-->
-<!--            <p>Lādē datus...</p>-->
-<!--          }-->
-<!--          @if (faculties()) {-->
-<!--            @for (faculties of faculties(); track faculties.facultyName) {-->
-<!--              <mat-option [value]="faculties">-->
-<!--                {{ faculties.facultyName }}-->
-<!--              </mat-option>-->
-<!--            }-->
-<!--          } @else {-->
-<!--            <p>Izveidojiet fakultātes!</p>-->
-<!--          }-->
-<!--        </mat-select>-->
-      </mat-form-field>
-<!--      <button mat-raised-button type="button" (click)="addNewFaculty()">Izveidot jaunu fakultāti</button>-->
-    </div>
-
+        } @else {
+          <p>Izveidojiet Akademiskos rangus</p>
+        }
+      </mat-select>
+      <mat-label><em> Izvēlies akadēmisko rangu</em></mat-label>
+    </mat-form-field>
     @if (onNewFaculty()) {
       <app-new-faculty (emitFaculty)="onEmittedFaculty($event)" class="inserted"/>
     }
     <div class="flex-faculty">
 
-    @if(userAuthDetails()?.email){
-       <p>{{userAuthDetails()?.email}}</p>
-    }
-      <button mat-raised-button type="button" (click)="closeOrOpenAuthDetails()" id="auth-details-button">{{authButtonText()}}</button>
+      @if (userAuthDetails()?.email) {
+        <p>{{ userAuthDetails()?.email }}</p>
+      }
+      <button mat-raised-button type="button" (click)="closeOrOpenAuthDetails()"
+              id="auth-details-button">{{ authButtonText() }}
+      </button>
     </div>
     @if (onAddUserAuthDetails()) {
-      <app-new-user (emitUserAuthDetails)="onEmittedUserAuthDetails($event)" (emitCancel)="closeOrOpenAuthDetails()" class="inserted"/>
+      <app-new-user (emitUserAuthDetails)="onEmittedUserAuthDetails($event)" (emitCancel)="closeOrOpenAuthDetails()"
+                    class="inserted"/>
     }
     <div class="action-wrapper">
-    <button mat-raised-button type="button" routerLink="..">Cancel</button>
-    <button mat-raised-button type="submit">Create</button>
+      <button mat-raised-button type="button" routerLink="..">Cancel</button>
+      <button mat-raised-button type="submit">Create</button>
     </div>
   </form>
 

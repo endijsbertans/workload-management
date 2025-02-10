@@ -1,4 +1,4 @@
-package workloadmanagement.config.course;
+package workloadmanagement.course;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

@@ -1,19 +1,19 @@
 package workloadmanagement.teachingstaff;
 
 import org.springframework.stereotype.Service;
-import workloadmanagement.auth.security.MyUser;
+import workloadmanagement.academicrank.AcademicRank;
 import workloadmanagement.faculty.Faculty;
 
 @Service
 public class TeachingStaffMapper {
-    // TODO make response to tSTaff
-    public TeachingStaff toTeachingStaff(TeachingStaffRequest request, Faculty staffFaculty) {
+
+    public TeachingStaff toTeachingStaff(TeachingStaffRequest request, Faculty staffFaculty, AcademicRank staffAcademicRank) {
         return TeachingStaff.builder()
                 .name(request.name())
                 .surname(request.surname())
                 .positionTitle(request.positionTitle())
                 .staffFaculty(staffFaculty)
-                //.staffAcademicRank(request.staffAcademicRank())
+                .staffAcademicRank(staffAcademicRank)
                 //.staffPhoto(request.staffPhoto())
                 .build();
     }

@@ -11,7 +11,7 @@ import workloadmanagement.MyClass.MyClass;
 import workloadmanagement.academicrank.AcademicRank;
 import workloadmanagement.auth.security.MyAuthority;
 import workloadmanagement.auth.security.MyUser;
-import workloadmanagement.config.course.Course;
+import workloadmanagement.course.Course;
 import workloadmanagement.faculty.Faculty;
 import workloadmanagement.repo.*;
 import workloadmanagement.statustype.StatusType;

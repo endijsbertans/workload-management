@@ -2,12 +2,11 @@ package workloadmanagement.workload;
 
 import lombok.*;
 import workloadmanagement.academicrank.AcademicRank;
-import workloadmanagement.config.course.Course;
+import workloadmanagement.course.Course;
 import workloadmanagement.MyClass.MyClass;
 import workloadmanagement.statustype.StatusType;
 import workloadmanagement.teachingstaff.TeachingStaff;
 
-import java.util.Collection;
 import java.util.List;
 
 @Getter

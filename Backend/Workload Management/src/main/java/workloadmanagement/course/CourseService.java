@@ -1,4 +1,4 @@
-package workloadmanagement.config.course;
+package workloadmanagement.course;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

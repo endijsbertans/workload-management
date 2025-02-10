@@ -18,6 +18,9 @@ import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatTooltip} from "@angular/material/tooltip";
 import {MatFormField} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
+import {component} from "@igniteui/angular-schematics/src/component";
+import {NewTeachingStaffComponent} from "../new-objects/new-teaching-staff/new-teaching-staff.component";
+import {Subscription} from "rxjs";
 
 
 @Component({
@@ -174,9 +177,11 @@ export class WorkloadListComponent implements OnInit, AfterViewInit {
     }
     this.displayedColumns();
   }
-  onCancelAddWorkload(){
+
+  onCancelAddWorkload() {
     this.isAddingWorkload = false;
   }
+
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     console.log(this.dataSource);
@@ -184,7 +189,8 @@ export class WorkloadListComponent implements OnInit, AfterViewInit {
       this.dataSource.filter = filterValue.trim().toLowerCase();
     }
   }
-  setupFiltering(){
+
+  setupFiltering() {
     this.dataSource.filterPredicate = (data: WorkloadResponse, filter: string) => {
       const lowercaseFilter = filter.trim().toLowerCase();
 
@@ -223,7 +229,4 @@ export class WorkloadListComponent implements OnInit, AfterViewInit {
     };
   }
 
-  onAddWorkload() {
-    this.isAddingWorkload = true;
-  }
 }

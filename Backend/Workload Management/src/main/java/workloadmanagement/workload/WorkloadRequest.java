@@ -5,12 +5,11 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import workloadmanagement.academicrank.AcademicRank;
-import workloadmanagement.config.course.Course;
+import workloadmanagement.course.Course;
 import workloadmanagement.MyClass.MyClass;
 import workloadmanagement.statustype.StatusType;
 import workloadmanagement.teachingstaff.TeachingStaff;
 
-import java.util.Collection;
 import java.util.List;
 
 public record WorkloadRequest (

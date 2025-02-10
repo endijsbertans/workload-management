@@ -2,6 +2,7 @@ package workloadmanagement.teachingstaff;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import workloadmanagement.academicrank.AcademicRankResponse;
 import workloadmanagement.auth.RegistrationRequest;
 import workloadmanagement.faculty.FacultyResponse;
 
@@ -17,10 +18,9 @@ public record TeachingStaffRequest(
         String positionTitle,
         @NotNull(message = "102")
         FacultyResponse staffFaculty,
-// TODO make binding of ACADEMIC RANK
-//        @NotNull(message = "103")
-//        @NotEmpty(message = "103")
-//        AcademicRank staffAcademicRank,
+
+        @NotNull(message = "103")
+        AcademicRankResponse staffAcademicRank,
 
 //        @NotNull(message = "104")
 //        @NotEmpty(message = "104")
