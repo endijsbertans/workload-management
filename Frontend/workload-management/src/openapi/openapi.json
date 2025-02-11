@@ -826,6 +826,9 @@
           },
           "classFaculty": {
             "$ref": "#/components/schemas/Faculty"
+          },
+          "classNameAndYear": {
+            "type": "string"
           }
         }
       },
@@ -1368,17 +1371,17 @@
           "name": {
             "type": "string"
           },
-          "accountNonLocked": {
-            "type": "boolean"
+          "username": {
+            "type": "string"
           },
-          "credentialsNonExpired": {
+          "accountNonLocked": {
             "type": "boolean"
           },
           "accountNonExpired": {
             "type": "boolean"
           },
-          "username": {
-            "type": "string"
+          "credentialsNonExpired": {
+            "type": "boolean"
           }
         }
       },
@@ -1453,6 +1456,9 @@
             "$ref": "#/components/schemas/Faculty"
           },
           "classYear": {
+            "type": "string"
+          },
+          "classNameAndYear": {
             "type": "string"
           }
         }

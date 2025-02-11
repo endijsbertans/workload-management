@@ -10,10 +10,11 @@ import {AsyncPipe} from "@angular/common";
 import {MatButton} from "@angular/material/button";
 import {RouterLink, RouterOutlet} from "@angular/router";
 import {NewTeachingStaffComponent} from "../../new-objects/new-teaching-staff/new-teaching-staff.component";
-import {TeachingStaffRequest} from "../../../../services/models/teaching-staff-request";
-import {CourseService} from "../../../../services/services";
+import {CourseService, MyClassService} from "../../../../services/services";
 import {CourseResponse} from "../../../../services/models/course-response";
-import {NewCourseComponent} from "../new-course/new-course.component";
+import {NewCourseComponent} from "../../new-objects/new-course/new-course.component";
+import {MyClassResponse} from "../../../../services/models/my-class-response";
+import {NewClassComponent} from "../../new-objects/new-class/new-class.component";
 
 @Component({
   selector: 'app-new-workload',
@@ -36,30 +37,40 @@ import {NewCourseComponent} from "../new-course/new-course.component";
   standalone: true,
   styleUrl: './new-workload.component.scss'
 })
-export class NewWorkloadComponent implements OnInit, AfterViewInit, OnDestroy{
+export class NewWorkloadComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly teachingStaffService = inject(TeachingStaffService);
   private readonly courseService = inject(CourseService);
+  private readonly myClassService = inject(MyClassService);
   errorMsg = '';
   tStaff: TeachingStaffResponse[] = [];
   courses: CourseResponse[] = [];
+  myClasses: MyClassResponse[] = [];
 
   public filteredTeachingStaff: ReplaySubject<TeachingStaffResponse[]> = new ReplaySubject<TeachingStaffResponse[]>(1);
   public filteredCourses: ReplaySubject<CourseResponse[]> = new ReplaySubject<CourseResponse[]>(1);
-  @ViewChild('singleSelect', {static: true}) singleSelect!: MatSelect;
+  public filteredMyClasses: ReplaySubject<MyClassResponse[]> = new ReplaySubject<MyClassResponse[]>(1);
   protected _onDestroy = new Subject<void>();
-  onSubmit() {}
+  @ViewChild('multiSelect', { static: true }) multiSelect: MatSelect | undefined;
+  onSubmit() {
+  }
+
   tStaffForm = new FormGroup({
-    tStaffCtrl: new FormControl<TeachingStaffResponse | null >(null),
+    tStaffCtrl: new FormControl<number | null>(null),
     tStaffFilterCtrl: new FormControl<string>('')
   });
 
   courseForm = new FormGroup({
-    courseCtrl: new FormControl<CourseResponse | null >(null),
+    courseCtrl: new FormControl<number | null>(null),
     courseFilterCtrl: new FormControl<string>('')
 
   });
-  isLinear = false;
+
+  myClassForm = new FormGroup({
+    myClassCtrl: new FormControl<number[] | null>(null),
+    myClassFilterCtrl: new FormControl<string>('')
+  })
   ngOnInit() {
+
     this.findAllTeachingStaff();
     this.tStaffForm.controls.tStaffFilterCtrl.valueChanges
       .pipe(takeUntil(this._onDestroy))
@@ -73,8 +84,17 @@ export class NewWorkloadComponent implements OnInit, AfterViewInit, OnDestroy{
       .subscribe(() => {
         this.filterCourse();
       });
-  }
 
+    this.findAllClasses();
+    this.myClassForm.controls.myClassFilterCtrl.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filterMyClasses();
+      });
+  }
+  ngAfterViewInit() {
+    //this.setInitialValue();
+  }
   private findAllTeachingStaff(callback?: () => void) {
     this.teachingStaffService.findAllTeachingStaff().subscribe({
       next: (tStaff) => {
@@ -87,26 +107,15 @@ export class NewWorkloadComponent implements OnInit, AfterViewInit, OnDestroy{
       }
     });
   }
-  ngAfterViewInit() {
-    this.setInitialValue();
-  }
+
+
   ngOnDestroy() {
     this._onDestroy.next();
     this._onDestroy.complete();
   }
-  protected setInitialValue() {
-    this.filteredTeachingStaff
-      .pipe(take(1), takeUntil(this._onDestroy))
-      .subscribe(() => {
-        this.singleSelect.compareWith = (a: TeachingStaffResponse, b: TeachingStaffResponse) => a && b && a.teachingStaffId === b.teachingStaffId;
-      });
 
-    this.filteredCourses
-      .pipe(take(1), takeUntil(this._onDestroy))
-      .subscribe(() => {
-        this.singleSelect.compareWith = (a: CourseResponse, b: CourseResponse) => a && b && a.courseId === b.courseId;
-      });
-  }
+
+
   protected filterTeachingStaff() {
     if (!this.tStaff) {
       return;
@@ -126,32 +135,8 @@ export class NewWorkloadComponent implements OnInit, AfterViewInit, OnDestroy{
     );
   }
 
-  subscribeToChildEmitter(componentRef: any) {
-    if (componentRef instanceof NewTeachingStaffComponent) {
-      console.log(componentRef);
-      componentRef.emitTeachingStaff.subscribe((id: number) => {
 
-        this.findAllTeachingStaff(() => {
-          const teachingStaff = this.tStaff.find(t => t.teachingStaffId == id);
-          if (teachingStaff) {
-            this.tStaffForm.controls.tStaffCtrl.setValue(teachingStaff, {emitModelToViewChange: false});
-          }
-        });
-      })
-    }
-    if (componentRef instanceof NewCourseComponent) {
-      console.log(componentRef);
-      componentRef.emitCourse.subscribe((id: number) => {
 
-        this.findAllCourses(() => {
-          const course = this.courses.find(c => c.courseId == id);
-          if (course) {
-            this.courseForm.controls.courseCtrl.setValue(course, {emitModelToViewChange: false});
-          }
-        });
-      })
-    }
-  }
   private findAllCourses(callback?: () => void) {
     this.courseService.findAllCourses().subscribe({
       next: (courses) => {
@@ -164,6 +149,7 @@ export class NewWorkloadComponent implements OnInit, AfterViewInit, OnDestroy{
       }
     });
   }
+
   protected filterCourse() {
     if (!this.courses) {
       return;
@@ -181,5 +167,59 @@ export class NewWorkloadComponent implements OnInit, AfterViewInit, OnDestroy{
         course.courseName?.toLowerCase().includes(search)
       )
     );
+  }
+  private findAllClasses(callback?: () => void) {
+    this.myClassService.findAllMyClass().subscribe({
+      next: (classes) => {
+        if (classes) {
+          this.myClasses = classes;
+          console.log(this.myClasses);
+          this.filteredMyClasses.next(this.myClasses.slice());
+        }
+        if (callback) callback();
+      }
+    });
+  }
+  protected filterMyClasses() {
+    if (!this.myClasses) {
+      return;
+    }
+    let search = this.myClassForm.controls.myClassFilterCtrl.value;
+    if (!search) {
+      this.filteredMyClasses.next(this.myClasses.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+
+    this.filteredMyClasses.next(
+      this.myClasses.filter((myClass) =>
+        myClass.classNameAndYear?.toLowerCase().includes(search)
+      )
+    );
+  }
+  subscribeToChildEmitter(componentRef: any) {
+    if (componentRef instanceof NewTeachingStaffComponent) {
+      componentRef.emitTeachingStaff.subscribe((id: number) => {
+        this.findAllTeachingStaff(() => {
+            this.tStaffForm.controls.tStaffCtrl.setValue(id, {emitModelToViewChange: false});
+        });
+      })
+    }
+    if (componentRef instanceof NewCourseComponent) {
+      componentRef.emitCourse.subscribe((id: number) => {
+        this.findAllCourses(() => {
+            this.courseForm.controls.courseCtrl.setValue(id, {emitModelToViewChange: false});
+        });
+      })
+    }
+    if (componentRef instanceof NewClassComponent) {
+      componentRef.emitMyClass.subscribe((id: number) => {
+        this.findAllClasses(() => {
+            let prevValues = this.myClassForm.controls.myClassCtrl.value || [];
+            this.myClassForm.controls.myClassCtrl.setValue([...prevValues, id], { emitModelToViewChange: false });
+        });
+      })
+    }
   }
 }

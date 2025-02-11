@@ -24,6 +24,7 @@ public class MyClass {
     private int classId;
 
     private String className;
+    private int studyYear;
 
     private String classYear;
 
@@ -36,4 +37,8 @@ public class MyClass {
     @ManyToMany(mappedBy = "myClasses")
     @JsonIgnore
     private List<Workload> myWorkloads = new ArrayList<>();
+
+    public String getClassNameAndYear() {
+        return className + " " + classYear;
+    }
 }

@@ -1,0 +1,85 @@
+<div class="backdrop"></div>
+<dialog open>
+  <form [formGroup]="classForm" (ngSubmit)="onSubmit()">
+    <h2>Pievienot jaunu klasi</h2>
+
+    <mat-form-field appearance="outline">
+      @if (classForm.controls.className.invalid) {
+        <mat-error>{{ errorMessage() }}</mat-error>
+      }
+      <mat-label>Ievadi klases abreviatūru</mat-label>
+      <input
+        matInput
+        placeholder="3ITB"
+        [formControl]="classForm.controls.className"
+        (blur)="updateErrorMessage('className')"
+        required
+      />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      @if (classForm.controls.studyYear.invalid) {
+        <mat-error>{{ errorMessage() }}</mat-error>
+      }
+      <mat-label>Ievadi klases gadu</mat-label>
+      <input
+        type="number"
+        matInput
+        placeholder="1"
+        [formControl]="classForm.controls.studyYear"
+        (blur)="updateErrorMessage('studyYear')"
+        required
+      />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      @if (classForm.controls.studentAmount.invalid) {
+        <mat-error>{{ errorMessage() }}</mat-error>
+      }
+      <mat-label>Ievadi studentu daudzumu</mat-label>
+      <input
+        type="number"
+        matInput
+        placeholder="27"
+        [formControl]="classForm.controls.studentAmount"
+        (blur)="updateErrorMessage('studentAmount')"
+        required
+      />
+    </mat-form-field>
+    <mat-form-field class="input-flex">
+
+      <mat-select required [formControl]="classForm.controls.classFaculty">
+        @if (isFetchingFaculties()) {
+          <mat-option>
+            Lādē datus...
+          </mat-option>
+        }
+        @if (faculties()) {
+          @for (faculties of faculties(); track faculties.facultyId) {
+            <mat-option [value]="faculties">
+              {{ faculties.facultyName }}
+            </mat-option>
+          }
+        } @else {
+          <p>Izveidojiet fakultātes!</p>
+        }
+      </mat-select>
+      <mat-label><em> Izvēlies fakultāti</em></mat-label>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      @if (classForm.controls.classYear.invalid) {
+        <mat-error>{{ errorMessage() }}</mat-error>
+      }
+      <mat-label>Ievadi studentu kursa gadu</mat-label>
+      <input
+        matInput
+        placeholder="s22"
+        [formControl]="classForm.controls.classYear"
+        (blur)="updateErrorMessage('classYear')"
+        required
+      />
+    </mat-form-field>
+    <div class="action-wrapper">
+      <button mat-raised-button type="button" routerLink="..">Cancel</button>
+      <button mat-raised-button type="Submit" [disabled]="classForm.invalid">Create</button>
+    </div>
+  </form>
+</dialog>

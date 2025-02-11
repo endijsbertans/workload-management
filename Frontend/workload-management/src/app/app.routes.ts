@@ -4,7 +4,8 @@ import {ActivateAccountComponent} from "./pages/auth/auth-wrapper/activate-accou
 import {WorkloadListComponent} from "./pages/main/workload-list/workload-list.component";
 import {NewWorkloadComponent} from "./pages/main/workload-list/new-workload/new-workload.component";
 import {NewTeachingStaffComponent} from "./pages/main/new-objects/new-teaching-staff/new-teaching-staff.component";
-import {NewCourseComponent} from "./pages/main/workload-list/new-course/new-course.component";
+import {NewCourseComponent} from "./pages/main/new-objects/new-course/new-course.component";
+import {NewClassComponent} from "./pages/main/new-objects/new-class/new-class.component";
 
 
 export const routes: Routes = [
@@ -36,7 +37,11 @@ export const routes: Routes = [
           {
             path: 'new-course',
             component: NewCourseComponent
-          }
+          },
+          {
+            path: 'new-class',
+            component: NewClassComponent
+          },
         ]
       }]
     }

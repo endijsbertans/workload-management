@@ -10,7 +10,7 @@
             </ngx-mat-select-search>
           </mat-option>
           @for (tStaff of filteredTeachingStaff | async; track tStaff.teachingStaffId) {
-            <mat-option [value]="tStaff">
+            <mat-option [value]="tStaff.teachingStaffId">
               {{ tStaff.rankFullName }}
             </mat-option>
           }
@@ -34,7 +34,7 @@
             </ngx-mat-select-search>
           </mat-option>
           @for (course of filteredCourses | async; track course.courseId) {
-            <mat-option [value]="course">
+            <mat-option [value]="course.courseId">
               {{ course.courseName }}
             </mat-option>
           }
@@ -44,6 +44,30 @@
         <button mat-button matStepperNext>Tālāk</button>
         <button mat-button routerLink="..">Atcelt</button>
         <button mat-button routerLink="new-course">Izveidot jaunu</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="myClassForm">
+    <form [formGroup]="myClassForm">
+      <mat-form-field>
+        <mat-select [formControl]="myClassForm.controls.myClassCtrl" placeholder="Klase" [multiple]="true" #multiSelect>
+          <mat-option>
+            <ngx-mat-select-search [formControl]="myClassForm.controls.myClassFilterCtrl"
+                                   placeholderLabel="Meklēt klasi"
+                                   noEntriesFoundLabel="Klase nav atrasta">
+            </ngx-mat-select-search>
+          </mat-option>
+          @for (myClass of filteredMyClasses | async; track myClass.classId) {
+            <mat-option [value]="myClass.classId">
+              {{ myClass.classNameAndYear }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <div style="display: flex">
+        <button mat-button matStepperNext>Tālāk</button>
+        <button mat-button routerLink="..">Atcelt</button>
+        <button mat-button routerLink="new-class">Izveidot jaunu</button>
       </div>
     </form>
   </mat-step>

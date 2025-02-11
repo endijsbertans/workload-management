@@ -101,9 +101,7 @@
     }
     <div class="action-wrapper">
       <button mat-raised-button type="button" routerLink="..">Cancel</button>
-      <button mat-raised-button type="submit">Create</button>
+      <button mat-raised-button type="submit" [disabled]="teachingStaffForm.invalid">Create</button>
     </div>
   </form>
-
-
 </dialog>

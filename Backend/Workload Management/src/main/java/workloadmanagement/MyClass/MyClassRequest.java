@@ -17,13 +17,11 @@ public record MyClassRequest (
 
     @Min(value = 0, message = "131")
     @NotNull(message = "131")
-    @NotEmpty(message = "131")
     int studyYear,
 
     @Min(value = 0, message = "131")
     int studentAmount,
     @NotNull(message = "132")
-    @NotEmpty(message = "132")
     Faculty classFaculty,
 
     @NotNull(message = "133")
