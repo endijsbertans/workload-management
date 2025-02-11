@@ -4,7 +4,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import workloadmanagement.faculty.Faculty;
+import workloadmanagement.faculty.FacultyResponse;
 
 public record MyClassRequest (
     @Size.List({
@@ -22,7 +22,7 @@ public record MyClassRequest (
     @Min(value = 0, message = "131")
     int studentAmount,
     @NotNull(message = "132")
-    Faculty classFaculty,
+    FacultyResponse classFaculty,
 
     @NotNull(message = "133")
     @NotEmpty(message = "133")

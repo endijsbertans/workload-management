@@ -45,24 +45,28 @@
       />
     </mat-form-field>
     <mat-form-field class="input-flex">
-
       <mat-select required [formControl]="classForm.controls.classFaculty">
-        @if (isFetchingFaculties()) {
-          <mat-option>
-            Lādē datus...
-          </mat-option>
-        }
         @if (faculties()) {
-          @for (faculties of faculties(); track faculties.facultyId) {
-            <mat-option [value]="faculties">
-              {{ faculties.facultyName }}
+          @if (faculties()?.length === 0) {
+            <mat-option>
+              Izveidojiet fakultātes!
             </mat-option>
+          } @else {
+            @for (faculties of faculties(); track faculties.facultyId) {
+              <mat-option [value]="faculties">
+                {{ faculties.facultyName }}
+              </mat-option>
+            }
           }
-        } @else {
-          <p>Izveidojiet fakultātes!</p>
         }
       </mat-select>
-      <mat-label><em> Izvēlies fakultāti</em></mat-label>
+      @if (!faculties()) {
+        <mat-label>
+          <em>Lādē datus...</em>
+        </mat-label>
+      } @else {
+        <mat-label>Izvēlies fakultāti</mat-label>
+      }
     </mat-form-field>
     <mat-form-field appearance="outline">
       @if (classForm.controls.classYear.invalid) {

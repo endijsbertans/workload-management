@@ -45,19 +45,15 @@ export class NewTeachingStaffComponent implements OnInit {
   private readonly facultyService = inject(FacultyService)
   private readonly academicRankService = inject(AcademicRankService)
 
-  isFetchingFaculties = signal(false);
-  isFetchingAcademicRanks = signal(false);
   faculties = signal<FacultyResponse[] | undefined>(undefined);
   academicRanks = signal<AcademicRankResponse[] | undefined>(undefined);
-  errorMessage = signal('');
   onNewFaculty = signal(false);
   onAddUserAuthDetails = signal(false);
   userAuthDetails = signal< RegistrationRequest | undefined>(undefined);
   authButtonText = signal("Izveidot autentifikācijas detaļas");
+  errorMessage = signal('');
 
   teachingStaffRequest?: TeachingStaffRequest;
-  //TODO THIS WONT WORK
-  errorMsg: Array<string> = [];
   teachingStaffForm = new FormGroup({
     name: new FormControl('', {
       validators: [
@@ -90,16 +86,7 @@ export class NewTeachingStaffComponent implements OnInit {
     this.fetchAcademicRanks();
   }
 
-  updateErrorMessage() {
-    // TODO
-    if (this.teachingStaffForm.controls.name.hasError('required')) {
-      this.errorMessage.set('Vārds ir obligāts');
-    } else if (this.teachingStaffForm.controls.name.hasError('email')) {
-      this.errorMessage.set('Nepareizs ēpasts');
-    } else {
-      this.errorMessage.set('');
-    }
-  }
+
 
   onSubmit() {
       console.log(this.teachingStaffForm.controls);
@@ -127,9 +114,7 @@ export class NewTeachingStaffComponent implements OnInit {
             this.emitTeachingStaff.emit( id );
           },
           error: (err) => {
-            console.log(this.errorMsg);
-            this.errorMsg = err.error.validationErrors;
-
+            console.log(err);
           }
         })
       }
@@ -159,33 +144,24 @@ export class NewTeachingStaffComponent implements OnInit {
     });
   }
 
-
   private fetchFaculties():Promise<void> {
-    this.isFetchingFaculties.set(true);
     return new Promise((resolve, reject) => {
       const subscription = this.facultyService.findAllFaculties().subscribe({
-
         next: (faculties) => {
           if (faculties) {
             this.faculties.set(faculties);
           }
         },
-        complete: () => {
-          this.isFetchingFaculties.set(false);
-          resolve();
-        },
         error: (err) => {
           reject(err);
         }
       });
-
       this.destroyRef.onDestroy(() => {
         subscription.unsubscribe();
       });
     });
   }
   private fetchAcademicRanks():Promise<void> {
-    this.isFetchingAcademicRanks.set(true);
     return new Promise((resolve, reject) => {
       const subscription = this.academicRankService.findAllAcademicRank().subscribe({
         next: (ranks) => {
@@ -193,15 +169,10 @@ export class NewTeachingStaffComponent implements OnInit {
             this.academicRanks.set(ranks);
           }
         },
-        complete: () => {
-          this.isFetchingAcademicRanks.set(false);
-          resolve();
-        },
-        error: (err) => {
-          reject(err);
+        error: (error) => {
+          reject(error);
         }
       });
-
       this.destroyRef.onDestroy(() => {
         subscription.unsubscribe();
       });
@@ -216,5 +187,25 @@ export class NewTeachingStaffComponent implements OnInit {
 
   closeOrOpenAuthDetails() {
     this.onAddUserAuthDetails.set(!this.onAddUserAuthDetails());
+  }
+  updateErrorMessage(controlName: keyof typeof this.teachingStaffForm.controls) {
+    const control = this.teachingStaffForm.controls[controlName];
+    if (control.errors) {
+      if (control.hasError('required')) {
+        this.errorMessage.set('Lauks nevar būt tukšs');
+      } else if (control.hasError('minlength')) {
+        this.errorMessage.set('Ievadītā vērtība ir pārāk īsa');
+      } else if (control.hasError('maxlength')) {
+        this.errorMessage.set('Ievadītā vērtība ir pārāk gara');
+      } else if (control.hasError('min')) {
+        this.errorMessage.set('Ievadītā vērtība ir pārāk maza');
+      } else if (control.hasError('max')) {
+        this.errorMessage.set('Ievadītā vērtība ir pārāk liela');
+      } else {
+        this.errorMessage.set('Nederīga vērtība');
+      }
+    } else {
+      this.errorMessage.set('');
+    }
   }
 }

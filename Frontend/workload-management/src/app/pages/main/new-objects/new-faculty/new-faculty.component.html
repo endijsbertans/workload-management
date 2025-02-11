@@ -3,27 +3,27 @@
   <div class="form-field-wrapper">
   <mat-form-field appearance="outline">
     @if (facultyForm.controls.name.invalid) {
-      <mat-error>{{ errorOnName() }}</mat-error>
+      <mat-error>{{ errorMessage() }}</mat-error>
     }
     <mat-label>Ievadi fakultātes abreviatūru</mat-label>
     <input
       matInput
       placeholder="abreviatūra"
       [formControl]="facultyForm.controls.name"
-      (blur)="updateErrorOnName()"
+      (blur)="updateErrorMessage('name')"
       required
     />
   </mat-form-field>
   <mat-form-field appearance="outline">
     @if (facultyForm.controls.fullName.invalid) {
-      <mat-error>{{ errorOnFullName() }}</mat-error>
+      <mat-error>{{ errorMessage() }}</mat-error>
     }
     <mat-label>Ievadi fakultātes pilno nosaukumu</mat-label>
     <input
       matInput
       placeholder="pilnais nosaukums"
       [formControl]="facultyForm.controls.fullName"
-      (blur)="updateErrorOnFullName()"
+      (blur)="updateErrorMessage('fullName')"
       required
     />
   </mat-form-field>

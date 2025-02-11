@@ -37,7 +37,6 @@ export class NewClassComponent implements OnInit{
   errorMsg: Array<string> = [];
   errorMessage = signal('');
   faculties = signal<FacultyResponse[] | undefined>(undefined);
-  isFetchingFaculties = signal(false);
   myClassRequest?:MyClassRequest;
   classForm = new FormGroup({
     className: new FormControl('', {
@@ -107,17 +106,11 @@ export class NewClassComponent implements OnInit{
       replaceUrl: true});
   }
   private fetchFaculties(){
-    this.isFetchingFaculties.set(true);
-    return new Promise((resolve, reject) => {
       const subscription = this.facultyService.findAllFaculties().subscribe({
         next: (faculties) => {
           if (faculties) {
             this.faculties.set(faculties);
           }
-        },
-        complete: () => {
-          this.isFetchingFaculties.set(false);
-
         },
         error: (err) => {
           console.log(err);
@@ -126,8 +119,8 @@ export class NewClassComponent implements OnInit{
       this.destroyRef.onDestroy(() => {
         subscription.unsubscribe();
       });
-    });
-  }
+    }
+
   updateErrorMessage(controlName: keyof typeof this.classForm.controls) {
     const control = this.classForm.controls[controlName];
     if (control.errors) {

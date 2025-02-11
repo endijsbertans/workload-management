@@ -11,7 +11,7 @@
         matInput
         placeholder="Vārds"
         [formControl]="teachingStaffForm.controls.name"
-        (blur)="updateErrorMessage()"
+        (blur)="updateErrorMessage('name')"
         required
       />
     </mat-form-field>
@@ -25,7 +25,7 @@
         matInput
         placeholder="Uzvārds"
         [formControl]="teachingStaffForm.controls.surname"
-        (blur)="updateErrorMessage()"
+        (blur)="updateErrorMessage('surname')"
         required
       />
     </mat-form-field>
@@ -39,49 +39,58 @@
         matInput
         placeholder="Vieslektors"
         [formControl]="teachingStaffForm.controls.positionTitle"
-        (blur)="updateErrorMessage()"
+        (blur)="updateErrorMessage('positionTitle')"
         required
       />
     </mat-form-field>
     <mat-form-field class="input-flex">
-
       <mat-select required [formControl]="teachingStaffForm.controls.staffFaculty">
-        @if (isFetchingFaculties()) {
-          <mat-option>
-            Lādē datus...
-          </mat-option>
-        }
         @if (faculties()) {
-          @for (faculties of faculties(); track faculties.facultyId) {
-            <mat-option [value]="faculties">
-              {{ faculties.facultyName }}
+          @if (faculties()?.length === 0) {
+            <mat-option>
+              Izveidojiet fakultātes!
             </mat-option>
+          } @else {
+            @for (faculties of faculties(); track faculties.facultyId) {
+              <mat-option [value]="faculties">
+                {{ faculties.facultyName }}
+              </mat-option>
+            }
           }
-        } @else {
-          <p>Izveidojiet fakultātes!</p>
         }
       </mat-select>
-      <mat-label><em> Izvēlies fakultāti</em></mat-label>
+      @if (!faculties()) {
+        <mat-label>
+          <em>Lādē datus...</em>
+        </mat-label>
+      } @else {
+        <mat-label>Izvēlies fakultāti</mat-label>
+      }
     </mat-form-field>
     <!--      <button mat-raised-button type="button" (click)="addNewFaculty()">Izveidot jaunu fakultāti</button>-->
     <mat-form-field class="input-flex">
       <mat-select required [formControl]="teachingStaffForm.controls.academicRank">
-        @if (isFetchingAcademicRanks()) {
-          <mat-option>
-            Lādē datus...
-          </mat-option>
-        }
         @if (academicRanks()) {
-          @for (rank of academicRanks(); track rank.academicRankId) {
-            <mat-option [value]="rank">
-              {{ rank.rankName }}
+          @if (academicRanks()?.length == 0) {
+            <mat-option>
+              Nav amati lūdzu izveidojiet amatus
             </mat-option>
+          } @else {
+            @for (rank of academicRanks(); track rank.academicRankId) {
+              <mat-option [value]="rank">
+                {{ rank.rankName }}
+              </mat-option>
+            }
           }
-        } @else {
-          <p>Izveidojiet Akademiskos rangus</p>
         }
       </mat-select>
-      <mat-label><em> Izvēlies akadēmisko rangu</em></mat-label>
+      @if (!academicRanks()) {
+        <mat-label>
+          <em> Lādē datus...</em>
+        </mat-label>
+      } @else {
+        <mat-label> Izvēlies amatu</mat-label>
+      }
     </mat-form-field>
     @if (onNewFaculty()) {
       <app-new-faculty (emitFaculty)="onEmittedFaculty($event)" class="inserted"/>

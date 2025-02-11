@@ -24,8 +24,7 @@ export class NewFacultyComponent {
   private readonly destroyRef = inject(DestroyRef);
   private readonly facultyService = inject(FacultyService)
   facultyRequest: FacultyRequest = {facultyName: '', facultyFullName: ''};
-  errorOnName = signal('');
-  errorOnFullName = signal('');
+  errorMessage = signal('');
   errorMsg: Array<string> = [];
 
   facultyForm = new FormGroup({
@@ -40,26 +39,6 @@ export class NewFacultyComponent {
         Validators.required],
     }),
   });
-
-  updateErrorOnName() {
-    if (this.facultyForm.controls.name.hasError('required')) {
-      this.errorOnName.set('Obligāts');
-    } else if (this.facultyForm.controls.name.hasError('minlength')) {
-      this.errorOnName.set('Par īsu');
-    } else {
-      this.errorOnName.set('');
-    }
-  }
-
-  updateErrorOnFullName() {
-    if (this.facultyForm.controls.fullName.hasError('required')) {
-      this.errorOnFullName.set('Obligāts');
-    } else if (this.facultyForm.controls.fullName.hasError('minlength')) {
-      this.errorOnFullName.set('Par īsu');
-    } else {
-      this.errorOnFullName.set('');
-    }
-  }
 
   onSubmit() {
     if (this.facultyForm.value.name && this.facultyForm.value.fullName) {
@@ -77,6 +56,26 @@ export class NewFacultyComponent {
 
         }
       })
+    }
+  }
+  updateErrorMessage(controlName: keyof typeof this.facultyForm.controls) {
+    const control = this.facultyForm.controls[controlName];
+    if (control.errors) {
+      if (control.hasError('required')) {
+        this.errorMessage.set('Lauks nevar būt tukšs');
+      } else if (control.hasError('minlength')) {
+        this.errorMessage.set('Ievadītā vērtība ir pārāk īsa');
+      } else if (control.hasError('maxlength')) {
+        this.errorMessage.set('Ievadītā vērtība ir pārāk gara');
+      } else if (control.hasError('min')) {
+        this.errorMessage.set('Ievadītā vērtība ir pārāk maza');
+      } else if (control.hasError('max')) {
+        this.errorMessage.set('Ievadītā vērtība ir pārāk liela');
+      } else {
+        this.errorMessage.set('Nederīga vērtība');
+      }
+    } else {
+      this.errorMessage.set('');
     }
   }
 }

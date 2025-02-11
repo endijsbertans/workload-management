@@ -35,7 +35,6 @@ export class NewUserComponent implements OnInit {
 
   updateErrorMessage() {
     const emailControl = this.userForm.controls.email;
-
     if (emailControl.hasError('required')) {
       this.errorMessage.set('Ēpasts ir obligāts');
     } else if (emailControl.hasError('email')) {

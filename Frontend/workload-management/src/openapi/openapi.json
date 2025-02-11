@@ -817,6 +817,10 @@
           "className": {
             "type": "string"
           },
+          "studyYear": {
+            "type": "integer",
+            "format": "int32"
+          },
           "classYear": {
             "type": "string"
           },
@@ -1079,7 +1083,7 @@
             "format": "int32"
           },
           "classFaculty": {
-            "$ref": "#/components/schemas/Faculty"
+            "$ref": "#/components/schemas/FacultyResponse"
           },
           "classYear": {
             "type": "string"
@@ -1374,13 +1378,13 @@
           "username": {
             "type": "string"
           },
-          "accountNonLocked": {
-            "type": "boolean"
-          },
           "accountNonExpired": {
             "type": "boolean"
           },
           "credentialsNonExpired": {
+            "type": "boolean"
+          },
+          "accountNonLocked": {
             "type": "boolean"
           }
         }

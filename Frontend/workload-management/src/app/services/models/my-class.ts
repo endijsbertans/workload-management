@@ -10,4 +10,5 @@ export interface MyClass {
   classNameAndYear?: string;
   classYear?: string;
   studentAmount?: number;
+  studyYear?: number;
 }

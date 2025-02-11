@@ -38,7 +38,6 @@ export class NewCourseComponent implements OnInit{
   courseService = inject(CourseService);
 
   academicRanks = signal<AcademicRankResponse[] | undefined>(undefined);
-  isFetchingAcademicRanks = signal(false);
   errorMessage = signal('');
   //TODO THIS WONT WORK
   errorMsg: Array<string> = [];
@@ -122,15 +121,11 @@ export class NewCourseComponent implements OnInit{
       replaceUrl: true});
   }
   private fetchAcademicRanks(){
-    this.isFetchingAcademicRanks.set(true);
       const subscription = this.academicRankService.findAllAcademicRank().subscribe({
         next: (ranks) => {
           if (ranks) {
             this.academicRanks.set(ranks);
           }
-        },
-        complete: () => {
-          this.isFetchingAcademicRanks.set(false);
         },
         error: (err) => {
           console.log(err);
@@ -141,12 +136,22 @@ export class NewCourseComponent implements OnInit{
       });
     }
 
-  updateErrorMessage() {
-  // TODO ADDITIONAL ERROR CHECKING
-    if (this.courseForm.controls.name.hasError('required')) {
-      this.errorMessage.set('Nevar būt tukšs');
-    } else if (this.courseForm.controls.name.hasError('minlength')) {
-      this.errorMessage.set('Pārāk īss');
+  updateErrorMessage(controlName: keyof typeof this.courseForm.controls) {
+    const control = this.courseForm.controls[controlName];
+    if (control.errors) {
+      if (control.hasError('required')) {
+        this.errorMessage.set('Lauks nevar būt tukšs');
+      } else if (control.hasError('minlength')) {
+        this.errorMessage.set('Ievadītā vērtība ir pārāk īsa');
+      } else if (control.hasError('maxlength')) {
+        this.errorMessage.set('Ievadītā vērtība ir pārāk gara');
+      } else if (control.hasError('min')) {
+        this.errorMessage.set('Ievadītā vērtība ir pārāk maza');
+      } else if (control.hasError('max')) {
+        this.errorMessage.set('Ievadītā vērtība ir pārāk liela');
+      } else {
+        this.errorMessage.set('Nederīga vērtība');
+      }
     } else {
       this.errorMessage.set('');
     }

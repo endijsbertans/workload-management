@@ -1,16 +1,17 @@
 package workloadmanagement.MyClass;
 
 import org.springframework.stereotype.Service;
+import workloadmanagement.faculty.Faculty;
 
 @Service
 public class MyClassMapper {
 
-    public MyClass toMyClass(MyClassRequest request){
+    public MyClass toMyClass(MyClassRequest request, Faculty faculty){
         return MyClass.builder()
                 .className(request.className())
                 .studentAmount(request.studentAmount())
                 .studyYear(request.studyYear())
-                .classFaculty(request.classFaculty())
+                .classFaculty(faculty)
                 .classYear(request.classYear())
                 .build();
     }

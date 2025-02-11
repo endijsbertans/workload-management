@@ -12,7 +12,7 @@
         matInput
         placeholder="Algoritmu teorija"
         [formControl]="courseForm.controls.name"
-        (blur)="updateErrorMessage()"
+        (blur)="updateErrorMessage('name')"
         required
       />
     </mat-form-field>
@@ -25,7 +25,7 @@
         matInput
         placeholder="MateB008"
         [formControl]="courseForm.controls.courseCode"
-        (blur)="updateErrorMessage()"
+        (blur)="updateErrorMessage('courseCode')"
         required
       />
     </mat-form-field>
@@ -38,7 +38,7 @@
         matInput
         placeholder="2"
         [formControl]="courseForm.controls.creditPoints"
-        (blur)="updateErrorMessage()"
+        (blur)="updateErrorMessage('creditPoints')"
         required
       />
     </mat-form-field>
@@ -52,7 +52,7 @@
         matInput
         placeholder="Automātiska"
         [formControl]="courseForm.controls.registrationType"
-        (blur)="updateErrorMessage()"
+        (blur)="updateErrorMessage('registrationType')"
         required
       />
     </mat-form-field>
@@ -65,7 +65,7 @@
         matInput
         placeholder="Vispārizglītojošie..."
         [formControl]="courseForm.controls.section"
-        (blur)="updateErrorMessage()"
+        (blur)="updateErrorMessage('section')"
         required
       />
     </mat-form-field>
@@ -78,28 +78,30 @@
         matInput
         placeholder="2"
         [formControl]="courseForm.controls.studyLevel"
-        (blur)="updateErrorMessage()"
+        (blur)="updateErrorMessage('studyLevel')"
         required
       />
     </mat-form-field>
     <mat-form-field class="input-flex">
       <mat-select required [formControl]="courseForm.controls.academicRank">
-        @if (isFetchingAcademicRanks()) {
-          <mat-option>
-            Lādē datus...
-          </mat-option>
-        }
+
         @if (academicRanks()) {
-          @for (rank of academicRanks(); track rank.academicRankId) {
-            <mat-option [value]="rank">
-              {{ rank.rankName }}
-            </mat-option>
+          @if (academicRanks()?.length === 0) {
+            <p>Izveidojiet Akademiskos rangus</p>
+          } @else {
+            @for (rank of academicRanks(); track rank.academicRankId) {
+              <mat-option [value]="rank">
+                {{ rank.rankName }}
+              </mat-option>
+            }
           }
-        } @else {
-          <p>Izveidojiet Akademiskos rangus</p>
         }
       </mat-select>
-      <mat-label><em> Izvēlies akadēmisko rangu</em></mat-label>
+      @if (academicRanks()) {
+        <mat-label>Izvēlies akadēmisko rangu</mat-label>
+      } @else {
+        <mat-label><em>Lādē datus...</em></mat-label>
+      }
     </mat-form-field>
 
     <div class="action-wrapper">
@@ -107,6 +109,4 @@
       <button mat-raised-button type="Submit" [disabled]="courseForm.invalid">Create</button>
     </div>
   </form>
-
-
 </dialog>

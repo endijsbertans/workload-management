@@ -71,5 +71,33 @@
       </div>
     </form>
   </mat-step>
+  <mat-step [stepControl]="academicRankForm">
+    <form [formGroup]="academicRankForm">
+      <mat-form-field>
+        <mat-select required [formControl]="academicRankForm.controls.academicRankCtrl">
+          @if (isFetchingAcademicRanks()) {
+            <mat-option>
+              Lādē datus...
+            </mat-option>
+          }
+          @if (academicRanks()) {
+            @for (rank of academicRanks(); track rank.academicRankId) {
+              <mat-option [value]="rank">
+                {{ rank.rankName }}
+              </mat-option>
+            }
+          } @else {
+            <p>Izveidojiet amatus</p>
+          }
+        </mat-select>
+        <mat-label><em>Izvēlies amatu</em></mat-label>
+      </mat-form-field>
+      <div style="display: flex">
+        <button mat-button matStepperNext>Tālāk</button>
+        <button mat-button routerLink="..">Atcelt</button>
+        <button mat-button routerLink="new-class">Izveidot jaunu</button>
+      </div>
+    </form>
+  </mat-step>
 </mat-stepper>
 <router-outlet (activate)="subscribeToChildEmitter($event)"/>
