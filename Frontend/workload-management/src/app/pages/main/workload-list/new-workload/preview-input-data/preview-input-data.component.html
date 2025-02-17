@@ -1,0 +1,13 @@
+<table class="wrapper">
+  <tr>
+    @for (header of displayedColumns; track header) {
+
+      <th>{{ header.name }}</th>
+    }
+  </tr>
+  <tr>
+    @for (header of displayedColumns; track header) {
+      <th>{{ getNestedProperty(header) }}</th>
+    }
+  </tr>
+</table>
