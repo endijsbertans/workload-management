@@ -1,8 +1,4 @@
-export interface ColumnNames {
-  name: string,
-  pathTo: string,
-  collection: string
-}
+import {ColumnNames} from "../new-objects/object-columns";
 
 export const CollapseData: ColumnNames[] = [
 

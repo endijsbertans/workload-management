@@ -7,7 +7,7 @@ import {MatSort, MatSortModule} from "@angular/material/sort";
 import {MatPaginator} from "@angular/material/paginator";
 import {
   CollapseData,
-  ColumnNames, ColumnsForActions,
+  ColumnsForActions,
   ColumnsForCalc,
   ColumnsForCourse,
   ColumnsForGeneralInfo, ColumnsForSalary,
@@ -18,9 +18,8 @@ import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatTooltip} from "@angular/material/tooltip";
 import {MatFormField} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
-import {component} from "@igniteui/angular-schematics/src/component";
-import {NewTeachingStaffComponent} from "../new-objects/new-teaching-staff/new-teaching-staff.component";
-import {Subscription} from "rxjs";
+import {ColumnNames} from "../new-objects/object-columns";
+
 
 
 @Component({
@@ -85,7 +84,7 @@ export class WorkloadListComponent implements OnInit, AfterViewInit {
     });
   }
 
-  getNestedProperty(obj: any, key: string, defaultValue: any = "") {
+  getNestedProperty(obj: any, key: string) {
     if (key == "myClasses") {
       let result: string[] = [];
       let val = this.digInObject(obj, key);
@@ -100,12 +99,10 @@ export class WorkloadListComponent implements OnInit, AfterViewInit {
   digInObject(obj: any, key: string, defaultValue: any = "") {
     return key.split('.')
       .reduce((acc, part) => acc?.[part], obj) ?? defaultValue;
-
   }
 
   mapDisplayedColumns(): string[] {
     return this.displayedColumns().map(col => col.pathTo);
-
   }
 
   displayedColumns(): ColumnNames[] {
@@ -178,9 +175,6 @@ export class WorkloadListComponent implements OnInit, AfterViewInit {
     this.displayedColumns();
   }
 
-  onCancelAddWorkload() {
-    this.isAddingWorkload = false;
-  }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;

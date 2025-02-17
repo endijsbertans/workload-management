@@ -81,7 +81,6 @@ export class NewTeachingStaffComponent implements OnInit {
   });
 
   ngOnInit(): void {
-
     this.fetchFaculties();
     this.fetchAcademicRanks();
   }

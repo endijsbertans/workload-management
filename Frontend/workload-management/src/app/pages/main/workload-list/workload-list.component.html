@@ -1,10 +1,6 @@
-
-
-
 <h2>Noslodzes saraksts</h2>
 <hr>
 
-<div class="wrapper">
   <div class="actions-with-table">
     <mat-form-field>
       <mat-label>Meklēt (ciparus neatrod)</mat-label>
@@ -16,7 +12,7 @@
   </div>
 
   <router-outlet/>
-
+<div class="wrapper">
   <table mat-table [dataSource]="dataSource" fixedLayout>
     @for (col of columnsToDisplay; track col) {
       @if(col.collection == 'actions'){

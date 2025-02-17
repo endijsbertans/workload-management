@@ -1,44 +1,77 @@
+
 <mat-stepper [linear]="true" #stepper>
-  <mat-step [stepControl]="tStaffForm" >
+  <mat-step [stepControl]="tStaffForm" label="Docents">
     <form [formGroup]="tStaffForm">
-      <mat-form-field >
-        <mat-select [formControl]="tStaffForm.controls.tStaffCtrl" placeholder="Docents" #singleSelect>
-          <mat-option>
-            <ngx-mat-select-search [formControl]="tStaffForm.controls.tStaffFilterCtrl"
-                                   placeholderLabel="Meklēt personu"
-                                   noEntriesFoundLabel="Persona nav atrasta">
-            </ngx-mat-select-search>
-          </mat-option>
-          @for (tStaff of filteredTeachingStaff | async; track tStaff.teachingStaffId) {
-            <mat-option [value]="tStaff.teachingStaffId">
-              {{ tStaff.rankFullName }}
-            </mat-option>
+      <mat-form-field>
+        <mat-select [formControl]="tStaffForm.controls.tStaffCtrl" #singleSelect >
+          @if (tStaff()) {
+            @if (tStaff()?.length === 0) {
+              <mat-option>
+                Izveidojiet docentus!
+              </mat-option>
+            } @else {
+              <mat-option>
+                <ngx-mat-select-search [formControl]="tStaffForm.controls.tStaffFilterCtrl"
+                                       placeholderLabel="Meklēt personu"
+                                       noEntriesFoundLabel="Persona nav atrasta">
+                </ngx-mat-select-search>
+              </mat-option>
+              @for (tStaff of filteredTeachingStaff | async; track tStaff.teachingStaffId) {
+                <mat-option [value]="tStaff.teachingStaffId">
+                  {{ tStaff.rankFullName }}
+                </mat-option>
+              }
+            }
           }
         </mat-select>
+        @if (!tStaff()) {
+          <mat-label>
+            <em>Lādē datus...</em>
+          </mat-label>
+        } @else {
+          <mat-label>Izvēlies docentu</mat-label>
+        }
       </mat-form-field>
+
       <div style="display: flex">
         <button mat-button matStepperNext>Tālāk</button>
         <button mat-button routerLink="..">Atcelt</button>
         <button mat-button routerLink="new-teaching-staff">Izveidot jaunu</button>
       </div>
     </form>
+
   </mat-step>
-  <mat-step [stepControl]="courseForm">
+  <mat-step [stepControl]="courseForm" label="Kurss">
     <form [formGroup]="courseForm">
       <mat-form-field>
-        <mat-select [formControl]="courseForm.controls.courseCtrl" placeholder="Kurss" #singleSelect>
-          <mat-option>
-            <ngx-mat-select-search [formControl]="courseForm.controls.courseFilterCtrl"
-                                   placeholderLabel="Meklēt kursu"
-                                   noEntriesFoundLabel="Kurss Nav atrasts">
-            </ngx-mat-select-search>
-          </mat-option>
-          @for (course of filteredCourses | async; track course.courseId) {
-            <mat-option [value]="course.courseId">
-              {{ course.courseName }}
-            </mat-option>
+        <mat-select [formControl]="courseForm.controls.courseCtrl" #singleSelect>
+          @if (courses()) {
+            @if (courses()?.length === 0) {
+              <mat-option>
+                Izveidojiet kursus!
+              </mat-option>
+            } @else {
+              <mat-option>
+                <ngx-mat-select-search [formControl]="courseForm.controls.courseFilterCtrl"
+                                       placeholderLabel="Meklēt kursu"
+                                       noEntriesFoundLabel="Kurss Nav atrasts">
+                </ngx-mat-select-search>
+              </mat-option>
+              @for (course of filteredCourses | async; track course.courseId) {
+                <mat-option [value]="course.courseId">
+                  {{ course.courseName }}
+                </mat-option>
+              }
+            }
           }
         </mat-select>
+        @if (!courses()) {
+          <mat-label>
+            <em>Lādē datus...</em>
+          </mat-label>
+        } @else {
+          <mat-label>Izvēlies kursu</mat-label>
+        }
       </mat-form-field>
       <div style="display: flex">
         <button mat-button matStepperNext>Tālāk</button>
@@ -47,22 +80,37 @@
       </div>
     </form>
   </mat-step>
-  <mat-step [stepControl]="myClassForm">
+  <mat-step [stepControl]="myClassForm" label="Klase">
     <form [formGroup]="myClassForm">
       <mat-form-field>
-        <mat-select [formControl]="myClassForm.controls.myClassCtrl" placeholder="Klase" [multiple]="true" #multiSelect>
-          <mat-option>
-            <ngx-mat-select-search [formControl]="myClassForm.controls.myClassFilterCtrl"
-                                   placeholderLabel="Meklēt klasi"
-                                   noEntriesFoundLabel="Klase nav atrasta">
-            </ngx-mat-select-search>
-          </mat-option>
-          @for (myClass of filteredMyClasses | async; track myClass.classId) {
-            <mat-option [value]="myClass.classId">
-              {{ myClass.classNameAndYear }}
-            </mat-option>
+        <mat-select [formControl]="myClassForm.controls.myClassCtrl" [multiple]="true" #multiSelect>
+          @if (myClasses()) {
+            @if (myClasses()?.length === 0) {
+              <mat-option>
+                Izveidojiet kursus!
+              </mat-option>
+            } @else {
+              <mat-option>
+                <ngx-mat-select-search [formControl]="myClassForm.controls.myClassFilterCtrl"
+                                       placeholderLabel="Meklēt klasi"
+                                       noEntriesFoundLabel="Klase nav atrasta">
+                </ngx-mat-select-search>
+              </mat-option>
+              @for (myClass of filteredMyClasses | async; track myClass.classId) {
+                <mat-option [value]="myClass.classId">
+                  {{ myClass.classNameAndYear }}
+                </mat-option>
+              }
+            }
           }
         </mat-select>
+        @if (!myClasses()) {
+          <mat-label>
+            <em>Lādē datus...</em>
+          </mat-label>
+        } @else {
+          <mat-label>Izvēlies klasi</mat-label>
+        }
       </mat-form-field>
       <div style="display: flex">
         <button mat-button matStepperNext>Tālāk</button>
@@ -71,33 +119,80 @@
       </div>
     </form>
   </mat-step>
-  <mat-step [stepControl]="academicRankForm">
+  <mat-step [stepControl]="academicRankForm" label="amats">
     <form [formGroup]="academicRankForm">
       <mat-form-field>
-        <mat-select required [formControl]="academicRankForm.controls.academicRankCtrl">
-          @if (isFetchingAcademicRanks()) {
-            <mat-option>
-              Lādē datus...
-            </mat-option>
-          }
+        <mat-select [formControl]="academicRankForm.controls.academicRankCtrl">
           @if (academicRanks()) {
-            @for (rank of academicRanks(); track rank.academicRankId) {
-              <mat-option [value]="rank">
-                {{ rank.rankName }}
+            @if (academicRanks()?.length === 0) {
+              <mat-option>
+                Izveidojiet amatus!
               </mat-option>
+            } @else {
+              @for (rank of academicRanks(); track rank.academicRankId) {
+                <mat-option [value]="rank.academicRankId">
+                  {{ rank.rankName }}
+                </mat-option>
+              }
             }
-          } @else {
-            <p>Izveidojiet amatus</p>
           }
         </mat-select>
-        <mat-label><em>Izvēlies amatu</em></mat-label>
+        @if (!academicRanks()) {
+          <mat-label>
+            <em>Lādē datus...</em>
+          </mat-label>
+        } @else {
+          <mat-label>Izvēlies amatu</mat-label>
+        }
       </mat-form-field>
       <div style="display: flex">
         <button mat-button matStepperNext>Tālāk</button>
         <button mat-button routerLink="..">Atcelt</button>
-        <button mat-button routerLink="new-class">Izveidot jaunu</button>
       </div>
     </form>
   </mat-step>
+  <mat-step [stepControl]="statusTypeForm" label="Statuss">
+    <form [formGroup]="statusTypeForm">
+      <mat-form-field>
+        <mat-select required [formControl]="statusTypeForm.controls.statusTypeCtrl">
+          @if (statusTypes()) {
+            @if (statusTypes()?.length === 0) {
+              <mat-option>
+                Izveidojiet statusus!
+              </mat-option>
+            } @else {
+              @for (statusType of statusTypes(); track statusType.statusTypeId) {
+                <mat-option [value]="statusType.statusTypeId">
+                  {{ statusType.statusTypeName }}
+                </mat-option>
+              }
+            }
+          }
+        </mat-select>
+        @if (!statusTypes()) {
+          <mat-label>
+            <em>Lādē datus...</em>
+          </mat-label>
+        } @else {
+          <mat-label>Izvēlies statusu</mat-label>
+        }
+      </mat-form-field>
+      <div style="display: flex">
+        <button mat-button matStepperNext>Tālāk</button>
+        <button mat-button routerLink="..">Atcelt</button>
+      </div>
+    </form>
+  </mat-step>
+
 </mat-stepper>
+
+<app-preview-input-data
+  [tStaff]="selectedTeachingStaff()"
+  [courses]="selectedCourse()"
+  [myClasses]="selectedMyClasses()"
+  [academicRank]="selectedAcademicRank()"
+  [statusType]="selectedStatusType()"
+  [displayedColumns]="columns()">
+</app-preview-input-data>
 <router-outlet (activate)="subscribeToChildEmitter($event)"/>
+
