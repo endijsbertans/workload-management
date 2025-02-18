@@ -19,10 +19,10 @@ import {AcademicRankResponse} from "../../../../services/models/academic-rank-re
 import {StatusTypeResponse} from "../../../../services/models/status-type-response";
 import {PreviewInputDataComponent} from "./preview-input-data/preview-input-data.component";
 import {
-  ColumnNames,
-  ColumnsForClassObject,
-  ColumnsForCourseObject,
-  ColumnsForTeacherObject
+  ColumnNames, ColumnsForAcademicRankResponse,
+  ColumnsForClassResponse,
+  ColumnsForCourseResponse, ColumnsForStatusTypeResponse,
+  ColumnsForTeacherResponse
 } from "../../new-objects/object-columns";
 
 @Component({
@@ -57,9 +57,8 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
   columnsForTeacher = signal(false);
   columnsForCourse = signal(false);
   columnsForMyClasses = signal(false);
-  // TODO
-  columnsForGeneralInfo = signal(false);
-  columnsForSalary = signal(false);
+  columnsForAcademicRank = signal(false);
+  columnsForStatusType = signal(false);
   private readonly destroyRef = inject(DestroyRef);
   private readonly teachingStaffService = inject(TeachingStaffService);
   private readonly courseService = inject(CourseService);
@@ -246,10 +245,12 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
 
   displayedColumns(){
     let columns: ColumnNames[] = [];
-    if (this.columnsForTeacher()) columns.push(...ColumnsForTeacherObject);
+    if (this.columnsForTeacher()) columns.push(...ColumnsForTeacherResponse);
 
-    if (this.columnsForCourse()) columns.push(...ColumnsForCourseObject);
-    if (this.columnsForMyClasses()) columns.push(...ColumnsForClassObject);
+    if (this.columnsForCourse()) columns.push(...ColumnsForCourseResponse);
+    if (this.columnsForMyClasses()) columns.push(...ColumnsForClassResponse);
+    if (this.columnsForAcademicRank()) columns.push(...ColumnsForAcademicRankResponse);
+    if (this.columnsForStatusType()) columns.push(...ColumnsForStatusTypeResponse);
     this.columns.set(columns);
   }
 
@@ -265,8 +266,8 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
         if (selectedStaff) {
           console.log(selectedStaff);
           this.columnsForTeacher.set(true);
-          this.displayedColumns();
           this.selectedTeachingStaff.set(selectedStaff);
+          this.displayedColumns();
         }
       }
     });
@@ -323,7 +324,9 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
         const selectedAcademicRank = this.academicRanks()?.find(val => val.academicRankId === id);
         if (selectedAcademicRank) {
           console.log(selectedAcademicRank);
+          this.columnsForAcademicRank.set(true)
           this.selectedAcademicRank.set(selectedAcademicRank);
+          this.displayedColumns();
         }
       }
     });
@@ -337,7 +340,9 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
         const selectedStatusType = this.statusTypes()?.find(val => val.statusTypeId === id);
         if (selectedStatusType) {
           console.log(selectedStatusType);
+          this.columnsForStatusType.set(true);
           this.selectedStatusType.set(selectedStatusType);
+          this.displayedColumns();
         }
       }
     });

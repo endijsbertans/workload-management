@@ -4,7 +4,7 @@ export interface ColumnNames {
   collection: string
 }
 
-export const ColumnsForTeacherObject: ColumnNames[] = [
+export const ColumnsForTeacherResponse: ColumnNames[] = [
   {
     name: 'Vārds',
     pathTo: 'teachingStaff.name',
@@ -42,7 +42,7 @@ export const ColumnsForTeacherObject: ColumnNames[] = [
   }
 ];
 
-export const ColumnsForCourseObject: ColumnNames[] = [
+export const ColumnsForCourseResponse: ColumnNames[] = [
   {
     name: 'Studiju līmenis',
     pathTo: 'course.studyLevel',
@@ -71,22 +71,20 @@ export const ColumnsForCourseObject: ColumnNames[] = [
   {
     name: 'Priekšmeta KP',
     pathTo: 'course.creditPoints',
-    collection: 'ColumnsForCalc'
+    collection: 'ColumnsForCourse'
   },
   {
     name: 'Nepieciešamais amats',
     pathTo: 'course.necessaryAcademicRank.rankName',
-    collection: 'ColumnsForCalc'
+    collection: 'ColumnsForCourse'
   }
 ];
-export const ColumnsForClassObject: ColumnNames[] = [
-
+export const ColumnsForClassResponse: ColumnNames[] = [
   {
     name: 'Klase',
     pathTo: 'className',
     collection: 'ColumnsForClass'
   }
-
   , {
     name: 'Gads',
     pathTo: 'classYear',
@@ -96,6 +94,35 @@ export const ColumnsForClassObject: ColumnNames[] = [
     name: 'studentu daudzums',
     pathTo: 'studentAmount',
     collection: 'ColumnsForClass'
+  }
+];
+export const ColumnsForAcademicRankResponse: ColumnNames[] = [
+  {
+    name: 'Amats',
+    pathTo: 'academicRank.rankName',
+    collection: 'ColumnsForAcademicRankResponse'
+  }
+  , {
+    name: 'KP pilnai slodzei',
+    pathTo: 'academicRank.maxCP',
+    collection: 'ColumnsForAcademicRankResponse'
+  }
+  , {
+    name: 'Abreviatūra',
+    pathTo: 'academicRank.abbreviation',
+    collection: 'ColumnsForAcademicRankResponse'
+  }
+  , {
+    name: 'Alga',
+    pathTo: 'academicRank.salary',
+    collection: 'CColumnsForAcademicRankResponse'
+  }
+];
+export const ColumnsForStatusTypeResponse: ColumnNames[] = [
+  {
+    name: 'Statuss',
+    pathTo: 'statusType.statusTypeName',
+    collection: 'ColumnsForStatusType'
   }
 ];
 

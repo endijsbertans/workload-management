@@ -1,19 +1,21 @@
+.wrapper {
+  display: block;
+  overflow-x: auto;
+  margin: 2rem 0;
+  max-width: 100%;
+}
+
 table {
   border-collapse: collapse;
   font-family: Arial, sans-serif;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  th {
-    background-color: var(--mat-sys-primary);
-    color: white;
-    padding: 12px;
-    text-align: left;
-    font-weight: bold;
-  }
+  min-width: max-content;
 }
-.wrapper{
-  width: 100%;
-  overflow-x: auto;
-  margin-top: 2rem;
-  margin-bottom: 2rem;
+
+th {
+  background-color: var(--mat-sys-primary);
+  color: white;
+  padding: 6px 10px;
+  text-align: left;
+  font-weight: normal;
+  border-bottom: 1px solid #ddd;
 }
