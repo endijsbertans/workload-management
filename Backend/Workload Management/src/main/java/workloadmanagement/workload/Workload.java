@@ -93,9 +93,6 @@ public class Workload {
         return course.getCreditPoints()/getCpForFullTime();
     }
     public double getCpForFullTime(){
-        if(semester.contains("pavasaris"))
-            return teachingStaff.getStaffAcademicRank().getCpForSpring()/course.getCreditPoints();
-        else
-            return teachingStaff.getStaffAcademicRank().getCpForAutumn()/course.getCreditPoints();
+            return teachingStaff.getStaffAcademicRank().getCpForFullTime();
     }
 }

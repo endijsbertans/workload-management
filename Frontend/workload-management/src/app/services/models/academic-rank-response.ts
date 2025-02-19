@@ -5,7 +5,7 @@
 export interface AcademicRankResponse {
   abbreviation?: string;
   academicRankId?: number;
-  maxCP?: number;
+  cpForFullTime?: number;
   rankName?: string;
   salary?: number;
 }

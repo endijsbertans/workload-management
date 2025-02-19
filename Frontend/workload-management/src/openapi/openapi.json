@@ -729,10 +729,10 @@
       "AcademicRank": {
         "required": [
           "abbreviation",
-          "cpForAutumn",
-          "cpForSpring",
+          "cpForFullTime",
           "rankName",
-          "salary"
+          "salary",
+          "semester"
         ],
         "type": "object",
         "properties": {
@@ -743,11 +743,7 @@
           "rankName": {
             "type": "string"
           },
-          "cpForSpring": {
-            "type": "number",
-            "format": "double"
-          },
-          "cpForAutumn": {
+          "cpForFullTime": {
             "type": "number",
             "format": "double"
           },
@@ -757,6 +753,13 @@
           "salary": {
             "type": "number",
             "format": "double"
+          },
+          "semester": {
+            "type": "string",
+            "enum": [
+              "pavasaris",
+              "rudens"
+            ]
           }
         }
       },
@@ -980,7 +983,7 @@
           "rankName": {
             "type": "string"
           },
-          "maxCP": {
+          "cpForFullTime": {
             "type": "number",
             "format": "double"
           },
@@ -1172,8 +1175,7 @@
         "required": [
           "abbreviation",
           "academicRankId",
-          "cpForAutumn",
-          "cpForSpring",
+          "cpForFullTime",
           "rankName",
           "salary"
         ],
@@ -1186,11 +1188,7 @@
           "rankName": {
             "type": "string"
           },
-          "cpForSpring": {
-            "type": "number",
-            "format": "double"
-          },
-          "cpForAutumn": {
+          "cpForFullTime": {
             "type": "number",
             "format": "double"
           },

@@ -16,10 +16,7 @@ public record AcademicRankRequest (
     String rankName,
     @NotNull(message = "152")
     @NotEmpty(message = "152")
-    double  cpForSpring,
-    @NotNull(message = "153")
-    @NotEmpty(message = "153")
-    double cpForAutumn,
+    double  cpForFullTime,
     @Size.List({
             @Size(min = 1, message = "154"),
             @Size(max = 45, message = "154")

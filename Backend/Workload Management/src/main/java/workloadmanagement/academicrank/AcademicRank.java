@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import workloadmanagement.academicrank.semester.Semester;
 
 import java.math.BigDecimal;
 
@@ -25,17 +26,13 @@ public class AcademicRank {
     private String rankName;
 
     @NotNull
-    private double  cpForSpring;
+    private double  cpForFullTime;
 
     @NotNull
-    private double cpForAutumn;
-
-    @NotNull
-
     private String abbreviation;
 
     @NotNull
     private double salary;
-
-
+    @NotNull
+    private Semester semester;
 }

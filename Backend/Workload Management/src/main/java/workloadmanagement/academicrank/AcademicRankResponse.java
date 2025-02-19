@@ -8,7 +8,7 @@ import lombok.*;
 public class AcademicRankResponse {
     private int academicRankId;
     private String rankName;
-    private double  maxCP;
+    private double  cpForFullTime;
     private String abbreviation;
     private double salary;
 }

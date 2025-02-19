@@ -1,9 +1,8 @@
-
-<mat-stepper [linear]="true" #stepper>
-  <mat-step [stepControl]="tStaffForm" label="Docents">
-    <form [formGroup]="tStaffForm">
+<form [formGroup]="workloadForm">
+  <div class="firstStepContentWrapper">
+    <div class="inputFieldFlex">
       <mat-form-field>
-        <mat-select [formControl]="tStaffForm.controls.tStaffCtrl" #singleSelect >
+        <mat-select [formControl]="workloadForm.controls.tStaffCtrl" #singleSelect>
           @if (tStaff()) {
             @if (tStaff()?.length === 0) {
               <mat-option>
@@ -11,7 +10,7 @@
               </mat-option>
             } @else {
               <mat-option>
-                <ngx-mat-select-search [formControl]="tStaffForm.controls.tStaffFilterCtrl"
+                <ngx-mat-select-search [formControl]="workloadForm.controls.tStaffFilterCtrl"
                                        placeholderLabel="Meklēt personu"
                                        noEntriesFoundLabel="Persona nav atrasta">
                 </ngx-mat-select-search>
@@ -32,19 +31,11 @@
           <mat-label>Izvēlies docentu</mat-label>
         }
       </mat-form-field>
-
-      <div style="display: flex">
-        <button mat-button matStepperNext>Tālāk</button>
-        <button mat-button routerLink="..">Atcelt</button>
-        <button mat-button routerLink="new-teaching-staff">Izveidot jaunu</button>
-      </div>
-    </form>
-
-  </mat-step>
-  <mat-step [stepControl]="courseForm" label="Kurss">
-    <form [formGroup]="courseForm">
+      <button mat-button routerLink="new-teaching-staff">Izveidot jaunu</button>
+    </div>
+    <div class="inputFieldFlex">
       <mat-form-field>
-        <mat-select [formControl]="courseForm.controls.courseCtrl" #singleSelect>
+        <mat-select [formControl]="workloadForm.controls.courseCtrl" #singleSelect>
           @if (courses()) {
             @if (courses()?.length === 0) {
               <mat-option>
@@ -52,7 +43,7 @@
               </mat-option>
             } @else {
               <mat-option>
-                <ngx-mat-select-search [formControl]="courseForm.controls.courseFilterCtrl"
+                <ngx-mat-select-search [formControl]="workloadForm.controls.courseFilterCtrl"
                                        placeholderLabel="Meklēt kursu"
                                        noEntriesFoundLabel="Kurss Nav atrasts">
                 </ngx-mat-select-search>
@@ -73,17 +64,11 @@
           <mat-label>Izvēlies kursu</mat-label>
         }
       </mat-form-field>
-      <div style="display: flex">
-        <button mat-button matStepperNext>Tālāk</button>
-        <button mat-button routerLink="..">Atcelt</button>
-        <button mat-button routerLink="new-course">Izveidot jaunu</button>
-      </div>
-    </form>
-  </mat-step>
-  <mat-step [stepControl]="myClassForm" label="Klase">
-    <form [formGroup]="myClassForm">
+      <button mat-button routerLink="new-course">Izveidot jaunu</button>
+    </div>
+    <div class="inputFieldFlex">
       <mat-form-field>
-        <mat-select [formControl]="myClassForm.controls.myClassCtrl" [multiple]="true" #multiSelect>
+        <mat-select [formControl]="workloadForm.controls.myClassCtrl" [multiple]="true" #multiSelect>
           @if (myClasses()) {
             @if (myClasses()?.length === 0) {
               <mat-option>
@@ -91,7 +76,7 @@
               </mat-option>
             } @else {
               <mat-option>
-                <ngx-mat-select-search [formControl]="myClassForm.controls.myClassFilterCtrl"
+                <ngx-mat-select-search [formControl]="workloadForm.controls.myClassFilterCtrl"
                                        placeholderLabel="Meklēt klasi"
                                        noEntriesFoundLabel="Klase nav atrasta">
                 </ngx-mat-select-search>
@@ -112,17 +97,11 @@
           <mat-label>Izvēlies klasi</mat-label>
         }
       </mat-form-field>
-      <div style="display: flex">
-        <button mat-button matStepperNext>Tālāk</button>
-        <button mat-button routerLink="..">Atcelt</button>
-        <button mat-button routerLink="new-class">Izveidot jaunu</button>
-      </div>
-    </form>
-  </mat-step>
-  <mat-step [stepControl]="academicRankForm" label="amats">
-    <form [formGroup]="academicRankForm">
+      <button mat-button routerLink="new-class">Izveidot jaunu</button>
+    </div>
+    <div class="inputFieldFlex">
       <mat-form-field>
-        <mat-select [formControl]="academicRankForm.controls.academicRankCtrl">
+        <mat-select [formControl]="workloadForm.controls.academicRankCtrl">
           @if (academicRanks()) {
             @if (academicRanks()?.length === 0) {
               <mat-option>
@@ -145,16 +124,10 @@
           <mat-label>Izvēlies amatu</mat-label>
         }
       </mat-form-field>
-      <div style="display: flex">
-        <button mat-button matStepperNext>Tālāk</button>
-        <button mat-button routerLink="..">Atcelt</button>
-      </div>
-    </form>
-  </mat-step>
-  <mat-step [stepControl]="statusTypeForm" label="Statuss">
-    <form [formGroup]="statusTypeForm">
+    </div>
+    <div class="inputFieldFlex">
       <mat-form-field>
-        <mat-select required [formControl]="statusTypeForm.controls.statusTypeCtrl">
+        <mat-select required [formControl]="workloadForm.controls.statusTypeCtrl">
           @if (statusTypes()) {
             @if (statusTypes()?.length === 0) {
               <mat-option>
@@ -177,14 +150,15 @@
           <mat-label>Izvēlies statusu</mat-label>
         }
       </mat-form-field>
-      <div style="display: flex">
-        <button mat-button matStepperNext>Tālāk</button>
-        <button mat-button routerLink="..">Atcelt</button>
-      </div>
-    </form>
-  </mat-step>
-
-</mat-stepper>
+    </div>
+  </div>
+  <div style="display: flex">
+    <button mat-raised-button type="button" routerLink="..">Cancel</button>
+    <button mat-raised-button type="submit" [disabled]="workloadForm.invalid">
+      Izveidot
+    </button>
+  </div>
+</form>
 
 <app-preview-input-data
   [tStaff]="selectedTeachingStaff()"

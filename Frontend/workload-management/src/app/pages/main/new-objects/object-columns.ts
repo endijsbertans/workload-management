@@ -104,7 +104,7 @@ export const ColumnsForAcademicRankResponse: ColumnNames[] = [
   }
   , {
     name: 'KP pilnai slodzei',
-    pathTo: 'academicRank.maxCP',
+    pathTo: 'academicRank.cpForFullTime',
     collection: 'ColumnsForAcademicRankResponse'
   }
   , {

@@ -6,8 +6,7 @@ public class AcademicRankMapper {
     public AcademicRank toAcademicRank(AcademicRankRequest request){
         return AcademicRank.builder()
                 .rankName(request.rankName())
-                .cpForSpring(request.cpForSpring())
-                .cpForAutumn(request.cpForAutumn())
+                .cpForFullTime(request.cpForFullTime())
                 .abbreviation(request.abbreviation())
                 .salary(request.salary())
                 .build();
@@ -17,8 +16,7 @@ public class AcademicRankMapper {
         return AcademicRankResponse.builder()
                 .academicRankId(academicRank.getAcademicRankId())
                 .rankName(academicRank.getRankName())
-                //.cpForSpring(academicRank.getCpForSpring())
-                //.cpForAutumn(academicRank.getCpForAutumn())
+                .cpForFullTime(academicRank.getCpForFullTime())
                 .abbreviation(academicRank.getAbbreviation())
                 .salary(academicRank.getSalary())
                 .build();

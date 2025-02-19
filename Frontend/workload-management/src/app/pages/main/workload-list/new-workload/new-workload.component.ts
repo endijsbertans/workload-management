@@ -1,10 +1,9 @@
-import {Component, DestroyRef,inject, OnDestroy, OnInit, signal, ViewChild} from '@angular/core';
-import {MatStep, MatStepper, MatStepperNext} from "@angular/material/stepper";
+import {Component, DestroyRef, inject, OnDestroy, OnInit, signal, ViewChild} from '@angular/core';
 import {TeachingStaffService} from "../../../../services/services/teaching-staff.service";
 import {TeachingStaffResponse} from "../../../../services/models/teaching-staff-response";
 import {ReplaySubject, Subject, takeUntil} from "rxjs";
 import {MatFormField, MatLabel, MatOption, MatSelect} from "@angular/material/select";
-import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
+import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {NgxMatSelectSearchModule} from "ngx-mat-select-search";
 import {AsyncPipe} from "@angular/common";
 import {MatButton} from "@angular/material/button";
@@ -28,15 +27,12 @@ import {
 @Component({
   selector: 'app-new-workload',
   imports: [
-    MatStepper,
-    MatStep,
     ReactiveFormsModule,
     MatFormField,
     MatSelect,
     MatOption,
     NgxMatSelectSearchModule,
     AsyncPipe,
-    MatStepperNext,
     MatButton,
     RouterLink,
     RouterOutlet,
@@ -84,29 +80,26 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
 
   onSubmit() {
   }
-
-  tStaffForm = new FormGroup({
-    tStaffCtrl: new FormControl<number | null>(null),
-    tStaffFilterCtrl: new FormControl<string>('')
-  });
-
-  courseForm = new FormGroup({
-    courseCtrl: new FormControl<number | null>(null),
-    courseFilterCtrl: new FormControl<string>('')
-  });
-
-  myClassForm = new FormGroup({
-    myClassCtrl: new FormControl<number[] | null>(null),
-    myClassFilterCtrl: new FormControl<string>('')
-  });
-
-  academicRankForm = new FormGroup({
-    academicRankCtrl: new FormControl<number | null>(null),
-  });
-  statusTypeForm = new FormGroup({
-    statusTypeCtrl: new FormControl<number | null>(null),
-  });
-
+  workloadForm = new FormGroup({
+    tStaffCtrl: new FormControl<number | null>(null,{
+      validators: [Validators.required]
+    }),
+    tStaffFilterCtrl: new FormControl<string>('',),
+    courseCtrl: new FormControl<number | null>(null,{
+      validators: [Validators.required]
+    }),
+    courseFilterCtrl: new FormControl<string>(''),
+    myClassCtrl: new FormControl<number[] | null>(null,{
+      validators: [Validators.required]
+    }),
+    myClassFilterCtrl: new FormControl<string>(''),
+    academicRankCtrl: new FormControl<number | null>(null,{
+      validators: [Validators.required]
+    }),
+    statusTypeCtrl: new FormControl<number | null>(null,{
+      validators: [Validators.required]
+    }),
+  })
   ngOnInit() {
     this.initTeachingStaffSub();
     this.initCourseSub()
@@ -119,26 +112,29 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
     this._onDestroy.next();
     this._onDestroy.complete();
   }
+
 //filter dropdown options
   protected filterTeachingStaff() {
-    const search = this.tStaffForm.controls.tStaffFilterCtrl.value?.toLowerCase() ?? '';
+    const search = this.workloadForm.controls.tStaffFilterCtrl.value?.toLowerCase() ?? '';
     this.filteredTeachingStaff.next(
       this.tStaff()?.filter(t => t.rankFullName?.toLowerCase().includes(search)) ?? []
     );
   }
 
   protected filterCourse() {
-    const search = this.courseForm.controls.courseFilterCtrl.value?.toLowerCase() ?? '';
+    const search = this.workloadForm.controls.courseFilterCtrl.value?.toLowerCase() ?? '';
     this.filteredCourses.next(
       this.courses()?.filter(course => course.courseName?.toLowerCase().includes(search)) ?? []
     );
   }
+
   protected filterMyClasses() {
-    const search = this.myClassForm.controls.myClassFilterCtrl.value?.toLowerCase() ?? '';
+    const search = this.workloadForm.controls.myClassFilterCtrl.value?.toLowerCase() ?? '';
     this.filteredMyClasses.next(
       this.myClasses()?.filter(myClass => myClass.classNameAndYear?.toLowerCase().includes(search)) ?? []
     );
   }
+
 // fetch data
   private fetchAllTeachingStaff(callback?: () => void) {
     const subscription = this.teachingStaffService.findAllTeachingStaff().subscribe({
@@ -155,6 +151,7 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
       subscription.unsubscribe();
     });
   }
+
   private fetchAllCourses(callback?: () => void) {
     const subscription = this.courseService.findAllCourses().subscribe({
       next: (courses) => {
@@ -170,6 +167,7 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
       subscription.unsubscribe();
     });
   }
+
   private fetchAllClasses(callback?: () => void) {
     const subscription = this.myClassService.findAllMyClass().subscribe({
       next: (classes) => {
@@ -216,34 +214,35 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
       subscription.unsubscribe();
     });
   }
+
 // select newly created objects
 
   subscribeToChildEmitter(componentRef: any) {
     if (componentRef instanceof NewTeachingStaffComponent) {
       componentRef.emitTeachingStaff.subscribe((id: number) => {
         this.fetchAllTeachingStaff(() => {
-          this.tStaffForm.controls.tStaffCtrl.setValue(id, {emitModelToViewChange: false});
+          this.workloadForm.controls.tStaffCtrl.setValue(id, {emitModelToViewChange: false});
         });
       });
     }
     if (componentRef instanceof NewCourseComponent) {
       componentRef.emitCourse.subscribe((id: number) => {
         this.fetchAllCourses(() => {
-          this.courseForm.controls.courseCtrl.setValue(id, {emitModelToViewChange: false});
+          this.workloadForm.controls.courseCtrl.setValue(id, {emitModelToViewChange: false});
         });
       });
     }
     if (componentRef instanceof NewClassComponent) {
       componentRef.emitMyClass.subscribe((id: number) => {
         this.fetchAllClasses(() => {
-          let prevValues = this.myClassForm.controls.myClassCtrl.value ?? [];
-          this.myClassForm.controls.myClassCtrl.setValue([...prevValues, id], {emitModelToViewChange: false});
+          let prevValues = this.workloadForm.controls.myClassCtrl.value ?? [];
+          this.workloadForm.controls.myClassCtrl.setValue([...prevValues, id], {emitModelToViewChange: false});
         });
       });
     }
   }
 
-  displayedColumns(){
+  displayedColumns() {
     let columns: ColumnNames[] = [];
     if (this.columnsForTeacher()) columns.push(...ColumnsForTeacherResponse);
 
@@ -257,10 +256,10 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
   // subscription Initialization
   initTeachingStaffSub() {
     this.fetchAllTeachingStaff();
-    this.tStaffForm.controls.tStaffFilterCtrl.valueChanges
+    this.workloadForm.controls.tStaffFilterCtrl.valueChanges
       .pipe(takeUntil(this._onDestroy))
       .subscribe(() => this.filterTeachingStaff());
-    const subTStaff = this.tStaffForm.controls.tStaffCtrl.valueChanges.subscribe({
+    const subTStaff = this.workloadForm.controls.tStaffCtrl.valueChanges.subscribe({
       next: id => {
         const selectedStaff = this.tStaff()?.find(val => val.teachingStaffId === id);
         if (selectedStaff) {
@@ -273,12 +272,13 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
     });
     this.destroyRef.onDestroy(() => subTStaff.unsubscribe());
   }
+
   private initCourseSub() {
     this.fetchAllCourses();
-    this.courseForm.controls.courseFilterCtrl.valueChanges
+    this.workloadForm.controls.courseFilterCtrl.valueChanges
       .pipe(takeUntil(this._onDestroy))
       .subscribe(() => this.filterCourse());
-    const subTStaff = this.courseForm.controls.courseCtrl.valueChanges.subscribe({
+    const subTStaff = this.workloadForm.controls.courseCtrl.valueChanges.subscribe({
       next: id => {
         const selectedCourse = this.courses()?.find(val => val.courseId === id);
         if (selectedCourse) {
@@ -291,13 +291,14 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
     });
     this.destroyRef.onDestroy(() => subTStaff.unsubscribe());
   }
+
   initMyClassSub() {
     this.fetchAllClasses();
-    this.myClassForm.controls.myClassFilterCtrl.valueChanges
+    this.workloadForm.controls.myClassFilterCtrl.valueChanges
       .pipe(takeUntil(this._onDestroy))
       .subscribe(() => this.filterMyClasses());
 
-    const subMyClass = this.myClassForm.controls.myClassCtrl.valueChanges.subscribe({
+    const subMyClass = this.workloadForm.controls.myClassCtrl.valueChanges.subscribe({
       next: selectedIds => {
         const selectedMyClasses = this.myClasses()?.filter(val =>
           val.classId !== undefined && selectedIds?.includes(val.classId)
@@ -319,7 +320,7 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
 
   initAcademicRankSub() {
     this.fetchAllAcademicRanks();
-    const subAcademicRanks = this.academicRankForm.controls.academicRankCtrl.valueChanges.subscribe({
+    const subAcademicRanks = this.workloadForm.controls.academicRankCtrl.valueChanges.subscribe({
       next: id => {
         const selectedAcademicRank = this.academicRanks()?.find(val => val.academicRankId === id);
         if (selectedAcademicRank) {
@@ -335,7 +336,7 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
 
   initStatusTypeSub() {
     this.fetchStatusTypes();
-    const subStatusTypes = this.statusTypeForm.controls.statusTypeCtrl.valueChanges.subscribe({
+    const subStatusTypes = this.workloadForm.controls.statusTypeCtrl.valueChanges.subscribe({
       next: id => {
         const selectedStatusType = this.statusTypes()?.find(val => val.statusTypeId === id);
         if (selectedStatusType) {
@@ -349,4 +350,7 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
     this.destroyRef.onDestroy(() => subStatusTypes.unsubscribe())
   }
 
+  onCancel() {
+
+  }
 }
