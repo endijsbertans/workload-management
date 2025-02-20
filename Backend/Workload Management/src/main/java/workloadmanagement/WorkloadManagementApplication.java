@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import workloadmanagement.MyClass.MyClass;
 import workloadmanagement.academicrank.AcademicRank;
 import workloadmanagement.academicrank.semester.Semester;
+import workloadmanagement.academicrank.semester.SemesterEnum;
 import workloadmanagement.auth.security.MyAuthority;
 import workloadmanagement.auth.security.MyUser;
 import workloadmanagement.course.Course;
@@ -19,6 +20,7 @@ import workloadmanagement.statustype.StatusType;
 import workloadmanagement.teachingstaff.TeachingStaff;
 import workloadmanagement.workload.Workload;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @EnableJpaAuditing()
@@ -40,7 +42,9 @@ public class WorkloadManagementApplication {
 			IStatusTypeRepo statusTypeRepo,
 			ITeachingStaffRepo teachingStaffRepo,
 			IWorkloadRepo workloadRepo,
+			ISemesterRepo semesterRepo,
 			PasswordEncoder passwordEncoder
+
 	) {
 		return args -> {
 //			if (myAuthorityRepo.findByTitle("USER").isEmpty()) {
@@ -57,33 +61,37 @@ public class WorkloadManagementApplication {
 							.build();
 					userRepo.save(u1);
 					myAuthorityRepo.save(authorities);
+					Semester s1 = Semester.builder()
+							.semesterName(SemesterEnum.pavasaris)
+							.year(LocalDate.parse("2024-01-01"))
+							.build();
+					semesterRepo.save(s1);
 
 					AcademicRank ar1 = AcademicRank.builder()
-							.rankName("Profesori pavasaris")
-							.semester(Semester.pavasaris)
+							.rankName("Profesori")
+							.semester(SemesterEnum.pavasaris)
 							.cpForFullTime(9.580)
 							.abbreviation("prof.")
 							.salary(2712)
 							.build();
 					AcademicRank ar2 = AcademicRank.builder()
-							.rankName("Profesori rudens")
-							.semester(Semester.rudens)
-							.cpForFullTime(9.580)
+							.rankName("Profesori")
+							.semester(SemesterEnum.rudens)
 							.cpForFullTime(14.370)
 							.abbreviation("prof.")
 							.salary(2712)
 							.build();
 
 					AcademicRank ar3 = AcademicRank.builder()
-							.rankName("Asociētie profesori pavasaris")
-							.semester(Semester.pavasaris)
+							.rankName("Asociētie profesori")
+							.semester(SemesterEnum.pavasaris)
 							.cpForFullTime(12.310)
 							.abbreviation("asoc.prof")
 							.salary(2172)
 							.build();
 					AcademicRank ar4 = AcademicRank.builder()
-							.rankName("Asociētie profesori rudens")
-							.semester(Semester.rudens)
+							.rankName("Asociētie profesori")
+							.semester(SemesterEnum.rudens)
 							.cpForFullTime(18.465)
 							.abbreviation("asoc.prof")
 							.salary(2172)
@@ -143,7 +151,7 @@ public class WorkloadManagementApplication {
 					Workload w1 = Workload.builder()
 									.teachingStaff(ts1)
 									.statusType(st1)
-									.semester("rudens")
+									.semester(s1)
 									.comments("praktiskie darbi")
 									.includeInBudget("1")
 									.budgetPosition(false)

@@ -192,7 +192,7 @@ export class WorkloadListComponent implements OnInit, AfterViewInit {
         // Top-level properties
         (data.comments?.toLowerCase().includes(lowercaseFilter) ?? false) ||
         (data.program?.toLowerCase().includes(lowercaseFilter) ?? false) ||
-        (data.semester?.toLowerCase().includes(lowercaseFilter) ?? false) ||
+        (data.semester?.semesterName?.toLowerCase().includes(lowercaseFilter) ?? false) ||
         // Course-related filtering
         (data.course?.courseName?.toLowerCase().includes(lowercaseFilter) ?? false) ||
         (data.course?.courseCode?.toLowerCase().includes(lowercaseFilter) ?? false) ||

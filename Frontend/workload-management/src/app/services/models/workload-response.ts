@@ -5,6 +5,7 @@
 import { AcademicRank } from '../models/academic-rank';
 import { Course } from '../models/course';
 import { MyClass } from '../models/my-class';
+import { Semester } from '../models/semester';
 import { StatusType } from '../models/status-type';
 import { TeachingStaff } from '../models/teaching-staff';
 export interface WorkloadResponse {
@@ -26,7 +27,7 @@ export interface WorkloadResponse {
   myClasses?: Array<MyClass>;
   program?: string;
   salaryPerMonth?: number;
-  semester?: string;
+  semester?: Semester;
   statusType?: StatusType;
   teachingStaff?: TeachingStaff;
   vacationMonths?: number;

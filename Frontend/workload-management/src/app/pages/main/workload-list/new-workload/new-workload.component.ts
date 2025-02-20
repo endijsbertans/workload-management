@@ -9,7 +9,13 @@ import {AsyncPipe} from "@angular/common";
 import {MatButton} from "@angular/material/button";
 import {RouterLink, RouterOutlet} from "@angular/router";
 import {NewTeachingStaffComponent} from "../../new-objects/new-teaching-staff/new-teaching-staff.component";
-import {AcademicRankService, CourseService, MyClassService, StatusTypeService} from "../../../../services/services";
+import {
+  AcademicRankService,
+  CourseService,
+  MyClassService,
+  SemesterControllerService,
+  StatusTypeService
+} from "../../../../services/services";
 import {CourseResponse} from "../../../../services/models/course-response";
 import {NewCourseComponent} from "../../new-objects/new-course/new-course.component";
 import {MyClassResponse} from "../../../../services/models/my-class-response";
@@ -20,9 +26,10 @@ import {PreviewInputDataComponent} from "./preview-input-data/preview-input-data
 import {
   ColumnNames, ColumnsForAcademicRankResponse,
   ColumnsForClassResponse,
-  ColumnsForCourseResponse, ColumnsForStatusTypeResponse,
+  ColumnsForCourseResponse, ColumnsForSemesterResponse, ColumnsForStatusTypeResponse,
   ColumnsForTeacherResponse
 } from "../../new-objects/object-columns";
+import {SemesterResponse} from "../../../../services/models/semester-response";
 
 @Component({
   selector: 'app-new-workload',
@@ -50,17 +57,21 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
   selectedMyClasses = signal<MyClassResponse[] | undefined>(undefined);
   selectedAcademicRank = signal<AcademicRankResponse | undefined>(undefined);
   selectedStatusType = signal<StatusTypeResponse | undefined>(undefined);
+  selectedSemester = signal<SemesterResponse | undefined>(undefined);
+
   columnsForTeacher = signal(false);
   columnsForCourse = signal(false);
   columnsForMyClasses = signal(false);
   columnsForAcademicRank = signal(false);
   columnsForStatusType = signal(false);
+  columnsForSemester = signal(false);
   private readonly destroyRef = inject(DestroyRef);
   private readonly teachingStaffService = inject(TeachingStaffService);
   private readonly courseService = inject(CourseService);
   private readonly myClassService = inject(MyClassService);
   private readonly academicRankService = inject(AcademicRankService);
   private readonly statusTypeService = inject(StatusTypeService);
+  private readonly semesterService = inject(SemesterControllerService);
 
 
   errorMsg = signal('');
@@ -69,7 +80,7 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
   myClasses = signal<MyClassResponse[] | undefined>(undefined);
   academicRanks = signal<AcademicRankResponse[] | undefined>(undefined);
   statusTypes = signal<StatusTypeResponse[] | undefined>(undefined);
-
+  semesters = signal<SemesterResponse[] | undefined>(undefined);
   public filteredTeachingStaff = new ReplaySubject<TeachingStaffResponse[]>(1);
   public filteredCourses = new ReplaySubject<CourseResponse[]>(1);
   public filteredMyClasses = new ReplaySubject<MyClassResponse[]>(1);
@@ -80,32 +91,38 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
 
   onSubmit() {
   }
+
   workloadForm = new FormGroup({
-    tStaffCtrl: new FormControl<number | null>(null,{
+    semesterCtrl: new FormControl<number | null>(null, {
+      validators: [Validators.required]
+    }),
+    tStaffCtrl: new FormControl<number | null>(null, {
       validators: [Validators.required]
     }),
     tStaffFilterCtrl: new FormControl<string>('',),
-    courseCtrl: new FormControl<number | null>(null,{
+    courseCtrl: new FormControl<number | null>(null, {
       validators: [Validators.required]
     }),
     courseFilterCtrl: new FormControl<string>(''),
-    myClassCtrl: new FormControl<number[] | null>(null,{
+    myClassCtrl: new FormControl<number[] | null>(null, {
       validators: [Validators.required]
     }),
     myClassFilterCtrl: new FormControl<string>(''),
-    academicRankCtrl: new FormControl<number | null>(null,{
+    academicRankCtrl: new FormControl<number | null>(null, {
       validators: [Validators.required]
     }),
-    statusTypeCtrl: new FormControl<number | null>(null,{
+    statusTypeCtrl: new FormControl<number | null>(null, {
       validators: [Validators.required]
     }),
   })
+
   ngOnInit() {
     this.initTeachingStaffSub();
     this.initCourseSub()
     this.initMyClassSub()
     this.initAcademicRankSub();
     this.initStatusTypeSub();
+    this.initSemesterSub();
   }
 
   ngOnDestroy() {
@@ -141,7 +158,7 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
       next: (tStaff) => {
         this.tStaff.set(tStaff);
         this.filteredTeachingStaff.next([...tStaff]);
-        if (callback) callback();
+        if (callback) callback(); // if necessary to execute something after fetch
       },
       error: (err) => {
         console.log(err);
@@ -157,7 +174,7 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
       next: (courses) => {
         this.courses.set(courses);
         this.filteredCourses.next([...courses]);
-        if (callback) callback();
+        if (callback) callback(); // if necessary to execute something after fetch
       },
       error: (err) => {
         console.log(err);
@@ -173,7 +190,7 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
       next: (classes) => {
         this.myClasses.set(classes);
         this.filteredMyClasses.next([...classes]);
-        if (callback) callback();
+        if (callback) callback(); // if necessary to execute something after fetch
       },
       error: (err) => {
         console.log(err);
@@ -187,8 +204,12 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
   private fetchAllAcademicRanks(callback?: () => void) {
     const subscription = this.academicRankService.findAllAcademicRank().subscribe({
       next: (academicRanks) => {
+        if(this.selectedSemester()){
+          this.academicRanks.set(academicRanks.filter((val) => val.semester === this.selectedSemester()?.semesterName));
+        }else{
         this.academicRanks.set(academicRanks);
-        if (callback) callback();
+        }
+        if (callback) callback(); // if necessary to execute something after fetch
       },
       error: (err) => {
         console.log(err);
@@ -204,6 +225,22 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
       next: (statusTypes) => {
         if (statusTypes) {
           this.statusTypes.set(statusTypes);
+        }
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
+    this.destroyRef.onDestroy(() => {
+      subscription.unsubscribe();
+    });
+  }
+
+  private fetchSemesters() {
+    const subscription = this.semesterService.findAllSemesters().subscribe({
+      next: (semesters) => {
+        if (semesters) {
+          this.semesters.set(semesters);
         }
       },
       error: (err) => {
@@ -245,11 +282,11 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
   displayedColumns() {
     let columns: ColumnNames[] = [];
     if (this.columnsForTeacher()) columns.push(...ColumnsForTeacherResponse);
-
     if (this.columnsForCourse()) columns.push(...ColumnsForCourseResponse);
     if (this.columnsForMyClasses()) columns.push(...ColumnsForClassResponse);
     if (this.columnsForAcademicRank()) columns.push(...ColumnsForAcademicRankResponse);
     if (this.columnsForStatusType()) columns.push(...ColumnsForStatusTypeResponse);
+    if (this.columnsForSemester()) columns.push(...ColumnsForSemesterResponse);
     this.columns.set(columns);
   }
 
@@ -348,6 +385,23 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
       }
     });
     this.destroyRef.onDestroy(() => subStatusTypes.unsubscribe())
+  }
+
+  initSemesterSub() {
+    this.fetchSemesters();
+    const subSemesters = this.workloadForm.controls.semesterCtrl.valueChanges.subscribe({
+      next: id => {
+        const selectedSemester = this.semesters()?.find(val => val.semesterId === id);
+        if (selectedSemester) {
+          console.log(selectedSemester);
+          this.columnsForSemester.set(true);
+          this.selectedSemester.set(selectedSemester);
+          this.displayedColumns();
+          this.fetchAllAcademicRanks();
+        }
+      }
+    });
+    this.destroyRef.onDestroy(() => subSemesters.unsubscribe())
   }
 
   onCancel() {

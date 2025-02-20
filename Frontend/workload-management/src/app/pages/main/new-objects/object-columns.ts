@@ -125,4 +125,16 @@ export const ColumnsForStatusTypeResponse: ColumnNames[] = [
     collection: 'ColumnsForStatusType'
   }
 ];
+export const ColumnsForSemesterResponse: ColumnNames[] = [
+  {
+    name: 'semestris',
+    pathTo: 'semester.semesterName',
+    collection: 'ColumnsForSemester'
+  },
+  {
+    name: 'gads',
+    pathTo: 'semester.year',
+    collection: 'ColumnsForSemester'
+  },
+]
 

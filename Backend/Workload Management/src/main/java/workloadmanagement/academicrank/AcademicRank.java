@@ -1,14 +1,9 @@
 package workloadmanagement.academicrank;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.*;
-import workloadmanagement.academicrank.semester.Semester;
-
-import java.math.BigDecimal;
+import workloadmanagement.academicrank.semester.SemesterEnum;
 
 @Entity
 @Getter
@@ -22,17 +17,13 @@ public class AcademicRank {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int academicRankId;
 
-    @NotNull
     private String rankName;
 
-    @NotNull
     private double  cpForFullTime;
 
-    @NotNull
     private String abbreviation;
 
-    @NotNull
     private double salary;
-    @NotNull
-    private Semester semester;
+
+    private SemesterEnum semester;
 }

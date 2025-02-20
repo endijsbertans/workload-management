@@ -1,5 +1,7 @@
 package workloadmanagement.academicrank;
 import lombok.*;
+import workloadmanagement.academicrank.semester.SemesterEnum;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -11,4 +13,5 @@ public class AcademicRankResponse {
     private double  cpForFullTime;
     private String abbreviation;
     private double salary;
+    private SemesterEnum semester;
 }

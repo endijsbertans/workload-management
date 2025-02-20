@@ -94,7 +94,7 @@ export const ColumnsForCourse: ColumnNames[] = [
 
   {
     name: 'Semestris',
-    pathTo: 'semester',
+    pathTo: 'semester.semesterName',
     collection: 'ColumnsForCourse'
   },
   {

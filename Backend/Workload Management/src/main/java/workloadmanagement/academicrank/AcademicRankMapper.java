@@ -9,6 +9,7 @@ public class AcademicRankMapper {
                 .cpForFullTime(request.cpForFullTime())
                 .abbreviation(request.abbreviation())
                 .salary(request.salary())
+                .semester(request.semester())
                 .build();
     }
 
@@ -19,6 +20,7 @@ public class AcademicRankMapper {
                 .cpForFullTime(academicRank.getCpForFullTime())
                 .abbreviation(academicRank.getAbbreviation())
                 .salary(academicRank.getSalary())
+                .semester(academicRank.getSemester())
                 .build();
     }
 }

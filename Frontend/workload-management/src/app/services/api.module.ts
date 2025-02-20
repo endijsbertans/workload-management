@@ -8,6 +8,7 @@ import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
 import { WorkloadService } from './services/workload.service';
 import { TeachingStaffService } from './services/teaching-staff.service';
+import { SemesterControllerService } from './services/semester-controller.service';
 import { StatusTypeService } from './services/status-type.service';
 import { MyClassService } from './services/my-class.service';
 import { FacultyService } from './services/faculty.service';
@@ -25,6 +26,7 @@ import { AcademicRankService } from './services/academic-rank.service';
   providers: [
     WorkloadService,
     TeachingStaffService,
+    SemesterControllerService,
     StatusTypeService,
     MyClassService,
     FacultyService,

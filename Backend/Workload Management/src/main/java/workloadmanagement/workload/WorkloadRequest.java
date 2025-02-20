@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import workloadmanagement.academicrank.AcademicRank;
+import workloadmanagement.academicrank.semester.Semester;
 import workloadmanagement.course.Course;
 import workloadmanagement.MyClass.MyClass;
 import workloadmanagement.statustype.StatusType;
@@ -27,7 +28,7 @@ public record WorkloadRequest (
     })
     @NotNull(message = "112")
     @NotEmpty(message = "112")
-    String semester,
+    Semester semester,
 
     @Size.List({
             @Size(min = 1, message = "113"),

@@ -5,6 +5,7 @@ import {MyClassResponse} from "../../../../../services/models/my-class-response"
 import {AcademicRankResponse} from "../../../../../services/models/academic-rank-response";
 import {StatusTypeResponse} from "../../../../../services/models/status-type-response";
 import {ColumnNames} from "../../../new-objects/object-columns";
+import {SemesterResponse} from "../../../../../services/models/semester-response";
 
 @Component({
   selector: 'app-preview-input-data',
@@ -19,6 +20,7 @@ export class PreviewInputDataComponent {
   @Input() myClasses?: MyClassResponse[];
   @Input() academicRank?: AcademicRankResponse;
   @Input() statusType?: StatusTypeResponse;
+  @Input() semester?: SemesterResponse;
   @Input() displayedColumns?: ColumnNames[] = [];
 
 
@@ -29,6 +31,7 @@ export class PreviewInputDataComponent {
       myClasses: this.myClasses,
       academicRank: this.academicRank,
       statusType: this.statusType,
+      semester: this.semester
     };
   }
 

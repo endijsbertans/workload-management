@@ -5,6 +5,7 @@
 import { AcademicRank } from '../models/academic-rank';
 import { Course } from '../models/course';
 import { MyClass } from '../models/my-class';
+import { Semester } from '../models/semester';
 import { StatusType } from '../models/status-type';
 import { TeachingStaff } from '../models/teaching-staff';
 export interface WorkloadRequest {
@@ -20,7 +21,7 @@ export interface WorkloadRequest {
   industryCoefficient: number;
   myClasses: Array<MyClass>;
   program: string;
-  semester: string;
+  semester: Semester;
   statusType: StatusType;
   teachingStaff: TeachingStaff;
   vacationMonths: number;

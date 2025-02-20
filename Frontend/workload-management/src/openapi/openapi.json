@@ -140,6 +140,58 @@
         }
       }
     },
+    "/statuses": {
+      "get": {
+        "tags": [
+          "semester-controller"
+        ],
+        "operationId": "findAllSemesters",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SemesterResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "semester-controller"
+        ],
+        "operationId": "saveSemester",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SemesterRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/status-type": {
       "get": {
         "tags": [
@@ -522,6 +574,37 @@
         }
       }
     },
+    "/statuses/{statusTypeId}": {
+      "get": {
+        "tags": [
+          "semester-controller"
+        ],
+        "operationId": "findSemesterById",
+        "parameters": [
+          {
+            "name": "statusTypeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SemesterResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/status-type/{statusTypeId}": {
       "get": {
         "tags": [
@@ -727,13 +810,6 @@
   "components": {
     "schemas": {
       "AcademicRank": {
-        "required": [
-          "abbreviation",
-          "cpForFullTime",
-          "rankName",
-          "salary",
-          "semester"
-        ],
         "type": "object",
         "properties": {
           "academicRankId": {
@@ -839,6 +915,26 @@
           }
         }
       },
+      "Semester": {
+        "type": "object",
+        "properties": {
+          "semesterId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "semesterName": {
+            "type": "string",
+            "enum": [
+              "pavasaris",
+              "rudens"
+            ]
+          },
+          "year": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
       "StatusType": {
         "type": "object",
         "properties": {
@@ -913,7 +1009,7 @@
             "$ref": "#/components/schemas/StatusType"
           },
           "semester": {
-            "type": "string"
+            "$ref": "#/components/schemas/Semester"
           },
           "comments": {
             "type": "string"
@@ -993,6 +1089,13 @@
           "salary": {
             "type": "number",
             "format": "double"
+          },
+          "semester": {
+            "type": "string",
+            "enum": [
+              "pavasaris",
+              "rudens"
+            ]
           }
         }
       },
@@ -1049,6 +1152,26 @@
           },
           "surname": {
             "type": "string"
+          }
+        }
+      },
+      "SemesterRequest": {
+        "required": [
+          "semesterName",
+          "year"
+        ],
+        "type": "object",
+        "properties": {
+          "semesterName": {
+            "type": "string",
+            "enum": [
+              "pavasaris",
+              "rudens"
+            ]
+          },
+          "year": {
+            "type": "string",
+            "format": "date"
           }
         }
       },
@@ -1174,17 +1297,13 @@
       "AcademicRankRequest": {
         "required": [
           "abbreviation",
-          "academicRankId",
           "cpForFullTime",
           "rankName",
-          "salary"
+          "salary",
+          "semester"
         ],
         "type": "object",
         "properties": {
-          "academicRankId": {
-            "type": "integer",
-            "format": "int32"
-          },
           "rankName": {
             "type": "string"
           },
@@ -1198,6 +1317,13 @@
           "salary": {
             "type": "number",
             "format": "double"
+          },
+          "semester": {
+            "type": "string",
+            "enum": [
+              "pavasaris",
+              "rudens"
+            ]
           }
         }
       },
@@ -1248,7 +1374,7 @@
             "$ref": "#/components/schemas/StatusType"
           },
           "semester": {
-            "type": "string"
+            "$ref": "#/components/schemas/Semester"
           },
           "comments": {
             "type": "string"
@@ -1376,10 +1502,10 @@
           "username": {
             "type": "string"
           },
-          "accountNonExpired": {
+          "credentialsNonExpired": {
             "type": "boolean"
           },
-          "credentialsNonExpired": {
+          "accountNonExpired": {
             "type": "boolean"
           },
           "accountNonLocked": {
@@ -1421,6 +1547,26 @@
           },
           "rankFullName": {
             "type": "string"
+          }
+        }
+      },
+      "SemesterResponse": {
+        "type": "object",
+        "properties": {
+          "semesterId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "semesterName": {
+            "type": "string",
+            "enum": [
+              "pavasaris",
+              "rudens"
+            ]
+          },
+          "year": {
+            "type": "string",
+            "format": "date"
           }
         }
       },

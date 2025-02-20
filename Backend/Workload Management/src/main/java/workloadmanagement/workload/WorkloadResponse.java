@@ -2,6 +2,7 @@ package workloadmanagement.workload;
 
 import lombok.*;
 import workloadmanagement.academicrank.AcademicRank;
+import workloadmanagement.academicrank.semester.Semester;
 import workloadmanagement.course.Course;
 import workloadmanagement.MyClass.MyClass;
 import workloadmanagement.statustype.StatusType;
@@ -18,7 +19,8 @@ public class WorkloadResponse {
     private int workloadId;
     private TeachingStaff teachingStaff;
     private StatusType statusType;
-    private String semester;
+
+    private Semester semester;
     private String comments;
     private String includeInBudget;
     private boolean budgetPosition;

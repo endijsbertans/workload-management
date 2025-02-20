@@ -8,4 +8,5 @@ export interface AcademicRankResponse {
   cpForFullTime?: number;
   rankName?: string;
   salary?: number;
+  semester?: 'pavasaris' | 'rudens';
 }

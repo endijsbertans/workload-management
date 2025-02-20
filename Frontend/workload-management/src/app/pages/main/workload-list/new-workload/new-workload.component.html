@@ -35,6 +35,33 @@
     </div>
     <div class="inputFieldFlex">
       <mat-form-field>
+        <mat-select [formControl]="workloadForm.controls.semesterCtrl" #singleSelect>
+          @if (courses()) {
+            @if (courses()?.length === 0) {
+              <mat-option>
+                Nav Semestri :(
+              </mat-option>
+            } @else {
+              @for (semester of semesters(); track semester.semesterId) {
+                <mat-option [value]="semester.semesterId">
+                  {{ semester.semesterName }}
+                </mat-option>
+              }
+            }
+          }
+        </mat-select>
+        @if (!courses()) {
+          <mat-label>
+            <em>Lādē datus...</em>
+          </mat-label>
+        } @else {
+          <mat-label>Izvēlies semestri!</mat-label>
+        }
+      </mat-form-field>
+<!--      <button mat-button routerLink="new-course">Izveidot jaunu</button>-->
+    </div>
+    <div class="inputFieldFlex">
+      <mat-form-field>
         <mat-select [formControl]="workloadForm.controls.courseCtrl" #singleSelect>
           @if (courses()) {
             @if (courses()?.length === 0) {
@@ -166,6 +193,7 @@
   [myClasses]="selectedMyClasses()"
   [academicRank]="selectedAcademicRank()"
   [statusType]="selectedStatusType()"
+  [semester]="selectedSemester()"
   [displayedColumns]="columns()">
 </app-preview-input-data>
 <router-outlet (activate)="subscribeToChildEmitter($event)"/>
