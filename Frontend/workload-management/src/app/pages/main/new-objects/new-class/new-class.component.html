@@ -45,7 +45,7 @@
       />
     </mat-form-field>
     <mat-form-field class="input-flex">
-      <mat-select required [formControl]="classForm.controls.classFaculty">
+      <mat-select required [formControl]="classForm.controls.classFacultyId">
         @if (faculties()) {
           @if (faculties()?.length === 0) {
             <mat-option>

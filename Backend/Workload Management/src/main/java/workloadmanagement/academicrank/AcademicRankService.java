@@ -15,9 +15,9 @@ public class AcademicRankService {
         return academicRankRepo.save(academicRank).getAcademicRankId();
     }
 
-    public AcademicRank findAcademicRankFromResponse(AcademicRankResponse response) {
-        return academicRankRepo.findById(response.getAcademicRankId())
-                .orElseThrow(() -> new RuntimeException("Academic Rank with id: " + response.getAcademicRankId() + " not found."));
+    public AcademicRank findAcademicRankFromResponseId(int id) {
+        return academicRankRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Academic Rank with id: " + id + " not found."));
     }
     public AcademicRankResponse findById(Integer academicRankId) {
         return academicRankRepo.findById(academicRankId)

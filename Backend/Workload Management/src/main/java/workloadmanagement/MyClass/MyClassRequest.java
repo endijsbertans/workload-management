@@ -22,7 +22,7 @@ public record MyClassRequest (
     @Min(value = 0, message = "131")
     int studentAmount,
     @NotNull(message = "132")
-    FacultyResponse classFaculty,
+    int classFacultyId,
 
     @NotNull(message = "133")
     @NotEmpty(message = "133")

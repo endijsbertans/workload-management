@@ -49,8 +49,9 @@ public class Workload {
     private double contactHours;
 
     private String program;
-
-    private String groupForSemester;
+    @ManyToOne
+    @JoinColumn(name="class_id")
+    private MyClass groupForSemester;
 
     @ManyToOne
     @JoinColumn(name="teaching_staff_id")

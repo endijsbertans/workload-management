@@ -17,7 +17,10 @@ public class StatusTypeService {
         StatusType statusType = statusTypeMapper.toStatusType(request);
         return statusTypeRepo.save(statusType).getStatusTypeId();
     }
-
+    public StatusType findStatusTypeFromResponseId(int id) {
+        return statusTypeRepo.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Status Type with id: " + id + " not found."));
+    }
     public StatusTypeResponse findById(Integer statusTypeId) {
         return statusTypeRepo.findById(statusTypeId)
                 .map(statusTypeMapper::toStatusTypeResponse)

@@ -9,9 +9,21 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import workloadmanagement.MyClass.MyClass;
+import workloadmanagement.MyClass.MyClassService;
+import workloadmanagement.academicrank.AcademicRank;
+import workloadmanagement.academicrank.AcademicRankService;
+import workloadmanagement.academicrank.semester.Semester;
+import workloadmanagement.academicrank.semester.SemesterService;
 import workloadmanagement.common.PageResponse;
+import workloadmanagement.course.Course;
+import workloadmanagement.course.CourseService;
 import workloadmanagement.repo.IWorkloadRepo;
+import workloadmanagement.statustype.StatusType;
+import workloadmanagement.statustype.StatusTypeService;
+import workloadmanagement.teachingstaff.TeachingStaff;
+import workloadmanagement.teachingstaff.TeachingStaffService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -20,9 +32,33 @@ import java.util.List;
 public class WorkloadService {
     private final WorkloadMapper workloadMapper;
     private final IWorkloadRepo workloadRepo;
-
+    private final TeachingStaffService teachingStaffService;
+    private final StatusTypeService statusTypeService;
+    private final SemesterService semesterService;
+    private final CourseService courseService;
+    private final AcademicRankService academicRankService;
+    private final MyClassService myClassService;
     public Integer save(WorkloadRequest request) {
-        Workload workload = workloadMapper.toWorkload(request);
+        TeachingStaff teachingStaff = teachingStaffService.findTeachingStaffFromResponseId(request.teachingStaffId());
+        StatusType statusType = statusTypeService.findStatusTypeFromResponseId(request.statusTypeId());
+        Semester semester = semesterService.findSemesterFromResponseId(request.semesterId());
+        Course course = courseService.findCourseFromResponseId(request.courseId());
+        AcademicRank academicRank = academicRankService.findAcademicRankFromResponseId(request.academicRankId());
+        List<MyClass> myClasses = new ArrayList<>();
+        MyClass groupForSemester = myClassService.findMyClassFromResponseId(request.groupForSemesterId());
+        for(int id : request.myClassIds()){
+            myClasses.add(myClassService.findMyClassFromResponseId(id));
+        }
+        Workload workload = workloadMapper.toWorkload(
+                request,
+                teachingStaff,
+                statusType,
+                semester,
+                course,
+                academicRank,
+                myClasses,
+                groupForSemester
+        );
         return workloadRepo.save(workload).getWorkloadId();
     }
     public WorkloadResponse findById(Integer tstaffId) {

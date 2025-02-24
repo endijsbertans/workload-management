@@ -1,7 +1,10 @@
-.firstStepContentWrapper{
-  display: inline-flex;
-  flex-direction: row;
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto auto auto auto auto;
+  gap: 10px;
+  padding: 10px;
 }
+
 .inputFieldFlex{
   display: flex;
   flex-flow: column-reverse;

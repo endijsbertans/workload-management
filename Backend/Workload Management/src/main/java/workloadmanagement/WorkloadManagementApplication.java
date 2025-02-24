@@ -162,7 +162,7 @@ public class WorkloadManagementApplication {
 									.groupAmount(1)
 									.contactHours(1)
 									.program("ITB")
-									.groupForSemester("1ITB")
+									.groupForSemester(ac1)
 									.course(c1)
 									.academicRank(ar1)
 									.myClasses(List.of(ac1,ac2))

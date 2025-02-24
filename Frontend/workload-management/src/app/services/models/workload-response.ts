@@ -5,6 +5,7 @@
 import { AcademicRank } from '../models/academic-rank';
 import { Course } from '../models/course';
 import { MyClass } from '../models/my-class';
+import { MyClassResponse } from '../models/my-class-response';
 import { Semester } from '../models/semester';
 import { StatusType } from '../models/status-type';
 import { TeachingStaff } from '../models/teaching-staff';
@@ -20,7 +21,7 @@ export interface WorkloadResponse {
   creditPointsPerHour?: number;
   expectedSalary?: number;
   groupAmount?: number;
-  groupForSemester?: string;
+  groupForSemester?: MyClassResponse;
   includeInBudget?: string;
   industryCoefficient?: number;
   monthSum?: number;

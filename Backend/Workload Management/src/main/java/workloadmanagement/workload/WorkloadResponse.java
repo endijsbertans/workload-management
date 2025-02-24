@@ -1,6 +1,7 @@
 package workloadmanagement.workload;
 
 import lombok.*;
+import workloadmanagement.MyClass.MyClassResponse;
 import workloadmanagement.academicrank.AcademicRank;
 import workloadmanagement.academicrank.semester.Semester;
 import workloadmanagement.course.Course;
@@ -31,7 +32,7 @@ public class WorkloadResponse {
     private int groupAmount;
     private double contactHours;
     private String program;
-    private String groupForSemester;
+    private MyClassResponse groupForSemester;
     private Course course;
     private AcademicRank academicRank;
     private List<MyClass> myClasses;

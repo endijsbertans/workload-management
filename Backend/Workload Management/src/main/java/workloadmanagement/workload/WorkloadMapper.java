@@ -1,14 +1,34 @@
 package workloadmanagement.workload;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import workloadmanagement.MyClass.MyClass;
+import workloadmanagement.MyClass.MyClassMapper;
+import workloadmanagement.academicrank.AcademicRank;
+import workloadmanagement.academicrank.semester.Semester;
+import workloadmanagement.course.Course;
+import workloadmanagement.statustype.StatusType;
+import workloadmanagement.teachingstaff.TeachingStaff;
+
+import java.util.List;
 
 @Service
 public class WorkloadMapper {
-    public Workload toWorkload(WorkloadRequest request) {
+    @Autowired
+    private MyClassMapper myClassMapper;
+    public Workload toWorkload(
+            WorkloadRequest request,
+            TeachingStaff teachingStaff,
+            StatusType statusType,
+            Semester semester,
+            Course course,
+            AcademicRank academicRank,
+            List<MyClass> myClasses,
+            MyClass classForSemester) {
         return Workload.builder()
-                .teachingStaff(request.teachingStaff())
-                .statusType(request.statusType())
-                .semester(request.semester())
+                .teachingStaff(teachingStaff)
+                .statusType(statusType)
+                .semester(semester)
                 .comments(request.comments())
                 .includeInBudget(request.includeInBudget())
                 .budgetPosition(request.budgetPosition())
@@ -19,10 +39,10 @@ public class WorkloadMapper {
                 .groupAmount(request.groupAmount())
                 .contactHours(request.contactHours())
                 .program(request.program())
-                .groupForSemester(request.groupForSemester())
-                .course(request.course())
-                .academicRank(request.academicRank())
-                .myClasses(request.myClasses())
+                .groupForSemester(classForSemester)
+                .course(course)
+                .academicRank(academicRank)
+                .myClasses(myClasses)
                 .build();
     }
     public WorkloadResponse toWorkloadResponse(Workload workload){
@@ -40,7 +60,7 @@ public class WorkloadMapper {
                 .groupAmount(workload.getGroupAmount())
                 .contactHours(workload.getContactHours())
                 .program(workload.getProgram())
-                .groupForSemester(workload.getGroupForSemester())
+                .groupForSemester(myClassMapper.toMyClassResponse(workload.getGroupForSemester()))
                 .course(workload.getCourse())
                 .academicRank(workload.getAcademicRank())
                 // Calculated values

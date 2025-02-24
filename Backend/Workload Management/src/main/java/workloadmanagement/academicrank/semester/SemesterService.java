@@ -15,6 +15,10 @@ public class SemesterService {
         Semester semester = semesterMapper.toSemester(request);
         return semesterRepo.save(semester).getSemesterId();
     }
+    public Semester findSemesterFromResponseId(int id) {
+        return semesterRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Semester with id: " + id + " not found."));
+    }
     public SemesterResponse findById(Integer statusTypeId) {
         return semesterRepo.findById(statusTypeId)
                 .map(semesterMapper::toSemesterResponse)

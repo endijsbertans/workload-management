@@ -11,7 +11,6 @@ import {MatOption} from "@angular/material/core";
 import {MatSelect} from "@angular/material/select";
 import {MatButton} from "@angular/material/button";
 import {NewFacultyComponent} from "../new-faculty/new-faculty.component";
-import {FacultyRequest} from "../../../../services/models/faculty-request";
 import {NewUserComponent} from "../new-user/new-user.component";
 import {RegistrationRequest} from "../../../../services/models/registration-request";
 import {TeachingStaffRequest} from "../../../../services/models/teaching-staff-request";
@@ -29,7 +28,6 @@ import {AcademicRankResponse} from "../../../../services/models/academic-rank-re
     MatOption,
     MatSelect,
     MatButton,
-    NewFacultyComponent,
     NewUserComponent,
   ],
   templateUrl: './new-teaching-staff.component.html',
@@ -47,7 +45,6 @@ export class NewTeachingStaffComponent implements OnInit {
 
   faculties = signal<FacultyResponse[] | undefined>(undefined);
   academicRanks = signal<AcademicRankResponse[] | undefined>(undefined);
-  onNewFaculty = signal(false);
   onAddUserAuthDetails = signal(false);
   userAuthDetails = signal< RegistrationRequest | undefined>(undefined);
   authButtonText = signal("Izveidot autentifikācijas detaļas");
@@ -70,11 +67,11 @@ export class NewTeachingStaffComponent implements OnInit {
         Validators.minLength(3),
         Validators.required],
     }),
-    staffFaculty: new FormControl<FacultyResponse | undefined>(undefined, {
+    staffFacultyId: new FormControl<number | undefined>(undefined, {
       validators: [
         Validators.required],
     }),
-    academicRank: new FormControl<AcademicRankResponse | undefined>(undefined, {
+    academicRankId: new FormControl<number | undefined>(undefined, {
       validators: [
         Validators.required],
     }),
@@ -85,22 +82,20 @@ export class NewTeachingStaffComponent implements OnInit {
     this.fetchAcademicRanks();
   }
 
-
-
   onSubmit() {
-      console.log(this.teachingStaffForm.controls);
+    console.log(this.teachingStaffForm.controls);
       if (this.teachingStaffForm.value.name &&
         this.teachingStaffForm.value.surname &&
         this.teachingStaffForm.value.positionTitle &&
-        this.teachingStaffForm.value.staffFaculty &&
-        this.teachingStaffForm.value.academicRank
+        this.teachingStaffForm.value.staffFacultyId &&
+        this.teachingStaffForm.value.academicRankId
       ) {
         this.teachingStaffRequest = {
           name: this.teachingStaffForm.value.name,
           surname: this.teachingStaffForm.value.surname,
           positionTitle: this.teachingStaffForm.value.positionTitle,
-          staffFaculty: this.teachingStaffForm.value.staffFaculty,
-          staffAcademicRank: this.teachingStaffForm.value.academicRank,
+          staffFacultyId: this.teachingStaffForm.value.staffFacultyId,
+          staffAcademicRankId: this.teachingStaffForm.value.academicRankId,
           authDetails: this.userAuthDetails() || undefined
         };
         if(this.userAuthDetails()){
@@ -121,26 +116,6 @@ export class NewTeachingStaffComponent implements OnInit {
       this.router.navigate(['..'], {
         relativeTo: this.activeRoute,
         replaceUrl: true});
-  }
-
-  addNewFaculty() {
-    this.onNewFaculty.set(!this.onNewFaculty());
-  }
-  onEmittedFaculty(event: FacultyRequest) {
-    this.onNewFaculty.set(false);
-
-    this.fetchFaculties().then(() => {
-      const faculties = this.faculties();
-      if (faculties) {
-        const faculty = faculties.find(faculty => faculty.facultyName == event.facultyName);
-        if (faculty) {
-          this.teachingStaffForm.controls.staffFaculty.setValue(faculty, { emitModelToViewChange: false });
-          console.log(this.teachingStaffForm.controls.staffFaculty);
-        }
-      }
-    }).catch(err => {
-      console.error("Failed to fetch faculties", err);
-    });
   }
 
   private fetchFaculties():Promise<void> {

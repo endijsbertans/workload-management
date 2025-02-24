@@ -16,9 +16,13 @@ public class CourseService {
     private final ICourseRepo courseRepo;
     private final AcademicRankService academicRankService;
     public Integer save(CourseRequest request) {
-        AcademicRank necessaryAcademicRank = academicRankService.findAcademicRankFromResponse(request.necessaryAcademicRank());
+        AcademicRank necessaryAcademicRank = academicRankService.findAcademicRankFromResponseId(request.necessaryAcademicRankId());
         Course course = courseMapper.toCourse(request, necessaryAcademicRank);
         return courseRepo.save(course).getCourseId();
+    }
+    public Course findCourseFromResponseId(int id) {
+        return courseRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Course with id: " + id + " not found."));
     }
     public CourseResponse findById(Integer courseId) {
         return courseRepo.findById(courseId)

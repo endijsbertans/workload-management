@@ -25,7 +25,7 @@ public record CourseRequest (
     @NotNull(message = "142")
     double creditPoints,
     @NotNull(message = "143")
-    AcademicRankResponse necessaryAcademicRank,
+    int necessaryAcademicRankId,
     @Size.List({
             @Size(min = 1, message = "144"),
             @Size(max = 45, message = "144")

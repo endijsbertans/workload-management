@@ -17,10 +17,10 @@ public record TeachingStaffRequest(
         @NotEmpty(message = "101")
         String positionTitle,
         @NotNull(message = "102")
-        FacultyResponse staffFaculty,
+        int staffFacultyId,
 
         @NotNull(message = "103")
-        AcademicRankResponse staffAcademicRank,
+        int staffAcademicRankId,
 
 //        @NotNull(message = "104")
 //        @NotEmpty(message = "104")

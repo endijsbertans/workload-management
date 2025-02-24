@@ -58,7 +58,7 @@ export class NewClassComponent implements OnInit{
         Validators.max(100)
       ],
     }),
-    classFaculty: new FormControl<FacultyResponse | undefined>(undefined, {
+    classFacultyId: new FormControl<number | undefined>(undefined, {
       validators: [
         Validators.required],
     }),
@@ -77,14 +77,14 @@ export class NewClassComponent implements OnInit{
     if (this.classForm.value.className &&
       this.classForm.value.studyYear &&
       this.classForm.value.studentAmount &&
-      this.classForm.value.classFaculty &&
+      this.classForm.value.classFacultyId &&
       this.classForm.value.classYear
     ) {
       this.myClassRequest = {
         className: this.classForm.value.className,
         studyYear: this.classForm.value.studyYear,
         studentAmount: this.classForm.value.studentAmount,
-        classFaculty: this.classForm.value.classFaculty,
+        classFacultyId: this.classForm.value.classFacultyId,
         classYear: this.classForm.value.classYear,
       };
 

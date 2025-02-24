@@ -2,6 +2,7 @@ package workloadmanagement.MyClass;
 
 import lombok.*;
 import workloadmanagement.faculty.Faculty;
+import workloadmanagement.faculty.FacultyResponse;
 
 @Getter
 @Setter
@@ -13,7 +14,7 @@ public class MyClassResponse {
     private String className;
     private int studyYear;
     private int studentAmount;
-    private Faculty classFaculty;
+    private FacultyResponse classFaculty;
     private String classYear;
     private String classNameAndYear;
 }

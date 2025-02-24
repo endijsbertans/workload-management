@@ -83,14 +83,14 @@
       />
     </mat-form-field>
     <mat-form-field class="input-flex">
-      <mat-select required [formControl]="courseForm.controls.academicRank">
+      <mat-select required [formControl]="courseForm.controls.academicRankId">
 
         @if (academicRanks()) {
           @if (academicRanks()?.length === 0) {
             <p>Izveidojiet Akademiskos rangus</p>
           } @else {
             @for (rank of academicRanks(); track rank.academicRankId) {
-              <mat-option [value]="rank">
+              <mat-option [value]="rank.academicRankId">
                 {{ rank.rankName }}
               </mat-option>
             }

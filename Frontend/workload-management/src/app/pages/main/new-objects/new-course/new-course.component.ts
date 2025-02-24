@@ -75,7 +75,7 @@ export class NewCourseComponent implements OnInit{
         Validators.minLength(3),
         Validators.required],
     }),
-    academicRank: new FormControl<AcademicRankResponse | undefined>(undefined, {
+    academicRankId: new FormControl<number | undefined>(undefined, {
       validators: [
         Validators.required],
     }),
@@ -91,7 +91,7 @@ export class NewCourseComponent implements OnInit{
       this.courseForm.value.registrationType &&
       this.courseForm.value.section &&
       this.courseForm.value.studyLevel &&
-      this.courseForm.value.academicRank
+      this.courseForm.value.academicRankId
     ) {
       this.courseRequest = {
         courseName: this.courseForm.value.name,
@@ -100,7 +100,7 @@ export class NewCourseComponent implements OnInit{
         registrationType: this.courseForm.value.registrationType,
         section: this.courseForm.value.section,
         studyLevel: this.courseForm.value.studyLevel,
-        necessaryAcademicRank: this.courseForm.value.academicRank
+        necessaryAcademicRankId: this.courseForm.value.academicRankId
       };
 
       this.courseService.saveCourse({

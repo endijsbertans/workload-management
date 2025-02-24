@@ -22,9 +22,9 @@ public class FacultyService {
                 .map(facultyMapper::toFacultyResponse)
                 .orElseThrow(() -> new RuntimeException("Faculty with id: " + facultyId + " not found."));
     }
-    public Faculty findFacultyFromResponse(FacultyResponse response) {
-        return facultyRepo.findById(response.getFacultyId())
-                .orElseThrow(() -> new RuntimeException("Faculty with id: " + response.getFacultyId() + " not found."));
+    public Faculty findFacultyFromResponseId(int id) {
+        return facultyRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Faculty with id: " + id + " not found."));
     }
     public List<FacultyResponse> findAllFaculties() {
         List<Faculty> faculties = (List<Faculty>) facultyRepo.findAll();

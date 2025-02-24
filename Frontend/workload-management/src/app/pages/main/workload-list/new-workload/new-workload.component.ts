@@ -2,19 +2,19 @@ import {Component, DestroyRef, inject, OnDestroy, OnInit, signal, ViewChild} fro
 import {TeachingStaffService} from "../../../../services/services/teaching-staff.service";
 import {TeachingStaffResponse} from "../../../../services/models/teaching-staff-response";
 import {ReplaySubject, Subject, takeUntil} from "rxjs";
-import {MatFormField, MatLabel, MatOption, MatSelect} from "@angular/material/select";
+import {MatError, MatFormField, MatLabel, MatOption, MatSelect} from "@angular/material/select";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {NgxMatSelectSearchModule} from "ngx-mat-select-search";
 import {AsyncPipe} from "@angular/common";
 import {MatButton} from "@angular/material/button";
-import {RouterLink, RouterOutlet} from "@angular/router";
+import {ActivatedRoute, Router, RouterLink, RouterOutlet} from "@angular/router";
 import {NewTeachingStaffComponent} from "../../new-objects/new-teaching-staff/new-teaching-staff.component";
 import {
   AcademicRankService,
   CourseService,
   MyClassService,
   SemesterControllerService,
-  StatusTypeService
+  StatusTypeService, WorkloadService
 } from "../../../../services/services";
 import {CourseResponse} from "../../../../services/models/course-response";
 import {NewCourseComponent} from "../../new-objects/new-course/new-course.component";
@@ -30,6 +30,9 @@ import {
   ColumnsForTeacherResponse
 } from "../../new-objects/object-columns";
 import {SemesterResponse} from "../../../../services/models/semester-response";
+import {MatInput} from "@angular/material/input";
+import {MatSlideToggle} from "@angular/material/slide-toggle";
+import {WorkloadRequest} from "../../../../services/models/workload-request";
 
 @Component({
   selector: 'app-new-workload',
@@ -44,7 +47,10 @@ import {SemesterResponse} from "../../../../services/models/semester-response";
     RouterLink,
     RouterOutlet,
     MatLabel,
-    PreviewInputDataComponent
+    PreviewInputDataComponent,
+    MatInput,
+    MatError,
+    MatSlideToggle
   ],
   templateUrl: './new-workload.component.html',
   standalone: true,
@@ -66,13 +72,15 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
   columnsForStatusType = signal(false);
   columnsForSemester = signal(false);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly router = inject(Router);
   private readonly teachingStaffService = inject(TeachingStaffService);
   private readonly courseService = inject(CourseService);
   private readonly myClassService = inject(MyClassService);
   private readonly academicRankService = inject(AcademicRankService);
   private readonly statusTypeService = inject(StatusTypeService);
   private readonly semesterService = inject(SemesterControllerService);
-
+  private readonly workloadService = inject(WorkloadService);
+  private readonly activeRoute = inject(ActivatedRoute);
 
   errorMsg = signal('');
   tStaff = signal<TeachingStaffResponse[] | undefined>(undefined);
@@ -85,33 +93,120 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
   public filteredCourses = new ReplaySubject<CourseResponse[]>(1);
   public filteredMyClasses = new ReplaySubject<MyClassResponse[]>(1);
 
+  workloadRequest?:WorkloadRequest;
   protected _onDestroy = new Subject<void>();
 
   @ViewChild('multiSelect', {static: true}) multiSelect: MatSelect | undefined;
 
   onSubmit() {
+    console.log(this.workloadForm.controls);
+    if (this.workloadForm.value.semesterCtrl &&
+      this.workloadForm.value.tStaffCtrl &&
+      this.workloadForm.value.courseCtrl &&
+      this.workloadForm.value.myClassCtrl &&
+      this.workloadForm.value.academicRankCtrl &&
+      this.workloadForm.value.statusTypeCtrl&&
+      this.workloadForm.value.includeInBudgetCtrl&&
+      this.workloadForm.value.budgetPositionCtrl&&
+      this.workloadForm.value.industryCoefficientCtrl&&
+      this.workloadForm.value.expectedSalaryCtrl&&
+      this.workloadForm.value.groupAmountCtrl&&
+      this.workloadForm.value.contactHoursCtrl&&
+      this.workloadForm.value.programCtrl&&
+      this.workloadForm.value.groupForSemesterCtrl&&
+      this.workloadForm.value.vacationMonthsCtrl&&
+      this.workloadForm.value.commentsCtrl
+    ) {
+      this.workloadRequest = {
+        semesterId: this.workloadForm.value.semesterCtrl,
+        teachingStaffId: this.workloadForm.value.tStaffCtrl,
+        courseId: this.workloadForm.value.courseCtrl,
+        myClassIds: this.workloadForm.value.myClassCtrl,
+        academicRankId: this.workloadForm.value.academicRankCtrl,
+        statusTypeId: this.workloadForm.value.statusTypeCtrl,
+        includeInBudget: this.workloadForm.value.includeInBudgetCtrl,
+        budgetPosition: this.workloadForm.value.budgetPositionCtrl,
+        industryCoefficient: this.workloadForm.value.industryCoefficientCtrl,
+        vacationMonths: this.workloadForm.value.vacationMonthsCtrl,
+        expectedSalary: this.workloadForm.value.expectedSalaryCtrl,
+        groupAmount: this.workloadForm.value.groupAmountCtrl,
+        contactHours: this.workloadForm.value.contactHoursCtrl,
+        program: this.workloadForm.value.programCtrl,
+        groupForSemesterId: this.workloadForm.value.groupForSemesterCtrl,
+        comments: this.workloadForm.value.commentsCtrl
+      };
+
+      this.workloadService.saveWorkload({
+        body: this.workloadRequest
+      }).subscribe({
+        next: (id) => {
+          console.log(id);
+        },
+        error: (err) => {
+          console.log(this.errorMsg);
+          this.errorMsg = err.error.validationErrors;
+
+        }
+      })
+    }
+    this.router.navigate(['..'], {
+      relativeTo: this.activeRoute,
+      replaceUrl: true});
   }
 
   workloadForm = new FormGroup({
     semesterCtrl: new FormControl<number | null>(null, {
       validators: [Validators.required]
     }),
+
     tStaffCtrl: new FormControl<number | null>(null, {
       validators: [Validators.required]
     }),
     tStaffFilterCtrl: new FormControl<string>('',),
+
     courseCtrl: new FormControl<number | null>(null, {
       validators: [Validators.required]
     }),
     courseFilterCtrl: new FormControl<string>(''),
+
     myClassCtrl: new FormControl<number[] | null>(null, {
       validators: [Validators.required]
     }),
     myClassFilterCtrl: new FormControl<string>(''),
+
     academicRankCtrl: new FormControl<number | null>(null, {
       validators: [Validators.required]
     }),
     statusTypeCtrl: new FormControl<number | null>(null, {
+      validators: [Validators.required]
+    }),
+    //written input fields
+    includeInBudgetCtrl: new FormControl<string | null>(null, {
+    }),
+    budgetPositionCtrl: new FormControl<boolean>(false, {
+    }),
+    industryCoefficientCtrl: new FormControl<number | null>(null, {
+      validators: [Validators.required]
+    }),
+    vacationMonthsCtrl: new FormControl<number>(0, {
+      validators: [Validators.required]
+    }),
+    expectedSalaryCtrl: new FormControl<number | null>(null, {
+      validators: [Validators.required]
+    }),
+    groupAmountCtrl: new FormControl<number | null>(null, {
+      validators: [Validators.required]
+    }),
+    contactHoursCtrl: new FormControl<number | null>(null, {
+      validators: [Validators.required]
+    }),
+    programCtrl: new FormControl<string | null>(null, {
+      validators: [Validators.required]
+    }),
+    groupForSemesterCtrl: new FormControl<number | null>(null, {
+      validators: [Validators.required]
+    }),
+    commentsCtrl: new FormControl<string | null>(null, {
       validators: [Validators.required]
     }),
   })
@@ -123,6 +218,11 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
     this.initAcademicRankSub();
     this.initStatusTypeSub();
     this.initSemesterSub();
+    this.workloadForm.statusChanges.subscribe(status => {
+      console.log("Form Status:", status);
+      console.log("Form Errors:", this.workloadForm.errors);
+      console.log(this.workloadForm.get('budgetPositionCtrl')?.value);
+    });
   }
 
   ngOnDestroy() {
@@ -204,10 +304,10 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
   private fetchAllAcademicRanks(callback?: () => void) {
     const subscription = this.academicRankService.findAllAcademicRank().subscribe({
       next: (academicRanks) => {
-        if(this.selectedSemester()){
+        if (this.selectedSemester()) {
           this.academicRanks.set(academicRanks.filter((val) => val.semester === this.selectedSemester()?.semesterName));
-        }else{
-        this.academicRanks.set(academicRanks);
+        } else {
+          this.academicRanks.set(academicRanks);
         }
         if (callback) callback(); // if necessary to execute something after fetch
       },
@@ -404,7 +504,12 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
     this.destroyRef.onDestroy(() => subSemesters.unsubscribe())
   }
 
-  onCancel() {
+ //TODO
+  errorMessage() {
+    return "";
+  }
+
+  updateErrorMessage(includeInBudgetCtrl: string) {
 
   }
 }

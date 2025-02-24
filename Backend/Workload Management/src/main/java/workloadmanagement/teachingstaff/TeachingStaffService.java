@@ -26,8 +26,8 @@ public class TeachingStaffService{
     private final FacultyService facultyService;
     private final AcademicRankService academicRankService;
     public Integer save(TeachingStaffRequest request) throws MessagingException {
-        Faculty faculty = facultyService.findFacultyFromResponse(request.staffFaculty());
-        AcademicRank staffAcademicRank = academicRankService.findAcademicRankFromResponse(request.staffAcademicRank());
+        Faculty faculty = facultyService.findFacultyFromResponseId(request.staffFacultyId());
+        AcademicRank staffAcademicRank = academicRankService.findAcademicRankFromResponseId(request.staffAcademicRankId());
         TeachingStaff tStaff = tStaffMapper.toTeachingStaff(request, faculty, staffAcademicRank);
         tStaffRepo.save(tStaff);
         if(request.authDetails() != null) {
@@ -36,9 +36,11 @@ public class TeachingStaffService{
             tStaff.setUser(user);
         }
         return tStaffRepo.save(tStaff).getTeachingStaffId();
-
     }
-
+    public TeachingStaff findTeachingStaffFromResponseId(int id) {
+        return tStaffRepo.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Teaching staff with id: " + id + " not found."));
+    }
     public TeachingStaffResponse findById(Integer tstaffId) {
         return tStaffRepo.findById(tstaffId)
                 .map(tStaffMapper::toTeachingStaffResponse)
