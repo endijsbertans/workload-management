@@ -57,7 +57,6 @@ export class NewCourseComponent implements OnInit{
     }),
     creditPoints: new FormControl(undefined, {
       validators: [
-        Validators.minLength(3),
         Validators.required],
     }),
     registrationType: new FormControl('', {
@@ -72,7 +71,6 @@ export class NewCourseComponent implements OnInit{
     }),
     studyLevel: new FormControl(undefined, {
       validators: [
-        Validators.minLength(3),
         Validators.required],
     }),
     academicRankId: new FormControl<number | undefined>(undefined, {

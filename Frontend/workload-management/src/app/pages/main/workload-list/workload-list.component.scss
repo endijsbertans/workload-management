@@ -1,5 +1,4 @@
 @use '@angular/material' as mat;
-
 .actions-with-table {
   display: flex;
   align-items: center;
@@ -17,13 +16,17 @@ table {
   @include mat.table-overrides((
     row-item-container-height: 1rem,
   ));
-
-  td, th {
+  th {
     text-align: left;
+    vertical-align: middle;
   }
 
 }
-
+.header-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 .wrapper {
   overflow-x: auto;
 }
@@ -39,31 +42,11 @@ $orange-header: #ECCA9C !important;
   background: $orange-header;
 }
 
-td.mat-column-action {
-  width: 20px;
-  padding-right: 8px;
-}
-
-th.mat-column-position,
-td.mat-column-position {
-  padding-left: 8px;
-}
-
 .mat-mdc-table-sticky-border-elem-right {
   border-left: 1px solid #e0e0e0;
 }
-
 .mat-icon {
-  scale: 0.6;
+  scale: 0.8;
 }
-.mat-column-delete{
-  max-width: 3rem;
-  padding: 0;
-}
-.mat-column-edit{
-  max-width: 3rem;
-  padding: 0;
-}
-.action-header{
-  opacity: 0;
-}
+
+

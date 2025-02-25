@@ -133,7 +133,8 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
         contactHours: this.workloadForm.value.contactHoursCtrl,
         program: this.workloadForm.value.programCtrl,
         groupForSemesterId: this.workloadForm.value.groupForSemesterCtrl,
-        comments: this.workloadForm.value.commentsCtrl
+        comments: this.workloadForm.value.commentsCtrl,
+        workingMonths: 5
       };
 
       this.workloadService.saveWorkload({
@@ -222,6 +223,7 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
       console.log("Form Status:", status);
       console.log("Form Errors:", this.workloadForm.errors);
       console.log(this.workloadForm.get('budgetPositionCtrl')?.value);
+      console.log(this.workloadForm.controls);
     });
   }
 
@@ -511,5 +513,9 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
 
   updateErrorMessage(includeInBudgetCtrl: string) {
 
+  }
+
+  navigate(event: Event) {
+    event.preventDefault();
   }
 }

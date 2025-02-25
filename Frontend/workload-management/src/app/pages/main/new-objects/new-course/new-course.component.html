@@ -36,7 +36,7 @@
       <mat-label>Kredītpunkti</mat-label>
       <input
         matInput
-        placeholder="2"
+        type="number"
         [formControl]="courseForm.controls.creditPoints"
         (blur)="updateErrorMessage('creditPoints')"
         required
@@ -76,7 +76,7 @@
       <mat-label>Studiju līmenis</mat-label>
       <input
         matInput
-        placeholder="2"
+        type="number"
         [formControl]="courseForm.controls.studyLevel"
         (blur)="updateErrorMessage('studyLevel')"
         required

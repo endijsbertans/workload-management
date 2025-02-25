@@ -53,7 +53,7 @@
             </mat-option>
           } @else {
             @for (faculties of faculties(); track faculties.facultyId) {
-              <mat-option [value]="faculties">
+              <mat-option [value]="faculties.facultyId">
                 {{ faculties.facultyName }}
               </mat-option>
             }

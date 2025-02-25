@@ -31,7 +31,7 @@
           <mat-label>Izvēlies docentu</mat-label>
         }
       </mat-form-field>
-      <button mat-button routerLink="new-teaching-staff">Izveidot jaunu</button>
+      <button mat-button (click)="navigate($event)" routerLink="new-teaching-staff">Izveidot jaunu</button>
     </div>
     <div class="inputFieldFlex">
       <mat-form-field>
@@ -58,7 +58,6 @@
           <mat-label>Izvēlies semestri!</mat-label>
         }
       </mat-form-field>
-      <button mat-button routerLink="new-course">Izveidot jaunu</button>
     </div>
     <div class="inputFieldFlex">
       <mat-form-field>
@@ -91,7 +90,7 @@
           <mat-label>Izvēlies kursu</mat-label>
         }
       </mat-form-field>
-      <button mat-button routerLink="new-course">Izveidot jaunu</button>
+      <button mat-button (click)="navigate($event)" routerLink="new-course">Izveidot jaunu</button>
     </div>
     <div class="inputFieldFlex">
       <mat-form-field>
@@ -125,7 +124,7 @@
           <mat-label>Izvēlies klasi</mat-label>
         }
       </mat-form-field>
-      <button mat-button routerLink="new-class">Izveidot jaunu</button>
+      <button mat-button (click)="navigate($event)" routerLink="new-class">Izveidot jaunu</button>
     </div>
     <div class="inputFieldFlex">
       <mat-form-field>
@@ -210,7 +209,6 @@
           <mat-label>Izvēlies klasi semestrim</mat-label>
         }
       </mat-form-field>
-            <button mat-button routerLink="new-class">Izveidot jaunu</button>
     </div>
 
     <div class="inputFieldFlex">
@@ -221,7 +219,7 @@
         <mat-label>Nozares koeficents</mat-label>
         <input
           matInput
-          placeholder="3ITB"
+          placeholder="0.5"
           [formControl]="workloadForm.controls.industryCoefficientCtrl"
           (blur)="updateErrorMessage('industryCoefficientCtrl')"
           required
@@ -327,7 +325,7 @@
         <mat-label>Iekļaut budžetā</mat-label>
         <input
           matInput
-          placeholder="Praktiskās lekcijas..."
+          placeholder="Nenotiks"
           [formControl]="workloadForm.controls.includeInBudgetCtrl"
           (blur)="updateErrorMessage('commentsCtrl')"
           required

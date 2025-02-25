@@ -41,7 +41,25 @@
             "schema": {
               "type": "integer",
               "format": "int32",
-              "default": 10
+              "default": 50
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "teachingStaff.name"
+            }
+          },
+          {
+            "name": "direction",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "asc"
             }
           }
         ],

@@ -1,13 +1,12 @@
-import {AfterViewInit, Component, inject, OnInit, signal, ViewChild} from '@angular/core';
+import {Component, inject, OnInit, signal, ViewChild} from '@angular/core';
 import {WorkloadService} from "../../../services/services";
 import {Router, RouterLink, RouterOutlet} from "@angular/router";
 import {MatTableDataSource, MatTableModule} from "@angular/material/table";
 import {WorkloadResponse} from "../../../services/models/workload-response";
-import {MatSort, MatSortModule} from "@angular/material/sort";
-import {MatPaginator} from "@angular/material/paginator";
+import {MatSort, MatSortModule, Sort} from "@angular/material/sort";
+import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {
   CollapseData,
-  ColumnsForActions,
   ColumnsForCalc,
   ColumnsForCourse,
   ColumnsForGeneralInfo, ColumnsForSalary,
@@ -19,6 +18,7 @@ import {MatTooltip} from "@angular/material/tooltip";
 import {MatFormField} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {ColumnNames} from "../new-objects/object-columns";
+import {MatProgressSpinner} from "@angular/material/progress-spinner";
 
 
 
@@ -36,21 +36,26 @@ import {ColumnNames} from "../new-objects/object-columns";
     RouterLink,
     MatButton,
     RouterOutlet,
+    MatPaginator,
+    MatProgressSpinner,
   ],
   templateUrl: './workload-list.component.html',
   styleUrl: './workload-list.component.scss'
 })
-export class WorkloadListComponent implements OnInit, AfterViewInit {
+export class WorkloadListComponent implements OnInit {
   private readonly workloadService = inject(WorkloadService);
   private readonly router = inject(Router);
   dataSource = new MatTableDataSource<WorkloadResponse>([]);
   workloadResponse?: WorkloadResponse[];
+  isLoadingResults = true;
   columnsToDisplay?: ColumnNames[];
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  isAddingWorkload = false;
-  public page = 0;
-  public size = 10;
+  length: number | undefined = 50;
+  pageSize = 1;
+  pageIndex = 0;
+  pages: any = [];
+  pageSizeOptions = [1, 2, 25];
+  sortColumn: Sort = {active: '', direction: ''};
   columnsForTeacher = signal(true);
   columnsForCourse = signal(true);
   columnsForCalc = signal(true);
@@ -58,28 +63,34 @@ export class WorkloadListComponent implements OnInit, AfterViewInit {
   columnsForSalary = signal(true);
 
   ngOnInit() {
+    this.dataSource.sort = this.sort;
     this.findAllWorkloads();
     this.setupFiltering();
     this.columnsToDisplay = this.displayedColumns();
     console.log(this.columnsToDisplay);
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-
   private findAllWorkloads() {
     this.workloadService.findAllWorkloads({
-      page: this.page,
-      size: this.size
+      page: this.pageIndex,
+      size: this.pageSize,
+      sort: this.sortColumn.active,
+      direction: this.sortColumn.direction
     }).subscribe({
       next: (workloads) => {
+        this.isLoadingResults = true;
         if (workloads.content) {
           this.dataSource.data = workloads.content;
-          console.log(this.dataSource.data);
+          this.pages = Array(workloads.totalPages)
+            .fill(0)
+            .map((x, i) => i);
+          this.length = workloads.totalElements;
+          console.log(this.pages);
         }
         this.workloadResponse = workloads.content;
+      },
+      complete: () => {
+        this.isLoadingResults = false;
       }
     });
   }
@@ -107,7 +118,6 @@ export class WorkloadListComponent implements OnInit, AfterViewInit {
 
   displayedColumns(): ColumnNames[] {
     let columns: ColumnNames[] = [];
-    columns.push(...ColumnsForActions);
     if (this.columnsForTeacher()) columns.push(...ColumnsForTeacher);
     else {
       columns.push(
@@ -223,4 +233,14 @@ export class WorkloadListComponent implements OnInit, AfterViewInit {
     };
   }
 
+  handlePageEvent(event: PageEvent) {
+    this.pageSize = event.pageSize;
+    this.pageIndex = event.pageIndex;
+    this.findAllWorkloads();  // Fetch new data for the selected page
+  }
+
+  announceSortChange(e: Sort) {
+    this.sortColumn = e;
+    this.findAllWorkloads();
+  }
 }

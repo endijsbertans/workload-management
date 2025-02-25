@@ -5,34 +5,26 @@ export const CollapseData: ColumnNames[] = [
   {
     name: 'Amats, Vārds, Uzvārds',
     pathTo: 'teachingStaff.rankFullName',
-    collection: 'ColumnsForTeacher'
+    collection: 'ColumnsForTeacher',
+    sortable: false
   },
   {
     name: 'Priekšmeta nosaukums',
     pathTo: 'course.courseName',
-    collection: 'ColumnsForCourse'
+    collection: 'ColumnsForCourse',
+    sortable: true
   },
   {
     name: 'Priekšmeta KP',
     pathTo: 'course.creditPoints',
-    collection: 'ColumnsForCalc'
+    collection: 'ColumnsForCalc',
+    sortable: true
   },
   {
     name: 'Alga',
     pathTo: 'teachingStaff.staffAcademicRank.salary',
-    collection: 'ColumnsForSalary'
-  }
-]
-export const ColumnsForActions: ColumnNames[] = [
-  {
-    name: 'delete',
-    pathTo: 'delete',
-    collection: 'actions'
-  },
-  {
-    name: 'edit',
-    pathTo: 'edit',
-    collection: 'actions'
+    collection: 'ColumnsForSalary',
+    sortable: true
   }
 ]
 
@@ -41,52 +33,62 @@ export const ColumnsForTeacher: ColumnNames[] = [
   {
     name: 'Amats, Vārds, Uzvārds',
     pathTo: 'teachingStaff.rankFullName',
-    collection: 'ColumnsForTeacher'
+    collection: 'ColumnsForTeacher',
+    sortable: false
   },
   {
     name: 'Vārds',
     pathTo: 'teachingStaff.name',
-    collection: 'ColumnsForTeacher'
+    collection: 'ColumnsForTeacher',
+    sortable: true
   },
   {
     name: 'Uzvārds',
     pathTo: 'teachingStaff.surname',
-    collection: 'ColumnsForTeacher'
+    collection: 'ColumnsForTeacher',
+    sortable: true
   },
   {
     name: 'KP pilnai slodzei',
     pathTo: 'cpForFullTime',
-    collection: 'ColumnsForTeacher'
+    collection: 'ColumnsForTeacher',
+    sortable: true
   },
   {
     name: 'Slodzes daļa',
     pathTo: 'cpProportionOnFullTime',
-    collection: 'ColumnsForTeacher'
+    collection: 'ColumnsForTeacher',
+    sortable: false
   },
   {
     name: 'Amata nosaukums',
     pathTo: 'teachingStaff.positionTitle',
-    collection: 'ColumnsForTeacher'
+    collection: 'ColumnsForTeacher',
+    sortable: true
   },
   {
     name: 'Amata grupa',
     pathTo: 'teachingStaff.staffAcademicRank.rankName',
-    collection: 'ColumnsForTeacher'
+    collection: 'ColumnsForTeacher',
+    sortable: true
   },
   {
     name: 'Statuss',
     pathTo: 'statusType.statusTypeName',
-    collection: 'ColumnsForTeacher'
+    collection: 'ColumnsForTeacher',
+    sortable: true
   },
   {
     name: 'Iekļaut budžetā',
     pathTo: 'includeInBudget',
-    collection: 'ColumnsForTeacher'
+    collection: 'ColumnsForTeacher',
+    sortable: true
   },
   {
     name: 'Pasniedzēja fakultāte',
     pathTo: 'teachingStaff.staffFaculty.facultyName',
-    collection: 'ColumnsForTeacher'
+    collection: 'ColumnsForTeacher',
+    sortable: true
   },
 ];
 
@@ -95,59 +97,70 @@ export const ColumnsForCourse: ColumnNames[] = [
   {
     name: 'Semestris',
     pathTo: 'semester.semesterName',
-    collection: 'ColumnsForCourse'
+    collection: 'ColumnsForCourse',
+    sortable: true
   },
   {
     name: 'Studiju līmenis',
     pathTo: 'course.studyLevel',
-    collection: 'ColumnsForCourse'
+    collection: 'ColumnsForCourse',
+    sortable: true
   }
   , {
     name: 'Priekšmeta nosaukums',
     pathTo: 'course.courseName',
-    collection: 'ColumnsForCourse'
+    collection: 'ColumnsForCourse',
+    sortable: true
   }
   , {
     name: 'Programmas Daļa',
     pathTo: 'course.section',
-    collection: 'ColumnsForCourse'
+    collection: 'ColumnsForCourse',
+    sortable: true
   }
   , {
     name: 'Reģistrācija',
     pathTo: 'course.registrationType',
-    collection: 'ColumnsForCourse'
+    collection: 'ColumnsForCourse',
+    sortable: true
   }
   , {
     name: 'Lais kods',
     pathTo: 'course.courseCode',
-    collection: 'ColumnsForCourse'
+    collection: 'ColumnsForCourse',
+    sortable: true
   }
 ];
 export const ColumnsForCalc: ColumnNames[] = [
   {
     name: 'KP/stundas',
     pathTo: 'creditPointsPerHour',
-    collection: 'ColumnsForCalc'
+    collection: 'ColumnsForCalc',
+    sortable: false
   }
   , {
     name: 'Priekšmeta KP',
     pathTo: 'course.creditPoints',
-    collection: 'ColumnsForCalc'
+    collection: 'ColumnsForCalc',
+    sortable: true
   }
   , {
     name: 'KP skaits grupai',
     pathTo: 'creditPointsPerGroup',
-    collection: 'ColumnsForCalc'
+    collection: 'ColumnsForCalc',
+    sortable: false
   }
   , {
     name: 'Grupu skaits',
     pathTo: 'groupAmount',
-    collection: 'ColumnsForCalc'
+    collection: 'ColumnsForCalc',
+    sortable: true
   },
   {
     name: 'Kontakt stundas',
     pathTo: 'contactHours',
-    collection: 'ColumnsForCalc'
+    collection: 'ColumnsForCalc',
+    sortable: true
   }
 
 ];
@@ -156,47 +169,57 @@ export const ColumnsForGeneralInfo: ColumnNames[] = [
     name: 'Kursi',
     pathTo: 'myClasses',
     collection: 'ColumnsForGeneralInfo'
+    ,
+    sortable: true
   }
   , {
     name: 'Komentāri',
     pathTo: 'comments',
-    collection: 'ColumnsForGeneralInfo'
+    collection: 'ColumnsForGeneralInfo',
+    sortable: true
   }
 ]
 export const ColumnsForSalary: ColumnNames[] = [
   {
     name: 'Budžeta pozīcija',
     pathTo: 'budgetPosition',
-    collection: 'ColumnsForSalary'
+    collection: 'ColumnsForSalary',
+    sortable: true
   }
   , {
     name: 'Alga',
     pathTo: 'teachingStaff.staffAcademicRank.salary',
-    collection: 'ColumnsForSalary'
+    collection: 'ColumnsForSalary',
+    sortable: true
   }
   , {
     name: 'Nozares koeficents',
     pathTo: 'industryCoefficient',
-    collection: 'ColumnsForSalary'
+    collection: 'ColumnsForSalary',
+    sortable: true
   }
   , {
     name: 'Alga mēnesī',
     pathTo: 'salaryPerMonth',
-    collection: 'ColumnsForSalary'
+    collection: 'ColumnsForSalary',
+    sortable: false
   }
   , {
     name: 'Vai atvaļinājums ieskaitās',
     pathTo: 'vacationMonths',
-    collection: 'ColumnsForSalary'
+    collection: 'ColumnsForSalary',
+    sortable: true
   }
   , {
     name: 'Mēnešu skaits',
     pathTo: 'monthSum',
-    collection: 'ColumnsForSalary'
+    collection: 'ColumnsForSalary',
+    sortable: true
   }
   , {
     name: 'Algai paredzēts',
     pathTo: 'expectedSalary',
-    collection: 'ColumnsForSalary'
+    collection: 'ColumnsForSalary',
+    sortable: true
   }
 ]

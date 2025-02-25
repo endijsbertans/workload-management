@@ -13,6 +13,8 @@ import { PageResponseWorkloadResponse } from '../../models/page-response-workloa
 export interface FindAllWorkloads$Params {
   page?: number;
   size?: number;
+  sort?: string;
+  direction?: string;
 }
 
 export function findAllWorkloads(http: HttpClient, rootUrl: string, params?: FindAllWorkloads$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseWorkloadResponse>> {
@@ -20,6 +22,8 @@ export function findAllWorkloads(http: HttpClient, rootUrl: string, params?: Fin
   if (params) {
     rb.query('page', params.page, {});
     rb.query('size', params.size, {});
+    rb.query('sort', params.sort, {});
+    rb.query('direction', params.direction, {});
   }
 
   return http.request(
