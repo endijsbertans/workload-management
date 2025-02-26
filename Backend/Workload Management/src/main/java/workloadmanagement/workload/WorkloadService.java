@@ -66,14 +66,17 @@ public class WorkloadService {
                 .map(workloadMapper::toWorkloadResponse)
                 .orElseThrow(() -> new EntityNotFoundException("Teaching staff with id: " + tstaffId + " not found."));
     }
-    public PageResponse<WorkloadResponse> findAllWorkloads(int page, int size) {
+    public PageResponse<WorkloadResponse> findAllWorkloads(Pageable pageable) {
 //        Workload workload = new Workload();
 //        workload.getTeachingStaff()
-        Pageable pageable = PageRequest.of(page, size, Sort.by("teachingStaff").descending());
-        Page<Workload> workloads = workloadRepo.findAllWorkloads(pageable);  // Pass pageable here
+       // Pageable pageable = PageRequest.of(page, size, Sort.by("teachingStaff.name").descending());
+        Page<Workload> workloads = workloadRepo.findAll(pageable);  // Pass pageable here
         List<WorkloadResponse> workloadResponse = workloads.stream()
                 .map(workloadMapper::toWorkloadResponse)
                 .toList();
+        System.out.println(pageable);
+        System.out.println(workloads);
+
         return new PageResponse<>(
                 workloadResponse,
                 workloads.getNumber(),

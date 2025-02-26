@@ -10,6 +10,8 @@ import workloadmanagement.MyClass.MyClass;
 import workloadmanagement.statustype.StatusType;
 import workloadmanagement.teachingstaff.TeachingStaff;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,24 +81,32 @@ public class Workload {
 //    }
 
     @Transient
-    public double getMonthSum(){ return workingMonths + vacationMonths;}
+    public double getMonthSum(){ return round(workingMonths + vacationMonths,2);}
     @Transient
     public double getCreditPointsPerHour(){
-        return course.getCreditPoints()/contactHours;
+        return round(course.getCreditPoints()/contactHours,2);
     }
     @Transient
     public double getCreditPointsPerGroup(){
-        return course.getCreditPoints()/groupAmount;
+        return round(course.getCreditPoints()/groupAmount,2);
     }
     @Transient
     public double getSalaryPerMonth(){
-        return teachingStaff.getStaffAcademicRank().getSalary()/workingMonths+vacationMonths;
+        System.out.println("ŅEW SALARY: "+teachingStaff.getStaffAcademicRank().getSalary() +" "+ workingMonths +"+"+ vacationMonths);
+        return round(teachingStaff.getStaffAcademicRank().getSalary()/(workingMonths+vacationMonths),2);
     }
     @Transient
     public double getCpProportionOnFullTime(){
-        return course.getCreditPoints()/getCpForFullTime();
+        return round(course.getCreditPoints()/getCpForFullTime(),2);
     }
     public double getCpForFullTime(){
-            return teachingStaff.getStaffAcademicRank().getCpForFullTime();
+            return round(teachingStaff.getStaffAcademicRank().getCpForFullTime(),2);
+    }
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bd = BigDecimal.valueOf(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 }
