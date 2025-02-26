@@ -1,5 +1,7 @@
-![alt text](./images/image.png)
+![bakalauradIzveidot.gif](images%2FbakalauradIzveidot.gif)
+![bakalauradList.gif](images%2FbakalauradList.gif)
 
+![alt text](./images/4.0V_EDR.png)
 ```sql
 SELECT u.name as 'Vārds',
     u.surname as 'Uzvārds',
@@ -53,3 +55,4 @@ JOIN faculty AS fClass ON fClass.faculty_id = class.class_faculty_id
 GROUP BY
 w.workload_id
 ```
+![img.png](img.png)

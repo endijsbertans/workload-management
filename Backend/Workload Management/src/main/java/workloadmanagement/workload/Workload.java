@@ -53,7 +53,7 @@ public class Workload {
 
     private String program;
     @ManyToOne
-    @JoinColumn(name="class_id")
+    @JoinColumn(name="group_for_semester_id")
     private MyClass groupForSemester;
 
     @ManyToOne

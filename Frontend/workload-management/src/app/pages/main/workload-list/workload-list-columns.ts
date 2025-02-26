@@ -52,7 +52,7 @@ export const ColumnsForTeacher: ColumnNames[] = [
     name: 'KP pilnai slodzei',
     pathTo: 'cpForFullTime',
     collection: 'ColumnsForTeacher',
-    sortable: true
+    sortable: false
   },
   {
     name: 'Slodzes daļa',
