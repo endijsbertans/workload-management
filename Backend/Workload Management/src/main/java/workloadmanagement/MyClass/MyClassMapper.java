@@ -18,6 +18,7 @@ public class MyClassMapper {
                 .studyYear(request.studyYear())
                 .classFaculty(faculty)
                 .classYear(request.classYear())
+                .program(request.program())
                 .build();
     }
 
@@ -28,6 +29,7 @@ public class MyClassMapper {
                 .studentAmount(myClass.getStudentAmount())
                 .classFaculty(facultyMapper.toFacultyResponse(myClass.getClassFaculty()))
                 .classYear(myClass.getClassYear())
+                .program(myClass.getProgram())
                 .classNameAndYear(myClass.getClassNameAndYear())
                 .build();
     }

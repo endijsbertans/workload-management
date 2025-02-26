@@ -1,0 +1,34 @@
+
+<h2>Noslodzes tabulas kolonu iestatījumi</h2>
+<div style="display:flex; align-content: center">
+@for(column of columnSettingsService.getSettings(); track column.pathTo){
+    <section class="example-section">
+      @if(column.isMain){
+      <span class="example-list-section">
+
+        <mat-checkbox
+          [checked]="column.visible"
+          (change)="toggleGroupVisibility(column.pathTo, column.visible)">
+          {{ column.name | titlecase }}
+        </mat-checkbox>
+
+      </span>
+
+      }@else{
+      <span class="example-list-section">
+        <ul>
+            <li>
+                <mat-checkbox
+                  [checked]="column.visible"
+                  (change)="toggleGroupVisibility(column.pathTo, column.visible)">
+                  {{ column.name | titlecase }}
+                </mat-checkbox>
+            </li>
+          </ul>
+      </span>
+
+      }
+    </section>
+  }
+
+</div>

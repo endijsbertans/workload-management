@@ -1105,6 +1105,9 @@
             "type": "integer",
             "format": "int32"
           },
+          "program": {
+            "type": "string"
+          },
           "classYear": {
             "type": "string"
           }
@@ -1379,6 +1382,9 @@
             "type": "integer",
             "format": "int32"
           },
+          "program": {
+            "type": "string"
+          },
           "classFaculty": {
             "$ref": "#/components/schemas/Faculty"
           },
@@ -1409,6 +1415,9 @@
             "$ref": "#/components/schemas/FacultyResponse"
           },
           "classYear": {
+            "type": "string"
+          },
+          "program": {
             "type": "string"
           },
           "classNameAndYear": {
@@ -1486,10 +1495,10 @@
           "staffPhoto": {
             "type": "string"
           },
-          "staffFullName": {
+          "rankFullName": {
             "type": "string"
           },
-          "rankFullName": {
+          "staffFullName": {
             "type": "string"
           }
         }
@@ -1636,13 +1645,13 @@
           "username": {
             "type": "string"
           },
-          "credentialsNonExpired": {
+          "accountNonLocked": {
             "type": "boolean"
           },
           "accountNonExpired": {
             "type": "boolean"
           },
-          "accountNonLocked": {
+          "credentialsNonExpired": {
             "type": "boolean"
           }
         }

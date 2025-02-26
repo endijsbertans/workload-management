@@ -132,12 +132,14 @@ public class WorkloadManagementApplication {
 					MyClass ac1 = MyClass.builder()
 							.className("3EIB")
 							.classFaculty(f1)
+							.program("EIB")
 							.studentAmount(22)
 							.classYear("s22")
 							.build();
 					myClassRepo.save(ac1);
 					MyClass ac2 = MyClass.builder()
 							.className("1ITB")
+							.program("ITB")
 							.classFaculty(f1)
 							.studentAmount(27)
 							.classYear("s21")
@@ -148,6 +150,7 @@ public class WorkloadManagementApplication {
 							.courseCode("MateB008")
 							.courseName("Algoritmu teorija")
 							.necessaryRank(ar1)
+							.studyLevel(2)
 							.registrationType("automātiska")
 							.section("Nozares pamatnoz")
 							.creditPoints(3.0)
@@ -192,7 +195,6 @@ public class WorkloadManagementApplication {
 					workloadRepo.save(w1);
 					myClassRepo.save(ac1);
 					System.out.println(w1);
-
 
 			};
 		}

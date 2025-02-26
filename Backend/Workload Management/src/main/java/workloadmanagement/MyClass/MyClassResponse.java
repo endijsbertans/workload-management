@@ -16,5 +16,6 @@ public class MyClassResponse {
     private int studentAmount;
     private FacultyResponse classFaculty;
     private String classYear;
+    private String program;
     private String classNameAndYear;
 }

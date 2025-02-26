@@ -1,17 +1,10 @@
-import {Component, inject, OnInit, signal, ViewChild} from '@angular/core';
+import {Component, computed, inject, OnInit, signal, ViewChild} from '@angular/core';
 import {WorkloadService} from "../../../services/services";
 import {Router, RouterLink, RouterOutlet} from "@angular/router";
 import {MatTableDataSource, MatTableModule} from "@angular/material/table";
 import {WorkloadResponse} from "../../../services/models/workload-response";
 import {MatSort, MatSortModule, Sort} from "@angular/material/sort";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
-import {
-  CollapseData,
-  ColumnsForCalc,
-  ColumnsForCourse,
-  ColumnsForGeneralInfo, ColumnsForSalary,
-  ColumnsForTeacher
-} from "./workload-list-columns";
 import {MatIcon} from "@angular/material/icon";
 import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatTooltip} from "@angular/material/tooltip";
@@ -19,6 +12,9 @@ import {MatFormField} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {ColumnNames} from "../new-objects/object-columns";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
+import {WorkloadListSettingsComponent} from "./workload-list-settings/workload-list-settings.component";
+import {WorkloadListSettingsService} from "./workload-list-settings/workload-list-settings-service";
+import {ShownColumns, WorkloadColumnSettings} from "./workload-list-columns";
 
 
 
@@ -38,6 +34,7 @@ import {MatProgressSpinner} from "@angular/material/progress-spinner";
     RouterOutlet,
     MatPaginator,
     MatProgressSpinner,
+    WorkloadListSettingsComponent,
   ],
   templateUrl: './workload-list.component.html',
   styleUrl: './workload-list.component.scss'
@@ -45,10 +42,14 @@ import {MatProgressSpinner} from "@angular/material/progress-spinner";
 export class WorkloadListComponent implements OnInit {
   private readonly workloadService = inject(WorkloadService);
   private readonly router = inject(Router);
+  private readonly columnSettingsService = inject(WorkloadListSettingsService);
+  columnsToDisplay? = computed(() => {
+    return this.columnSettingsService.getSettings().filter((column) => column.visible) ?? []
+  });
   dataSource = new MatTableDataSource<WorkloadResponse>([]);
   workloadResponse?: WorkloadResponse[];
   isLoadingResults = true;
-  columnsToDisplay?: ColumnNames[];
+
   @ViewChild(MatSort) sort!: MatSort;
   length: number | undefined = 50;
   pageSize = 1;
@@ -56,20 +57,11 @@ export class WorkloadListComponent implements OnInit {
   pages: any = [];
   pageSizeOptions = [1, 2, 25];
   sortColumn: Sort = {active: '', direction: ''};
-  columnsForTeacher = signal(true);
-  columnsForCourse = signal(true);
-  columnsForCalc = signal(true);
-  columnsForGeneralInfo = signal(true);
-  columnsForSalary = signal(true);
-
   ngOnInit() {
     this.dataSource.sort = this.sort;
     this.findAllWorkloads();
     this.setupFiltering();
-    this.columnsToDisplay = this.displayedColumns();
-    console.log(this.columnsToDisplay);
   }
-
   private findAllWorkloads() {
     this.workloadService.findAllWorkloads({
       page: this.pageIndex,
@@ -96,94 +88,31 @@ export class WorkloadListComponent implements OnInit {
     });
   }
 
-  getNestedProperty(obj: any, key: string) {
-    if (key == "myClasses") {
+  getNestedProperty(obj: any, col: WorkloadColumnSettings) {
+    if (col.collection.includes("columnsForWorkloadClasses")) {
       let result: string[] = [];
-      let val = this.digInObject(obj, key);
+      let val = this.digInObject(obj, "myClasses");
       val.forEach(function (val: any) {
-        result.push(val.className);
+          result.push(val?.[col.pathTo]);
       });
       return result.join(', ');
     }
-    return this.digInObject(obj, key);
+    return this.digInObject(obj, col.pathTo);
   }
-
   digInObject(obj: any, key: string, defaultValue: any = "") {
     return key.split('.')
       .reduce((acc, part) => acc?.[part], obj) ?? defaultValue;
   }
-
   mapDisplayedColumns(): string[] {
-    return this.displayedColumns().map(col => col.pathTo);
+    if (this.columnsToDisplay) {
+      return this.columnsToDisplay().map(col => col.pathTo);
+    }
+    return [];
   }
-
-  displayedColumns(): ColumnNames[] {
-    let columns: ColumnNames[] = [];
-    if (this.columnsForTeacher()) columns.push(...ColumnsForTeacher);
-    else {
-      columns.push(
-        CollapseData[0]
-      );
-    }
-    if (this.columnsForCourse()) columns.push(...ColumnsForCourse);
-    else {
-      columns.push(
-        CollapseData[1]
-      );
-    }
-    if (this.columnsForCalc()) columns.push(...ColumnsForCalc);
-    else {
-      columns.push(
-        CollapseData[2]
-      );
-    }
-    if (this.columnsForGeneralInfo()) columns.push(...ColumnsForGeneralInfo);
-    if (this.columnsForSalary()) columns.push(...ColumnsForSalary);
-    else {
-      columns.push(
-        CollapseData[3]
-      );
-    }
-    return columns;
-  }
-
-  classExpression(collection: string) {
-    switch (collection) {
-      case 'ColumnsForTeacher':
-        return 'teacher-header';
-      case 'ColumnsForCourse':
-        return 'course-header';
-      case 'ColumnsForCalc':
-        return 'calc-header';
-      case 'ColumnsForSalary':
-        return 'salary-header';
-      case 'ColumnsForGeneralInfo':
-        return 'general-header';
-      default:
-        return '';
-    }
-  }
-
   clickEvent(event: MouseEvent, name: string) {
     event.preventDefault();
     event.stopPropagation();
-
-    switch (name) {
-      case 'ColumnsForTeacher':
-        this.columnsForTeacher.set(!this.columnsForTeacher());
-        break;
-      case 'ColumnsForCourse':
-        this.columnsForCourse.set(!this.columnsForCourse());
-        break;
-      case 'ColumnsForCalc':
-        this.columnsForCalc.set(!this.columnsForCalc());
-        break;
-
-      case 'ColumnsForSalary':
-        this.columnsForSalary.set(!this.columnsForSalary());
-        break;
-    }
-    this.displayedColumns();
+    this.columnSettingsService.hideWorkloadGroup(name as keyof ShownColumns);
   }
 
 
@@ -233,13 +162,11 @@ export class WorkloadListComponent implements OnInit {
       );
     };
   }
-
   handlePageEvent(event: PageEvent) {
     this.pageSize = event.pageSize;
     this.pageIndex = event.pageIndex;
     this.findAllWorkloads();  // Fetch new data for the selected page
   }
-
   announceSortChange(e: Sort) {
     this.sortColumn = e;
     this.findAllWorkloads();

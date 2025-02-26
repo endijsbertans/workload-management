@@ -1,225 +1,61 @@
-import {ColumnNames} from "../new-objects/object-columns";
+export interface WorkloadColumnSettings {
+  collection: string,
+    name: string,
+    pathTo: string,
+    sortable: boolean,
+    visible: boolean,
+    style: string,
+    isMain: boolean
+}
 
-export const CollapseData: ColumnNames[] = [
+export interface ShownColumns {
+  columnsForTeacher: boolean,
+  columnsForCourse: boolean,
+  columnsForCalc: boolean,
+  columnsForGeneralInfo: boolean,
+  columnsForSalary: boolean,
+  columnsForWorkloadClasses: boolean
+}
 
-  {
-    name: 'Amats, Vārds, Uzvārds',
-    pathTo: 'teachingStaff.rankFullName',
-    collection: 'ColumnsForTeacher',
-    sortable: false
-  },
-  {
-    name: 'Priekšmeta nosaukums',
-    pathTo: 'course.courseName',
-    collection: 'ColumnsForCourse',
-    sortable: true
-  },
-  {
-    name: 'Priekšmeta KP',
-    pathTo: 'course.creditPoints',
-    collection: 'ColumnsForCalc',
-    sortable: true
-  },
-  {
-    name: 'Alga',
-    pathTo: 'teachingStaff.staffAcademicRank.salary',
-    collection: 'ColumnsForSalary',
-    sortable: true
-  }
-]
-
-export const ColumnsForTeacher: ColumnNames[] = [
-
-  {
-    name: 'Amats, Vārds, Uzvārds',
-    pathTo: 'teachingStaff.rankFullName',
-    collection: 'ColumnsForTeacher',
-    sortable: false
-  },
-  {
-    name: 'Vārds',
-    pathTo: 'teachingStaff.name',
-    collection: 'ColumnsForTeacher',
-    sortable: true
-  },
-  {
-    name: 'Uzvārds',
-    pathTo: 'teachingStaff.surname',
-    collection: 'ColumnsForTeacher',
-    sortable: true
-  },
-  {
-    name: 'KP pilnai slodzei',
-    pathTo: 'cpForFullTime',
-    collection: 'ColumnsForTeacher',
-    sortable: false
-  },
-  {
-    name: 'Slodzes daļa',
-    pathTo: 'cpProportionOnFullTime',
-    collection: 'ColumnsForTeacher',
-    sortable: false
-  },
-  {
-    name: 'Amata nosaukums',
-    pathTo: 'teachingStaff.positionTitle',
-    collection: 'ColumnsForTeacher',
-    sortable: true
-  },
-  {
-    name: 'Amata grupa',
-    pathTo: 'academicRankDetails.academicRank.rankName',
-    collection: 'ColumnsForTeacher',
-    sortable: true
-  },
-  {
-    name: 'Statuss',
-    pathTo: 'statusType.statusTypeName',
-    collection: 'ColumnsForTeacher',
-    sortable: true
-  },
-  {
-    name: 'Iekļaut budžetā',
-    pathTo: 'includeInBudget',
-    collection: 'ColumnsForTeacher',
-    sortable: true
-  },
-  {
-    name: 'Pasniedzēja fakultāte',
-    pathTo: 'teachingStaff.staffFaculty.facultyName',
-    collection: 'ColumnsForTeacher',
-    sortable: true
-  },
+export interface WorkloadColumnSettings {
+  collection: string,
+  name: string,
+  pathTo: string,
+  sortable: boolean,
+  visible: boolean,
+  style: string,
+  isMain: boolean
+}
+export const ColumnsForWorkloadList: WorkloadColumnSettings[] = [
+  { collection: 'columnsForTeacher', name: 'Amats, Vārds, Uzvārds', pathTo: 'teachingStaff.rankFullName', sortable: false, visible: true, style: 'teacher-header', isMain: true },
+  { collection: 'columnsForTeacher', name: 'Vārds', pathTo: 'teachingStaff.name', sortable: true, visible: true, style: 'teacher-header', isMain: false },
+  { collection: 'columnsForTeacher', name: 'Uzvārds', pathTo: 'teachingStaff.surname', sortable: true, visible: true, style: 'teacher-header', isMain: false },
+  { collection: 'columnsForTeacher', name: 'KP pilnai slodzei', pathTo: 'cpForFullTime', sortable: false, visible: true, style: 'teacher-header', isMain: false },
+  { collection: 'columnsForTeacher', name: 'Slodzes daļa', pathTo: 'cpProportionOnFullTime', sortable: false, visible: true, style: 'teacher-header', isMain: false },
+  { collection: 'columnsForTeacher', name: 'Amata nosaukums', pathTo: 'teachingStaff.positionTitle', sortable: true, visible: true, style: 'teacher-header', isMain: false },
+  { collection: 'columnsForTeacher', name: 'Amata grupa', pathTo: 'academicRankDetails.academicRank.rankName', sortable: true, visible: true, style: 'teacher-header', isMain: false },
+  { collection: 'columnsForTeacher', name: 'Statuss', pathTo: 'statusType.statusTypeName', sortable: true, visible: true, style: 'teacher-header', isMain: false },
+  { collection: 'columnsForTeacher', name: 'Iekļaut budžetā', pathTo: 'includeInBudget', sortable: true, visible: true, style: 'teacher-header', isMain: false },
+  { collection: 'columnsForTeacher', name: 'Pasniedzēja fakultāte', pathTo: 'teachingStaff.staffFaculty.facultyName', sortable: true, visible: true, style: 'teacher-header', isMain: false },
+  { collection: 'columnsForCourse', name: 'Priekšmeta nosaukums', pathTo: 'course.courseName', sortable: true, visible: true, style: 'course-header', isMain: true },
+  { collection: 'columnsForCourse', name: 'Semestris', pathTo: 'semester.semesterName', sortable: true, visible: true, style: 'course-header', isMain: false },
+  { collection: 'columnsForCourse', name: 'Studiju līmenis', pathTo: 'course.studyLevel', sortable: true, visible: true, style: 'course-header', isMain: false },
+  { collection: 'columnsForCourse', name: 'Programmas Daļa', pathTo: 'course.section', sortable: true, visible: true, style: 'course-header', isMain: false },
+  { collection: 'columnsForCourse', name: 'Reģistrācija', pathTo: 'course.registrationType', sortable: true, visible: true, style: 'course-header', isMain: false },
+  { collection: 'columnsForCourse', name: 'Lais kods', pathTo: 'course.courseCode', sortable: true, visible: true, style: 'course-header', isMain: false },
+  { collection: 'columnsForCalc', name: 'KP skaits grupai', pathTo: 'creditPointsPerGroup', sortable: false, visible: true, style: 'calc-header', isMain: true },
+  { collection: 'columnsForCalc', name: 'KP/stundas', pathTo: 'creditPointsPerHour', sortable: false, visible: true, style: 'calc-header', isMain: false },
+  { collection: 'columnsForCalc', name: 'Grupu skaits', pathTo: 'groupAmount', sortable: true, visible: true, style: 'calc-header', isMain: false },
+  { collection: 'columnsForCalc', name: 'Kontakt stundas', pathTo: 'contactHours', sortable: true, visible: true, style: 'calc-header', isMain: false },
+  { collection: 'columnsForWorkloadClasses', name: 'Kursi', pathTo: 'className', sortable: true, visible: true, style: 'workloadClass-header', isMain: true },
+  { collection: 'columnsForWorkloadClasses', name: 'Programma', pathTo: 'program', sortable: true, visible: true, style: 'workloadClass-header', isMain: false },
+  { collection: 'columnsForWorkloadClasses', name: 'Studentu Skaits', pathTo: 'studentAmount', sortable: true, visible: true, style: 'workloadClass-header', isMain: false },
+  { collection: 'columnsForGeneralInfo', name: 'Komentāri', pathTo: 'comments', sortable: true, visible: true, style: 'general-header', isMain: false },
+  { collection: 'columnsForSalary', name: 'Alga', pathTo: 'academicRankDetails.salary', sortable: true, visible: true, style: 'salary-header', isMain: true },
+  { collection: 'columnsForSalary', name: 'Budžeta pozīcija', pathTo: 'budgetPosition', sortable: true, visible: true, style: 'salary-header', isMain: false },
+  { collection: 'columnsForSalary', name: 'Nozares koeficents', pathTo: 'industryCoefficient', sortable: true, visible: true, style: 'salary-header', isMain: false },
+  { collection: 'columnsForSalary', name: 'Alga mēnesī', pathTo: 'salaryPerMonth', sortable: false, visible: true, style: 'salary-header', isMain: false },
+  { collection: 'columnsForSalary', name: 'Vai atvaļinājums ieskaitās', pathTo: 'vacationMonths', sortable: true, visible: true, style: 'salary-header', isMain: false },
+  { collection: 'columnsForSalary', name: 'Mēnešu skaits', pathTo: 'monthSum', sortable: true, visible: true, style: 'salary-header', isMain: false },
+  { collection: 'columnsForSalary', name: 'Algai paredzēts', pathTo: 'expectedSalary', sortable: true, visible: true, style: 'salary-header', isMain: false }
 ];
-
-export const ColumnsForCourse: ColumnNames[] = [
-
-  {
-    name: 'Semestris',
-    pathTo: 'semester.semesterName',
-    collection: 'ColumnsForCourse',
-    sortable: true
-  },
-  {
-    name: 'Studiju līmenis',
-    pathTo: 'course.studyLevel',
-    collection: 'ColumnsForCourse',
-    sortable: true
-  }
-  , {
-    name: 'Priekšmeta nosaukums',
-    pathTo: 'course.courseName',
-    collection: 'ColumnsForCourse',
-    sortable: true
-  }
-  , {
-    name: 'Programmas Daļa',
-    pathTo: 'course.section',
-    collection: 'ColumnsForCourse',
-    sortable: true
-  }
-  , {
-    name: 'Reģistrācija',
-    pathTo: 'course.registrationType',
-    collection: 'ColumnsForCourse',
-    sortable: true
-  }
-  , {
-    name: 'Lais kods',
-    pathTo: 'course.courseCode',
-    collection: 'ColumnsForCourse',
-    sortable: true
-  }
-];
-export const ColumnsForCalc: ColumnNames[] = [
-  {
-    name: 'KP/stundas',
-    pathTo: 'creditPointsPerHour',
-    collection: 'ColumnsForCalc',
-    sortable: false
-  }
-  , {
-    name: 'Priekšmeta KP',
-    pathTo: 'course.creditPoints',
-    collection: 'ColumnsForCalc',
-    sortable: true
-  }
-  , {
-    name: 'KP skaits grupai',
-    pathTo: 'creditPointsPerGroup',
-    collection: 'ColumnsForCalc',
-    sortable: false
-  }
-  , {
-    name: 'Grupu skaits',
-    pathTo: 'groupAmount',
-    collection: 'ColumnsForCalc',
-    sortable: true
-  },
-  {
-    name: 'Kontakt stundas',
-    pathTo: 'contactHours',
-    collection: 'ColumnsForCalc',
-    sortable: true
-  }
-
-];
-export const ColumnsForGeneralInfo: ColumnNames[] = [
-  {
-    name: 'Kursi',
-    pathTo: 'myClasses',
-    collection: 'ColumnsForGeneralInfo'
-    ,
-    sortable: true
-  }
-  , {
-    name: 'Komentāri',
-    pathTo: 'comments',
-    collection: 'ColumnsForGeneralInfo',
-    sortable: true
-  }
-]
-export const ColumnsForSalary: ColumnNames[] = [
-  {
-    name: 'Budžeta pozīcija',
-    pathTo: 'budgetPosition',
-    collection: 'ColumnsForSalary',
-    sortable: true
-  }
-  , {
-    name: 'Alga',
-    pathTo: 'academicRankDetails.salary',
-    collection: 'ColumnsForSalary',
-    sortable: true
-  }
-  , {
-    name: 'Nozares koeficents',
-    pathTo: 'industryCoefficient',
-    collection: 'ColumnsForSalary',
-    sortable: true
-  }
-  , {
-    name: 'Alga mēnesī',
-    pathTo: 'salaryPerMonth',
-    collection: 'ColumnsForSalary',
-    sortable: false
-  }
-  , {
-    name: 'Vai atvaļinājums ieskaitās',
-    pathTo: 'vacationMonths',
-    collection: 'ColumnsForSalary',
-    sortable: true
-  }
-  , {
-    name: 'Mēnešu skaits',
-    pathTo: 'monthSum',
-    collection: 'ColumnsForSalary',
-    sortable: true
-  }
-  , {
-    name: 'Algai paredzēts',
-    pathTo: 'expectedSalary',
-    collection: 'ColumnsForSalary',
-    sortable: true
-  }
-]

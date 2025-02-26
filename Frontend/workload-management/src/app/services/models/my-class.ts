@@ -9,6 +9,7 @@ export interface MyClass {
   className?: string;
   classNameAndYear?: string;
   classYear?: string;
+  program?: string;
   studentAmount?: number;
   studyYear?: number;
 }

@@ -23,7 +23,7 @@ public record MyClassRequest (
     int studentAmount,
     @NotNull(message = "132")
     int classFacultyId,
-
+    String program,
     @NotNull(message = "133")
     @NotEmpty(message = "133")
     String classYear

@@ -22,13 +22,11 @@ public class MyClass {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int classId;
-
     private String className;
     private int studyYear;
-
     private String classYear;
-
     private int studentAmount;
+    private String program;
 
     @ManyToOne
     @JoinColumn(name="class_faculty_id")

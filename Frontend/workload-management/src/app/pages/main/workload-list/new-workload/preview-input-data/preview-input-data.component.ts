@@ -7,12 +7,14 @@ import {StatusTypeResponse} from "../../../../../services/models/status-type-res
 import {ColumnNames} from "../../../new-objects/object-columns";
 import {SemesterResponse} from "../../../../../services/models/semester-response";
 
+
 @Component({
   selector: 'app-preview-input-data',
   standalone: true,
   templateUrl: './preview-input-data.component.html',
   styleUrls: ['./preview-input-data.component.scss'],
-  imports: []
+  imports: [
+  ]
 })
 export class PreviewInputDataComponent {
   @Input() tStaff?: TeachingStaffResponse;
@@ -52,6 +54,10 @@ export class PreviewInputDataComponent {
   digInObject(obj: any, key: string, defaultValue: any = "") {
     return key.split('.')
       .reduce((acc, part) => acc?.[part], obj) ?? defaultValue;
+  }
+
+  clickEvent($event: MouseEvent, collection: any) {
+
   }
 }
 
