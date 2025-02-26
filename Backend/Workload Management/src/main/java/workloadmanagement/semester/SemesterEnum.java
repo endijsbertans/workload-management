@@ -1,4 +1,4 @@
-package workloadmanagement.academicrank.semester;
+package workloadmanagement.semester;
 
 public enum SemesterEnum {
     pavasaris,

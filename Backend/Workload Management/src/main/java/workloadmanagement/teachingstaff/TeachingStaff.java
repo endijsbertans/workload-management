@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import workloadmanagement.academicrank.AcademicRank;
+import workloadmanagement.academicrank.academicrankDetails.AcademicRankDetails;
 import workloadmanagement.faculty.Faculty;
 import workloadmanagement.auth.security.MyUser;
 
@@ -44,6 +45,6 @@ public class TeachingStaff {
         return name + " " + surname;
     }
     public String getRankFullName(){
-        return staffAcademicRank.getAbbreviation() + getStaffFullName();
+        return staffAcademicRank.getAbbreviation() + " " + getStaffFullName();
     }
 }

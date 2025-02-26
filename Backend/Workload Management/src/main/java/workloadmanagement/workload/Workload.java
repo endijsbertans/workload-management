@@ -4,7 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import workloadmanagement.academicrank.AcademicRank;
-import workloadmanagement.academicrank.semester.Semester;
+import workloadmanagement.academicrank.academicrankDetails.AcademicRankDetails;
+import workloadmanagement.semester.Semester;
 import workloadmanagement.course.Course;
 import workloadmanagement.MyClass.MyClass;
 import workloadmanagement.statustype.StatusType;
@@ -63,15 +64,14 @@ public class Workload {
     @JoinColumn(name="status_type_id")
     private StatusType statusType;
 
-    @NotNull
+
     @ManyToOne
     @JoinColumn(name = "course_id")
     private Course course;
 
-    @NotNull
     @ManyToOne
-    @JoinColumn(name = "academic_rank_id")
-    private AcademicRank academicRank;
+    @JoinColumn(name = "academic_rank_details_id")
+    private AcademicRankDetails academicRankDetails;
 
     @ManyToMany(fetch = EAGER)
     private List<MyClass> myClasses = new ArrayList<>();
@@ -79,7 +79,6 @@ public class Workload {
 //    public String getMyClasses(){
 //        return myClasses.stream().map(MyClass::getClassName).collect(Collectors.joining(", "));
 //    }
-
     @Transient
     public double getMonthSum(){ return round(workingMonths + vacationMonths,2);}
     @Transient
@@ -92,19 +91,17 @@ public class Workload {
     }
     @Transient
     public double getSalaryPerMonth(){
-        System.out.println("ŅEW SALARY: "+teachingStaff.getStaffAcademicRank().getSalary() +" "+ workingMonths +"+"+ vacationMonths);
-        return round(teachingStaff.getStaffAcademicRank().getSalary()/(workingMonths+vacationMonths),2);
+        return round(academicRankDetails.getSalary()/(workingMonths+vacationMonths),2);
     }
     @Transient
     public double getCpProportionOnFullTime(){
         return round(course.getCreditPoints()/getCpForFullTime(),2);
     }
     public double getCpForFullTime(){
-            return round(teachingStaff.getStaffAcademicRank().getCpForFullTime(),2);
+            return round(academicRankDetails.getCpForFullTime(),2);
     }
     public static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
-
         BigDecimal bd = BigDecimal.valueOf(value);
         bd = bd.setScale(places, RoundingMode.HALF_UP);
         return bd.doubleValue();

@@ -1,4 +1,4 @@
-package workloadmanagement.academicrank.semester;
+package workloadmanagement.semester;
 
 import org.springframework.stereotype.Service;
 
@@ -7,14 +7,14 @@ public class SemesterMapper {
     public Semester toSemester(SemesterRequest request){
         return Semester.builder()
                 .semesterName(request.semesterName())
-                .year(request.year())
+                .semesterYear(request.year())
                 .build();
     }
     public SemesterResponse toSemesterResponse(Semester semester){
         return SemesterResponse.builder()
                 .semesterId(semester.getSemesterId())
                 .semesterName(semester.getSemesterName())
-                .year(semester.getYear())
+                .year(semester.getSemesterYear())
                 .build();
     }
 }

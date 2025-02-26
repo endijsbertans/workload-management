@@ -3,7 +3,8 @@ package workloadmanagement.workload;
 import lombok.*;
 import workloadmanagement.MyClass.MyClassResponse;
 import workloadmanagement.academicrank.AcademicRank;
-import workloadmanagement.academicrank.semester.Semester;
+import workloadmanagement.academicrank.academicrankDetails.AcademicRankDetails;
+import workloadmanagement.semester.Semester;
 import workloadmanagement.course.Course;
 import workloadmanagement.MyClass.MyClass;
 import workloadmanagement.statustype.StatusType;
@@ -34,7 +35,7 @@ public class WorkloadResponse {
     private String program;
     private MyClassResponse groupForSemester;
     private Course course;
-    private AcademicRank academicRank;
+    private AcademicRankDetails academicRankDetails;
     private List<MyClass> myClasses;
 
     // Calculated values

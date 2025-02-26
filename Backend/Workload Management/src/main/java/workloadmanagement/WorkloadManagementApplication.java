@@ -9,8 +9,10 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import workloadmanagement.MyClass.MyClass;
 import workloadmanagement.academicrank.AcademicRank;
-import workloadmanagement.academicrank.semester.Semester;
-import workloadmanagement.academicrank.semester.SemesterEnum;
+import workloadmanagement.academicrank.academicrankDetails.AcademicRankDetails;
+import workloadmanagement.academicrank.academicrankDetails.IAcademicRankDetailsRepo;
+import workloadmanagement.semester.Semester;
+import workloadmanagement.semester.SemesterEnum;
 import workloadmanagement.auth.security.MyAuthority;
 import workloadmanagement.auth.security.MyUser;
 import workloadmanagement.course.Course;
@@ -43,6 +45,7 @@ public class WorkloadManagementApplication {
 			ITeachingStaffRepo teachingStaffRepo,
 			IWorkloadRepo workloadRepo,
 			ISemesterRepo semesterRepo,
+			IAcademicRankDetailsRepo academicRankDetailsRepo ,
 			PasswordEncoder passwordEncoder
 
 	) {
@@ -63,44 +66,63 @@ public class WorkloadManagementApplication {
 					myAuthorityRepo.save(authorities);
 					Semester s1 = Semester.builder()
 							.semesterName(SemesterEnum.pavasaris)
-							.year(LocalDate.parse("2024-01-01"))
+							.semesterYear(2024)
 							.build();
 					semesterRepo.save(s1);
 
 					AcademicRank ar1 = AcademicRank.builder()
 							.rankName("Profesori")
-							.semester(SemesterEnum.pavasaris)
-							.cpForFullTime(9.580)
 							.abbreviation("prof.")
-							.salary(2712)
 							.build();
 					AcademicRank ar2 = AcademicRank.builder()
-							.rankName("Profesori")
-							.semester(SemesterEnum.rudens)
-							.cpForFullTime(14.370)
-							.abbreviation("prof.")
-							.salary(2712)
-							.build();
-
-					AcademicRank ar3 = AcademicRank.builder()
 							.rankName("Asociētie profesori")
-							.semester(SemesterEnum.pavasaris)
-							.cpForFullTime(12.310)
 							.abbreviation("asoc.prof")
-							.salary(2172)
+							.build();
+					AcademicRank ar3 = AcademicRank.builder()
+							.rankName("Docenti")
+							.abbreviation("doc.")
 							.build();
 					AcademicRank ar4 = AcademicRank.builder()
-							.rankName("Asociētie profesori")
-							.semester(SemesterEnum.rudens)
-							.cpForFullTime(18.465)
-							.abbreviation("asoc.prof")
-							.salary(2172)
+							.rankName("lektori")
+							.abbreviation("lekt.")
 							.build();
 					academicRankRepo.save(ar1);
 					academicRankRepo.save(ar2);
 					academicRankRepo.save(ar3);
 					academicRankRepo.save(ar4);
 
+					AcademicRankDetails ard1 = AcademicRankDetails.builder()
+							.academicRank(ar1)
+							.cpForFullTime(9.58)
+							.salary(2712)
+							.contactHoursForFullTime(14.37)
+							.semester(s1)
+							.build();
+				AcademicRankDetails ard2 = AcademicRankDetails.builder()
+						.academicRank(ar2)
+						.cpForFullTime(12.31)
+						.salary(2171)
+						.contactHoursForFullTime(18.465)
+						.semester(s1)
+						.build();
+				AcademicRankDetails ard3 = AcademicRankDetails.builder()
+						.academicRank(ar3)
+						.cpForFullTime(15.05)
+						.salary(1738)
+						.contactHoursForFullTime(24.63)
+						.semester(s1)
+						.build();
+				AcademicRankDetails ard4 = AcademicRankDetails.builder()
+						.academicRank(ar4)
+						.cpForFullTime(16.42)
+						.salary(1392)
+						.contactHoursForFullTime(24.63)
+						.semester(s1)
+						.build();
+				academicRankDetailsRepo.save(ard1);
+				academicRankDetailsRepo.save(ard2);
+				academicRankDetailsRepo.save(ard3);
+				academicRankDetailsRepo.save(ard4);
 					Faculty f1 =  Faculty.builder()
 							.facultyName("ITF")
 							.facultyFullName("Informācijas tehnoloģiju fakultāte")
@@ -164,7 +186,7 @@ public class WorkloadManagementApplication {
 									.program("ITB")
 									.groupForSemester(ac1)
 									.course(c1)
-									.academicRank(ar1)
+									.academicRankDetails(ard1)
 									.myClasses(List.of(ac1,ac2))
 									.build();
 					workloadRepo.save(w1);

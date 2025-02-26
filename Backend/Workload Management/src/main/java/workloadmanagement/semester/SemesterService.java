@@ -1,4 +1,4 @@
-package workloadmanagement.academicrank.semester;
+package workloadmanagement.semester;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;

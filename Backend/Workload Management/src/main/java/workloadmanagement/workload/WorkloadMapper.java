@@ -5,7 +5,8 @@ import org.springframework.stereotype.Service;
 import workloadmanagement.MyClass.MyClass;
 import workloadmanagement.MyClass.MyClassMapper;
 import workloadmanagement.academicrank.AcademicRank;
-import workloadmanagement.academicrank.semester.Semester;
+import workloadmanagement.academicrank.academicrankDetails.AcademicRankDetails;
+import workloadmanagement.semester.Semester;
 import workloadmanagement.course.Course;
 import workloadmanagement.statustype.StatusType;
 import workloadmanagement.teachingstaff.TeachingStaff;
@@ -22,7 +23,7 @@ public class WorkloadMapper {
             StatusType statusType,
             Semester semester,
             Course course,
-            AcademicRank academicRank,
+            AcademicRankDetails academicRankDetails,
             List<MyClass> myClasses,
             MyClass classForSemester) {
         return Workload.builder()
@@ -41,7 +42,7 @@ public class WorkloadMapper {
                 .program(request.program())
                 .groupForSemester(classForSemester)
                 .course(course)
-                .academicRank(academicRank)
+                .academicRankDetails(academicRankDetails)
                 .myClasses(myClasses)
                 .build();
     }
@@ -62,7 +63,7 @@ public class WorkloadMapper {
                 .program(workload.getProgram())
                 .groupForSemester(myClassMapper.toMyClassResponse(workload.getGroupForSemester()))
                 .course(workload.getCourse())
-                .academicRank(workload.getAcademicRank())
+                .academicRankDetails(workload.getAcademicRankDetails())
                 // Calculated values
                 .myClasses(workload.getMyClasses())
                 .creditPointsPerHour(workload.getCreditPointsPerHour())

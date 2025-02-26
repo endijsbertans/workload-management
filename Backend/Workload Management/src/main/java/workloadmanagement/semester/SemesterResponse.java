@@ -1,4 +1,4 @@
-package workloadmanagement.academicrank.semester;
+package workloadmanagement.semester;
 
 import lombok.*;
 import java.time.LocalDate;
@@ -11,5 +11,5 @@ import java.time.LocalDate;
 public class SemesterResponse {
     private int semesterId;
     private SemesterEnum semesterName;
-    private LocalDate year;
+    private int year;
 }

@@ -1,4 +1,4 @@
-package workloadmanagement.academicrank.semester;
+package workloadmanagement.semester;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
