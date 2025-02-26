@@ -55,4 +55,4 @@ JOIN faculty AS fClass ON fClass.faculty_id = class.class_faculty_id
 GROUP BY
 w.workload_id
 ```
-![img.png](img.png)
+![img.png](images%2Fimg.png)
