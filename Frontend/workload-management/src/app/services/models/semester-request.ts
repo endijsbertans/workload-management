@@ -4,5 +4,5 @@
 
 export interface SemesterRequest {
   semesterName: 'pavasaris' | 'rudens';
-  year: string;
+  year: number;
 }

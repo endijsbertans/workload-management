@@ -11,3 +11,4 @@ export { FacultyService } from './services/faculty.service';
 export { CourseService } from './services/course.service';
 export { AuthenticationService } from './services/authentication.service';
 export { AcademicRankService } from './services/academic-rank.service';
+export { AcademicRankDetailsService } from './services/academic-rank-details.service';

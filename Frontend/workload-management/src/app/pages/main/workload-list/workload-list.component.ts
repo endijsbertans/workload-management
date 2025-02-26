@@ -88,6 +88,7 @@ export class WorkloadListComponent implements OnInit {
           console.log(this.pages);
         }
         this.workloadResponse = workloads.content;
+        console.log(this.workloadResponse);
       },
       complete: () => {
         this.isLoadingResults = false;

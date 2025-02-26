@@ -5,8 +5,5 @@
 export interface AcademicRank {
   abbreviation?: string;
   academicRankId?: number;
-  cpForFullTime?: number;
   rankName?: string;
-  salary?: number;
-  semester?: 'pavasaris' | 'rudens';
 }

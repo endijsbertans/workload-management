@@ -107,7 +107,7 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
       this.workloadForm.value.academicRankCtrl &&
       this.workloadForm.value.statusTypeCtrl&&
       this.workloadForm.value.includeInBudgetCtrl&&
-      this.workloadForm.value.budgetPositionCtrl&&
+      this.workloadForm.value.budgetPositionCtrl &&
       this.workloadForm.value.industryCoefficientCtrl&&
       this.workloadForm.value.expectedSalaryCtrl&&
       this.workloadForm.value.groupAmountCtrl&&
@@ -183,8 +183,10 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
     }),
     //written input fields
     includeInBudgetCtrl: new FormControl<string | null>(null, {
+      validators: [Validators.required]
     }),
     budgetPositionCtrl: new FormControl<boolean>(false, {
+      validators: [Validators.required]
     }),
     industryCoefficientCtrl: new FormControl<number | null>(null, {
       validators: [Validators.required]
@@ -306,11 +308,7 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
   private fetchAllAcademicRanks(callback?: () => void) {
     const subscription = this.academicRankService.findAllAcademicRank().subscribe({
       next: (academicRanks) => {
-        if (this.selectedSemester()) {
-          this.academicRanks.set(academicRanks.filter((val) => val.semester === this.selectedSemester()?.semesterName));
-        } else {
           this.academicRanks.set(academicRanks);
-        }
         if (callback) callback(); // if necessary to execute something after fetch
       },
       error: (err) => {

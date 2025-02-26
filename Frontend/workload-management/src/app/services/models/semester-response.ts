@@ -5,5 +5,5 @@
 export interface SemesterResponse {
   semesterId?: number;
   semesterName?: 'pavasaris' | 'rudens';
-  year?: string;
+  year?: number;
 }

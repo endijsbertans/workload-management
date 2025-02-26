@@ -530,6 +530,58 @@
         }
       }
     },
+    "/academic-rank/details": {
+      "get": {
+        "tags": [
+          "AcademicRankDetails"
+        ],
+        "operationId": "findAllAcademicRank_1",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AcademicRankDetailsResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "AcademicRankDetails"
+        ],
+        "operationId": "saveAcademicRank_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AcademicRankDetailsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/workload/{workload-id}": {
       "get": {
         "tags": [
@@ -823,6 +875,37 @@
           }
         }
       }
+    },
+    "/academic-rank/details/{academic-rank-id}": {
+      "get": {
+        "tags": [
+          "AcademicRankDetails"
+        ],
+        "operationId": "findAcademicRankById_1",
+        "parameters": [
+          {
+            "name": "academic-rank-id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AcademicRankDetailsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -980,8 +1063,8 @@
             ]
           },
           "year": {
-            "type": "string",
-            "format": "date"
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -1109,33 +1192,15 @@
       "AcademicRankRequest": {
         "required": [
           "abbreviation",
-          "cpForFullTime",
-          "rankName",
-          "salary",
-          "semester"
+          "rankName"
         ],
         "type": "object",
         "properties": {
           "rankName": {
             "type": "string"
           },
-          "cpForFullTime": {
-            "type": "number",
-            "format": "double"
-          },
           "abbreviation": {
             "type": "string"
-          },
-          "salary": {
-            "type": "number",
-            "format": "double"
-          },
-          "semester": {
-            "type": "string",
-            "enum": [
-              "pavasaris",
-              "rudens"
-            ]
           }
         }
       },
@@ -1149,23 +1214,85 @@
           "rankName": {
             "type": "string"
           },
+          "abbreviation": {
+            "type": "string"
+          }
+        }
+      },
+      "AcademicRankDetailsRequest": {
+        "required": [
+          "academicRank",
+          "contactHoursForFullTime",
+          "cpForFullTime",
+          "salary",
+          "semester"
+        ],
+        "type": "object",
+        "properties": {
           "cpForFullTime": {
             "type": "number",
             "format": "double"
-          },
-          "abbreviation": {
-            "type": "string"
           },
           "salary": {
             "type": "number",
             "format": "double"
           },
+          "contactHoursForFullTime": {
+            "type": "number",
+            "format": "double"
+          },
           "semester": {
+            "$ref": "#/components/schemas/Semester"
+          },
+          "academicRank": {
+            "$ref": "#/components/schemas/AcademicRank"
+          }
+        }
+      },
+      "Semester": {
+        "type": "object",
+        "properties": {
+          "semesterId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "semesterName": {
             "type": "string",
             "enum": [
               "pavasaris",
               "rudens"
             ]
+          },
+          "semesterYear": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "AcademicRankDetails": {
+        "type": "object",
+        "properties": {
+          "academicRankDetailsId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "cpForFullTime": {
+            "type": "number",
+            "format": "double"
+          },
+          "salary": {
+            "type": "number",
+            "format": "double"
+          },
+          "contactHoursForFullTime": {
+            "type": "number",
+            "format": "double"
+          },
+          "semester": {
+            "$ref": "#/components/schemas/Semester"
+          },
+          "academicRank": {
+            "$ref": "#/components/schemas/AcademicRank"
           }
         }
       },
@@ -1322,26 +1449,6 @@
           }
         }
       },
-      "Semester": {
-        "type": "object",
-        "properties": {
-          "semesterId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "semesterName": {
-            "type": "string",
-            "enum": [
-              "pavasaris",
-              "rudens"
-            ]
-          },
-          "year": {
-            "type": "string",
-            "format": "date"
-          }
-        }
-      },
       "StatusType": {
         "type": "object",
         "properties": {
@@ -1441,8 +1548,8 @@
           "course": {
             "$ref": "#/components/schemas/Course"
           },
-          "academicRank": {
-            "$ref": "#/components/schemas/AcademicRank"
+          "academicRankDetails": {
+            "$ref": "#/components/schemas/AcademicRankDetails"
           },
           "myClasses": {
             "type": "array",
@@ -1529,10 +1636,10 @@
           "username": {
             "type": "string"
           },
-          "accountNonExpired": {
+          "credentialsNonExpired": {
             "type": "boolean"
           },
-          "credentialsNonExpired": {
+          "accountNonExpired": {
             "type": "boolean"
           },
           "accountNonLocked": {
@@ -1592,8 +1699,8 @@
             ]
           },
           "year": {
-            "type": "string",
-            "format": "date"
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -1651,23 +1758,35 @@
           "rankName": {
             "type": "string"
           },
+          "abbreviation": {
+            "type": "string"
+          }
+        }
+      },
+      "AcademicRankDetailsResponse": {
+        "type": "object",
+        "properties": {
+          "academicRankDetailsId": {
+            "type": "integer",
+            "format": "int32"
+          },
           "cpForFullTime": {
             "type": "number",
             "format": "double"
-          },
-          "abbreviation": {
-            "type": "string"
           },
           "salary": {
             "type": "number",
             "format": "double"
           },
+          "contactHoursForFullTime": {
+            "type": "number",
+            "format": "double"
+          },
           "semester": {
-            "type": "string",
-            "enum": [
-              "pavasaris",
-              "rudens"
-            ]
+            "$ref": "#/components/schemas/Semester"
+          },
+          "academicRank": {
+            "$ref": "#/components/schemas/AcademicRank"
           }
         }
       }

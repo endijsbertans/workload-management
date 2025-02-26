@@ -68,7 +68,7 @@ export const ColumnsForTeacher: ColumnNames[] = [
   },
   {
     name: 'Amata grupa',
-    pathTo: 'teachingStaff.staffAcademicRank.rankName',
+    pathTo: 'academicRankDetails.academicRank.rankName',
     collection: 'ColumnsForTeacher',
     sortable: true
   },
@@ -188,7 +188,7 @@ export const ColumnsForSalary: ColumnNames[] = [
   }
   , {
     name: 'Alga',
-    pathTo: 'teachingStaff.staffAcademicRank.salary',
+    pathTo: 'academicRankDetails.salary',
     collection: 'ColumnsForSalary',
     sortable: true
   }
