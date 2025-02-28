@@ -10,7 +10,6 @@ import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatTooltip} from "@angular/material/tooltip";
 import {MatFormField} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
-import {ColumnNames} from "../new-objects/object-columns";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {WorkloadListSettingsComponent} from "./workload-list-settings/workload-list-settings.component";
 import {WorkloadListSettingsService} from "./workload-list-settings/workload-list-settings-service";

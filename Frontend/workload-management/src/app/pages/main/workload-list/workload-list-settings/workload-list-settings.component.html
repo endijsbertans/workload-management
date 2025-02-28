@@ -9,7 +9,7 @@
         <mat-checkbox
           [checked]="column.visible"
           (change)="toggleGroupVisibility(column.pathTo, column.visible)">
-          {{ column.name | titlecase }}
+          {{ column.name  }}
         </mat-checkbox>
 
       </span>
@@ -21,7 +21,7 @@
                 <mat-checkbox
                   [checked]="column.visible"
                   (change)="toggleGroupVisibility(column.pathTo, column.visible)">
-                  {{ column.name | titlecase }}
+                  {{ column.name  }}
                 </mat-checkbox>
             </li>
           </ul>

@@ -100,60 +100,44 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     console.log(this.workloadForm.controls);
-    if (this.workloadForm.value.semesterCtrl &&
-      this.workloadForm.value.tStaffCtrl &&
-      this.workloadForm.value.courseCtrl &&
-      this.workloadForm.value.myClassCtrl &&
-      this.workloadForm.value.academicRankCtrl &&
-      this.workloadForm.value.statusTypeCtrl&&
-      this.workloadForm.value.includeInBudgetCtrl&&
-      this.workloadForm.value.budgetPositionCtrl &&
-      this.workloadForm.value.industryCoefficientCtrl&&
-      this.workloadForm.value.expectedSalaryCtrl&&
-      this.workloadForm.value.groupAmountCtrl&&
-      this.workloadForm.value.contactHoursCtrl&&
-      this.workloadForm.value.programCtrl&&
-      this.workloadForm.value.groupForSemesterCtrl&&
-      this.workloadForm.value.vacationMonthsCtrl&&
-      this.workloadForm.value.commentsCtrl
-    ) {
+
+    if (this.workloadForm.valid) {
       this.workloadRequest = {
-        semesterId: this.workloadForm.value.semesterCtrl,
-        teachingStaffId: this.workloadForm.value.tStaffCtrl,
-        courseId: this.workloadForm.value.courseCtrl,
-        myClassIds: this.workloadForm.value.myClassCtrl,
-        academicRankId: this.workloadForm.value.academicRankCtrl,
-        statusTypeId: this.workloadForm.value.statusTypeCtrl,
-        includeInBudget: this.workloadForm.value.includeInBudgetCtrl,
-        budgetPosition: this.workloadForm.value.budgetPositionCtrl,
-        industryCoefficient: this.workloadForm.value.industryCoefficientCtrl,
-        vacationMonths: this.workloadForm.value.vacationMonthsCtrl,
-        expectedSalary: this.workloadForm.value.expectedSalaryCtrl,
-        groupAmount: this.workloadForm.value.groupAmountCtrl,
-        contactHours: this.workloadForm.value.contactHoursCtrl,
-        program: this.workloadForm.value.programCtrl,
-        groupForSemesterId: this.workloadForm.value.groupForSemesterCtrl,
-        comments: this.workloadForm.value.commentsCtrl,
+        semesterId: this.workloadForm.value.semesterCtrl ?? 0,
+        teachingStaffId: this.workloadForm.value.tStaffCtrl ?? 0,
+        courseId: this.workloadForm.value.courseCtrl ?? 0,
+        myClassIds: this.workloadForm.value.myClassCtrl ?? [],
+        academicRankId: this.workloadForm.value.academicRankCtrl ?? 0,
+        statusTypeId: this.workloadForm.value.statusTypeCtrl ?? 0,
+        includeInBudget: this.workloadForm.value.includeInBudgetCtrl ?? '',
+        budgetPosition: this.workloadForm.value.budgetPositionCtrl ?? false,
+        industryCoefficient: this.workloadForm.value.industryCoefficientCtrl ?? 0,
+        vacationMonths: this.workloadForm.value.vacationMonthsCtrl ?? 0,
+        expectedSalary: this.workloadForm.value.expectedSalaryCtrl ?? 0,
+        groupAmount: this.workloadForm.value.groupAmountCtrl ?? 0,
+        contactHours: this.workloadForm.value.contactHoursCtrl ?? 0,
+        program: this.workloadForm.value.programCtrl ?? '',
+        groupForSemesterId: this.workloadForm.value.groupForSemesterCtrl ?? 0,
+        comments: this.workloadForm.value.commentsCtrl ?? '',
         workingMonths: 5
       };
 
-      this.workloadService.saveWorkload({
-        body: this.workloadRequest
-      }).subscribe({
+      this.workloadService.saveWorkload({ body: this.workloadRequest }).subscribe({
         next: (id) => {
           console.log(id);
+          this.router.navigate(['..'], {
+            relativeTo: this.activeRoute,
+            replaceUrl: true
+          });
         },
         error: (err) => {
           console.log(this.errorMsg);
           this.errorMsg = err.error.validationErrors;
-
         }
-      })
+      });
     }
-    this.router.navigate(['..'], {
-      relativeTo: this.activeRoute,
-      replaceUrl: true});
   }
+
 
   workloadForm = new FormGroup({
     semesterCtrl: new FormControl<number | null>(null, {
