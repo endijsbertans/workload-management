@@ -1,3 +1,8 @@
+@if(editMode()){
+  <p>Rediģēt</p>
+}@else{
+  <p> Izveidot jaunu</p>
+}
 <form [formGroup]="workloadForm" (ngSubmit)="onSubmit()">
   <div class="grid-container">
     <div class="inputFieldFlex">
@@ -214,7 +219,7 @@
     <div class="inputFieldFlex">
       <mat-form-field appearance="outline">
         @if (workloadForm.controls.industryCoefficientCtrl.invalid) {
-          <mat-error>{{ errorMessage() }}</mat-error>
+          <mat-error>{{ errorMsg() }}</mat-error>
         }
         <mat-label>Nozares koeficents</mat-label>
         <input
@@ -229,14 +234,14 @@
     <div class="inputFieldFlex">
       <mat-form-field appearance="outline">
         @if (workloadForm.controls.vacationMonthsCtrl.invalid) {
-          <mat-error>{{ errorMessage() }}</mat-error>
+          <mat-error>{{ errorMsg() }}</mat-error>
         }
         <mat-label>Atvaļinājuma mēneši</mat-label>
         <input
           matInput
           type="number"
           [formControl]="workloadForm.controls.vacationMonthsCtrl"
-          (blur)="updateErrorMessage('VacationMonthsCtrl')"
+          (blur)="updateErrorMessage('vacationMonthsCtrl')"
           required
         />
       </mat-form-field>
@@ -244,7 +249,7 @@
     <div class="inputFieldFlex">
       <mat-form-field appearance="outline">
         @if (workloadForm.controls.expectedSalaryCtrl.invalid) {
-          <mat-error>{{ errorMessage() }}</mat-error>
+          <mat-error>{{ errorMsg() }}</mat-error>
         }
         <mat-label>Paredzēts algai</mat-label>
         <input
@@ -259,7 +264,7 @@
     <div class="inputFieldFlex">
       <mat-form-field appearance="outline">
         @if (workloadForm.controls.groupAmountCtrl.invalid) {
-          <mat-error>{{ errorMessage() }}</mat-error>
+          <mat-error>{{ errorMsg() }}</mat-error>
         }
         <mat-label>Grupu skaits</mat-label>
         <input
@@ -274,7 +279,7 @@
     <div class="inputFieldFlex">
       <mat-form-field appearance="outline">
         @if (workloadForm.controls.contactHoursCtrl.invalid) {
-          <mat-error>{{ errorMessage() }}</mat-error>
+          <mat-error>{{ errorMsg() }}</mat-error>
         }
         <mat-label>Kontaktstundu skaits</mat-label>
         <input
@@ -289,7 +294,7 @@
     <div class="inputFieldFlex">
       <mat-form-field appearance="outline">
         @if (workloadForm.controls.programCtrl.invalid) {
-          <mat-error>{{ errorMessage() }}</mat-error>
+          <mat-error>{{ errorMsg() }}</mat-error>
         }
         <mat-label>Programmas daļa</mat-label>
         <input
@@ -305,7 +310,7 @@
     <div class="inputFieldFlex">
       <mat-form-field appearance="outline">
         @if (workloadForm.controls.commentsCtrl.invalid) {
-          <mat-error>{{ errorMessage() }}</mat-error>
+          <mat-error>{{ errorMsg() }}</mat-error>
         }
         <mat-label>Komentāri</mat-label>
         <input
@@ -320,7 +325,7 @@
     <div class="inputFieldFlex">
       <mat-form-field appearance="outline">
         @if (workloadForm.controls.includeInBudgetCtrl.invalid) {
-          <mat-error>{{ errorMessage() }}</mat-error>
+          <mat-error>{{ errorMsg() }}</mat-error>
         }
         <mat-label>Iekļaut budžetā</mat-label>
         <input
@@ -334,10 +339,16 @@
     </div>
   </div>
   <div style="display: flex">
-    <button mat-raised-button type="button" routerLink="..">Cancel</button>
-    <button mat-raised-button type="submit" [disabled]="workloadForm.invalid">
-      Izveidot
-    </button>
+    <button mat-raised-button type="button" routerLink="/main/workload">Cancel</button>
+    @if(editMode()){
+      <button mat-raised-button type="submit" [disabled]="workloadForm.invalid">
+        Iesniegt labojumu
+      </button>
+    }@else{
+      <button mat-raised-button type="submit" [disabled]="workloadForm.invalid">
+        Izveidot
+      </button>
+    }
     <mat-slide-toggle [formControl]="workloadForm.controls.budgetPositionCtrl">budžeta pozicija </mat-slide-toggle>
   </div>
 </form>

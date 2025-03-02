@@ -11,6 +11,10 @@
   background-color: var(--mat-sys-primary);
   color: var(--mat-sys-on-primary);
 }
+.row-is-clicked {
+  font-weight: bold;
+}
+
 
 table {
   @include mat.table-overrides((
@@ -42,11 +46,15 @@ $orange-header: #ECCA9C !important;
   background: $orange-header;
 }
 
-.mat-mdc-table-sticky-border-elem-right {
-  border-left: 1px solid #e0e0e0;
-}
 .mat-icon {
   scale: 0.8;
 }
 
-
+.mat-mdc-row .mat-mdc-cell {
+  border-bottom: 1px solid transparent;
+  border-top: 1px solid transparent;
+  cursor: pointer;
+}
+.mat-mdc-row:hover .mat-mdc-cell {
+  border-color: black;
+}

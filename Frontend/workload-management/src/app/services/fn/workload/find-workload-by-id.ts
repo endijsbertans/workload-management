@@ -8,16 +8,16 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { TeachingStaffResponse } from '../../models/teaching-staff-response';
+import { WorkloadResponse } from '../../models/workload-response';
 
-export interface FindTeachingStaffById1$Params {
-  'tstaff-id': number;
+export interface FindWorkloadById$Params {
+  'workload-id': number;
 }
 
-export function findTeachingStaffById1(http: HttpClient, rootUrl: string, params: FindTeachingStaffById1$Params, context?: HttpContext): Observable<StrictHttpResponse<TeachingStaffResponse>> {
-  const rb = new RequestBuilder(rootUrl, findTeachingStaffById1.PATH, 'get');
+export function findWorkloadById(http: HttpClient, rootUrl: string, params: FindWorkloadById$Params, context?: HttpContext): Observable<StrictHttpResponse<WorkloadResponse>> {
+  const rb = new RequestBuilder(rootUrl, findWorkloadById.PATH, 'get');
   if (params) {
-    rb.path('tstaff-id', params['tstaff-id'], {});
+    rb.path('workload-id', params['workload-id'], {});
   }
 
   return http.request(
@@ -25,9 +25,9 @@ export function findTeachingStaffById1(http: HttpClient, rootUrl: string, params
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<TeachingStaffResponse>;
+      return r as StrictHttpResponse<WorkloadResponse>;
     })
   );
 }
 
-findTeachingStaffById1.PATH = '/teaching-staff/{tstaff-id}';
+findWorkloadById.PATH = '/workload/{workload-id}';

@@ -48,7 +48,7 @@ export class WorkloadListComponent implements OnInit {
   dataSource = new MatTableDataSource<WorkloadResponse>([]);
   workloadResponse?: WorkloadResponse[];
   isLoadingResults = true;
-
+  clickedWorkloadRow?: WorkloadResponse;
   @ViewChild(MatSort) sort!: MatSort;
   length: number | undefined = 50;
   pageSize = 1;
@@ -164,10 +164,23 @@ export class WorkloadListComponent implements OnInit {
   handlePageEvent(event: PageEvent) {
     this.pageSize = event.pageSize;
     this.pageIndex = event.pageIndex;
-    this.findAllWorkloads();  // Fetch new data for the selected page
+    this.findAllWorkloads();
   }
   announceSortChange(e: Sort) {
     this.sortColumn = e;
     this.findAllWorkloads();
+  }
+
+  clickedRow(row: WorkloadResponse) {
+    this.clickedWorkloadRow = row;
+    this.router.navigate(['/main/workload/edit-workload', row.workloadId]);
+
+  }
+
+  isClicked(row: WorkloadResponse):boolean {
+    if(row.workloadId == this.clickedWorkloadRow?.workloadId) {
+      return true;
+    }
+    return false
   }
 }

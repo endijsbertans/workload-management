@@ -587,7 +587,7 @@
         "tags": [
           "Workload"
         ],
-        "operationId": "findTeachingStaffById",
+        "operationId": "findWorkloadById",
         "parameters": [
           {
             "name": "workload-id",
@@ -611,6 +611,46 @@
             }
           }
         }
+      },
+      "patch": {
+        "tags": [
+          "Workload"
+        ],
+        "operationId": "updateWorkloadById",
+        "parameters": [
+          {
+            "name": "workload-id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkloadRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/teaching-staff/{tstaff-id}": {
@@ -618,7 +658,7 @@
         "tags": [
           "TeachingStaff"
         ],
-        "operationId": "findTeachingStaffById_1",
+        "operationId": "findTeachingStaffById",
         "parameters": [
           {
             "name": "tstaff-id",
@@ -1495,10 +1535,10 @@
           "staffPhoto": {
             "type": "string"
           },
-          "rankFullName": {
+          "staffFullName": {
             "type": "string"
           },
-          "staffFullName": {
+          "rankFullName": {
             "type": "string"
           }
         }
@@ -1642,16 +1682,16 @@
           "name": {
             "type": "string"
           },
-          "username": {
-            "type": "string"
-          },
-          "accountNonLocked": {
+          "credentialsNonExpired": {
             "type": "boolean"
           },
           "accountNonExpired": {
             "type": "boolean"
           },
-          "credentialsNonExpired": {
+          "username": {
+            "type": "string"
+          },
+          "accountNonLocked": {
             "type": "boolean"
           }
         }

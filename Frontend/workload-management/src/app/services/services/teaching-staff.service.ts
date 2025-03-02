@@ -13,8 +13,8 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { findAllTeachingStaff } from '../fn/teaching-staff/find-all-teaching-staff';
 import { FindAllTeachingStaff$Params } from '../fn/teaching-staff/find-all-teaching-staff';
-import { findTeachingStaffById1 } from '../fn/teaching-staff/find-teaching-staff-by-id-1';
-import { FindTeachingStaffById1$Params } from '../fn/teaching-staff/find-teaching-staff-by-id-1';
+import { findTeachingStaffById } from '../fn/teaching-staff/find-teaching-staff-by-id';
+import { FindTeachingStaffById$Params } from '../fn/teaching-staff/find-teaching-staff-by-id';
 import { saveTeachingStaff } from '../fn/teaching-staff/save-teaching-staff';
 import { SaveTeachingStaff$Params } from '../fn/teaching-staff/save-teaching-staff';
 import { TeachingStaffResponse } from '../models/teaching-staff-response';
@@ -75,27 +75,27 @@ export class TeachingStaffService extends BaseService {
     );
   }
 
-  /** Path part for operation `findTeachingStaffById1()` */
-  static readonly FindTeachingStaffById1Path = '/teaching-staff/{tstaff-id}';
+  /** Path part for operation `findTeachingStaffById()` */
+  static readonly FindTeachingStaffByIdPath = '/teaching-staff/{tstaff-id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findTeachingStaffById1()` instead.
+   * To access only the response body, use `findTeachingStaffById()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findTeachingStaffById1$Response(params: FindTeachingStaffById1$Params, context?: HttpContext): Observable<StrictHttpResponse<TeachingStaffResponse>> {
-    return findTeachingStaffById1(this.http, this.rootUrl, params, context);
+  findTeachingStaffById$Response(params: FindTeachingStaffById$Params, context?: HttpContext): Observable<StrictHttpResponse<TeachingStaffResponse>> {
+    return findTeachingStaffById(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findTeachingStaffById1$Response()` instead.
+   * To access the full response (for headers, for example), `findTeachingStaffById$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findTeachingStaffById1(params: FindTeachingStaffById1$Params, context?: HttpContext): Observable<TeachingStaffResponse> {
-    return this.findTeachingStaffById1$Response(params, context).pipe(
+  findTeachingStaffById(params: FindTeachingStaffById$Params, context?: HttpContext): Observable<TeachingStaffResponse> {
+    return this.findTeachingStaffById$Response(params, context).pipe(
       map((r: StrictHttpResponse<TeachingStaffResponse>): TeachingStaffResponse => r.body)
     );
   }

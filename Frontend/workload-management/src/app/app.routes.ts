@@ -28,6 +28,22 @@ export const routes: Routes = [
       path: 'workload',
       component: WorkloadListComponent,
       children: [{
+        path: 'edit-workload/:id',
+        component: NewWorkloadComponent,
+        children: [{
+          path: 'new-teaching-staff',
+          component: NewTeachingStaffComponent
+        },
+          {
+            path: 'new-course',
+            component: NewCourseComponent
+          },
+          {
+            path: 'new-class',
+            component: NewClassComponent
+          }]
+        },
+        {
         path: 'new-workload',
         component: NewWorkloadComponent,
         children: [{

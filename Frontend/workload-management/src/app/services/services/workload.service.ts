@@ -13,11 +13,13 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { findAllWorkloads } from '../fn/workload/find-all-workloads';
 import { FindAllWorkloads$Params } from '../fn/workload/find-all-workloads';
-import { findTeachingStaffById } from '../fn/workload/find-teaching-staff-by-id';
-import { FindTeachingStaffById$Params } from '../fn/workload/find-teaching-staff-by-id';
+import { findWorkloadById } from '../fn/workload/find-workload-by-id';
+import { FindWorkloadById$Params } from '../fn/workload/find-workload-by-id';
 import { PageResponseWorkloadResponse } from '../models/page-response-workload-response';
 import { saveWorkload } from '../fn/workload/save-workload';
 import { SaveWorkload$Params } from '../fn/workload/save-workload';
+import { updateWorkloadById } from '../fn/workload/update-workload-by-id';
+import { UpdateWorkloadById$Params } from '../fn/workload/update-workload-by-id';
 import { WorkloadResponse } from '../models/workload-response';
 
 @Injectable({ providedIn: 'root' })
@@ -76,28 +78,53 @@ export class WorkloadService extends BaseService {
     );
   }
 
-  /** Path part for operation `findTeachingStaffById()` */
-  static readonly FindTeachingStaffByIdPath = '/workload/{workload-id}';
+  /** Path part for operation `findWorkloadById()` */
+  static readonly FindWorkloadByIdPath = '/workload/{workload-id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findTeachingStaffById()` instead.
+   * To access only the response body, use `findWorkloadById()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findTeachingStaffById$Response(params: FindTeachingStaffById$Params, context?: HttpContext): Observable<StrictHttpResponse<WorkloadResponse>> {
-    return findTeachingStaffById(this.http, this.rootUrl, params, context);
+  findWorkloadById$Response(params: FindWorkloadById$Params, context?: HttpContext): Observable<StrictHttpResponse<WorkloadResponse>> {
+    return findWorkloadById(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findTeachingStaffById$Response()` instead.
+   * To access the full response (for headers, for example), `findWorkloadById$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findTeachingStaffById(params: FindTeachingStaffById$Params, context?: HttpContext): Observable<WorkloadResponse> {
-    return this.findTeachingStaffById$Response(params, context).pipe(
+  findWorkloadById(params: FindWorkloadById$Params, context?: HttpContext): Observable<WorkloadResponse> {
+    return this.findWorkloadById$Response(params, context).pipe(
       map((r: StrictHttpResponse<WorkloadResponse>): WorkloadResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `updateWorkloadById()` */
+  static readonly UpdateWorkloadByIdPath = '/workload/{workload-id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateWorkloadById()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateWorkloadById$Response(params: UpdateWorkloadById$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return updateWorkloadById(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateWorkloadById$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateWorkloadById(params: UpdateWorkloadById$Params, context?: HttpContext): Observable<number> {
+    return this.updateWorkloadById$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
     );
   }
 

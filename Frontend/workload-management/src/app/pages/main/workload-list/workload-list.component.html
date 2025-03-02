@@ -48,7 +48,10 @@
         }
 
     <tr mat-header-row *matHeaderRowDef="mapDisplayedColumns()" ></tr>
-    <tr mat-row *matRowDef="let myRowData; columns: mapDisplayedColumns()"></tr>
+    <tr       mat-row
+              (click)="clickedRow(myRowData)"
+              [class.row-is-clicked]="isClicked(myRowData)"
+              *matRowDef="let myRowData; columns: mapDisplayedColumns()"></tr>
   </table>
   @if (isLoadingResults) {
     <div class="example-loading-shade">
@@ -56,6 +59,13 @@
     </div>
   }
 </div>
+@if (!clickedWorkloadRow) {
+  <div>Clicked rows will be logged here</div>
+}
+
+<ul>
+    <li>Clicked on {{clickedWorkloadRow?.comments}}</li>
+</ul>
 <mat-paginator
   [length]="length"
   [pageSize]="pageSize"
