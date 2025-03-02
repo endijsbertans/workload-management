@@ -51,10 +51,10 @@ export class WorkloadListComponent implements OnInit {
   clickedWorkloadRow?: WorkloadResponse;
   @ViewChild(MatSort) sort!: MatSort;
   length: number | undefined = 50;
-  pageSize = 1;
+  pageSize = 10;
   pageIndex = 0;
   pages: any = [];
-  pageSizeOptions = [1, 2, 25];
+  pageSizeOptions = [10, 25, 50];
   sortColumn: Sort = {active: '', direction: ''};
   ngOnInit() {
     this.dataSource.sort = this.sort;

@@ -6,6 +6,9 @@ import {NewWorkloadComponent} from "./pages/main/workload-list/new-workload/new-
 import {NewTeachingStaffComponent} from "./pages/main/new-objects/new-teaching-staff/new-teaching-staff.component";
 import {NewCourseComponent} from "./pages/main/new-objects/new-course/new-course.component";
 import {NewClassComponent} from "./pages/main/new-objects/new-class/new-class.component";
+import {
+  WorkloadContainerComponent
+} from "./pages/main/workload-list/new-workload/workload-container/workload-container.component";
 
 
 export const routes: Routes = [
@@ -29,7 +32,7 @@ export const routes: Routes = [
       component: WorkloadListComponent,
       children: [{
         path: 'edit-workload/:id',
-        component: NewWorkloadComponent,
+        component: WorkloadContainerComponent,
         children: [{
           path: 'new-teaching-staff',
           component: NewTeachingStaffComponent
@@ -42,24 +45,24 @@ export const routes: Routes = [
             path: 'new-class',
             component: NewClassComponent
           }]
-        },
+      },
         {
-        path: 'new-workload',
-        component: NewWorkloadComponent,
-        children: [{
+          path: 'new-workload',
+          component: WorkloadContainerComponent,
+          children: [{
             path: 'new-teaching-staff',
             component: NewTeachingStaffComponent
           },
-          {
-            path: 'new-course',
-            component: NewCourseComponent
-          },
-          {
-            path: 'new-class',
-            component: NewClassComponent
-          },
-        ]
-      }]
+            {
+              path: 'new-course',
+              component: NewCourseComponent
+            },
+            {
+              path: 'new-class',
+              component: NewClassComponent
+            },
+          ]
+        }]
     }
     ]
   }

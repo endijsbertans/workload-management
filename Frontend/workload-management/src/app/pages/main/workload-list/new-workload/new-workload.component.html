@@ -3,11 +3,11 @@
 }@else{
   <p> Izveidot jaunu</p>
 }
-<form [formGroup]="workloadForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="workloadForm1" (ngSubmit)="onSubmit()">
   <div class="grid-container">
     <div class="inputFieldFlex">
       <mat-form-field>
-        <mat-select [formControl]="workloadForm.controls.tStaffCtrl" #singleSelect>
+        <mat-select [formControl]="workloadForm1.controls.tStaffCtrl" #singleSelect>
           @if (tStaff()) {
             @if (tStaff()?.length === 0) {
               <mat-option>
@@ -15,7 +15,7 @@
               </mat-option>
             } @else {
               <mat-option>
-                <ngx-mat-select-search [formControl]="workloadForm.controls.tStaffFilterCtrl"
+                <ngx-mat-select-search [formControl]="workloadForm1.controls.tStaffFilterCtrl"
                                        placeholderLabel="Meklēt personu"
                                        noEntriesFoundLabel="Persona nav atrasta">
                 </ngx-mat-select-search>
@@ -40,7 +40,7 @@
     </div>
     <div class="inputFieldFlex">
       <mat-form-field>
-        <mat-select [formControl]="workloadForm.controls.semesterCtrl" #singleSelect>
+        <mat-select [formControl]="workloadForm1.controls.semesterCtrl" #singleSelect>
           @if (courses()) {
             @if (courses()?.length === 0) {
               <mat-option>
@@ -66,7 +66,7 @@
     </div>
     <div class="inputFieldFlex">
       <mat-form-field>
-        <mat-select [formControl]="workloadForm.controls.courseCtrl" #singleSelect>
+        <mat-select [formControl]="workloadForm1.controls.courseCtrl" #singleSelect>
           @if (courses()) {
             @if (courses()?.length === 0) {
               <mat-option>
@@ -74,7 +74,7 @@
               </mat-option>
             } @else {
               <mat-option>
-                <ngx-mat-select-search [formControl]="workloadForm.controls.courseFilterCtrl"
+                <ngx-mat-select-search [formControl]="workloadForm1.controls.courseFilterCtrl"
                                        placeholderLabel="Meklēt kursu"
                                        noEntriesFoundLabel="Kurss Nav atrasts">
                 </ngx-mat-select-search>
@@ -99,7 +99,7 @@
     </div>
     <div class="inputFieldFlex">
       <mat-form-field>
-        <mat-select [formControl]="workloadForm.controls.myClassCtrl" [multiple]="true" #multiSelect>
+        <mat-select [formControl]="workloadForm1.controls.myClassCtrl" [multiple]="true" #multiSelect>
           @if (myClasses()) {
             @if (myClasses()?.length === 0) {
               <mat-option>
@@ -107,7 +107,7 @@
               </mat-option>
             } @else {
               <mat-option>
-                <ngx-mat-select-search [formControl]="workloadForm.controls.myClassFilterCtrl"
+                <ngx-mat-select-search [formControl]="workloadForm1.controls.myClassFilterCtrl"
                                        placeholderLabel="Meklēt klasi"
                                        noEntriesFoundLabel="Klase nav atrasta">
                 </ngx-mat-select-search>
@@ -133,7 +133,7 @@
     </div>
     <div class="inputFieldFlex">
       <mat-form-field>
-        <mat-select [formControl]="workloadForm.controls.academicRankCtrl">
+        <mat-select [formControl]="workloadForm1.controls.academicRankCtrl">
           @if (academicRanks()) {
             @if (academicRanks()?.length === 0) {
               <mat-option>
@@ -159,7 +159,7 @@
     </div>
     <div class="inputFieldFlex">
       <mat-form-field>
-        <mat-select required [formControl]="workloadForm.controls.statusTypeCtrl">
+        <mat-select required [formControl]="workloadForm1.controls.statusTypeCtrl">
           @if (statusTypes()) {
             @if (statusTypes()?.length === 0) {
               <mat-option>
@@ -185,7 +185,7 @@
     </div>
     <div class="inputFieldFlex">
       <mat-form-field>
-        <mat-select [formControl]="workloadForm.controls.groupForSemesterCtrl" [multiple]="false" #singleSelect>
+        <mat-select [formControl]="workloadForm1.controls.groupForSemesterCtrl" [multiple]="false" #singleSelect>
           @if (myClasses()) {
             @if (myClasses()?.length === 0) {
               <mat-option>
@@ -193,7 +193,7 @@
               </mat-option>
             } @else {
               <mat-option>
-                <ngx-mat-select-search [formControl]="workloadForm.controls.myClassFilterCtrl"
+                <ngx-mat-select-search [formControl]="workloadForm1.controls.myClassFilterCtrl"
                                        placeholderLabel="Meklēt klasi"
                                        noEntriesFoundLabel="Klase nav atrasta">
                 </ngx-mat-select-search>
@@ -218,14 +218,14 @@
 
     <div class="inputFieldFlex">
       <mat-form-field appearance="outline">
-        @if (workloadForm.controls.industryCoefficientCtrl.invalid) {
+        @if (workloadForm1.controls.industryCoefficientCtrl.invalid) {
           <mat-error>{{ errorMsg() }}</mat-error>
         }
         <mat-label>Nozares koeficents</mat-label>
         <input
           matInput
           placeholder="0.5"
-          [formControl]="workloadForm.controls.industryCoefficientCtrl"
+          [formControl]="workloadForm1.controls.industryCoefficientCtrl"
           (blur)="updateErrorMessage('industryCoefficientCtrl')"
           required
         />
@@ -233,14 +233,14 @@
     </div>
     <div class="inputFieldFlex">
       <mat-form-field appearance="outline">
-        @if (workloadForm.controls.vacationMonthsCtrl.invalid) {
+        @if (workloadForm1.controls.vacationMonthsCtrl.invalid) {
           <mat-error>{{ errorMsg() }}</mat-error>
         }
         <mat-label>Atvaļinājuma mēneši</mat-label>
         <input
           matInput
           type="number"
-          [formControl]="workloadForm.controls.vacationMonthsCtrl"
+          [formControl]="workloadForm1.controls.vacationMonthsCtrl"
           (blur)="updateErrorMessage('vacationMonthsCtrl')"
           required
         />
@@ -248,14 +248,14 @@
     </div>
     <div class="inputFieldFlex">
       <mat-form-field appearance="outline">
-        @if (workloadForm.controls.expectedSalaryCtrl.invalid) {
+        @if (workloadForm1.controls.expectedSalaryCtrl.invalid) {
           <mat-error>{{ errorMsg() }}</mat-error>
         }
         <mat-label>Paredzēts algai</mat-label>
         <input
           matInput
           type="number"
-          [formControl]="workloadForm.controls.expectedSalaryCtrl"
+          [formControl]="workloadForm1.controls.expectedSalaryCtrl"
           (blur)="updateErrorMessage('expectedSalaryCtrl')"
           required
         />
@@ -263,14 +263,14 @@
     </div>
     <div class="inputFieldFlex">
       <mat-form-field appearance="outline">
-        @if (workloadForm.controls.groupAmountCtrl.invalid) {
+        @if (workloadForm1.controls.groupAmountCtrl.invalid) {
           <mat-error>{{ errorMsg() }}</mat-error>
         }
         <mat-label>Grupu skaits</mat-label>
         <input
           matInput
           type="number"
-          [formControl]="workloadForm.controls.groupAmountCtrl"
+          [formControl]="workloadForm1.controls.groupAmountCtrl"
           (blur)="updateErrorMessage('groupAmountCtrl')"
           required
         />
@@ -278,14 +278,14 @@
     </div>
     <div class="inputFieldFlex">
       <mat-form-field appearance="outline">
-        @if (workloadForm.controls.contactHoursCtrl.invalid) {
+        @if (workloadForm1.controls.contactHoursCtrl.invalid) {
           <mat-error>{{ errorMsg() }}</mat-error>
         }
         <mat-label>Kontaktstundu skaits</mat-label>
         <input
           matInput
           type="number"
-          [formControl]="workloadForm.controls.contactHoursCtrl"
+          [formControl]="workloadForm1.controls.contactHoursCtrl"
           (blur)="updateErrorMessage('groupAmountCtrl')"
           required
         />
@@ -293,14 +293,14 @@
     </div>
     <div class="inputFieldFlex">
       <mat-form-field appearance="outline">
-        @if (workloadForm.controls.programCtrl.invalid) {
+        @if (workloadForm1.controls.programCtrl.invalid) {
           <mat-error>{{ errorMsg() }}</mat-error>
         }
         <mat-label>Programmas daļa</mat-label>
         <input
           matInput
           placeholder="Nozares pamatnoz."
-          [formControl]="workloadForm.controls.programCtrl"
+          [formControl]="workloadForm1.controls.programCtrl"
           (blur)="updateErrorMessage('groupAmountCtrl')"
           required
         />
@@ -309,14 +309,14 @@
 
     <div class="inputFieldFlex">
       <mat-form-field appearance="outline">
-        @if (workloadForm.controls.commentsCtrl.invalid) {
+        @if (workloadForm1.controls.commentsCtrl.invalid) {
           <mat-error>{{ errorMsg() }}</mat-error>
         }
         <mat-label>Komentāri</mat-label>
         <input
           matInput
           placeholder="Praktiskās lekcijas..."
-          [formControl]="workloadForm.controls.commentsCtrl"
+          [formControl]="workloadForm1.controls.commentsCtrl"
           (blur)="updateErrorMessage('commentsCtrl')"
           required
         />
@@ -324,14 +324,14 @@
     </div>
     <div class="inputFieldFlex">
       <mat-form-field appearance="outline">
-        @if (workloadForm.controls.includeInBudgetCtrl.invalid) {
+        @if (workloadForm1.controls.includeInBudgetCtrl.invalid) {
           <mat-error>{{ errorMsg() }}</mat-error>
         }
         <mat-label>Iekļaut budžetā</mat-label>
         <input
           matInput
           placeholder="Nenotiks"
-          [formControl]="workloadForm.controls.includeInBudgetCtrl"
+          [formControl]="workloadForm1.controls.includeInBudgetCtrl"
           (blur)="updateErrorMessage('commentsCtrl')"
           required
         />
@@ -341,15 +341,15 @@
   <div style="display: flex">
     <button mat-raised-button type="button" routerLink="/main/workload">Cancel</button>
     @if(editMode()){
-      <button mat-raised-button type="submit" [disabled]="workloadForm.invalid">
+      <button mat-raised-button type="submit" [disabled]="workloadForm1.invalid">
         Iesniegt labojumu
       </button>
     }@else{
-      <button mat-raised-button type="submit" [disabled]="workloadForm.invalid">
+      <button mat-raised-button type="submit" [disabled]="workloadForm1.invalid">
         Izveidot
       </button>
     }
-    <mat-slide-toggle [formControl]="workloadForm.controls.budgetPositionCtrl">budžeta pozicija </mat-slide-toggle>
+    <mat-slide-toggle [formControl]="workloadForm1.controls.budgetPositionCtrl">budžeta pozicija </mat-slide-toggle>
   </div>
 </form>
 

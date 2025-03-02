@@ -113,7 +113,7 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
   @ViewChild('multiSelect', { static: true }) multiSelect: MatSelect | undefined;
 
   // Reactive form definition
-  workloadForm = new FormGroup({
+  workloadForm1 = new FormGroup({
     semesterCtrl: new FormControl<number | null>(null, [Validators.required]),
     tStaffCtrl: new FormControl<number | null>(null, [Validators.required]),
     tStaffFilterCtrl: new FormControl<string>(''),
@@ -143,11 +143,11 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
     this.initAcademicRankSub();
     this.initStatusTypeSub();
     this.initSemesterSub();
-    this.workloadForm.statusChanges.subscribe(status => {
+    this.workloadForm1.statusChanges.subscribe(status => {
       console.log("Form Status:", status);
-      console.log("Form Errors:", this.workloadForm.errors);
-      console.log(this.workloadForm.get('budgetPositionCtrl')?.value);
-      console.log(this.workloadForm.controls);
+      console.log("Form Errors:", this.workloadForm1.errors);
+      console.log(this.workloadForm1.get('budgetPositionCtrl')?.value);
+      console.log(this.workloadForm1.controls);
     });
   }
 
@@ -197,26 +197,26 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    console.log(this.workloadForm.controls);
-    if (this.workloadForm.valid) {
+    console.log(this.workloadForm1.controls);
+    if (this.workloadForm1.valid) {
       // Create workloadRequest from form values
       this.workloadRequest = {
-        semesterId: this.workloadForm.value.semesterCtrl ?? 0,
-        teachingStaffId: this.workloadForm.value.tStaffCtrl ?? 0,
-        courseId: this.workloadForm.value.courseCtrl ?? 0,
-        myClassIds: this.workloadForm.value.myClassCtrl ?? [],
-        academicRankId: this.workloadForm.value.academicRankCtrl ?? 0,
-        statusTypeId: this.workloadForm.value.statusTypeCtrl ?? 0,
-        includeInBudget: this.workloadForm.value.includeInBudgetCtrl ?? '',
-        budgetPosition: this.workloadForm.value.budgetPositionCtrl ?? false,
-        industryCoefficient: this.workloadForm.value.industryCoefficientCtrl ?? 0,
-        vacationMonths: this.workloadForm.value.vacationMonthsCtrl ?? 0,
-        expectedSalary: this.workloadForm.value.expectedSalaryCtrl ?? 0,
-        groupAmount: this.workloadForm.value.groupAmountCtrl ?? 0,
-        contactHours: this.workloadForm.value.contactHoursCtrl ?? 0,
-        program: this.workloadForm.value.programCtrl ?? '',
-        groupForSemesterId: this.workloadForm.value.groupForSemesterCtrl ?? 0,
-        comments: this.workloadForm.value.commentsCtrl ?? '',
+        semesterId: this.workloadForm1.value.semesterCtrl ?? 0,
+        teachingStaffId: this.workloadForm1.value.tStaffCtrl ?? 0,
+        courseId: this.workloadForm1.value.courseCtrl ?? 0,
+        myClassIds: this.workloadForm1.value.myClassCtrl ?? [],
+        academicRankId: this.workloadForm1.value.academicRankCtrl ?? 0,
+        statusTypeId: this.workloadForm1.value.statusTypeCtrl ?? 0,
+        includeInBudget: this.workloadForm1.value.includeInBudgetCtrl ?? '',
+        budgetPosition: this.workloadForm1.value.budgetPositionCtrl ?? false,
+        industryCoefficient: this.workloadForm1.value.industryCoefficientCtrl ?? 0,
+        vacationMonths: this.workloadForm1.value.vacationMonthsCtrl ?? 0,
+        expectedSalary: this.workloadForm1.value.expectedSalaryCtrl ?? 0,
+        groupAmount: this.workloadForm1.value.groupAmountCtrl ?? 0,
+        contactHours: this.workloadForm1.value.contactHoursCtrl ?? 0,
+        program: this.workloadForm1.value.programCtrl ?? '',
+        groupForSemesterId: this.workloadForm1.value.groupForSemesterCtrl ?? 0,
+        comments: this.workloadForm1.value.commentsCtrl ?? '',
         workingMonths: 5
       };
 
@@ -258,21 +258,21 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
 
   // ----- Filtering methods -----
   protected filterTeachingStaff() {
-    const search = this.workloadForm.controls.tStaffFilterCtrl.value?.toLowerCase() ?? '';
+    const search = this.workloadForm1.controls.tStaffFilterCtrl.value?.toLowerCase() ?? '';
     this.filteredTeachingStaff.next(
       this.tStaff()?.filter(t => t.rankFullName?.toLowerCase().includes(search)) ?? []
     );
   }
 
   protected filterCourse() {
-    const search = this.workloadForm.controls.courseFilterCtrl.value?.toLowerCase() ?? '';
+    const search = this.workloadForm1.controls.courseFilterCtrl.value?.toLowerCase() ?? '';
     this.filteredCourses.next(
       this.courses()?.filter(course => course.courseName?.toLowerCase().includes(search)) ?? []
     );
   }
 
   protected filterMyClasses() {
-    const search = this.workloadForm.controls.myClassFilterCtrl.value?.toLowerCase() ?? '';
+    const search = this.workloadForm1.controls.myClassFilterCtrl.value?.toLowerCase() ?? '';
     this.filteredMyClasses.next(
       this.myClasses()?.filter(myClass => myClass.classNameAndYear?.toLowerCase().includes(search)) ?? []
     );
@@ -375,10 +375,10 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
   // ----- Subscription Initialization Methods -----
   initTeachingStaffSub() {
     if (!this.editMode()) this.fetchAllTeachingStaff();
-    this.workloadForm.controls.tStaffFilterCtrl.valueChanges
+    this.workloadForm1.controls.tStaffFilterCtrl.valueChanges
       .pipe(takeUntil(this._onDestroy))
       .subscribe(() => this.filterTeachingStaff());
-    const subTStaff = this.workloadForm.controls.tStaffCtrl.valueChanges.subscribe({
+    const subTStaff = this.workloadForm1.controls.tStaffCtrl.valueChanges.subscribe({
       next: id => {
         const selectedStaff = this.tStaff()?.find(val => val.teachingStaffId === id);
         if (selectedStaff) {
@@ -394,10 +394,10 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
 
   private initCourseSub() {
     if (!this.editMode()) this.fetchAllCourses();
-    this.workloadForm.controls.courseFilterCtrl.valueChanges
+    this.workloadForm1.controls.courseFilterCtrl.valueChanges
       .pipe(takeUntil(this._onDestroy))
       .subscribe(() => this.filterCourse());
-    const subCourse = this.workloadForm.controls.courseCtrl.valueChanges.subscribe({
+    const subCourse = this.workloadForm1.controls.courseCtrl.valueChanges.subscribe({
       next: id => {
         const selectedCourse = this.courses()?.find(val => val.courseId === id);
         if (selectedCourse) {
@@ -413,10 +413,10 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
 
   initMyClassSub() {
     if (!this.editMode()) this.fetchAllClasses();
-    this.workloadForm.controls.myClassFilterCtrl.valueChanges
+    this.workloadForm1.controls.myClassFilterCtrl.valueChanges
       .pipe(takeUntil(this._onDestroy))
       .subscribe(() => this.filterMyClasses());
-    const subMyClass = this.workloadForm.controls.myClassCtrl.valueChanges.subscribe({
+    const subMyClass = this.workloadForm1.controls.myClassCtrl.valueChanges.subscribe({
       next: selectedIds => {
         const selectedMyClasses = this.myClasses()?.filter(val =>
           val.classId !== undefined && selectedIds?.includes(val.classId)
@@ -437,7 +437,7 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
 
   initAcademicRankSub() {
     if (!this.editMode()) this.fetchAllAcademicRanks();
-    const subAcademicRanks = this.workloadForm.controls.academicRankCtrl.valueChanges.subscribe({
+    const subAcademicRanks = this.workloadForm1.controls.academicRankCtrl.valueChanges.subscribe({
       next: id => {
         const selectedAcademicRank = this.academicRanks()?.find(val => val.academicRankId === id);
         if (selectedAcademicRank) {
@@ -453,7 +453,7 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
 
   initStatusTypeSub() {
     if (!this.editMode()) this.fetchStatusTypes();
-    const subStatusTypes = this.workloadForm.controls.statusTypeCtrl.valueChanges.subscribe({
+    const subStatusTypes = this.workloadForm1.controls.statusTypeCtrl.valueChanges.subscribe({
       next: id => {
         const selectedStatusType = this.statusTypes()?.find(val => val.statusTypeId === id);
         if (selectedStatusType) {
@@ -469,7 +469,7 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
 
   initSemesterSub() {
     if (!this.editMode()) this.fetchSemesters();
-    const subSemesters = this.workloadForm.controls.semesterCtrl.valueChanges.subscribe({
+    const subSemesters = this.workloadForm1.controls.semesterCtrl.valueChanges.subscribe({
       next: id => {
         const selectedSemester = this.semesters()?.find(val => val.semesterId === id);
         if (selectedSemester) {
@@ -515,67 +515,67 @@ export class NewWorkloadComponent implements OnInit, OnDestroy {
     else
       this.fetchStatusTypes();
     if (workload.groupForSemester?.classId)
-      this.workloadForm.controls.groupForSemesterCtrl.setValue(workload.groupForSemester.classId);
+      this.workloadForm1.controls.groupForSemesterCtrl.setValue(workload.groupForSemester.classId);
     else
       this.fetchAllClasses();
     if (workload.comments)
-      this.workloadForm.controls.commentsCtrl.setValue(workload.comments);
+      this.workloadForm1.controls.commentsCtrl.setValue(workload.comments);
     if (workload.industryCoefficient)
-      this.workloadForm.controls.industryCoefficientCtrl.setValue(workload.industryCoefficient);
+      this.workloadForm1.controls.industryCoefficientCtrl.setValue(workload.industryCoefficient);
     if (workload.vacationMonths)
-      this.workloadForm.controls.vacationMonthsCtrl.setValue(workload.vacationMonths);
+      this.workloadForm1.controls.vacationMonthsCtrl.setValue(workload.vacationMonths);
     if (workload.expectedSalary)
-      this.workloadForm.controls.expectedSalaryCtrl.setValue(workload.expectedSalary);
+      this.workloadForm1.controls.expectedSalaryCtrl.setValue(workload.expectedSalary);
     if (workload.groupAmount)
-      this.workloadForm.controls.groupAmountCtrl.setValue(workload.groupAmount);
+      this.workloadForm1.controls.groupAmountCtrl.setValue(workload.groupAmount);
     if (workload.contactHours)
-      this.workloadForm.controls.contactHoursCtrl.setValue(workload.contactHours);
+      this.workloadForm1.controls.contactHoursCtrl.setValue(workload.contactHours);
     if (workload.program)
-      this.workloadForm.controls.programCtrl.setValue(workload.program);
+      this.workloadForm1.controls.programCtrl.setValue(workload.program);
     if (workload.includeInBudget)
-      this.workloadForm.controls.includeInBudgetCtrl.setValue(workload.includeInBudget);
+      this.workloadForm1.controls.includeInBudgetCtrl.setValue(workload.includeInBudget);
     if (workload.budgetPosition)
-      this.workloadForm.controls.budgetPositionCtrl.setValue(workload.budgetPosition);
+      this.workloadForm1.controls.budgetPositionCtrl.setValue(workload.budgetPosition);
   }
 
   fillTeachingStaffInput(id: number) {
     this.fetchAllTeachingStaff(() => {
-      this.workloadForm.controls.tStaffCtrl.setValue(id);
+      this.workloadForm1.controls.tStaffCtrl.setValue(id);
     });
   }
 
   fillMyCourseInput(id: number) {
     this.fetchAllCourses(() => {
-      this.workloadForm.controls.courseCtrl.setValue(id);
+      this.workloadForm1.controls.courseCtrl.setValue(id);
     });
   }
 
   fillClassesInput(id: number) {
     this.fetchAllClasses(() => {
-      let prevValues = this.workloadForm.controls.myClassCtrl.value ?? [];
-      this.workloadForm.controls.myClassCtrl.setValue([...prevValues, id]);
+      let prevValues = this.workloadForm1.controls.myClassCtrl.value ?? [];
+      this.workloadForm1.controls.myClassCtrl.setValue([...prevValues, id]);
     });
   }
 
   fillSemesterInput(id: number) {
     this.fetchSemesters(() => {
-      this.workloadForm.controls.semesterCtrl.setValue(id);
+      this.workloadForm1.controls.semesterCtrl.setValue(id);
     });
   }
 
   fillAcademicRankInput(id: number) {
     this.fetchAllAcademicRanks(() => {
-      this.workloadForm.controls.academicRankCtrl.setValue(id);
+      this.workloadForm1.controls.academicRankCtrl.setValue(id);
     });
   }
 
   fillStatusType(id: number) {
     this.fetchStatusTypes(() => {
-      this.workloadForm.controls.statusTypeCtrl.setValue(id);
+      this.workloadForm1.controls.statusTypeCtrl.setValue(id);
     });
   }
-  updateErrorMessage(controlName: keyof typeof this.workloadForm.controls) {
-    const control = this.workloadForm.controls[controlName];
+  updateErrorMessage(controlName: keyof typeof this.workloadForm1.controls) {
+    const control = this.workloadForm1.controls[controlName];
     if (control.errors) {
       if (control.hasError('required')) {
         this.errorMsg.set('Lauks nevar būt tukšs');
