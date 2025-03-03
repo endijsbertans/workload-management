@@ -1,0 +1,29 @@
+<router-outlet></router-outlet>
+<div class="container">
+  <div class="selection-controls">
+    <select [(ngModel)]="selectedTableType" (change)="onTableTypeChange()">
+      @for (type of tableTypes; track type.id) {
+        <option [value]="type.id">{{ type.name }}</option>
+      }
+    </select>
+    <button (click)="createNewObject()" class="create-button">Izveidot jaunu</button>
+  </div>
+
+  <div class="table-container">
+    @if (isLoading()) {
+      <div class="loading">Lādē datus...</div>
+    } @else {
+      <app-object-list
+        [tStaff]="tStaff()"
+        [courses]="courses()"
+        [myClasses]="myClasses()"
+        [academicRanks]="academicRanks()"
+        [statusTypes]="statusTypes()"
+        [semesters]="semesters()"
+        [displayedColumns]="displayedColumns()"
+        [academicRankDetails]="academicRankDetails()"
+        [selectedTableType]="selectedTableType">
+      </app-object-list>
+    }
+  </div>
+</div>

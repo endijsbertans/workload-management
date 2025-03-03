@@ -10,6 +10,7 @@ import {MatSelect} from "@angular/material/select";
 import {FacultyService} from "../../../../services/services/faculty.service";
 import {MyClassRequest} from "../../../../services/models/my-class-request";
 import {MyClassService} from "../../../../services/services/my-class.service";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-new-class',
@@ -25,16 +26,17 @@ import {MyClassService} from "../../../../services/services/my-class.service";
   ],
   templateUrl: './new-class.component.html',
   standalone: true,
-  styleUrl: './new-class.component.scss'
+  styleUrls: ['./new-class.component.scss', '../new-object-style.scss']
 })
 export class NewClassComponent implements OnInit{
   @Output() emitMyClass = new EventEmitter<number>();
   private readonly router = inject(Router);
   private readonly activeRoute = inject(ActivatedRoute);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly _snackBar = inject(MatSnackBar);
   private readonly facultyService = inject(FacultyService)
   private readonly myClassService = inject(MyClassService)
-  private readonly destroyRef = inject(DestroyRef);
-  errorMsg: Array<string> = [];
+
   errorMessage = signal('');
   faculties = signal<FacultyResponse[] | undefined>(undefined);
   myClassRequest?:MyClassRequest;
@@ -70,7 +72,6 @@ export class NewClassComponent implements OnInit{
   })
   ngOnInit(): void {
     this.fetchFaculties();
-
   }
   onSubmit() {
     console.log(this.classForm.controls);
@@ -93,11 +94,10 @@ export class NewClassComponent implements OnInit{
       }).subscribe({
         next: (id) => {
           this.emitMyClass.emit( id );
+          this._snackBar.open("Saglabāts", "Aizvērt", { duration: 5000 });
         },
         error: (err) => {
-          console.log(this.errorMsg);
-          this.errorMsg = err.error.validationErrors;
-
+          this._snackBar.open(err.error.errorMsg, "Aizvērt", { duration: 5000 });
         }
       })
     }

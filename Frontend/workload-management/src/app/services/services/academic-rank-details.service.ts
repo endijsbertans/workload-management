@@ -12,12 +12,12 @@ import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
 import { AcademicRankDetailsResponse } from '../models/academic-rank-details-response';
-import { findAcademicRankById1 } from '../fn/academic-rank-details/find-academic-rank-by-id-1';
-import { FindAcademicRankById1$Params } from '../fn/academic-rank-details/find-academic-rank-by-id-1';
-import { findAllAcademicRank1 } from '../fn/academic-rank-details/find-all-academic-rank-1';
-import { FindAllAcademicRank1$Params } from '../fn/academic-rank-details/find-all-academic-rank-1';
-import { saveAcademicRank1 } from '../fn/academic-rank-details/save-academic-rank-1';
-import { SaveAcademicRank1$Params } from '../fn/academic-rank-details/save-academic-rank-1';
+import { findAcademicRankDetailsById } from '../fn/academic-rank-details/find-academic-rank-details-by-id';
+import { FindAcademicRankDetailsById$Params } from '../fn/academic-rank-details/find-academic-rank-details-by-id';
+import { findAllAcademicRankDetails } from '../fn/academic-rank-details/find-all-academic-rank-details';
+import { FindAllAcademicRankDetails$Params } from '../fn/academic-rank-details/find-all-academic-rank-details';
+import { saveAcademicRankDetails } from '../fn/academic-rank-details/save-academic-rank-details';
+import { SaveAcademicRankDetails$Params } from '../fn/academic-rank-details/save-academic-rank-details';
 
 @Injectable({ providedIn: 'root' })
 export class AcademicRankDetailsService extends BaseService {
@@ -25,77 +25,77 @@ export class AcademicRankDetailsService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `findAllAcademicRank1()` */
-  static readonly FindAllAcademicRank1Path = '/academic-rank/details';
+  /** Path part for operation `findAllAcademicRankDetails()` */
+  static readonly FindAllAcademicRankDetailsPath = '/academic-rank/details';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findAllAcademicRank1()` instead.
+   * To access only the response body, use `findAllAcademicRankDetails()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAllAcademicRank1$Response(params?: FindAllAcademicRank1$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<AcademicRankDetailsResponse>>> {
-    return findAllAcademicRank1(this.http, this.rootUrl, params, context);
+  findAllAcademicRankDetails$Response(params?: FindAllAcademicRankDetails$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<AcademicRankDetailsResponse>>> {
+    return findAllAcademicRankDetails(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findAllAcademicRank1$Response()` instead.
+   * To access the full response (for headers, for example), `findAllAcademicRankDetails$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAllAcademicRank1(params?: FindAllAcademicRank1$Params, context?: HttpContext): Observable<Array<AcademicRankDetailsResponse>> {
-    return this.findAllAcademicRank1$Response(params, context).pipe(
+  findAllAcademicRankDetails(params?: FindAllAcademicRankDetails$Params, context?: HttpContext): Observable<Array<AcademicRankDetailsResponse>> {
+    return this.findAllAcademicRankDetails$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<AcademicRankDetailsResponse>>): Array<AcademicRankDetailsResponse> => r.body)
     );
   }
 
-  /** Path part for operation `saveAcademicRank1()` */
-  static readonly SaveAcademicRank1Path = '/academic-rank/details';
+  /** Path part for operation `saveAcademicRankDetails()` */
+  static readonly SaveAcademicRankDetailsPath = '/academic-rank/details';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `saveAcademicRank1()` instead.
+   * To access only the response body, use `saveAcademicRankDetails()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  saveAcademicRank1$Response(params: SaveAcademicRank1$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
-    return saveAcademicRank1(this.http, this.rootUrl, params, context);
+  saveAcademicRankDetails$Response(params: SaveAcademicRankDetails$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return saveAcademicRankDetails(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `saveAcademicRank1$Response()` instead.
+   * To access the full response (for headers, for example), `saveAcademicRankDetails$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  saveAcademicRank1(params: SaveAcademicRank1$Params, context?: HttpContext): Observable<number> {
-    return this.saveAcademicRank1$Response(params, context).pipe(
+  saveAcademicRankDetails(params: SaveAcademicRankDetails$Params, context?: HttpContext): Observable<number> {
+    return this.saveAcademicRankDetails$Response(params, context).pipe(
       map((r: StrictHttpResponse<number>): number => r.body)
     );
   }
 
-  /** Path part for operation `findAcademicRankById1()` */
-  static readonly FindAcademicRankById1Path = '/academic-rank/details/{academic-rank-id}';
+  /** Path part for operation `findAcademicRankDetailsById()` */
+  static readonly FindAcademicRankDetailsByIdPath = '/academic-rank/details/{academic-rank-id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findAcademicRankById1()` instead.
+   * To access only the response body, use `findAcademicRankDetailsById()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAcademicRankById1$Response(params: FindAcademicRankById1$Params, context?: HttpContext): Observable<StrictHttpResponse<AcademicRankDetailsResponse>> {
-    return findAcademicRankById1(this.http, this.rootUrl, params, context);
+  findAcademicRankDetailsById$Response(params: FindAcademicRankDetailsById$Params, context?: HttpContext): Observable<StrictHttpResponse<AcademicRankDetailsResponse>> {
+    return findAcademicRankDetailsById(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findAcademicRankById1$Response()` instead.
+   * To access the full response (for headers, for example), `findAcademicRankDetailsById$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAcademicRankById1(params: FindAcademicRankById1$Params, context?: HttpContext): Observable<AcademicRankDetailsResponse> {
-    return this.findAcademicRankById1$Response(params, context).pipe(
+  findAcademicRankDetailsById(params: FindAcademicRankDetailsById$Params, context?: HttpContext): Observable<AcademicRankDetailsResponse> {
+    return this.findAcademicRankDetailsById$Response(params, context).pipe(
       map((r: StrictHttpResponse<AcademicRankDetailsResponse>): AcademicRankDetailsResponse => r.body)
     );
   }

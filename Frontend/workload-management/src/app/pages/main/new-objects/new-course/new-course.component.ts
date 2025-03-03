@@ -11,7 +11,8 @@ import {MatOption} from "@angular/material/core";
 import {MatSelect} from "@angular/material/select";
 import {CourseService} from "../../../../services/services";
 import {CourseRequest} from "../../../../services/models/course-request";
-import {TeachingStaffRequest} from "../../../../services/models/teaching-staff-request";
+import {MatSnackBar} from "@angular/material/snack-bar";
+
 
 
 @Component({
@@ -27,7 +28,7 @@ import {TeachingStaffRequest} from "../../../../services/models/teaching-staff-r
   ],
   templateUrl: './new-course.component.html',
   standalone: true,
-  styleUrl: './new-course.component.scss'
+  styleUrls: ['./new-course.component.scss', '../new-object-style.scss']
 })
 export class NewCourseComponent implements OnInit{
   @Output() emitCourse = new EventEmitter<number>();
@@ -36,6 +37,7 @@ export class NewCourseComponent implements OnInit{
   private readonly destroyRef = inject(DestroyRef);
   academicRankService = inject(AcademicRankService)
   courseService = inject(CourseService);
+  private readonly _snackBar = inject(MatSnackBar);
 
   academicRanks = signal<AcademicRankResponse[] | undefined>(undefined);
   errorMessage = signal('');
@@ -69,7 +71,7 @@ export class NewCourseComponent implements OnInit{
         Validators.minLength(3),
         Validators.required],
     }),
-    studyLevel: new FormControl(undefined, {
+    studyLevel: new FormControl<number | undefined>(undefined, {
       validators: [
         Validators.required],
     }),
@@ -106,11 +108,11 @@ export class NewCourseComponent implements OnInit{
       }).subscribe({
         next: (id) => {
           this.emitCourse.emit( id );
+          this._snackBar.open("Saglabāts", "Aizvērt", { duration: 5000 });
         },
         error: (err) => {
-          console.log(this.errorMsg);
-          this.errorMsg = err.error.validationErrors;
-
+          console.log(err.error.validationErrors);
+          this._snackBar.open(err.error.errorMsg, "Aizvērt", { duration: 5000 });
         }
       })
      }

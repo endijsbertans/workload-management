@@ -10,12 +10,12 @@ import { RequestBuilder } from '../../request-builder';
 
 import { AcademicRankDetailsRequest } from '../../models/academic-rank-details-request';
 
-export interface SaveAcademicRank1$Params {
+export interface SaveAcademicRankDetails$Params {
       body: AcademicRankDetailsRequest
 }
 
-export function saveAcademicRank1(http: HttpClient, rootUrl: string, params: SaveAcademicRank1$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
-  const rb = new RequestBuilder(rootUrl, saveAcademicRank1.PATH, 'post');
+export function saveAcademicRankDetails(http: HttpClient, rootUrl: string, params: SaveAcademicRankDetails$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+  const rb = new RequestBuilder(rootUrl, saveAcademicRankDetails.PATH, 'post');
   if (params) {
     rb.body(params.body, 'application/json');
   }
@@ -30,4 +30,4 @@ export function saveAcademicRank1(http: HttpClient, rootUrl: string, params: Sav
   );
 }
 
-saveAcademicRank1.PATH = '/academic-rank/details';
+saveAcademicRankDetails.PATH = '/academic-rank/details';

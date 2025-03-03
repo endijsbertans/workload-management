@@ -1,0 +1,32 @@
+<div class="wrapper">
+  <table>
+    <thead>
+    <tr>
+      @for (column of displayedColumns; track column.name) {
+        <th>{{ column.name }}</th>
+      }
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+      @for (item of getDataItems(); track $index) {
+        <tr>
+          @for (column of displayedColumns; track column.name) {
+            <td>{{ getNestedPropertyForItem(item, column) }}</td>
+          }
+          <td class="actions">
+            <button class="edit-btn">Rediģēt</button>
+            <button class="delete-btn">Dzēst</button>
+          </td>
+        </tr>
+      }
+      @if (!getDataItems().length || !displayedColumns?.length) {
+        <tr>
+          <td class="no-data">
+            Nav datu
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

@@ -4,6 +4,7 @@ import { RegistrationRequest } from "../../../../services/models/registration-re
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatButtonModule } from "@angular/material/button";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-new-user',
@@ -15,12 +16,13 @@ import { MatButtonModule } from "@angular/material/button";
   ],
   templateUrl: './new-user.component.html',
   standalone: true,
-  styleUrls: ['./new-user.component.scss']
+  styleUrl: './new-user.component.scss'
 })
 export class NewUserComponent implements OnInit {
   @Output() emitUserAuthDetails = new EventEmitter<RegistrationRequest>();
   @Output() emitCancel = new EventEmitter();
   private readonly destroyRef = inject(DestroyRef);
+  private readonly _snackBar = inject(MatSnackBar);
   authDetailsRequest: RegistrationRequest = { email: '' };
   errorMessage = signal('');
   errorMsg: Array<string> = [];
@@ -49,10 +51,12 @@ export class NewUserComponent implements OnInit {
     if (emailValue) {
       this.authDetailsRequest.email = emailValue;
       this.emitUserAuthDetails.emit({ ...this.authDetailsRequest });
+      this._snackBar.open("Saglabāts", "Aizvērt", { duration: 5000 });
     }
   }
 
   onCancel() {
     this.emitCancel.emit();
+    this._snackBar.open("Atcelts", "Aizvērt", { duration: 5000 });
   }
 }

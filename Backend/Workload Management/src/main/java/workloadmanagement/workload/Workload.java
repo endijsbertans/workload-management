@@ -3,6 +3,8 @@ package workloadmanagement.workload;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import workloadmanagement.academicrank.AcademicRank;
 import workloadmanagement.academicrank.academicrankDetails.AcademicRankDetails;
 import workloadmanagement.semester.Semester;
@@ -83,23 +85,37 @@ public class Workload {
     public double getMonthSum(){ return round(workingMonths + vacationMonths,2);}
     @Transient
     public double getCreditPointsPerHour(){
-        return round(course.getCreditPoints()/contactHours,2);
+        if(contactHours > 0 && course.getCreditPoints() > 0)
+            return round(course.getCreditPoints()/contactHours,2);
+        else
+            return 0;
     }
     @Transient
     public double getCreditPointsPerGroup(){
-        return round(course.getCreditPoints()/groupAmount,2);
+        if(course.getCreditPoints() > 0 && groupAmount > 0)
+            return round(course.getCreditPoints()/groupAmount,2);
+        else
+            return 0;
     }
     @Transient
     public double getSalaryPerMonth(){
-        return round(academicRankDetails.getSalary()/(workingMonths+vacationMonths),2);
+        if(academicRankDetails.getSalary() > 0 && (workingMonths+vacationMonths) > 0)
+            return round(academicRankDetails.getSalary()/(workingMonths+vacationMonths),2);
+        else
+            return 0;
     }
     @Transient
     public double getCpProportionOnFullTime(){
-        return round(course.getCreditPoints()/getCpForFullTime(),2);
+        if(course.getCreditPoints() > 0 && getCpForFullTime() > 0)
+            return round(course.getCreditPoints()/getCpForFullTime(),2);
+        else
+            return 0;
     }
+    @Transient
     public double getCpForFullTime(){
             return round(academicRankDetails.getCpForFullTime(),2);
     }
+
     public static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
         BigDecimal bd = BigDecimal.valueOf(value);

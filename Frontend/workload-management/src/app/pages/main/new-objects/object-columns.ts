@@ -8,43 +8,43 @@ export interface ColumnNames {
 export const ColumnsForTeacherResponse: ColumnNames[] = [
   {
     name: 'Vārds',
-    pathTo: 'teachingStaff.name',
+    pathTo: 'name',
     collection: 'ColumnsForTeacher',
     sortable: true
   },
   {
     name: 'Uzvārds',
-    pathTo: 'teachingStaff.surname',
+    pathTo: 'surname',
     collection: 'ColumnsForTeacher',
     sortable: true
   },
   {
     name: 'Amata nosaukums',
-    pathTo: 'teachingStaff.positionTitle',
+    pathTo: 'positionTitle',
     collection: 'ColumnsForTeacher',
     sortable: true
   },
   {
     name: 'Pasniedzēja fakultāte',
-    pathTo: 'teachingStaff.staffFaculty.facultyName',
+    pathTo: 'staffFaculty.facultyName',
     collection: 'ColumnsForTeacher',
     sortable: true
   },
   {
     name: 'Amata grupa',
-    pathTo: 'teachingStaff.staffAcademicRank.abbreviation',
+    pathTo: 'staffAcademicRank.abbreviation',
     collection: 'ColumnsForTeacher',
     sortable: true
   },
   {
     name: 'Ēpasts',
-    pathTo: 'teachingStaff.user.email',
+    pathTo: 'user.email',
     collection: 'ColumnsForTeacher',
     sortable: true
   },
   {
     name: 'Profils apstiprināts',
-    pathTo: 'teachingStaff.user.enabled',
+    pathTo: 'user.enabled',
     collection: 'ColumnsForTeacher',
     sortable: true
   }
@@ -53,43 +53,43 @@ export const ColumnsForTeacherResponse: ColumnNames[] = [
 export const ColumnsForCourseResponse: ColumnNames[] = [
   {
     name: 'Studiju līmenis',
-    pathTo: 'course.studyLevel',
+    pathTo: 'studyLevel',
     collection: 'ColumnsForCourse',
     sortable: true
   }
   , {
     name: 'Priekšmeta nosaukums',
-    pathTo: 'course.courseName',
+    pathTo: 'courseName',
     collection: 'ColumnsForCourse',
     sortable: true
   }
   , {
     name: 'Programmas Daļa',
-    pathTo: 'course.section',
+    pathTo: 'section',
     collection: 'ColumnsForCourse',
     sortable: true
   }
   , {
     name: 'Reģistrācija',
-    pathTo: 'course.registrationType',
+    pathTo: 'registrationType',
     collection: 'ColumnsForCourse',
     sortable: true
   }
   , {
     name: 'Lais kods',
-    pathTo: 'course.courseCode',
+    pathTo: 'courseCode',
     collection: 'ColumnsForCourse',
     sortable: true
   },
   {
     name: 'Priekšmeta KP',
-    pathTo: 'course.creditPoints',
+    pathTo: 'creditPoints',
     collection: 'ColumnsForCourse',
     sortable: true
   },
   {
     name: 'Nepieciešamais amats',
-    pathTo: 'course.necessaryAcademicRank.rankName',
+    pathTo: 'necessaryAcademicRank.rankName',
     collection: 'ColumnsForCourse',
     sortable: true
   }
@@ -117,48 +117,74 @@ export const ColumnsForClassResponse: ColumnNames[] = [
 export const ColumnsForAcademicRankResponse: ColumnNames[] = [
   {
     name: 'Amats',
-    pathTo: 'academicRank.rankName',
-    collection: 'ColumnsForAcademicRankResponse',
+    pathTo: 'rankName',
+    collection: 'columnsForAcademicRankResponse',
     sortable: true
   }
   , {
-    name: 'KP pilnai slodzei',
-    pathTo: 'academicRank.cpForFullTime',
-    collection: 'ColumnsForAcademicRankResponse',
+    name: 'Abreviatūra',
+    pathTo: 'abbreviation',
+    collection: 'columnsForAcademicRankResponse',
+    sortable: true
+  }
+];
+export const ColumnsForAcademicRankDetailsResponse: ColumnNames[] = [
+  {
+    name: 'Kredīta punkti pilnai slodzei',
+    pathTo: 'cpForFullTime',
+    collection: 'columnsForAcademicRankDetailsResponse',
+    sortable: true
+  },
+  {
+    name: 'kontakstundas pilnai slodzei',
+    pathTo: 'contactHoursForFullTime',
+    collection: 'columnsForAcademicRankDetailsResponse',
+    sortable: true
+  },
+  {
+    name: 'semestris',
+    pathTo: 'semester.semesterName',
+    collection: 'columnsForAcademicRankDetailsResponse',
+    sortable: true
+  },
+  {
+    name: 'semestra gads',
+    pathTo: 'semester.semesterYear',
+    collection: 'columnsForAcademicRankDetailsResponse',
+    sortable: true
+  }
+  ,{
+    name: 'Amats',
+    pathTo: 'academicRank.rankName',
+    collection: 'columnsForAcademicRankDetailsResponse',
     sortable: true
   }
   , {
     name: 'Abreviatūra',
     pathTo: 'academicRank.abbreviation',
-    collection: 'ColumnsForAcademicRankResponse',
-    sortable: true
-  }
-  , {
-    name: 'Alga',
-    pathTo: 'academicRank.salary',
-    collection: 'CColumnsForAcademicRankResponse',
+    collection: 'columnsForAcademicRankDetailsResponse',
     sortable: true
   }
 ];
 export const ColumnsForStatusTypeResponse: ColumnNames[] = [
   {
     name: 'Statuss',
-    pathTo: 'statusType.statusTypeName',
-    collection: 'ColumnsForStatusType',
+    pathTo: 'statusTypeName',
+    collection: 'columnsForStatusType',
     sortable: true
   }
 ];
 export const ColumnsForSemesterResponse: ColumnNames[] = [
   {
     name: 'semestris',
-    pathTo: 'semester.semesterName',
-    collection: 'ColumnsForSemester',
+    pathTo: 'semesterName',
+    collection: 'columnsForSemester',
     sortable: true
   },
   {
     name: 'gads',
-    pathTo: 'semester.year',
-    collection: 'ColumnsForSemester',
+    pathTo: 'year',
+    collection: 'columnsForSemester',
     sortable: true
   },
 ]

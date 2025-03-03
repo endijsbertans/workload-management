@@ -10,11 +10,11 @@ import { RequestBuilder } from '../../request-builder';
 
 import { AcademicRankDetailsResponse } from '../../models/academic-rank-details-response';
 
-export interface FindAllAcademicRank1$Params {
+export interface FindAllAcademicRankDetails$Params {
 }
 
-export function findAllAcademicRank1(http: HttpClient, rootUrl: string, params?: FindAllAcademicRank1$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<AcademicRankDetailsResponse>>> {
-  const rb = new RequestBuilder(rootUrl, findAllAcademicRank1.PATH, 'get');
+export function findAllAcademicRankDetails(http: HttpClient, rootUrl: string, params?: FindAllAcademicRankDetails$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<AcademicRankDetailsResponse>>> {
+  const rb = new RequestBuilder(rootUrl, findAllAcademicRankDetails.PATH, 'get');
   if (params) {
   }
 
@@ -28,4 +28,4 @@ export function findAllAcademicRank1(http: HttpClient, rootUrl: string, params?:
   );
 }
 
-findAllAcademicRank1.PATH = '/academic-rank/details';
+findAllAcademicRankDetails.PATH = '/academic-rank/details';

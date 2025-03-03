@@ -3,7 +3,10 @@ package workloadmanagement.academicrank.academicrankDetails;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import workloadmanagement.academicrank.AcademicRank;
+import workloadmanagement.academicrank.AcademicRankService;
 import workloadmanagement.semester.Semester;
+import workloadmanagement.semester.SemesterService;
 
 import java.util.List;
 
@@ -12,8 +15,12 @@ import java.util.List;
 public class AcademicRankDetailsService {
     private final AcademicRankDetailsMapper academicRankDetailsMapper;
     private final IAcademicRankDetailsRepo academicRankDetailsRepo;
+    private final AcademicRankService academicRankService;
+    private final SemesterService semesterService;
     public Integer save(AcademicRankDetailsRequest request) {
-        AcademicRankDetails academicRankDetails = academicRankDetailsMapper.toAcademicRankDetails(request);
+        Semester semester = semesterService.findSemesterFromResponseId(request.semesterId());
+        AcademicRank staffAcademicRank = academicRankService.findAcademicRankFromResponseId(request.academicRankId());
+        AcademicRankDetails academicRankDetails = academicRankDetailsMapper.toAcademicRankDetails(request, staffAcademicRank, semester);
         return academicRankDetailsRepo.save(academicRankDetails).getAcademicRankDetailsId();
     }
 
@@ -23,13 +30,13 @@ public class AcademicRankDetailsService {
                         "Academic Rank with ID: " + academicRankId + " not found for year: " + semester.getSemesterYear()));
     }
 
-    public AcademicRankDetailsResponse findById(Integer academicRankDetailsId) {
+    public AcademicRankDetailsResponse findAcademicRankDetailsById(Integer academicRankDetailsId) {
         return academicRankDetailsRepo.findById(academicRankDetailsId)
                 .map(academicRankDetailsMapper::toAcademicRankDetailsResponse)
                 .orElseThrow(() -> new RuntimeException("Academic Rank with id " + academicRankDetailsId + " not found."));
     }
 
-    public List<AcademicRankDetailsResponse> findAllAcademicRank() {
+    public List<AcademicRankDetailsResponse> findAllAcademicRankDetails() {
         List<AcademicRankDetails> academicRanks = (List<AcademicRankDetails>) academicRankDetailsRepo.findAll();
         return academicRanks.stream()
                 .map(academicRankDetailsMapper::toAcademicRankDetailsResponse)

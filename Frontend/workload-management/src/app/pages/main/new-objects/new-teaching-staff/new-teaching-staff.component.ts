@@ -10,11 +10,12 @@ import {MatInputModule} from "@angular/material/input";
 import {MatOption} from "@angular/material/core";
 import {MatSelect} from "@angular/material/select";
 import {MatButton} from "@angular/material/button";
-import {NewFacultyComponent} from "../new-faculty/new-faculty.component";
+
 import {NewUserComponent} from "../new-user/new-user.component";
 import {RegistrationRequest} from "../../../../services/models/registration-request";
 import {TeachingStaffRequest} from "../../../../services/models/teaching-staff-request";
 import {AcademicRankResponse} from "../../../../services/models/academic-rank-response";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 
 
@@ -32,16 +33,17 @@ import {AcademicRankResponse} from "../../../../services/models/academic-rank-re
   ],
   templateUrl: './new-teaching-staff.component.html',
   standalone: true,
-  styleUrl: './new-teaching-staff.component.scss'
+  styleUrls: ['./new-teaching-staff.component.scss', '../new-object-style.scss']
 })
 export class NewTeachingStaffComponent implements OnInit {
   @Output() emitTeachingStaff = new EventEmitter<number>();
   private readonly destroyRef = inject(DestroyRef);
   private readonly router = inject(Router);
   private readonly activeRoute = inject(ActivatedRoute);
-  private readonly teachingStaffService = inject(TeachingStaffService)
-  private readonly facultyService = inject(FacultyService)
-  private readonly academicRankService = inject(AcademicRankService)
+  private readonly teachingStaffService = inject(TeachingStaffService);
+  private readonly facultyService = inject(FacultyService);
+  private readonly academicRankService = inject(AcademicRankService);
+  private readonly _snackBar = inject(MatSnackBar);
 
   faculties = signal<FacultyResponse[] | undefined>(undefined);
   academicRanks = signal<AcademicRankResponse[] | undefined>(undefined);
@@ -106,9 +108,12 @@ export class NewTeachingStaffComponent implements OnInit {
         }).subscribe({
           next: (id) => {
             this.emitTeachingStaff.emit( id );
+            this._snackBar.open("Saglabāts", "Aizvērt", { duration: 5000 });
+
           },
           error: (err) => {
             console.log(err);
+            this._snackBar.open(err.error.errorMsg, "Aizvērt", { duration: 5000 });
           }
         })
       }

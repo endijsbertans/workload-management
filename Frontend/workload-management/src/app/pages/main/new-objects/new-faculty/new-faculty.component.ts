@@ -5,6 +5,7 @@ import {MatInput} from "@angular/material/input";
 import {MatButton} from "@angular/material/button";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {FacultyRequest} from "../../../../services/models/faculty-request";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-new-faculty',
@@ -16,13 +17,14 @@ import {FacultyRequest} from "../../../../services/models/faculty-request";
   ],
   templateUrl: './new-faculty.component.html',
   standalone: true,
-  styleUrl: './new-faculty.component.scss'
+  styleUrls: ['./new-faculty.component.scss', '../new-object-style.scss']
 })
 export class NewFacultyComponent {
   @Output() emitFaculty = new EventEmitter<FacultyRequest>();
 
   private readonly destroyRef = inject(DestroyRef);
-  private readonly facultyService = inject(FacultyService)
+  private readonly facultyService = inject(FacultyService);
+  private readonly _snackBar = inject(MatSnackBar);
   facultyRequest: FacultyRequest = {facultyName: '', facultyFullName: ''};
   errorMessage = signal('');
   errorMsg: Array<string> = [];
@@ -49,10 +51,11 @@ export class NewFacultyComponent {
       }).subscribe({
         next: () => {
           this.emitFaculty.emit({ ...this.facultyRequest });
+          this._snackBar.open("Saglabāts", "Aizvērt", { duration: 5000 });
         },
         error: (err) => {
           console.log(this.errorMsg);
-          this.errorMsg = err.error.validationErrors;
+          this._snackBar.open(err.error.errorMsg, "Aizvērt", { duration: 5000 });
 
         }
       })

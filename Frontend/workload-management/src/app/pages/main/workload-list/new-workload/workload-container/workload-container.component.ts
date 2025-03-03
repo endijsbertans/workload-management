@@ -41,7 +41,7 @@ export class WorkloadContainerComponent implements OnInit{
             const id = idParam ? Number(idParam) : NaN;
             if (isNaN(id) || id <= 0) {
               this.router.navigate(['/main/workload'], { replaceUrl: true });
-              this._snackBar.open("Invalid id", "Close", { duration: 5000 });
+              this._snackBar.open("Nepareizs id", "Close", { duration: 5000 });
               return EMPTY;
             }
             this.currentWorkloadId = id;
@@ -59,7 +59,7 @@ export class WorkloadContainerComponent implements OnInit{
       },
       error: (err) => {
         console.log(err);
-        this._snackBar.open(err.error.errorMsg, "Close", { duration: 5000 });
+        this._snackBar.open(err.error.errorMsg, "Aizvērt", { duration: 5000 });
         this.router.navigate(['/main/workload'], { replaceUrl: true });
       }
     });

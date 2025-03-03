@@ -14,6 +14,7 @@ public class AcademicRankMapper {
         return AcademicRankResponse.builder()
                 .academicRankId(academicRank.getAcademicRankId())
                 .rankName(academicRank.getRankName())
+                .abbreviation(academicRank.getAbbreviation())
                 .build();
     }
 }

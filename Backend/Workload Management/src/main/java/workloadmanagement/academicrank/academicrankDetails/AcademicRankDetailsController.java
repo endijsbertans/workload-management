@@ -15,19 +15,19 @@ import java.util.List;
 public class AcademicRankDetailsController {
     private final AcademicRankDetailsService academicRankDetailsService;
     @PostMapping
-    public ResponseEntity<Integer> saveAcademicRank(
+    public ResponseEntity<Integer> saveAcademicRankDetails(
             @Valid @RequestBody AcademicRankDetailsRequest request
     ){
         return ResponseEntity.ok(academicRankDetailsService.save(request));
     }
     @GetMapping("{academic-rank-id}")
-    public ResponseEntity<AcademicRankDetailsResponse> findAcademicRankById(
+    public ResponseEntity<AcademicRankDetailsResponse> findAcademicRankDetailsById(
             @PathVariable("academic-rank-id") Integer academicRankId
     ){
-        return ResponseEntity.ok(academicRankDetailsService.findById(academicRankId));
+        return ResponseEntity.ok(academicRankDetailsService.findAcademicRankDetailsById(academicRankId));
     }
     @GetMapping
-    public ResponseEntity<List<AcademicRankDetailsResponse>> findAllAcademicRank(){
-        return ResponseEntity.ok(academicRankDetailsService.findAllAcademicRank());
+    public ResponseEntity<List<AcademicRankDetailsResponse>> findAllAcademicRankDetails(){
+        return ResponseEntity.ok(academicRankDetailsService.findAllAcademicRankDetails());
     }
 }

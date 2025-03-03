@@ -10,6 +10,9 @@ import {
   WorkloadContainerComponent
 } from "./pages/main/workload-list/new-workload/workload-container/workload-container.component";
 import {authGuard} from "./services/guard/auth.guard";
+import {ObjectContainerComponent} from "./pages/main/object-container/object-container.component";
+import {NewFacultyComponent} from "./pages/main/new-objects/new-faculty/new-faculty.component";
+import {NewAcademicRankComponent} from "./pages/main/new-objects/new-academic-rank/new-academic-rank.component";
 
 
 export const routes: Routes = [
@@ -52,9 +55,9 @@ export const routes: Routes = [
           path: 'new-workload',
           component: WorkloadContainerComponent,
           children: [{
-            path: 'new-teaching-staff',
-            component: NewTeachingStaffComponent
-          },
+              path: 'new-teaching-staff',
+              component: NewTeachingStaffComponent
+            },
             {
               path: 'new-course',
               component: NewCourseComponent
@@ -63,8 +66,33 @@ export const routes: Routes = [
               path: 'new-class',
               component: NewClassComponent
             },
-          ]
-        }]
+          ],
+        }],
+    }, {
+      path: 'objects',
+      component: ObjectContainerComponent,
+       children: [
+         {
+         path: 'new-teaching-staff',
+         component: NewTeachingStaffComponent
+        },
+         {
+           path: 'new-course',
+           component: NewCourseComponent
+         },
+         {
+           path: 'new-class',
+           component: NewClassComponent
+         },
+         {
+           path: 'new-faculty',
+           component: NewFacultyComponent
+         },
+         {
+           path: 'new-academic-rank',
+           component: NewAcademicRankComponent
+         }
+       ],
     }
     ]
   }
