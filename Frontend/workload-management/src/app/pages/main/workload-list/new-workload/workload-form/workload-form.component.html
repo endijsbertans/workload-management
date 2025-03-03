@@ -44,8 +44,8 @@
     <div class="inputFieldFlex">
       <mat-form-field>
         <mat-select [formControl]="workloadForm.controls.semesterCtrl" #singleSelect>
-          @if (courses()) {
-            @if (courses()?.length === 0) {
+          @if (semesters()) {
+            @if (semesters()?.length === 0) {
               <mat-option>
                 Nav Semestri :(
               </mat-option>
@@ -58,7 +58,7 @@
             }
           }
         </mat-select>
-        @if (!tStaff() && editMode === undefined) {
+        @if (!semesters() && editMode === undefined) {
           <mat-label>
             <em>Lādē datus...</em>
           </mat-label>
@@ -90,7 +90,7 @@
             }
           }
         </mat-select>
-        @if (!tStaff() && editMode === undefined) {
+        @if (!courses() && editMode === undefined) {
           <mat-label>
             <em>Lādē datus...</em>
           </mat-label>
@@ -124,7 +124,7 @@
           }
 
         </mat-select>
-        @if (!tStaff() && editMode === undefined) {
+        @if (!myClasses() && editMode === undefined) {
           <mat-label>
             <em>Lādē datus...</em>
           </mat-label>
@@ -151,7 +151,7 @@
             }
           }
         </mat-select>
-        @if (!tStaff() && editMode === undefined) {
+        @if (!academicRanks() && editMode === undefined) {
           <mat-label>
             <em>Lādē datus...</em>
           </mat-label>
@@ -177,7 +177,7 @@
             }
           }
         </mat-select>
-        @if (!tStaff() && editMode === undefined) {
+        @if (!statusTypes() && editMode === undefined) {
           <mat-label>
             <em>Lādē datus...</em>
           </mat-label>
@@ -209,7 +209,7 @@
             }
           }
         </mat-select>
-        @if (!tStaff() && editMode === undefined) {
+        @if (!myClasses() && editMode === undefined) {
           <mat-label>
             <em>Lādē datus...</em>
           </mat-label>

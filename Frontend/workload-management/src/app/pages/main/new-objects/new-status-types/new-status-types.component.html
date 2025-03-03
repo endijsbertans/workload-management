@@ -1,0 +1,25 @@
+<div class="backdrop"></div>
+<dialog open>
+  <form [formGroup]="statusTypeForm" (ngSubmit)="onSubmit()">
+    <h2>Pievienot jaunu klasi</h2>
+
+    <mat-form-field appearance="outline">
+      @if (statusTypeForm.controls.statusTypeName.invalid) {
+        <mat-error>{{ errorMessage() }}</mat-error>
+      }
+      <mat-label>Ievadi statusa nosaukumu</mat-label>
+      <input
+        matInput
+        placeholder="3ITB"
+        [formControl]="statusTypeForm.controls.statusTypeName"
+        (blur)="updateErrorMessage('statusTypeName')"
+        required
+      />
+    </mat-form-field>
+
+    <div class="action-wrapper">
+      <button mat-raised-button type="button" routerLink="..">Cancel</button>
+      <button mat-raised-button type="Submit" [disabled]="statusTypeForm.invalid">Create</button>
+    </div>
+  </form>
+</dialog>

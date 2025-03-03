@@ -1,0 +1,35 @@
+<div class="backdrop"></div>
+<dialog open>
+  <form [formGroup]="semesterForm" (ngSubmit)="onSubmit()">
+    <h2>Pievienot jaunu klasi</h2>
+    <mat-form-field class="input-flex">
+      <mat-select required [formControl]="semesterForm.controls.semesterName">
+              <mat-option value="rudens">
+                pavasaris
+              </mat-option>
+              <mat-option value="pavasaris">
+                rudens
+              </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      @if (semesterForm.controls.year.invalid) {
+        <mat-error>{{ errorMessage() }}</mat-error>
+      }
+      <mat-label>Ievadi gadu</mat-label>
+      <input
+        type="number"
+        matInput
+        placeholder="2025"
+        [formControl]="semesterForm.controls.year"
+        (blur)="updateErrorMessage('year')"
+        required
+      />
+    </mat-form-field>
+
+    <div class="action-wrapper">
+      <button mat-raised-button type="button" routerLink="..">Cancel</button>
+      <button mat-raised-button type="Submit" [disabled]="semesterForm.invalid">Create</button>
+    </div>
+  </form>
+</dialog>

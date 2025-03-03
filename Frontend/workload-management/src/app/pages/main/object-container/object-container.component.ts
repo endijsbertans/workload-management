@@ -135,13 +135,13 @@ export class ObjectContainerComponent implements OnInit {
         this.router.navigate(['/main/objects/new-academic-rank']);
         break;
       case 'academicRankDetails':
-        this.router.navigate(['/main/objects/new/academic-rank-details']);
+        this.router.navigate(['/main/objects/new-academic-rank-details']);
         break;
       case 'statusTypes':
-        this.router.navigate(['/main/objects/new/status-type']);
+        this.router.navigate(['/main/objects/new-status-type']);
         break;
       case 'semesters':
-        this.router.navigate(['/main/objects/new/semester']);
+        this.router.navigate(['/main/objects/new-semester']);
         break;
     }
   }

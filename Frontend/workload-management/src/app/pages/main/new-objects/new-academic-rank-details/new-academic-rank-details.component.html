@@ -1,0 +1,105 @@
+<div class="backdrop"></div>
+<dialog open>
+  <form [formGroup]="academicRankDetailsForm" (ngSubmit)="onSubmit()">
+    <h2>Pievienot amata detaļas</h2>
+
+    <mat-form-field appearance="outline">
+      @if (academicRankDetailsForm.controls.cpForFullTime.invalid) {
+        <mat-error>{{ errorMessage() }}</mat-error>
+      }
+      <mat-label>Ievadi nepieciešamos KP pilnai slodzei</mat-label>
+      <input
+        type="number"
+        matInput
+        placeholder="6"
+        [formControl]="academicRankDetailsForm.controls.cpForFullTime"
+        (blur)="updateErrorMessage('cpForFullTime')"
+        required
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      @if (academicRankDetailsForm.controls.salary.invalid) {
+        <mat-error>{{ errorMessage() }}</mat-error>
+      }
+      <mat-label>Ievadi algu</mat-label>
+      <input
+        type="number"
+        matInput
+        placeholder="1"
+        [formControl]="academicRankDetailsForm.controls.salary"
+        (blur)="updateErrorMessage('salary')"
+        required
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      @if (academicRankDetailsForm.controls.contactHoursForFullTime.invalid) {
+        <mat-error>{{ errorMessage() }}</mat-error>
+      }
+      <mat-label>Ievadi kontaktstundu daudzumu</mat-label>
+      <input
+        type="number"
+        matInput
+        placeholder="27"
+        [formControl]="academicRankDetailsForm.controls.contactHoursForFullTime"
+        (blur)="updateErrorMessage('contactHoursForFullTime')"
+        required
+      />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-select [formControl]="academicRankDetailsForm.controls.semesterId" #singleSelect>
+        @if (semesters()) {
+          @if (semesters()?.length === 0) {
+            <mat-option>
+              Nav Semestri :(
+            </mat-option>
+          } @else {
+            @for (semester of semesters(); track semester.semesterId) {
+              <mat-option [value]="semester.semesterId">
+                {{ semester.semesterName }} {{ semester.year }}
+              </mat-option>
+            }
+          }
+        }
+      </mat-select>
+      @if (!semesters()) {
+        <mat-label>
+          <em>Lādē datus...</em>
+        </mat-label>
+      } @else {
+        <mat-label>Izvēlies semestri!</mat-label>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-select [formControl]="academicRankDetailsForm.controls.academicRankId">
+        @if (academicRanks()) {
+          @if (academicRanks()?.length === 0) {
+            <mat-option>
+              Izveidojiet amatus!
+            </mat-option>
+          } @else {
+            @for (rank of academicRanks(); track rank.academicRankId) {
+              <mat-option [value]="rank.academicRankId">
+                {{ rank.rankName }}
+              </mat-option>
+            }
+          }
+        }
+      </mat-select>
+      @if (!academicRanks()) {
+        <mat-label>
+          <em>Lādē datus...</em>
+        </mat-label>
+      } @else {
+        <mat-label>Izvēlies amatu</mat-label>
+      }
+    </mat-form-field>
+    <div class="action-wrapper">
+      <button mat-raised-button type="button" routerLink="..">Cancel</button>
+      <button mat-raised-button type="Submit" [disabled]="academicRankDetailsForm.invalid">Create</button>
+    </div>
+  </form>
+</dialog>

@@ -13,6 +13,11 @@ import {authGuard} from "./services/guard/auth.guard";
 import {ObjectContainerComponent} from "./pages/main/object-container/object-container.component";
 import {NewFacultyComponent} from "./pages/main/new-objects/new-faculty/new-faculty.component";
 import {NewAcademicRankComponent} from "./pages/main/new-objects/new-academic-rank/new-academic-rank.component";
+import {
+  NewAcademicRankDetailsComponent
+} from "./pages/main/new-objects/new-academic-rank-details/new-academic-rank-details.component";
+import {NewStatusTypesComponent} from "./pages/main/new-objects/new-status-types/new-status-types.component";
+import {NewSemesterComponent} from "./pages/main/new-objects/new-semester/new-semester.component";
 
 
 export const routes: Routes = [
@@ -91,6 +96,18 @@ export const routes: Routes = [
          {
            path: 'new-academic-rank',
            component: NewAcademicRankComponent
+         },
+         {
+           path: 'new-academic-rank-details',
+           component: NewAcademicRankDetailsComponent
+         },
+         {
+           path: 'new-status-type',
+           component: NewStatusTypesComponent
+         },
+         {
+           path: 'new-semester',
+           component: NewSemesterComponent
          }
        ],
     }
