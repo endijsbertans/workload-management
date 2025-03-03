@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import {Component, inject} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import {HttpClient, HttpClientModule} from "@angular/common/http";
-import {LoginComponent} from "./pages/auth/auth-wrapper/login/login.component";
+import {TokenExpirationService} from "./services/guard/token-expiration.service";
+
+
 
 @Component({
   selector: 'app-root',
@@ -11,6 +12,10 @@ import {LoginComponent} from "./pages/auth/auth-wrapper/login/login.component";
   styleUrl: './app.component.scss',
 
 })
-export class AppComponent {
-  title = 'workload-management';
+export class AppComponent{
+  private readonly tokenExpirationService = inject(TokenExpirationService);
+
+  ngOnInit() {
+    this.tokenExpirationService.startExpirationCheck();
+  }
 }

@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {RouterLink} from "@angular/router";
 import {MatIcon} from "@angular/material/icon";
 import {MatFabAnchor} from "@angular/material/button";
+import {TokenService} from "../../../services/token/token.service";
 
 @Component({
   selector: 'app-navigation',
@@ -15,5 +16,13 @@ import {MatFabAnchor} from "@angular/material/button";
   styleUrl: './navigation.component.scss'
 })
 export class NavigationComponent {
-
+  private readonly tokenService = inject(TokenService);
+  authDetails = this.tokenService.getAuthDetails();
+  constructor() {
+    console.log("AUTH: " + this.authDetails.fullName + " " + this.authDetails.authorities);
+  }
+  logout(){
+    localStorage.removeItem('token');
+    window.location.reload();
+  }
 }

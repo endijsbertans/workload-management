@@ -59,13 +59,6 @@
     </div>
   }
 </div>
-@if (!clickedWorkloadRow) {
-  <div>Clicked rows will be logged here</div>
-}
-
-<ul>
-    <li>Clicked on {{clickedWorkloadRow?.comments}}</li>
-</ul>
 <mat-paginator
   [length]="length"
   [pageSize]="pageSize"

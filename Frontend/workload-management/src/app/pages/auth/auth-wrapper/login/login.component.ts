@@ -9,6 +9,7 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatIcon} from "@angular/material/icon";
 import {MatFabButton, MatIconButton} from "@angular/material/button";
+import {TokenExpirationService} from "../../../../services/guard/token-expiration.service";
 
 let initialEmailValue = '';
 const savedForm = window.localStorage.getItem('saved-login-form');
@@ -34,6 +35,11 @@ if (savedForm) {
 
 })
 export class LoginComponent {
+  private readonly tokenExpirationService = inject(TokenExpirationService);
+
+
+
+
   private readonly router =  inject(Router);
   private readonly authService =  inject(AuthenticationService);
   private readonly tokenService = inject(TokenService);
@@ -90,7 +96,10 @@ export class LoginComponent {
       next: (res) =>{
         this.tokenService.token = res.token as string;
         console.log(res.token);
-        this.router.navigate(['main'])
+        this.router.navigate(['main']);
+      },
+      complete: () => {
+        this.tokenExpirationService.startExpirationCheck();
       },
       error:(err) => {
         console.log(err);

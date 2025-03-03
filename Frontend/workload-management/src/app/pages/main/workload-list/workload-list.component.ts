@@ -1,6 +1,6 @@
 import {Component, computed, inject, OnInit, signal, ViewChild} from '@angular/core';
 import {WorkloadService} from "../../../services/services";
-import {Router, RouterLink, RouterOutlet} from "@angular/router";
+import {NavigationEnd, Router, RouterLink, RouterOutlet} from "@angular/router";
 import {MatTableDataSource, MatTableModule} from "@angular/material/table";
 import {WorkloadResponse} from "../../../services/models/workload-response";
 import {MatSort, MatSortModule, Sort} from "@angular/material/sort";
@@ -60,6 +60,11 @@ export class WorkloadListComponent implements OnInit {
     this.dataSource.sort = this.sort;
     this.findAllWorkloads();
     this.setupFiltering();
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.findAllWorkloads();
+      }
+    });
   }
   private findAllWorkloads() {
     this.workloadService.findAllWorkloads({

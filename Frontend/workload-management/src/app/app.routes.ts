@@ -9,6 +9,7 @@ import {NewClassComponent} from "./pages/main/new-objects/new-class/new-class.co
 import {
   WorkloadContainerComponent
 } from "./pages/main/workload-list/new-workload/workload-container/workload-container.component";
+import {authGuard} from "./services/guard/auth.guard";
 
 
 export const routes: Routes = [
@@ -27,6 +28,7 @@ export const routes: Routes = [
   {
     path: 'main',
     loadComponent: () => import('./pages/main/main.component').then(m => m.MainComponent),
+    canActivate: [authGuard],
     children: [{
       path: 'workload',
       component: WorkloadListComponent,
