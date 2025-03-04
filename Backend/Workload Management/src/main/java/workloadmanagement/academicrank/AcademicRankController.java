@@ -1,6 +1,7 @@
 package workloadmanagement.academicrank;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Tag(name = "AcademicRank")
 public class AcademicRankController {
+
     private final AcademicRankService academicRankService;
     @PostMapping
     public ResponseEntity<Integer> saveAcademicRank(

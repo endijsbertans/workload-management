@@ -18,17 +18,24 @@ public class WorkloadMapper {
     @Autowired
     private MyClassMapper myClassMapper;
     public Workload toWorkload(
+            double programCoefficient,
+            double totalCreditPoints,
+            double cpProportionOnFullTime,
+            double salaryPerMonth,
+            double expectedSalary,
             WorkloadRequest request,
             TeachingStaff teachingStaff,
-            StatusType statusType,
             Semester semester,
             Course course,
             AcademicRankDetails academicRankDetails,
             List<MyClass> myClasses,
-            MyClass classForSemester) {
+            MyClass classForSemester
+            ) {
         return Workload.builder()
+                .programCoefficient(programCoefficient)
                 .teachingStaff(teachingStaff)
-                .statusType(statusType)
+                .cpProportionOnFullTime(cpProportionOnFullTime)
+                .salaryPerMonth(salaryPerMonth)
                 .semester(semester)
                 .comments(request.comments())
                 .includeInBudget(request.includeInBudget())
@@ -36,7 +43,7 @@ public class WorkloadMapper {
                 .industryCoefficient(request.industryCoefficient())
                 .vacationMonths(request.vacationMonths())
                 .workingMonths(request.workingMonths())
-                .expectedSalary(request.expectedSalary())
+                .expectedSalary(expectedSalary)
                 .groupAmount(request.groupAmount())
                 .contactHours(request.contactHours())
                 .program(request.program())
@@ -44,34 +51,37 @@ public class WorkloadMapper {
                 .course(course)
                 .academicRankDetails(academicRankDetails)
                 .myClasses(myClasses)
+                .creditPointsPerGroup(request.creditPointsPerGroup())
+                .totalCreditPoints(totalCreditPoints)
                 .build();
     }
     public WorkloadResponse toWorkloadResponse(Workload workload){
         return WorkloadResponse.builder()
                 .workloadId(workload.getWorkloadId())
                 .teachingStaff(workload.getTeachingStaff())
-                .statusType(workload.getStatusType())
                 .semester(workload.getSemester())
                 .comments(workload.getComments())
                 .includeInBudget(workload.getIncludeInBudget())
                 .budgetPosition(workload.isBudgetPosition())
                 .industryCoefficient(workload.getIndustryCoefficient())
+                .programCoefficient(workload.getProgramCoefficient())
                 .vacationMonths(workload.getVacationMonths())
                 .expectedSalary(workload.getExpectedSalary())
                 .groupAmount(workload.getGroupAmount())
                 .contactHours(workload.getContactHours())
-                .program(workload.getProgram())
+                .program(workload.isProgram())
                 .groupForSemester(myClassMapper.toMyClassResponse(workload.getGroupForSemester()))
                 .course(workload.getCourse())
                 .academicRankDetails(workload.getAcademicRankDetails())
+                .creditPointsPerGroup(workload.getCreditPointsPerGroup())
+                .cpProportionOnFullTime(workload.getCpProportionOnFullTime())
+                .salaryPerMonth(workload.getSalaryPerMonth())
                 // Calculated values
                 .myClasses(workload.getMyClasses())
-                .creditPointsPerHour(workload.getCreditPointsPerHour())
-                .creditPointsPerGroup(workload.getCreditPointsPerGroup())
-                .salaryPerMonth(workload.getSalaryPerMonth())
-                .cpProportionOnFullTime(workload.getCpProportionOnFullTime())
-                .cpForFullTime(workload.getCpForFullTime())
+
+                .cpForFullTime(workload.getAcademicRankDetails().getCpForFullTime())
                 .monthSum(workload.getMonthSum())
+                .totalCreditPoints(workload.getTotalCreditPoints())
                 .build();
     }
 

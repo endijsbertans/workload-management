@@ -135,7 +135,6 @@ export class WorkloadListComponent implements OnInit {
       return (
         // Top-level properties
         (data.comments?.toLowerCase().includes(lowercaseFilter) ?? false) ||
-        (data.program?.toLowerCase().includes(lowercaseFilter) ?? false) ||
         (data.semester?.semesterName?.toLowerCase().includes(lowercaseFilter) ?? false) ||
         // Course-related filtering
         (data.course?.courseName?.toLowerCase().includes(lowercaseFilter) ?? false) ||
@@ -154,14 +153,11 @@ export class WorkloadListComponent implements OnInit {
         (data.teachingStaff?.name?.toLowerCase().includes(lowercaseFilter) ?? false) ||
         (data.teachingStaff?.surname?.toLowerCase().includes(lowercaseFilter) ?? false) ||
 
-        // Status Type filtering
-        (data.statusType?.statusTypeName?.toLowerCase().includes(lowercaseFilter) ?? false) ||
-
         // Array of MyClasses filtering
         (data.myClasses?.some(myClass =>
           myClass.className?.toLowerCase().includes(lowercaseFilter) ||
           myClass.classFaculty?.facultyName?.toLowerCase().includes(lowercaseFilter) ||
-          myClass.classYear?.toLowerCase().includes(lowercaseFilter)
+          myClass.myClassProgram?.toLowerCase().includes(lowercaseFilter)
         ) ?? false)
       );
     };

@@ -9,13 +9,9 @@ import workloadmanagement.faculty.FacultyResponse;
 public record TeachingStaffRequest(
 
         RegistrationRequest authDetails,
-        @Size.List({
-                @Size(min = 1, message = "101"),
-                @Size(max = 45, message = "101")
-        })
+
         @NotNull(message = "101")
-        @NotEmpty(message = "101")
-        String positionTitle,
+        int statusId,
         @NotNull(message = "102")
         int staffFacultyId,
 

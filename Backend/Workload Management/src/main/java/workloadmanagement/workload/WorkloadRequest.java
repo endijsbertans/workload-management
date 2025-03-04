@@ -9,9 +9,6 @@ public record WorkloadRequest (
     @NotNull(message = "110")
     int teachingStaffId,
 
-    @NotNull(message = "111")
-    int statusTypeId,
-
     @NotNull(message = "112")
     int semesterId,
 
@@ -44,10 +41,6 @@ public record WorkloadRequest (
     @Min(value = 0, message = "118" )
     int workingMonths,
 
-    @Min(value = 0, message = "119")
-    @NotNull(message = "119")
-    double expectedSalary,
-
     @Min(value = 0, message = "120")
     @NotNull(message = "120")
     int groupAmount,
@@ -56,12 +49,8 @@ public record WorkloadRequest (
     @NotNull(message = "121")
     double contactHours,
 
-    @Size.List({
-            @Size(min = 1, message = "122"),
-            @Size(max = 45, message = "122")
-    })
     @NotNull(message = "122")
-    String program,
+    boolean program,
     @NotNull(message = "123")
     int groupForSemesterId,
 
@@ -72,6 +61,11 @@ public record WorkloadRequest (
     int academicRankId,
 
     @NotNull(message = "125")
-    int[] myClassIds
+    int[] myClassIds,
+
+    @Min(value = 0, message = "126")
+    @NotNull(message = "126")
+    double creditPointsPerGroup
+
 ){
 }

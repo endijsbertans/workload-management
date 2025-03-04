@@ -4,6 +4,7 @@
 
 import { AcademicRank } from '../models/academic-rank';
 import { Faculty } from '../models/faculty';
+import { StatusType } from '../models/status-type';
 export interface TeachingStaff {
   name?: string;
   positionTitle?: string;
@@ -12,6 +13,7 @@ export interface TeachingStaff {
   staffFaculty?: Faculty;
   staffFullName?: string;
   staffPhoto?: string;
+  status?: StatusType;
   surname?: string;
   teachingStaffId?: number;
 }

@@ -6,6 +6,7 @@ import lombok.*;
 import workloadmanagement.academicrank.AcademicRank;
 import workloadmanagement.faculty.Faculty;
 import workloadmanagement.auth.security.MyUser;
+import workloadmanagement.statustype.StatusType;
 
 @Getter
 @Setter
@@ -19,6 +20,7 @@ public class TeachingStaffResponse {
     private String name;
     private String surname;
     private Faculty staffFaculty;
+    private StatusType status;
     private String positionTitle;
     private AcademicRank staffAcademicRank;
     private byte[] staffPhoto;

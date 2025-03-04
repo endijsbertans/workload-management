@@ -3,7 +3,7 @@ import {
   DestroyRef,
   EventEmitter,
   inject,
-  Input,
+  Input, OnInit,
   Output,
   signal,
   SimpleChanges,
@@ -19,13 +19,11 @@ import {TeachingStaffResponse} from "../../../../../services/models/teaching-sta
 import {CourseResponse} from "../../../../../services/models/course-response";
 import {MyClassResponse} from "../../../../../services/models/my-class-response";
 import {AcademicRankResponse} from "../../../../../services/models/academic-rank-response";
-import {StatusTypeResponse} from "../../../../../services/models/status-type-response";
 import {SemesterResponse} from "../../../../../services/models/semester-response";
 import {TeachingStaffService} from "../../../../../services/services/teaching-staff.service";
 import {CourseService} from "../../../../../services/services/course.service";
 import {MyClassService} from "../../../../../services/services/my-class.service";
 import {AcademicRankService} from "../../../../../services/services/academic-rank.service";
-import {StatusTypeService} from "../../../../../services/services/status-type.service";
 import {SemesterControllerService} from "../../../../../services/services/semester-controller.service";
 import {WorkloadService} from "../../../../../services/services/workload.service";
 import {NewTeachingStaffComponent} from "../../../new-objects/new-teaching-staff/new-teaching-staff.component";
@@ -59,7 +57,7 @@ import {RouterLink, RouterOutlet} from "@angular/router";
   standalone: true,
   styleUrl: './workload-form.component.scss'
 })
-export class WorkloadFormComponent {
+export class WorkloadFormComponent implements OnInit {
   @Input() initialWorkload?: WorkloadResponse;
   @Input() editMode: boolean | undefined;
   @Output() formSubmit = new EventEmitter<WorkloadRequest>();
@@ -70,7 +68,6 @@ export class WorkloadFormComponent {
   courses = signal<CourseResponse[] | undefined>(undefined);
   myClasses = signal<MyClassResponse[] | undefined>(undefined);
   academicRanks = signal<AcademicRankResponse[] | undefined>(undefined);
-  statusTypes = signal<StatusTypeResponse[] | undefined>(undefined);
   semesters = signal<SemesterResponse[] | undefined>(undefined);
   private readonly destroyRef = inject(DestroyRef);
   private readonly _snackBar = inject(MatSnackBar);
@@ -78,7 +75,6 @@ export class WorkloadFormComponent {
   private readonly courseService = inject(CourseService);
   private readonly myClassService = inject(MyClassService);
   private readonly academicRankService = inject(AcademicRankService);
-  private readonly statusTypeService = inject(StatusTypeService);
   private readonly semesterService = inject(SemesterControllerService);
   private readonly workloadService = inject(WorkloadService);
   @ViewChild('multiSelect', {static: true}) multiSelect: MatSelect | undefined;
@@ -98,15 +94,14 @@ export class WorkloadFormComponent {
     myClassCtrl: new FormControl<number[] | null>(null, [Validators.required]),
     myClassFilterCtrl: new FormControl<string>(''),
     academicRankCtrl: new FormControl<number | null>(null, [Validators.required]),
-    statusTypeCtrl: new FormControl<number | null>(null, [Validators.required]),
+    cpForGroupCtrl: new FormControl<number | null>(null, [Validators.required]),
     includeInBudgetCtrl: new FormControl<string | null>(null, [Validators.required]),
     budgetPositionCtrl: new FormControl<boolean>(false, [Validators.required]),
     industryCoefficientCtrl: new FormControl<number | null>(null, [Validators.required]),
     vacationMonthsCtrl: new FormControl<number>(0, [Validators.required]),
-    expectedSalaryCtrl: new FormControl<number | null>(null, [Validators.required]),
     groupAmountCtrl: new FormControl<number | null>(null, [Validators.required]),
     contactHoursCtrl: new FormControl<number | null>(null, [Validators.required]),
-    programCtrl: new FormControl<string | null>(null, [Validators.required]),
+    programCtrl: new FormControl<boolean | null>(false, [Validators.required]),
     groupForSemesterCtrl: new FormControl<number | null>(null, [Validators.required]),
     commentsCtrl: new FormControl<string | null>(null, [Validators.required]),
   });
@@ -123,7 +118,6 @@ export class WorkloadFormComponent {
     this.fetchSemesters();
     this.fetchAllClasses();
     this.fetchAllCourses();
-    this.fetchStatusTypes();
     this.fetchAllAcademicRanks();
 
     // If editing, prefill the form with the workload data
@@ -152,15 +146,14 @@ export class WorkloadFormComponent {
     this.workloadForm.controls.commentsCtrl.setValue(workload.comments ?? null);
     this.workloadForm.controls.industryCoefficientCtrl.setValue(workload.industryCoefficient ?? null);
     this.workloadForm.controls.vacationMonthsCtrl.setValue(workload.vacationMonths ?? 0);
-    this.workloadForm.controls.expectedSalaryCtrl.setValue(workload.expectedSalary ?? null);
     this.workloadForm.controls.groupAmountCtrl.setValue(workload.groupAmount ?? null);
     this.workloadForm.controls.contactHoursCtrl.setValue(workload.contactHours ?? null);
-    this.workloadForm.controls.programCtrl.setValue(workload.program ?? null);
+    this.workloadForm.controls.programCtrl.setValue(workload.program ?? false);
     this.workloadForm.controls.includeInBudgetCtrl.setValue(workload.includeInBudget ?? null);
     this.workloadForm.controls.budgetPositionCtrl.setValue(workload.budgetPosition ?? false);
     this.workloadForm.controls.academicRankCtrl.setValue(workload.academicRankDetails?.academicRank?.academicRankId ?? null);
-    this.workloadForm.controls.statusTypeCtrl.setValue(workload.statusType?.statusTypeId ?? null);
     this.workloadForm.controls.groupForSemesterCtrl.setValue(workload.groupForSemester?.classId ?? null);
+    this.workloadForm.controls.cpForGroupCtrl.setValue(workload.creditPointsPerGroup ?? 0);
     workload.myClasses?.forEach((myClass) => {
       if (myClass.classId) {
         let prevValues = this.workloadForm.controls.myClassCtrl.value ?? [];
@@ -187,7 +180,7 @@ export class WorkloadFormComponent {
   protected filterMyClasses() {
     const search = this.workloadForm.controls.myClassFilterCtrl.value?.toLowerCase() ?? '';
     this.filteredMyClasses.next(
-      this.myClasses()?.filter(myClass => myClass.classNameAndYear?.toLowerCase().includes(search)) ?? []
+      this.myClasses()?.filter(myClass => myClass.classNameAndProgram?.toLowerCase().includes(search)) ?? []
     );
   }
 
@@ -200,17 +193,16 @@ export class WorkloadFormComponent {
         courseId: this.workloadForm.value.courseCtrl ?? 0,
         myClassIds: this.workloadForm.value.myClassCtrl ?? [],
         academicRankId: this.workloadForm.value.academicRankCtrl ?? 0,
-        statusTypeId: this.workloadForm.value.statusTypeCtrl ?? 0,
         includeInBudget: this.workloadForm.value.includeInBudgetCtrl ?? '',
         budgetPosition: this.workloadForm.value.budgetPositionCtrl ?? false,
         industryCoefficient: this.workloadForm.value.industryCoefficientCtrl ?? 0,
         vacationMonths: this.workloadForm.value.vacationMonthsCtrl ?? 0,
-        expectedSalary: this.workloadForm.value.expectedSalaryCtrl ?? 0,
         groupAmount: this.workloadForm.value.groupAmountCtrl ?? 0,
         contactHours: this.workloadForm.value.contactHoursCtrl ?? 0,
-        program: this.workloadForm.value.programCtrl ?? '',
+        program: this.workloadForm.value.programCtrl ?? false,
         groupForSemesterId: this.workloadForm.value.groupForSemesterCtrl ?? 0,
         comments: this.workloadForm.value.commentsCtrl ?? '',
+        creditPointsPerGroup: this.workloadForm.value.cpForGroupCtrl ?? 0,
         workingMonths: 5
       };
       this.formSubmit.emit(request);
@@ -265,17 +257,6 @@ export class WorkloadFormComponent {
     const subscription = this.academicRankService.findAllAcademicRank().subscribe({
       next: (academicRanks) => {
         this.academicRanks.set(academicRanks);
-        if (callback) callback();
-      },
-      error: (err) => console.log(err)
-    });
-    this.destroyRef.onDestroy(() => subscription.unsubscribe());
-  }
-
-  private fetchStatusTypes(callback?: () => void) {
-    const subscription = this.statusTypeService.findAllStatusTypes().subscribe({
-      next: (statusTypes) => {
-        this.statusTypes.set(statusTypes);
         if (callback) callback();
       },
       error: (err) => console.log(err)

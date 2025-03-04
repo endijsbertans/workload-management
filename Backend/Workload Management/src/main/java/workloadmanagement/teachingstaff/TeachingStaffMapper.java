@@ -3,15 +3,18 @@ package workloadmanagement.teachingstaff;
 import org.springframework.stereotype.Service;
 import workloadmanagement.academicrank.AcademicRank;
 import workloadmanagement.faculty.Faculty;
+import workloadmanagement.statustype.StatusType;
 
 @Service
 public class TeachingStaffMapper {
 
-    public TeachingStaff toTeachingStaff(TeachingStaffRequest request, Faculty staffFaculty, AcademicRank staffAcademicRank) {
+    public TeachingStaff toTeachingStaff(TeachingStaffRequest request, Faculty staffFaculty, AcademicRank staffAcademicRank, String positionTitle,
+                                         StatusType status) {
         return TeachingStaff.builder()
                 .name(request.name())
                 .surname(request.surname())
-                .positionTitle(request.positionTitle())
+                .positionTitle(positionTitle)
+                .status(status)
                 .staffFaculty(staffFaculty)
                 .staffAcademicRank(staffAcademicRank)
                 //.staffPhoto(request.staffPhoto())
@@ -25,6 +28,7 @@ public class TeachingStaffMapper {
                 .surname(teachingStaff.getSurname())
                 .user(teachingStaff.getUser())
                 .positionTitle(teachingStaff.getPositionTitle())
+                .status(teachingStaff.getStatus())
                 .staffFaculty(teachingStaff.getStaffFaculty())
                 .staffAcademicRank(teachingStaff.getStaffAcademicRank())
                 .staffFullName(teachingStaff.getStaffFullName())

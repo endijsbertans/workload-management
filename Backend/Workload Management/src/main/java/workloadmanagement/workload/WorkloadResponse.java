@@ -20,29 +20,29 @@ import java.util.List;
 public class WorkloadResponse {
     private int workloadId;
     private TeachingStaff teachingStaff;
-    private StatusType statusType;
 
     private Semester semester;
     private String comments;
     private String includeInBudget;
     private boolean budgetPosition;
     private double industryCoefficient;
+    private double programCoefficient;
     private int vacationMonths;
 //    private int workingMonths;
     private double expectedSalary;
     private int groupAmount;
     private double contactHours;
-    private String program;
+    private boolean program;
     private MyClassResponse groupForSemester;
     private Course course;
     private AcademicRankDetails academicRankDetails;
     private List<MyClass> myClasses;
-
-    // Calculated values
-    private double creditPointsPerHour;
     private double creditPointsPerGroup;
-    private double salaryPerMonth;
+    private double totalCreditPoints;
     private double cpProportionOnFullTime;
+    // Calculated values
+    private double salaryPerMonth;
     private double cpForFullTime;
     private double monthSum;
+
 }

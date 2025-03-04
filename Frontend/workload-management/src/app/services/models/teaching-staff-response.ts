@@ -5,6 +5,7 @@
 import { AcademicRank } from '../models/academic-rank';
 import { Faculty } from '../models/faculty';
 import { MyUser } from '../models/my-user';
+import { StatusType } from '../models/status-type';
 export interface TeachingStaffResponse {
   name?: string;
   positionTitle?: string;
@@ -12,7 +13,8 @@ export interface TeachingStaffResponse {
   staffAcademicRank?: AcademicRank;
   staffFaculty?: Faculty;
   staffFullName?: string;
-  staffPhoto?: string;
+  staffPhoto?: Array<string>;
+  status?: StatusType;
   surname?: string;
   teachingStaffId?: number;
   user?: MyUser;

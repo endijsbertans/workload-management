@@ -1,5 +1,10 @@
 import {Component, DestroyRef, EventEmitter, inject, OnInit, Output, signal} from '@angular/core';
-import {AcademicRankService, FacultyService, TeachingStaffService} from "../../../../services/services";
+import {
+  AcademicRankService,
+  FacultyService,
+  StatusTypeService,
+  TeachingStaffService
+} from "../../../../services/services";
 import {FacultyResponse} from "../../../../services/models/faculty-response";
 
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
@@ -16,6 +21,7 @@ import {RegistrationRequest} from "../../../../services/models/registration-requ
 import {TeachingStaffRequest} from "../../../../services/models/teaching-staff-request";
 import {AcademicRankResponse} from "../../../../services/models/academic-rank-response";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {StatusTypeResponse} from "../../../../services/models/status-type-response";
 
 
 
@@ -44,7 +50,9 @@ export class NewTeachingStaffComponent implements OnInit {
   private readonly facultyService = inject(FacultyService);
   private readonly academicRankService = inject(AcademicRankService);
   private readonly _snackBar = inject(MatSnackBar);
+  private readonly statusTypeService = inject(StatusTypeService);
 
+  statusTypes = signal<StatusTypeResponse[] | undefined>(undefined);
   faculties = signal<FacultyResponse[] | undefined>(undefined);
   academicRanks = signal<AcademicRankResponse[] | undefined>(undefined);
   onAddUserAuthDetails = signal(false);
@@ -64,9 +72,8 @@ export class NewTeachingStaffComponent implements OnInit {
         Validators.minLength(3),
         Validators.required],
     }),
-    positionTitle: new FormControl('', {
+    statusTypeId: new FormControl<number | undefined>(undefined, {
       validators: [
-        Validators.minLength(3),
         Validators.required],
     }),
     staffFacultyId: new FormControl<number | undefined>(undefined, {
@@ -82,20 +89,21 @@ export class NewTeachingStaffComponent implements OnInit {
   ngOnInit(): void {
     this.fetchFaculties();
     this.fetchAcademicRanks();
+    this.fetchStatusTypes();
   }
 
   onSubmit() {
     console.log(this.teachingStaffForm.controls);
       if (this.teachingStaffForm.value.name &&
         this.teachingStaffForm.value.surname &&
-        this.teachingStaffForm.value.positionTitle &&
+        this.teachingStaffForm.value.statusTypeId &&
         this.teachingStaffForm.value.staffFacultyId &&
         this.teachingStaffForm.value.academicRankId
       ) {
         this.teachingStaffRequest = {
           name: this.teachingStaffForm.value.name,
           surname: this.teachingStaffForm.value.surname,
-          positionTitle: this.teachingStaffForm.value.positionTitle,
+          statusId: this.teachingStaffForm.value.statusTypeId,
           staffFacultyId: this.teachingStaffForm.value.staffFacultyId,
           staffAcademicRankId: this.teachingStaffForm.value.academicRankId,
           authDetails: this.userAuthDetails() || undefined
@@ -156,6 +164,16 @@ export class NewTeachingStaffComponent implements OnInit {
         subscription.unsubscribe();
       });
     });
+  }
+  private fetchStatusTypes(callback?: () => void) {
+    const subscription = this.statusTypeService.findAllStatusTypes().subscribe({
+      next: (statusTypes) => {
+        this.statusTypes.set(statusTypes);
+        if (callback) callback();
+      },
+      error: (err) => console.log(err)
+    });
+    this.destroyRef.onDestroy(() => subscription.unsubscribe());
   }
   onEmittedUserAuthDetails(authDetails: RegistrationRequest) {
     this.onAddUserAuthDetails.set(false);

@@ -8,15 +8,14 @@ export interface WorkloadRequest {
   comments: string;
   contactHours: number;
   courseId: number;
-  expectedSalary: number;
+  creditPointsPerGroup: number;
   groupAmount: number;
   groupForSemesterId: number;
   includeInBudget: string;
   industryCoefficient: number;
   myClassIds: Array<number>;
-  program: string;
+  program: boolean;
   semesterId: number;
-  statusTypeId: number;
   teachingStaffId: number;
   vacationMonths: number;
   workingMonths?: number;

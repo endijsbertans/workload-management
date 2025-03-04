@@ -117,7 +117,7 @@
               </mat-option>
               @for (myClass of filteredMyClasses | async; track myClass.classId) {
                 <mat-option [value]="myClass.classId">
-                  {{ myClass.classNameAndYear }}
+                  {{ myClass.className}}
                 </mat-option>
               }
             }
@@ -162,32 +162,6 @@
     </div>
     <div class="inputFieldFlex">
       <mat-form-field>
-        <mat-select required [formControl]="workloadForm.controls.statusTypeCtrl">
-          @if (statusTypes()) {
-            @if (statusTypes()?.length === 0) {
-              <mat-option>
-                Izveidojiet statusus!
-              </mat-option>
-            } @else {
-              @for (statusType of statusTypes(); track statusType.statusTypeId) {
-                <mat-option [value]="statusType.statusTypeId">
-                  {{ statusType.statusTypeName }}
-                </mat-option>
-              }
-            }
-          }
-        </mat-select>
-        @if (!statusTypes() && editMode === undefined) {
-          <mat-label>
-            <em>Lādē datus...</em>
-          </mat-label>
-        } @else {
-          <mat-label>Izvēlies statusu</mat-label>
-        }
-      </mat-form-field>
-    </div>
-    <div class="inputFieldFlex">
-      <mat-form-field>
         <mat-select [formControl]="workloadForm.controls.groupForSemesterCtrl" [multiple]="false" #singleSelect>
           @if (myClasses()) {
             @if (myClasses()?.length === 0) {
@@ -203,7 +177,7 @@
               </mat-option>
               @for (myClass of filteredMyClasses | async; track myClass.classId) {
                 <mat-option [value]="myClass.classId">
-                  {{ myClass.classNameAndYear }}
+                  {{ myClass.className}}
                 </mat-option>
               }
             }
@@ -249,21 +223,7 @@
         />
       </mat-form-field>
     </div>
-    <div class="inputFieldFlex">
-      <mat-form-field appearance="outline">
-        @if (workloadForm.controls.expectedSalaryCtrl.invalid) {
-          <mat-error>{{ errorMsg() }}</mat-error>
-        }
-        <mat-label>Paredzēts algai</mat-label>
-        <input
-          matInput
-          type="number"
-          [formControl]="workloadForm.controls.expectedSalaryCtrl"
-          (blur)="updateErrorMessage('expectedSalaryCtrl')"
-          required
-        />
-      </mat-form-field>
-    </div>
+
     <div class="inputFieldFlex">
       <mat-form-field appearance="outline">
         @if (workloadForm.controls.groupAmountCtrl.invalid) {
@@ -281,6 +241,21 @@
     </div>
     <div class="inputFieldFlex">
       <mat-form-field appearance="outline">
+        @if (workloadForm.controls.cpForGroupCtrl.invalid) {
+          <mat-error>{{ errorMsg() }}</mat-error>
+        }
+        <mat-label>KP skaits grupai</mat-label>
+        <input
+          matInput
+          type="number"
+          [formControl]="workloadForm.controls.cpForGroupCtrl"
+          (blur)="updateErrorMessage('cpForGroupCtrl')"
+          required
+        />
+      </mat-form-field>
+    </div>
+    <div class="inputFieldFlex">
+      <mat-form-field appearance="outline">
         @if (workloadForm.controls.contactHoursCtrl.invalid) {
           <mat-error>{{ errorMsg() }}</mat-error>
         }
@@ -289,22 +264,7 @@
           matInput
           type="number"
           [formControl]="workloadForm.controls.contactHoursCtrl"
-          (blur)="updateErrorMessage('groupAmountCtrl')"
-          required
-        />
-      </mat-form-field>
-    </div>
-    <div class="inputFieldFlex">
-      <mat-form-field appearance="outline">
-        @if (workloadForm.controls.programCtrl.invalid) {
-          <mat-error>{{ errorMsg() }}</mat-error>
-        }
-        <mat-label>Programmas daļa</mat-label>
-        <input
-          matInput
-          placeholder="Nozares pamatnoz."
-          [formControl]="workloadForm.controls.programCtrl"
-          (blur)="updateErrorMessage('groupAmountCtrl')"
+          (blur)="updateErrorMessage('contactHoursCtrl')"
           required
         />
       </mat-form-field>
@@ -335,7 +295,7 @@
           matInput
           placeholder="Nenotiks"
           [formControl]="workloadForm.controls.includeInBudgetCtrl"
-          (blur)="updateErrorMessage('commentsCtrl')"
+          (blur)="updateErrorMessage('includeInBudgetCtrl')"
           required
         />
       </mat-form-field>
@@ -353,6 +313,9 @@
       </button>
     }
     <mat-slide-toggle [formControl]="workloadForm.controls.budgetPositionCtrl">budžeta pozicija </mat-slide-toggle>
+    <mat-slide-toggle [formControl]="workloadForm.controls.programCtrl"> Ir maģistrs? </mat-slide-toggle>
+
+
   </div>
 </form>
 

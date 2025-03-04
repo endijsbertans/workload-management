@@ -7,6 +7,7 @@ import workloadmanagement.academicrank.AcademicRank;
 import workloadmanagement.academicrank.academicrankDetails.AcademicRankDetails;
 import workloadmanagement.faculty.Faculty;
 import workloadmanagement.auth.security.MyUser;
+import workloadmanagement.statustype.StatusType;
 
 @Getter
 @Setter
@@ -30,7 +31,9 @@ public class TeachingStaff {
 
     private String surname;
 
-    private String positionTitle;
+    @ManyToOne
+    @JoinColumn(name = "status_status_type_id")
+    private StatusType status;
 
     @ManyToOne
     @JoinColumn(name="staff_faculty_id")
@@ -40,11 +43,15 @@ public class TeachingStaff {
     @JoinColumn(name="staff_academic_rank_id")
     private AcademicRank staffAcademicRank;
 
+    private String positionTitle;
+
     private String staffPhoto;
+    @Transient
     public String getStaffFullName(){
         return name + " " + surname;
     }
+    @Transient
     public String getRankFullName(){
-        return staffAcademicRank.getAbbreviation() + " " + getStaffFullName();
+        return positionTitle + " " + getStaffFullName();
     }
 }

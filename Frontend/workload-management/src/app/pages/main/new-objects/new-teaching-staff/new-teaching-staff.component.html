@@ -30,18 +30,29 @@
       />
     </mat-form-field>
 
-    <mat-form-field appearance="outline">
-      @if (teachingStaffForm.controls.positionTitle.invalid) {
-        <mat-error>{{ errorMessage() }}</mat-error>
+    <mat-form-field>
+      <mat-select required [formControl]="teachingStaffForm.controls.statusTypeId">
+        @if (statusTypes()) {
+          @if (statusTypes()?.length === 0) {
+            <mat-option>
+              Izveidojiet statusus!
+            </mat-option>
+          } @else {
+            @for (statusType of statusTypes(); track statusType.statusTypeId) {
+              <mat-option [value]="statusType.statusTypeId">
+                {{ statusType.statusTypeName }}
+              </mat-option>
+            }
+          }
+        }
+      </mat-select>
+      @if (!statusTypes()) {
+        <mat-label>
+          <em>Lādē datus...</em>
+        </mat-label>
+      } @else {
+        <mat-label>Izvēlies statusu</mat-label>
       }
-      <mat-label>Ievadi amata nos.</mat-label>
-      <input
-        matInput
-        placeholder="Vieslektors"
-        [formControl]="teachingStaffForm.controls.positionTitle"
-        (blur)="updateErrorMessage('positionTitle')"
-        required
-      />
     </mat-form-field>
     <mat-form-field class="input-flex">
       <mat-select required [formControl]="teachingStaffForm.controls.staffFacultyId">

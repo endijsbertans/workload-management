@@ -7,7 +7,6 @@ import { Course } from '../models/course';
 import { MyClass } from '../models/my-class';
 import { MyClassResponse } from '../models/my-class-response';
 import { Semester } from '../models/semester';
-import { StatusType } from '../models/status-type';
 import { TeachingStaff } from '../models/teaching-staff';
 export interface WorkloadResponse {
   academicRankDetails?: AcademicRankDetails;
@@ -18,7 +17,6 @@ export interface WorkloadResponse {
   cpForFullTime?: number;
   cpProportionOnFullTime?: number;
   creditPointsPerGroup?: number;
-  creditPointsPerHour?: number;
   expectedSalary?: number;
   groupAmount?: number;
   groupForSemester?: MyClassResponse;
@@ -26,11 +24,12 @@ export interface WorkloadResponse {
   industryCoefficient?: number;
   monthSum?: number;
   myClasses?: Array<MyClass>;
-  program?: string;
+  program?: boolean;
+  programCoefficient?: number;
   salaryPerMonth?: number;
   semester?: Semester;
-  statusType?: StatusType;
   teachingStaff?: TeachingStaff;
+  totalCreditPoints?: number;
   vacationMonths?: number;
   workloadId?: number;
 }

@@ -15,16 +15,7 @@ public record MyClassRequest (
     @NotEmpty(message = "130")
     String className,
 
-    @Min(value = 0, message = "131")
-    @NotNull(message = "131")
-    int studyYear,
-
-    @Min(value = 0, message = "131")
-    int studentAmount,
     @NotNull(message = "132")
     int classFacultyId,
-    String program,
-    @NotNull(message = "133")
-    @NotEmpty(message = "133")
-    String classYear
+    String myClassProgram
 ){}

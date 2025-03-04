@@ -14,11 +14,8 @@ public class MyClassMapper {
     public MyClass toMyClass(MyClassRequest request, Faculty faculty){
         return MyClass.builder()
                 .className(request.className())
-                .studentAmount(request.studentAmount())
-                .studyYear(request.studyYear())
                 .classFaculty(faculty)
-                .classYear(request.classYear())
-                .program(request.program())
+                .myClassProgram(request.myClassProgram())
                 .build();
     }
 
@@ -26,11 +23,9 @@ public class MyClassMapper {
         return MyClassResponse.builder()
                 .classId(myClass.getClassId())
                 .className(myClass.getClassName())
-                .studentAmount(myClass.getStudentAmount())
                 .classFaculty(facultyMapper.toFacultyResponse(myClass.getClassFaculty()))
-                .classYear(myClass.getClassYear())
-                .program(myClass.getProgram())
-                .classNameAndYear(myClass.getClassNameAndYear())
+                .myClassProgram(myClass.getMyClassProgram())
+                .classNameAndProgram(myClass.classNameAndProgram())
                 .build();
     }
 }

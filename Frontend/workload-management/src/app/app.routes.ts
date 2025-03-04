@@ -2,7 +2,7 @@ import {Routes} from '@angular/router';
 import {LoginComponent} from "./pages/auth/auth-wrapper/login/login.component";
 import {ActivateAccountComponent} from "./pages/auth/auth-wrapper/activate-account/activate-account.component";
 import {WorkloadListComponent} from "./pages/main/workload-list/workload-list.component";
-import {NewWorkloadComponent} from "./pages/main/workload-list/new-workload/new-workload.component";
+
 import {NewTeachingStaffComponent} from "./pages/main/new-objects/new-teaching-staff/new-teaching-staff.component";
 import {NewCourseComponent} from "./pages/main/new-objects/new-course/new-course.component";
 import {NewClassComponent} from "./pages/main/new-objects/new-class/new-class.component";

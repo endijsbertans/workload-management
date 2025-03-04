@@ -957,7 +957,7 @@
           "comments",
           "contactHours",
           "courseId",
-          "expectedSalary",
+          "creditPointsPerGroup",
           "groupAmount",
           "groupForSemesterId",
           "includeInBudget",
@@ -965,17 +965,12 @@
           "myClassIds",
           "program",
           "semesterId",
-          "statusTypeId",
           "teachingStaffId",
           "vacationMonths"
         ],
         "type": "object",
         "properties": {
           "teachingStaffId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "statusTypeId": {
             "type": "integer",
             "format": "int32"
           },
@@ -1006,11 +1001,6 @@
             "type": "integer",
             "format": "int32"
           },
-          "expectedSalary": {
-            "minimum": 0,
-            "type": "number",
-            "format": "double"
-          },
           "groupAmount": {
             "minimum": 0,
             "type": "integer",
@@ -1022,7 +1012,7 @@
             "format": "double"
           },
           "program": {
-            "type": "string"
+            "type": "boolean"
           },
           "groupForSemesterId": {
             "type": "integer",
@@ -1042,6 +1032,11 @@
               "type": "integer",
               "format": "int32"
             }
+          },
+          "creditPointsPerGroup": {
+            "minimum": 0,
+            "type": "number",
+            "format": "double"
           }
         }
       },
@@ -1059,9 +1054,9 @@
       "TeachingStaffRequest": {
         "required": [
           "name",
-          "positionTitle",
           "staffAcademicRankId",
           "staffFacultyId",
+          "statusId",
           "surname"
         ],
         "type": "object",
@@ -1069,8 +1064,9 @@
           "authDetails": {
             "$ref": "#/components/schemas/RegistrationRequest"
           },
-          "positionTitle": {
-            "type": "string"
+          "statusId": {
+            "type": "integer",
+            "format": "int32"
           },
           "staffFacultyId": {
             "type": "integer",
@@ -1122,33 +1118,18 @@
       "MyClassRequest": {
         "required": [
           "classFacultyId",
-          "className",
-          "classYear",
-          "studyYear"
+          "className"
         ],
         "type": "object",
         "properties": {
           "className": {
             "type": "string"
           },
-          "studyYear": {
-            "minimum": 0,
-            "type": "integer",
-            "format": "int32"
-          },
-          "studentAmount": {
-            "minimum": 0,
-            "type": "integer",
-            "format": "int32"
-          },
           "classFacultyId": {
             "type": "integer",
             "format": "int32"
           },
-          "program": {
-            "type": "string"
-          },
-          "classYear": {
+          "myClassProgram": {
             "type": "string"
           }
         }
@@ -1393,25 +1374,11 @@
           "className": {
             "type": "string"
           },
-          "studyYear": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "classYear": {
-            "type": "string"
-          },
-          "studentAmount": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "program": {
+          "myClassProgram": {
             "type": "string"
           },
           "classFaculty": {
             "$ref": "#/components/schemas/Faculty"
-          },
-          "classNameAndYear": {
-            "type": "string"
           }
         }
       },
@@ -1425,24 +1392,13 @@
           "className": {
             "type": "string"
           },
-          "studyYear": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "studentAmount": {
-            "type": "integer",
-            "format": "int32"
-          },
           "classFaculty": {
             "$ref": "#/components/schemas/FacultyResponse"
           },
-          "classYear": {
+          "myClassProgram": {
             "type": "string"
           },
-          "program": {
-            "type": "string"
-          },
-          "classNameAndYear": {
+          "classNameAndProgram": {
             "type": "string"
           }
         }
@@ -1525,14 +1481,17 @@
           "surname": {
             "type": "string"
           },
-          "positionTitle": {
-            "type": "string"
+          "status": {
+            "$ref": "#/components/schemas/StatusType"
           },
           "staffFaculty": {
             "$ref": "#/components/schemas/Faculty"
           },
           "staffAcademicRank": {
             "$ref": "#/components/schemas/AcademicRank"
+          },
+          "positionTitle": {
+            "type": "string"
           },
           "staffPhoto": {
             "type": "string"
@@ -1555,9 +1514,6 @@
           "teachingStaff": {
             "$ref": "#/components/schemas/TeachingStaff"
           },
-          "statusType": {
-            "$ref": "#/components/schemas/StatusType"
-          },
           "semester": {
             "$ref": "#/components/schemas/Semester"
           },
@@ -1571,6 +1527,10 @@
             "type": "boolean"
           },
           "industryCoefficient": {
+            "type": "number",
+            "format": "double"
+          },
+          "programCoefficient": {
             "type": "number",
             "format": "double"
           },
@@ -1591,7 +1551,7 @@
             "format": "double"
           },
           "program": {
-            "type": "string"
+            "type": "boolean"
           },
           "groupForSemester": {
             "$ref": "#/components/schemas/MyClassResponse"
@@ -1608,19 +1568,19 @@
               "$ref": "#/components/schemas/MyClass"
             }
           },
-          "creditPointsPerHour": {
-            "type": "number",
-            "format": "double"
-          },
           "creditPointsPerGroup": {
             "type": "number",
             "format": "double"
           },
-          "salaryPerMonth": {
+          "totalCreditPoints": {
             "type": "number",
             "format": "double"
           },
           "cpProportionOnFullTime": {
+            "type": "number",
+            "format": "double"
+          },
+          "salaryPerMonth": {
             "type": "number",
             "format": "double"
           },
@@ -1684,17 +1644,17 @@
           "name": {
             "type": "string"
           },
-          "username": {
-            "type": "string"
-          },
-          "accountNonLocked": {
-            "type": "boolean"
-          },
           "accountNonExpired": {
             "type": "boolean"
           },
           "credentialsNonExpired": {
             "type": "boolean"
+          },
+          "accountNonLocked": {
+            "type": "boolean"
+          },
+          "username": {
+            "type": "string"
           }
         }
       },
@@ -1717,6 +1677,9 @@
           "staffFaculty": {
             "$ref": "#/components/schemas/Faculty"
           },
+          "status": {
+            "$ref": "#/components/schemas/StatusType"
+          },
           "positionTitle": {
             "type": "string"
           },
@@ -1724,8 +1687,11 @@
             "$ref": "#/components/schemas/AcademicRank"
           },
           "staffPhoto": {
-            "type": "string",
-            "format": "byte"
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "byte"
+            }
           },
           "staffFullName": {
             "type": "string"

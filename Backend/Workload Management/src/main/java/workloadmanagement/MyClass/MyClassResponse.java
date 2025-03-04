@@ -12,10 +12,7 @@ import workloadmanagement.faculty.FacultyResponse;
 public class MyClassResponse {
     private int classId;
     private String className;
-    private int studyYear;
-    private int studentAmount;
     private FacultyResponse classFaculty;
-    private String classYear;
-    private String program;
-    private String classNameAndYear;
+    private String myClassProgram;
+    private String classNameAndProgram;
 }
