@@ -100,19 +100,26 @@ export const ColumnsForClassResponse: ColumnNames[] = [
     pathTo: 'className',
     collection: 'ColumnsForClass',
     sortable: true
-  }
-  , {
-    name: 'Gads',
-    pathTo: 'classYear',
+  },
+  {
+    name: 'Klases programma',
+    pathTo: 'myClassProgram',
+    collection: 'ColumnsForClass',
+    sortable: true
+  },
+  {
+    name: 'Klases fakultāte',
+    pathTo: 'classFaculty.facultyName',
+    collection: 'ColumnsForClass',
+    sortable: true
+  },
+  {
+    name: 'Klases fakultāte',
+    pathTo: 'classFaculty.facultyFullName',
     collection: 'ColumnsForClass',
     sortable: true
   }
-  , {
-    name: 'studentu daudzums',
-    pathTo: 'studentAmount',
-    collection: 'ColumnsForClass',
-    sortable: true
-  }
+
 ];
 export const ColumnsForAcademicRankResponse: ColumnNames[] = [
   {
@@ -153,7 +160,7 @@ export const ColumnsForAcademicRankDetailsResponse: ColumnNames[] = [
     collection: 'columnsForAcademicRankDetailsResponse',
     sortable: true
   }
-  ,{
+  , {
     name: 'Amats',
     pathTo: 'academicRank.rankName',
     collection: 'columnsForAcademicRankDetailsResponse',

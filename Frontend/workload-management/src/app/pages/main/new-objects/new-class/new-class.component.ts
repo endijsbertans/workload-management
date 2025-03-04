@@ -45,29 +45,15 @@ export class NewClassComponent implements OnInit{
         Validators.minLength(3),
         Validators.required],
     }),
-    studyYear: new FormControl(null, {
+    program: new FormControl('', {
       validators: [
-        Validators.required,
-        Validators.min(0),
-        Validators.max(5)
-      ],
-    }),
-    studentAmount: new FormControl(null, {
-      validators: [
-        Validators.required,
-        Validators.min(0),
-        Validators.max(100)
-      ],
+        Validators.minLength(1),
+        Validators.required],
     }),
     classFacultyId: new FormControl<number | undefined>(undefined, {
       validators: [
         Validators.required],
-    }),
-    classYear: new FormControl('', {
-      validators: [
-        Validators.minLength(2),
-        Validators.required],
-    }),
+    })
   })
   ngOnInit(): void {
     this.fetchFaculties();
@@ -75,17 +61,12 @@ export class NewClassComponent implements OnInit{
   onSubmit() {
     console.log(this.classForm.controls);
     if (this.classForm.value.className &&
-      this.classForm.value.studyYear &&
-      this.classForm.value.studentAmount &&
-      this.classForm.value.classFacultyId &&
-      this.classForm.value.classYear
+      this.classForm.value.classFacultyId
+
     ) {
       this.myClassRequest = {
         className: this.classForm.value.className,
-        studyYear: this.classForm.value.studyYear,
-        studentAmount: this.classForm.value.studentAmount,
         classFacultyId: this.classForm.value.classFacultyId,
-        classYear: this.classForm.value.classYear,
       };
 
       this.myClassService.saveMyClass({

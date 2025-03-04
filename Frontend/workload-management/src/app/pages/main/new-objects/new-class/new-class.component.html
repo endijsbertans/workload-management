@@ -17,33 +17,19 @@
       />
     </mat-form-field>
     <mat-form-field appearance="outline">
-      @if (classForm.controls.studyYear.invalid) {
+      @if (classForm.controls.program.invalid) {
         <mat-error>{{ errorMessage() }}</mat-error>
       }
-      <mat-label>Ievadi klases gadu</mat-label>
+      <mat-label>Ievadi programmu</mat-label>
       <input
-        type="number"
         matInput
-        placeholder="1"
-        [formControl]="classForm.controls.studyYear"
-        (blur)="updateErrorMessage('studyYear')"
+        placeholder="ITM"
+        [formControl]="classForm.controls.program"
+        (blur)="updateErrorMessage('program')"
         required
       />
     </mat-form-field>
-    <mat-form-field appearance="outline">
-      @if (classForm.controls.studentAmount.invalid) {
-        <mat-error>{{ errorMessage() }}</mat-error>
-      }
-      <mat-label>Ievadi studentu daudzumu</mat-label>
-      <input
-        type="number"
-        matInput
-        placeholder="27"
-        [formControl]="classForm.controls.studentAmount"
-        (blur)="updateErrorMessage('studentAmount')"
-        required
-      />
-    </mat-form-field>
+
     <mat-form-field class="input-flex">
       <mat-select required [formControl]="classForm.controls.classFacultyId">
         @if (faculties()) {
@@ -68,19 +54,7 @@
         <mat-label>Izvēlies fakultāti</mat-label>
       }
     </mat-form-field>
-    <mat-form-field appearance="outline">
-      @if (classForm.controls.classYear.invalid) {
-        <mat-error>{{ errorMessage() }}</mat-error>
-      }
-      <mat-label>Ievadi studentu kursa gadu</mat-label>
-      <input
-        matInput
-        placeholder="s22"
-        [formControl]="classForm.controls.classYear"
-        (blur)="updateErrorMessage('classYear')"
-        required
-      />
-    </mat-form-field>
+
     <div class="action-wrapper">
       <button mat-raised-button type="button" routerLink="..">Cancel</button>
       <button mat-raised-button type="Submit" [disabled]="classForm.invalid">Create</button>

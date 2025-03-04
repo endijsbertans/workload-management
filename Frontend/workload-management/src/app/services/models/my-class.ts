@@ -7,9 +7,5 @@ export interface MyClass {
   classFaculty?: Faculty;
   classId?: number;
   className?: string;
-  classNameAndYear?: string;
-  classYear?: string;
-  program?: string;
-  studentAmount?: number;
-  studyYear?: number;
+  myClassProgram?: string;
 }

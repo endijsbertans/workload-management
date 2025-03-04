@@ -7,9 +7,6 @@ export interface MyClassResponse {
   classFaculty?: FacultyResponse;
   classId?: number;
   className?: string;
-  classNameAndYear?: string;
-  classYear?: string;
-  program?: string;
-  studentAmount?: number;
-  studyYear?: number;
+  classNameAndProgram?: string;
+  myClassProgram?: string;
 }

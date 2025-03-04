@@ -5,8 +5,5 @@
 export interface MyClassRequest {
   classFacultyId: number;
   className: string;
-  classYear: string;
-  program?: string;
-  studentAmount?: number;
-  studyYear: number;
+  myClassProgram?: string;
 }
