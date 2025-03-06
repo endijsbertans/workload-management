@@ -21,6 +21,7 @@ jobs:
           fetch-depth: 0
       - name: Grant execute permission for Maven Wrapper
         run: |
+          ls -la Backend/workload-management
           chmod +x Backend/workload-management/mvnw
           chmod +x Backend/workload-management/.mvn/wrapper/maven-wrapper.proporties
 
