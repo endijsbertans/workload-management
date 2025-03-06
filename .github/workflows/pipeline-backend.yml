@@ -114,10 +114,11 @@ jobs:
           export EMAIL_USER_NAME=${{ secrets.EMAIL_USER_NAME }}
           export EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}
           export DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
+          export EC2_HOST=${{ secrets.EC2_HOST }}
           # Deploy application
           cd ci-cd
           sudo -E docker-compose -f docker-compose.yml pull -q
           sudo -E docker-compose -f docker-compose.yml up -d
           EOF
-
-
+          
+          
