@@ -78,3 +78,4 @@ jobs:
           sudo docker-compose -f docker-compose.yml pull -q
           sudo docker-compose -f docker-compose.yml up -d
           EOF
+
