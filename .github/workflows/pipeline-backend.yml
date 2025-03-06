@@ -39,7 +39,7 @@ jobs:
           file: docker/backend/Dockerfile
           push: true
           platforms: linux/amd64
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/wms-api:latest,${{ secrets.DOCKERHUB_USERNAME }}/wms-api:${{ steps.extract_version.outputs.VERSION }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/wms-api:${{ steps.extract_version.outputs.VERSION }},${{ secrets.DOCKERHUB_USERNAME }}/wms-api:latest
 
   deploy:
     name: Deploy BACKEND to AWS EC2
