@@ -11,13 +11,12 @@ spring:
 
   mail:
     host: ${EMAIL_HOSTNAME}
-    port: 465
+    port: 587
     username: ${EMAIL_USER_NAME}
     password: ${EMAIL_PASSWORD}
     properties:
       mail:
         smtp:
-          trust: '*'
           auth: true
           ssl:
             enable: true

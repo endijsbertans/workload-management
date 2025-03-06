@@ -19,14 +19,6 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-
-  mail-dev:
-    container_name: mail-dev-wms
-    image: maildev/maildev
-    ports:
-      - 1080:1080
-      - 1025:1025
-
   wms-backend:
     container_name: wms-api
     image: ${DOCKERHUB_USERNAME}/wms-api:latest
