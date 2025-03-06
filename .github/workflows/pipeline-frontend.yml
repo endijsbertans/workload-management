@@ -75,7 +75,7 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/ec2_key.pem ec2-user@${{ secrets.EC2_HOST }} <<EOF
           cd ci-cd
           ls
-          sudo docker-compose -f docker-compose.yml pull -q
-          sudo docker-compose -f docker-compose.yml up -d
+          sudo -E docker-compose -f docker-compose.yml pull -q
+          sudo -E docker-compose -f docker-compose.yml up -d
           EOF
 
