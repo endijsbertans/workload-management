@@ -30,6 +30,10 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Update API URL
+        run: |
+          cd Frontend/workload-management
+          sed -i "s|API_URL_PLACEHOLDER|http://${{ secrets.EC2_HOST }}:8088/api/v1|g" src/environments/environment.prod.ts
 
       - name: Build & Push to DockerHub
         uses: docker/build-push-action@v5

@@ -12,7 +12,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(withInterceptors([authInterceptor])),
     provideAnimations(),
-    importProvidersFrom(ApiModule.forRoot({ rootUrl: 'http://13.61.154.100:8088/api/v1' }))
+    importProvidersFrom(ApiModule.forRoot({ rootUrl: environment.apiUrl }))
   ]
 };
 
