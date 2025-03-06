@@ -1,14 +1,14 @@
-name: WMS Frontend Pipeline
+name: WMS Backend Pipeline
 
 on:
   push:
     branches:
       - main
     paths:
-      - Frontend/**
-      - docker/frontend/**
+      - Backend/**
+      - docker/backend/**
       - 'docker-compose.yml'
-      - .github/workflows/*-frontend.yml
+      - .github/workflows/*-backend.yml
 
 jobs:
   build-image:
@@ -23,7 +23,7 @@ jobs:
       - name: Extract project version
         id: extract_version
         run: |
-          cd Frontend/workload-management
+          cd Backend/workload-management
           echo "VERSION=$(jq -r '.version' package.json)" >> $GITHUB_OUTPUT
 
       - name: Login to DockerHub

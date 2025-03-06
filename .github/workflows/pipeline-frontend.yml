@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - Backend/**
+      - Frontend/**
       - docker/frontend/**
       - 'docker-compose.yml'
       - .github/workflows/*-frontend.yml
@@ -45,6 +45,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build-image]
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -56,13 +60,15 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/ec2_key.pem
-          chmod 400 ~/.ssh/ec2_key.pem
+          chmod 600 ~/.ssh/ec2_key.pem
 
       - name: Create deployment folder on EC2
         run: ssh -o StrictHostKeyChecking=no -i ~/.ssh/ec2_key.pem ec2-user@${{ secrets.EC2_HOST }} "mkdir -p ci-cd"
 
       - name: Copy docker-compose file to EC2
-        run: scp -o StrictHostKeyChecking=no -i ~/.ssh/ec2_key.pem docker-compose.yml ec2-user@${{ secrets.EC2_HOST }}:ci-cd/docker-compose.yml
+        run: |
+          ls
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/ec2_key.pem docker-compose.yml ec2-user@${{ secrets.EC2_HOST }}:ci-cd/docker-compose.yml
 
       - name: Deploy to EC2
         run: |
