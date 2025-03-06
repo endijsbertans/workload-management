@@ -195,7 +195,9 @@ public class WorkloadManagementApplication {
 					workloadRepo.save(w1);
 					myClassRepo.save(ac1);
 					System.out.println(w1);
-
+					System.out.println(${EMAIL_HOSTNAME});
+					System.out.println(${EMAIL_USER_NAME});
+					System.out.println(${EMAIL_PASSWORD});
 			};
 		}
 	}
