@@ -76,9 +76,13 @@ jobs:
           export EMAIL_HOSTNAME=${{ secrets.EMAIL_HOSTNAME }}
           export EMAIL_USER_NAME=${{ secrets.EMAIL_USER_NAME }}
           export EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}
-          echo $EMAIL_HOSTNAME
-          echo $EMAIL_USER_NAME
-          echo $EMAIL_PASSWORD
+          
+          echo "Checking environment variables:"
+          echo "EC2_HOST: $EC2_HOST"
+          echo "EMAIL_HOSTNAME: $EMAIL_HOSTNAME"
+          echo "EMAIL_USER_NAME: $EMAIL_USER_NAME"
+          echo "DOCKERHUB_USERNAME: $DOCKERHUB_USERNAME"
+          
           export DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
           export EC2_HOST=${{ secrets.EC2_HOST }}
           cd ci-cd
