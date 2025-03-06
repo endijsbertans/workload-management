@@ -35,14 +35,14 @@ jobs:
       - name: Build & Push to DockerHub
         uses: docker/build-push-action@v5
         with:
-          context: Frontend/workload-management
-          file: docker/frontend/Dockerfile
+          context: Backend/workload-management
+          file: docker/backend/Dockerfile
           push: true
           platforms: linux/amd64
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/wms-ui:latest,${{ secrets.DOCKERHUB_USERNAME }}/wms-ui:${{ steps.extract_version.outputs.VERSION }}
 
   deploy:
-    name: Deploy Frontend to AWS EC2
+    name: Deploy BACKEND to AWS EC2
     runs-on: ubuntu-latest
     needs: [build-image]
     steps:
