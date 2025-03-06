@@ -34,6 +34,6 @@ application:
     frontend:
       activation-url: http://localhost:4200/activate-account
   cors:
-    origins: http://localhost:4200,http://localhost:8080,http://${EC2_HOST}:8088,http://${EC2_HOST}:8080
+    origins: http://localhost:4200,http://localhost:8080,http://${EC2_HOST}:8088,http://${EC2_HOST}:8080, http://${EC2_HOST}:80
 server:
   port: 8088
