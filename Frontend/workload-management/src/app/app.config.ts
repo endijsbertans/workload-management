@@ -1,7 +1,7 @@
 import { ApplicationConfig, provideZoneChangeDetection, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-
+import { ApiModule } from './services/api.module';
 import { routes } from './app.routes';
 import { authInterceptor } from './services/interceptor/http-token.interceptor';
 import { provideAnimations } from '@angular/platform-browser/animations';
