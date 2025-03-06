@@ -5,6 +5,7 @@ import { ApiModule } from './services/api.module';
 import { routes } from './app.routes';
 import { authInterceptor } from './services/interceptor/http-token.interceptor';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import {prodEnvironment} from "../environments/environment.prod";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -12,7 +13,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(withInterceptors([authInterceptor])),
     provideAnimations(),
-    importProvidersFrom(ApiModule.forRoot({ rootUrl: environment.apiUrl }))
+    importProvidersFrom(ApiModule.forRoot({ rootUrl: prodEnvironment.apiUrl }))
   ]
 };
 

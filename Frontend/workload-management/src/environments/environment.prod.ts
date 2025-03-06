@@ -1,11 +1,11 @@
-// Frontend/workload-management/src/environments/environment.ts
+// environment.ts
 export const environment = {
   production: false,
   apiUrl: 'http://localhost:8088/api/v1'
 };
 
-// Frontend/workload-management/src/environments/environment.prod.ts
-export const environment = {
+// environment.prod.ts
+export const prodEnvironment = {
   production: true,
   apiUrl: 'API_URL_PLACEHOLDER'
 };
