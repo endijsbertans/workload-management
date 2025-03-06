@@ -110,7 +110,7 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/ec2_key.pem ec2-user@${{ secrets.EC2_HOST }} <<EOF
           # Set environment variables
-          export EMAIL_HOSTNAME=${{ secrets.EMAIL_HOST_NAME }}
+          export EMAIL_HOSTNAME=${{ secrets.EMAIL_HOSTNAME }}
           export EMAIL_USER_NAME=${{ secrets.EMAIL_USER_NAME }}
           export EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}
           export DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
