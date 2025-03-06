@@ -23,7 +23,7 @@ jobs:
         run: |
           ls -la Backend/workload-management
           chmod +x Backend/workload-management/mvnw
-          chmod +x Backend/workload-management/.mvn/wrapper/maven-wrapper.proporties
+
 
       - name: Setup JDK
         uses: actions/setup-java@v4
