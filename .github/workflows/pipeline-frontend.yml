@@ -54,7 +54,7 @@ jobs:
 
       - name: Create SSH key file
         run: |
-          sudo mkdir -p ~/.ssh
+          mkdir -p ~/.ssh
           echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/ec2_key.pem
           chmod 400 ~/.ssh/ec2_key.pem
 
