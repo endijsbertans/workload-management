@@ -23,8 +23,6 @@ jobs:
         run: |
           ls -la Backend/workload-management
           chmod +x Backend/workload-management/mvnw
-
-
       - name: Setup JDK
         uses: actions/setup-java@v4
         with:
@@ -35,8 +33,6 @@ jobs:
         run: |
           cd Backend/workload-management
           ./mvnw clean compile
-
-
   build:
     runs-on: ubuntu-latest
     name: Build backend
@@ -52,7 +48,10 @@ jobs:
         with:
           java-version: '17'
           distribution: 'corretto'
-
+      - name: Grant execute permission for Maven Wrapper
+        run: |
+          ls -la Backend/workload-management
+          chmod +x Backend/workload-management/mvnw
       - name: Compile project
         run: |
           cd Backend/workload-management
