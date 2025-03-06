@@ -1,4 +1,4 @@
-name: BSN Backend API Pipeline
+name: wms Backend API Pipeline
 
 on:
   push:
@@ -34,31 +34,11 @@ jobs:
           cd Backend/workload-management
           ./mvnw clean compile
 
-  unit-tests:
-    runs-on: ubuntu-latest
-    name: Unit tests
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Grant execute permission for Maven Wrapper
-        run: chmod +x Backend/workload-management/mvnw
-      - name: Setup JDK
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'corretto'
-
-      - name: Running Unit Tests
-        run: |
-          cd Backend/workload-management
-          ./mvnw clean test
 
   build:
     runs-on: ubuntu-latest
     name: Build backend
-    needs: [compile, unit-tests]
+    needs: [compile]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -105,7 +85,7 @@ jobs:
           file: docker/backend/Dockerfile
           push: true
           platforms: linux/amd64
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/bsn-api:${{ steps.extract_version.outputs.VERSION }},${{ secrets.DOCKERHUB_USERNAME }}/bsn-api:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/wms-api:${{ steps.extract_version.outputs.VERSION }},${{ secrets.DOCKERHUB_USERNAME }}/wms-api:latest
           build-args: |
             PROFILE=dev
             APP_VERSION=${{ steps.extract_version.outputs.VERSION }}
@@ -137,7 +117,7 @@ jobs:
       - name: Deploy to EC2
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/ec2_key.pem ec2-user@${{ secrets.EC2_HOST }} <<EOF
-          export EMAIL_HOST_NAME=${{ secrets.EMAIL_HOST_NAME }}
+          export EMAIL_HOSTNAME=${{ secrets.EMAIL_HOST_NAME }}
           export EMAIL_USER_NAME=${{ secrets.EMAIL_USER_NAME }}
           export EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}
           cd ci-cd

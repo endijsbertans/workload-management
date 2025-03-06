@@ -1,4 +1,4 @@
-name: BSN Frontend Pipeline
+name: WMS Frontend Pipeline
 
 on:
   push:
@@ -38,7 +38,7 @@ jobs:
           file: docker/frontend/Dockerfile
           push: true
           platforms: linux/amd64
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/bsn-ui:latest,${{ secrets.DOCKERHUB_USERNAME }}/bsn-ui:${{ steps.extract_version.outputs.VERSION }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/wms-ui:latest,${{ secrets.DOCKERHUB_USERNAME }}/wms-ui:${{ steps.extract_version.outputs.VERSION }}
 
   deploy:
     name: Deploy Frontend to AWS EC2
