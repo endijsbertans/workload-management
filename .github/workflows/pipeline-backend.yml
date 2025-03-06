@@ -1,4 +1,4 @@
-name: WMS Backend Pipeline
+name: WMS Backend API Pipeline
 
 on:
   push:
@@ -9,17 +9,58 @@ on:
       - docker/backend/**
       - 'docker-compose.yml'
       - .github/workflows/*-backend.yml
-
 jobs:
-  build-image:
-    name: Build FE Docker image
-    runs-on: ubuntu-latest
+  compile:
+    runs-on: self-hosted
+    name: Compile project
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'corretto'
+
+      - name: Running Unit Tests
+        run: |
+          cd Backend/workload-management
+          ./mvnw clean compile
+
+  build:
+    runs-on: self-hosted
+    name: Build backend
+    needs: [compile]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'corretto'
+
+      - name: Compile project
+        run: |
+          cd Backend/workload-management
+          ./mvnw clean compile
+
+  build-image:
+    name: Build Docker image
+    runs-on: self-hosted
+    needs: [build]
+    steps:
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'corretto'
       - name: Extract project version
         id: extract_version
         run: |
@@ -43,6 +84,7 @@ jobs:
           build-args: |
             PROFILE=dev
             APP_VERSION=${{ steps.extract_version.outputs.VERSION }}
+  
 
   deploy:
     name: Deploy BACKEND to AWS EC2
