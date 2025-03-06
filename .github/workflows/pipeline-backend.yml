@@ -22,7 +22,7 @@ jobs:
       - name: Grant execute permission for Maven Wrapper
         run: |
           chmod +x Backend/workload-management/mvnw
-          chmod +x Backend/workload-management/.mvn/wrapper/maven-wrapper.jar
+          chmod +x Backend/workload-management/.mvn/wrapper/maven-wrapper.proporties
 
       - name: Setup JDK
         uses: actions/setup-java@v4
