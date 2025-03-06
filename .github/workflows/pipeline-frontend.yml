@@ -54,9 +54,9 @@ jobs:
 
       - name: Create SSH key file
         run: |
-          mkdir -p ~/.ssh
+          sudo mkdir -p ~/.ssh
           echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/ec2_key.pem
-          chmod 600 ~/.ssh/ec2_key.pem
+          chmod 400 ~/.ssh/ec2_key.pem
 
       - name: Create deployment folder on EC2
         run: ssh -o StrictHostKeyChecking=no -i ~/.ssh/ec2_key.pem ec2-user@${{ secrets.EC2_HOST }} "mkdir -p ci-cd"
