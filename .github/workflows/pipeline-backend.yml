@@ -48,6 +48,10 @@ jobs:
         with:
           java-version: '17'
           distribution: 'corretto'
+      - name: Make mvnw executable
+        run: |
+          cd Backend/workload-management
+          chmod +x ./mvnw
       - name: Extract project version
         id: extract_version
         run: |
