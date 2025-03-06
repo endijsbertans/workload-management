@@ -73,29 +73,13 @@ jobs:
       - name: Deploy to EC2
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/ec2_key.pem ec2-user@${{ secrets.EC2_HOST }} <<EOF
-            # Install Docker if not installed
-            if ! command -v docker &> /dev/null; then
-              echo "Installing Docker..."
-              sudo yum update -y
-              sudo yum install -y docker
-              sudo systemctl start docker
-              sudo systemctl enable docker
-              sudo usermod -aG docker ec2-user
-          
-              # Install Docker Compose
-              sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-              sudo chmod +x /usr/local/bin/docker-compose
-              sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
-            fi
-          
-            # Set environment variables
-            export EMAIL_HOSTNAME=${{ secrets.EMAIL_HOST_NAME }}
-            export EMAIL_USER_NAME=${{ secrets.EMAIL_USER_NAME }}
-            export EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}
-            export DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
-          
-            # Deploy application
-            cd ci-cd
-            sudo docker compose -f docker-compose.yml pull -q
-            sudo docker compose -f docker-compose.yml up -d
-            EOF
+          # Set environment variables
+          export EMAIL_HOSTNAME=${{ secrets.EMAIL_HOST_NAME }}
+          export EMAIL_USER_NAME=${{ secrets.EMAIL_USER_NAME }}
+          export EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}
+          export DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
+          # Deploy application
+          cd ci-cd
+          sudo docker compose -f docker-compose.yml pull -q
+          sudo docker compose -f docker-compose.yml up -d
+          EOF
