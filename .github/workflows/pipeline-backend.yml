@@ -1,88 +1,31 @@
-name: wms Backend API Pipeline
+name: WMS Frontend Pipeline
 
 on:
   push:
     branches:
       - main
     paths:
-      - Backend/**
-      - docker/backend/**
+      - Frontend/**
+      - docker/frontend/**
       - 'docker-compose.yml'
-      - .github/workflows/*-backend.yml
+      - .github/workflows/*-frontend.yml
 
 jobs:
-  compile:
-    runs-on: ubuntu-latest
-    name: Compile project
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Grant execute permission for Maven Wrapper
-        run: |
-          ls -la Backend/workload-management
-          chmod +x Backend/workload-management/mvnw
-      - name: Setup JDK
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'corretto'
-
-      - name: Running Unit Tests
-        run: |
-          cd Backend/workload-management
-          ./mvnw clean compile
-  build:
-    runs-on: ubuntu-latest
-    name: Build backend
-    needs: [compile]
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Setup JDK
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'corretto'
-      - name: Grant execute permission for Maven Wrapper
-        run: |
-          ls -la Backend/workload-management
-          chmod +x Backend/workload-management/mvnw
-      - name: Compile project
-        run: |
-          cd Backend/workload-management
-          ./mvnw clean compile
-
   build-image:
-    name: Build Docker image
+    name: Build FE Docker image
     runs-on: ubuntu-latest
-    needs: [build]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Setup JDK
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'corretto'
-
-      - name: Grant execute permission for Maven Wrapper
-        run: |
-          ls -la Backend/workload-management
-          chmod +x Backend/workload-management/mvnw
 
       - name: Extract project version
         id: extract_version
         run: |
-          cd Backend/workload-management
-          echo "VERSION=$(./mvnw -q -Dexec.executable='echo' -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_OUTPUT
+          cd Frontend/workload-management
+          echo "VERSION=$(jq -r '.version' package.json)" >> $GITHUB_OUTPUT
+
       - name: Login to DockerHub
         uses: docker/login-action@v3
         with:
@@ -92,17 +35,14 @@ jobs:
       - name: Build & Push to DockerHub
         uses: docker/build-push-action@v5
         with:
-          context: Backend/workload-management
-          file: docker/backend/Dockerfile
+          context: Frontend/workload-management
+          file: docker/frontend/Dockerfile
           push: true
           platforms: linux/amd64
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/wms-api:${{ steps.extract_version.outputs.VERSION }},${{ secrets.DOCKERHUB_USERNAME }}/wms-api:latest
-          build-args: |
-            PROFILE=dev
-            APP_VERSION=${{ steps.extract_version.outputs.VERSION }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/wms-ui:latest,${{ secrets.DOCKERHUB_USERNAME }}/wms-ui:${{ steps.extract_version.outputs.VERSION }}
 
   deploy:
-    name: Deploy Backend to AWS EC2
+    name: Deploy Frontend to AWS EC2
     runs-on: ubuntu-latest
     needs: [build-image]
     steps:
@@ -128,18 +68,34 @@ jobs:
         run: ssh -o StrictHostKeyChecking=no -i ~/.ssh/ec2_key.pem ec2-user@${{ secrets.EC2_HOST }} "mkdir -p ci-cd"
 
       - name: Copy docker-compose file to EC2
-        run: |
-          ls
-          scp -o StrictHostKeyChecking=no -i ~/.ssh/ec2_key.pem docker-compose.yml ec2-user@${{ secrets.EC2_HOST }}:ci-cd/docker-compose.yml
+        run: scp -o StrictHostKeyChecking=no -i ~/.ssh/ec2_key.pem docker-compose.yml ec2-user@${{ secrets.EC2_HOST }}:ci-cd/docker-compose.yml
 
       - name: Deploy to EC2
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/ec2_key.pem ec2-user@${{ secrets.EC2_HOST }} <<EOF
-          export EMAIL_HOSTNAME=${{ secrets.EMAIL_HOST_NAME }}
-          export EMAIL_USER_NAME=${{ secrets.EMAIL_USER_NAME }}
-          export EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}
-          export DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
-          cd ci-cd
-          docker compose -f docker-compose.yml pull -q
-          docker compose -f docker-compose.yml up -d
-          EOF
+            # Install Docker if not installed
+            if ! command -v docker &> /dev/null; then
+              echo "Installing Docker..."
+              sudo yum update -y
+              sudo yum install -y docker
+              sudo systemctl start docker
+              sudo systemctl enable docker
+              sudo usermod -aG docker ec2-user
+          
+              # Install Docker Compose
+              sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+              sudo chmod +x /usr/local/bin/docker-compose
+              sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+            fi
+          
+            # Set environment variables
+            export EMAIL_HOSTNAME=${{ secrets.EMAIL_HOST_NAME }}
+            export EMAIL_USER_NAME=${{ secrets.EMAIL_USER_NAME }}
+            export EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}
+            export DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
+          
+            # Deploy application
+            cd ci-cd
+            sudo docker compose -f docker-compose.yml pull -q
+            sudo docker compose -f docker-compose.yml up -d
+            EOF
