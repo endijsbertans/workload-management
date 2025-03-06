@@ -80,6 +80,6 @@ jobs:
           export DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
           # Deploy application
           cd ci-cd
-          sudo docker compose -f docker-compose.yml pull -q
-          sudo docker compose -f docker-compose.yml up -d
+          sudo docker-compose -f docker-compose.yml pull -q
+          sudo docker-compose -f docker-compose.yml up -d
           EOF
