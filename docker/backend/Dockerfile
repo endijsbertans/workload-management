@@ -12,9 +12,12 @@ ARG PROFILE=dev
 ARG APP_VERSION=1.0.0
 
 WORKDIR /app
-COPY --from=build /build/target/workload-management-*.jar /app/
+COPY --from=build /build/target/workloadmanagement-*.jar /app/
 EXPOSE 8088
 ENV ACTIVE_PROFILE=${PROFILE}
 ENV DB_URL=jdbc:mysql://mysql-container:3306/mydatabase
 ENV JAR_VERSION=${APP_VERSION}
-CMD java -jar -Dspring.profiles.active=${ACTIVE_PROFILE} -Dspring.datasource.url=${DB_URL}  workload-management-${JAR_VERSION}.jar
+ENV EMAIL_HOSTNAME=missing_host_name
+ENV EMAIL_USER_NAME=missing_user_name
+ENV EMAIL_PASSWORD=missing_password
+CMD java -jar -Dspring.profiles.active=${ACTIVE_PROFILE} -Dspring.datasource.url=${DB_URL}  workloadmanagement-${JAR_VERSION}.jar

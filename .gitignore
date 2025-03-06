@@ -1,19 +1,19 @@
 C:\Users\cice3\Desktop\BAKALAURS\Backend\Workload Management\.idea
-/Backend/Workload Management/.mvn/
-/Backend/Workload Management/target/
-/Backend/Workload Management/!.mvn/wrapper/maven-wrapper.jar
-/Backend/Workload Management/!**/src/main/**/target/
-/Backend/Workload Management/**/src/test/**/target/
-/Backend/Workload Management/HELP.md
+/Backend/workload-management/.mvn/
+/Backend/workload-management/target/
+/Backend/workload-management/!.mvn/wrapper/maven-wrapper.jar
+/Backend/workload-management/!**/src/main/**/target/
+/Backend/workload-management/**/src/test/**/target/
+/Backend/workload-management/HELP.md
 
 ### STS ###
-/Backend/Workload Management/apt_generated
-/Backend/Workload Management/classpath
-/Backend/Workload Management/factorypath
-/Backend/Workload Management/project
-/Backend/Workload Management/settings
-/Backend/Workload Management/springBeans
-/Backend/Workload Management/sts4-cache
+/Backend/workload-management/apt_generated
+/Backend/workload-management/classpath
+/Backend/workload-management/factorypath
+/Backend/workload-management/project
+/Backend/workload-management/settings
+/Backend/workload-management/springBeans
+/Backend/workload-management/sts4-cache
 
 ### IntelliJ IDEA ###
 .idea
@@ -22,15 +22,15 @@ C:\Users\cice3\Desktop\BAKALAURS\Backend\Workload Management\.idea
 /Backend/Workload Management/*.ipr
 
 ### NetBeans ###
-/Backend/Workload Management/nbproject/private/
-/Backend/Workload Management/nbbuild/
-/Backend/Workload Management/dist/
-/Backend/Workload Management/nbdist/
-/Backend/Workload Management/.nb-gradle/
-/Backend/Workload Management/build/
-/Backend/Workload Management/!**/src/main/**/build/
-/Backend/Workload Management/!**/src/test/**/build/
+/Backend/workload-management/nbproject/private/
+/Backend/workload-management/nbbuild/
+/Backend/workload-management/dist/
+/Backend/workload-management/nbdist/
+/Backend/workload-management/.nb-gradle/
+/Backend/workload-management/build/
+/Backend/workload-management/!**/src/main/**/build/
+/Backend/workload-management/!**/src/test/**/build/
 
 ### VS Code ###
-/Backend/Workload Management/.vscode/
+/Backend/workload-management/.vscode/
 

@@ -11,22 +11,38 @@ services:
       - 3306:3306
     volumes:
       - mysql:/var/lib/mysql
-
+    networks:
+      - spring-demo
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   mail-dev:
     container_name: mail-dev-bsn
     image: maildev/maildev
     ports:
       - 1080:1080
       - 1025:1025
+
   wm-api:
     container_name: wm-api
-    image: dwm/dwm:1.0.0
+    image: wms/wms:1.0.2
     ports:
       - 8088:8088
     networks:
       - spring-demo
     depends_on:
       - mysql
+  wm-frontend:
+    container_name: wm-ui
+    image: wms/wms-frontend:1.0.0
+    ports:
+      - 8080:80
+    networks:
+      - spring-demo
+    depends_on:
+      - wm-api
 
 networks:
   spring-demo:
