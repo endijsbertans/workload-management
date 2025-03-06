@@ -23,8 +23,8 @@ jobs:
       - name: Extract project version
         id: extract_version
         run: |
-          cd Backend/workload-management
-          echo "VERSION=$(jq -r '.version' package.json)" >> $GITHUB_OUTPUT
+          cd book-network
+          echo "VERSION=$(./mvnw -q -Dexec.executable='echo' -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_OUTPUT
 
       - name: Login to DockerHub
         uses: docker/login-action@v3
@@ -39,7 +39,10 @@ jobs:
           file: docker/backend/Dockerfile
           push: true
           platforms: linux/amd64
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/wms-api:${{ steps.extract_version.outputs.VERSION }},${{ secrets.DOCKERHUB_USERNAME }}/wms-api:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/wms-api:latest,${{ secrets.DOCKERHUB_USERNAME }}/wms-api:${{ steps.extract_version.outputs.VERSION }}
+          build-args: |
+            PROFILE=dev
+            APP_VERSION=${{ steps.extract_version.outputs.VERSION }}
 
   deploy:
     name: Deploy BACKEND to AWS EC2
