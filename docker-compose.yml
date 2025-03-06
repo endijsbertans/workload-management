@@ -36,7 +36,7 @@ services:
       - EMAIL_HOSTNAME=${EMAIL_HOSTNAME}
       - EMAIL_USER_NAME=${EMAIL_USER_NAME}
       - EMAIL_PASSWORD=${EMAIL_PASSWORD}
-      - ENV EC2_HOST=missing_ec2_host
+      - ENV EC2_HOST=${EC2_HOST}
     networks:
       - spring-demo
     depends_on:

@@ -20,4 +20,5 @@ ENV JAR_VERSION=${APP_VERSION}
 ENV EMAIL_HOSTNAME=missing_host_name
 ENV EMAIL_USER_NAME=missing_user_name
 ENV EMAIL_PASSWORD=missing_password
+ENV EC2_HOST=missing_ec2_host
 CMD java -jar -Dspring.profiles.active=${ACTIVE_PROFILE} -Dspring.datasource.url=${DB_URL}  workloadmanagement-${JAR_VERSION}.jar
