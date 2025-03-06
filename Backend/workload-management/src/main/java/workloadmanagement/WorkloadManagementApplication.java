@@ -32,7 +32,14 @@ public class WorkloadManagementApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(WorkloadManagementApplication.class, args);
 	}
+	@Value("${EMAIL_HOSTNAME}")
+	private String emailHostname;
 
+	@Value("${EMAIL_USER_NAME}")
+	private String emailUsername;
+
+	@Value("${EMAIL_PASSWORD}")
+	private String emailPassword;
 	@Bean
 	public CommandLineRunner testDatabaseLayer(
 			IMyAuthorityRepo myAuthorityRepo,
@@ -195,9 +202,9 @@ public class WorkloadManagementApplication {
 					workloadRepo.save(w1);
 					myClassRepo.save(ac1);
 					System.out.println(w1);
-					System.out.println(${EMAIL_HOSTNAME});
-					System.out.println(${EMAIL_USER_NAME});
-					System.out.println(${EMAIL_PASSWORD});
+			System.out.println(env.getProperty("EMAIL_HOSTNAME"));
+			System.out.println(env.getProperty("EMAIL_USER_NAME"));
+			System.out.println(env.getProperty("EMAIL_PASSWORD"));
 			};
 		}
 	}
