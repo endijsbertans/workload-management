@@ -15,3 +15,4 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(ApiModule.forRoot({ rootUrl: 'http://13.61.154.100:8088/api/v1' }))
   ]
 };
+
