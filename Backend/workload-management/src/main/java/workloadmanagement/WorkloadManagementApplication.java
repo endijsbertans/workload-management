@@ -1,5 +1,6 @@
 package workloadmanagement;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -202,9 +203,9 @@ public class WorkloadManagementApplication {
 					workloadRepo.save(w1);
 					myClassRepo.save(ac1);
 					System.out.println(w1);
-			System.out.println(env.getProperty("EMAIL_HOSTNAME"));
-			System.out.println(env.getProperty("EMAIL_USER_NAME"));
-			System.out.println(env.getProperty("EMAIL_PASSWORD"));
+			System.out.println(emailHostname);
+			System.out.println(emailUsername);
+			System.out.println(emailPassword);
 			};
 		}
 	}
