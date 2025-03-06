@@ -91,37 +91,45 @@ jobs:
             PROFILE=dev
             APP_VERSION=${{ steps.extract_version.outputs.VERSION }}
 
-  deploy:
-    name: Deploy Backend to AWS EC2
-    runs-on: ubuntu-latest
-    needs: [build-image]
-    steps:
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
+deploy:
+  name: Deploy Backend to AWS EC2
+  runs-on: ubuntu-latest
+  needs: [build-image]
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
-      - name: Create SSH key file
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/ec2_key.pem
-          chmod 600 ~/.ssh/ec2_key.pem
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Create deployment folder on EC2
-        run: ssh -o StrictHostKeyChecking=no -i ~/.ssh/ec2_key.pem ec2-user@${{ secrets.EC2_HOST }} "mkdir -p ci-cd"
+    - name: Create SSH key file
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/ec2_key.pem
+        chmod 600 ~/.ssh/ec2_key.pem
 
-      - name: Copy docker-compose file to EC2
-        run: scp -o StrictHostKeyChecking=no -i ~/.ssh/ec2_key.pem docker-compose.yml ec2-user@${{ secrets.EC2_HOST }}:ci-cd/docker-compose.yml
+    - name: Create deployment folder on EC2
+      run: ssh -o StrictHostKeyChecking=no -i ~/.ssh/ec2_key.pem ec2-user@${{ secrets.EC2_HOST }} "mkdir -p ci-cd"
 
-      - name: Deploy to EC2
-        run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/ec2_key.pem ec2-user@${{ secrets.EC2_HOST }} <<EOF
-          export EMAIL_HOSTNAME=${{ secrets.EMAIL_HOST_NAME }}
-          export EMAIL_USER_NAME=${{ secrets.EMAIL_USER_NAME }}
-          export EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}
-          cd ci-cd
-          docker compose -f docker-compose.yml pull -q
-          docker compose -f docker-compose.yml up -d
-          EOF
+    - name: Copy docker-compose file to EC2
+      run: |
+        ls
+        scp -o StrictHostKeyChecking=no -i ~/.ssh/ec2_key.pem docker-compose.yml ec2-user@${{ secrets.EC2_HOST }}:ci-cd/docker-compose.yml
+
+    - name: Deploy to EC2
+      run: |
+        ssh -o StrictHostKeyChecking=no -i ~/.ssh/ec2_key.pem ec2-user@${{ secrets.EC2_HOST }} <<EOF
+        export EMAIL_HOSTNAME=${{ secrets.EMAIL_HOST_NAME }}
+        export EMAIL_USER_NAME=${{ secrets.EMAIL_USER_NAME }}
+        export EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}
+        export DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
+        cd ci-cd
+        docker compose -f docker-compose.yml pull -q
+        docker compose -f docker-compose.yml up -d
+        EOF
