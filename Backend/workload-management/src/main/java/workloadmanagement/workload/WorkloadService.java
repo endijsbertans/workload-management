@@ -124,7 +124,7 @@ public PageResponse<WorkloadResponse> findAllWorkloads(Pageable pageable, Map<St
 
             filters.forEach((column, filter) -> {
                 // Special handling for course fields (assuming you have a 'course' property in Workload)
-// Special handling for MyClass filtering (many-to-many relationship)
+                // Special handling for MyClass filtering (many-to-many relationship)
                 if (column.startsWith("class")) {
                     jakarta.persistence.criteria.Join<Workload, MyClass> classJoin = root.join("myClasses", JoinType.LEFT);
                     addPredicate(predicates, criteriaBuilder, classJoin.get(column), filter);
