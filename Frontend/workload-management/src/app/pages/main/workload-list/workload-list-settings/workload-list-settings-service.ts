@@ -37,36 +37,27 @@ export class WorkloadListSettingsService implements OnInit{
     );
     this.saveSettings();
   }
-
   updateWorkloadGroup() {
     const visibleGroups = this.visibleWorkloadGroups();
+    const currentSettings = this.listSettings();
     const newSettings: WorkloadColumnSettings[] = [];
 
-    newSettings.push(
-      ...(visibleGroups.columnsForTeacher
-        ? ColumnsForWorkloadList.filter(column => column.collection === "columnsForTeacher")
-        : ColumnsForWorkloadList.filter(column => column.collection === "columnsForTeacher" && column.isMain)),
 
-      ...(visibleGroups.columnsForCourse
-        ? ColumnsForWorkloadList.filter(column => column.collection === "columnsForCourse")
-        : ColumnsForWorkloadList.filter(column => column.collection === "columnsForCourse" && column.isMain)),
+    ColumnsForWorkloadList.forEach(originalColumn => {
 
-      ...(visibleGroups.columnsForCalc
-        ? ColumnsForWorkloadList.filter(column => column.collection === "columnsForCalc")
-        : ColumnsForWorkloadList.filter(column => column.collection === "columnsForCalc" && column.isMain)),
+      const userSetting = currentSettings.find(col => col.pathTo === originalColumn.pathTo);
 
-      ...(visibleGroups.columnsForWorkloadClasses
-        ? ColumnsForWorkloadList.filter(column => column.collection === "columnsForWorkloadClasses")
-        : ColumnsForWorkloadList.filter(column => column.collection === "columnsForWorkloadClasses" && column.isMain)),
+      const groupVisible = visibleGroups[originalColumn.collection as keyof ShownColumns];
+      const shouldInclude = groupVisible || originalColumn.isMain;
 
-      ...(visibleGroups.columnsForGeneralInfo
-        ? ColumnsForWorkloadList.filter(column => column.collection === "columnsForGeneralInfo")
-        : ColumnsForWorkloadList.filter(column => column.collection === "columnsForGeneralInfo" && column.isMain)),
+      if (shouldInclude) {
 
-      ...(visibleGroups.columnsForSalary
-        ? ColumnsForWorkloadList.filter(column => column.collection === "columnsForSalary")
-        : ColumnsForWorkloadList.filter(column => column.collection === "columnsForSalary" && column.isMain))
-    );
+        newSettings.push({
+          ...originalColumn,
+          visible: userSetting ? userSetting.visible : originalColumn.visible
+        });
+      }
+    });
 
     this.listSettings.set(newSettings);
     this.saveSettings();

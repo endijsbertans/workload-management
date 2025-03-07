@@ -14,6 +14,8 @@ import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {WorkloadListSettingsComponent} from "./workload-list-settings/workload-list-settings.component";
 import {WorkloadListSettingsService} from "./workload-list-settings/workload-list-settings-service";
 import {ShownColumns, WorkloadColumnSettings} from "./workload-list-columns";
+import {ColumnFilterDialogComponent} from "./column-filter-dialog/column-filter-dialog.component";
+import {MatDialog} from "@angular/material/dialog";
 
 
 
@@ -42,6 +44,9 @@ export class WorkloadListComponent implements OnInit {
   private readonly workloadService = inject(WorkloadService);
   private readonly router = inject(Router);
   private readonly columnSettingsService = inject(WorkloadListSettingsService);
+  private readonly dialog = inject(MatDialog);
+  activeFilters: Map<string, {value: string, operator: string}> = new Map();
+
   columnsToDisplay? = computed(() => {
     return this.columnSettingsService.getSettings().filter((column) => column.visible) ?? []
   });
@@ -67,11 +72,22 @@ export class WorkloadListComponent implements OnInit {
     });
   }
   private findAllWorkloads() {
+    // Convert the activeFilters Map to a JSON string
+    let filtersJson: string | undefined;
+    if (this.activeFilters.size > 0) {
+      const filtersObject: Record<string, { value: string, operator: string }> = {};
+      this.activeFilters.forEach((value, key) => {
+        filtersObject[key] = value;
+      });
+      filtersJson = JSON.stringify(filtersObject);
+    }
+
     this.workloadService.findAllWorkloads({
       page: this.pageIndex,
       size: this.pageSize,
       sort: this.sortColumn.active,
-      direction: this.sortColumn.direction
+      direction: this.sortColumn.direction,
+      filters: filtersJson
     }).subscribe({
       next: (workloads) => {
         this.isLoadingResults = true;
@@ -183,5 +199,36 @@ export class WorkloadListComponent implements OnInit {
       return true;
     }
     return false
+  }
+  openFilterDialog(event: MouseEvent, column: WorkloadColumnSettings): void {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const currentFilter = this.activeFilters.get(column.pathTo);
+
+    const dialogRef = this.dialog.open(ColumnFilterDialogComponent, {
+      width: '300px',
+      data: {
+        column: column,
+        currentFilter: currentFilter?.value ?? '',
+        currentOperator: currentFilter?.operator ?? 'contains'
+      }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        if (result.clear) {
+          this.activeFilters.delete(result.column.pathTo);
+        } else {
+          this.activeFilters.set(result.column.pathTo, {
+            value: result.value,
+            operator: result.operator
+          });
+        }
+        this.findAllWorkloads();
+      }
+    });
+  }
+  isColumnFiltered(columnPath: string): boolean {
+    return this.activeFilters.has(columnPath);
   }
 }

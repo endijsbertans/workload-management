@@ -22,4 +22,5 @@ export class WorkloadListSettingsComponent {
   toggleGroupVisibility(column: string, visible: boolean) {
     this.columnSettingsService.updateWorkloadColumnSetting(column, !visible);
   }
+
 }

@@ -13,7 +13,7 @@ export interface TeachingStaffResponse {
   staffAcademicRank?: AcademicRank;
   staffFaculty?: Faculty;
   staffFullName?: string;
-  staffPhoto?: Array<string>;
+  staffPhoto?: string;
   status?: StatusType;
   surname?: string;
   teachingStaffId?: number;

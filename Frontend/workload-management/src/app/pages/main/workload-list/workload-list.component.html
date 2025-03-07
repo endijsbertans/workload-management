@@ -2,41 +2,52 @@
 <hr>
 <router-outlet/>
 <app-workload-list-settings/>
-  <div class="actions-with-table">
-    <mat-form-field>
-      <mat-label>Meklēt (ciparus neatrod)</mat-label>
-      <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
-    </mat-form-field>
-    <button mat-raised-button routerLink="new-workload" type="button" >
-      Pievienot datus
-    </button>
-  </div>
+<div class="actions-with-table">
+  <mat-form-field>
+    <mat-label>Meklēt (ciparus neatrod)</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
+  </mat-form-field>
+  <button mat-raised-button routerLink="new-workload" type="button">
+    Pievienot datus
+  </button>
+</div>
 <div class="wrapper">
-  <table mat-table [dataSource]="dataSource"  matSort (matSortChange)="announceSortChange($event)">
+  <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)">
     @for (col of columnsToDisplay ? columnsToDisplay() : []; track col.pathTo) {
       <ng-container [matColumnDef]="col.pathTo">
-        @if(col.sortable){
-        <th mat-header-cell *matHeaderCellDef
-            mat-sort-header
-            [class]="col.style">
-          <div class="header-container">
-          <span>{{ col.name }}</span>
-            @if(col.isMain){
-          <button (click)="clickEvent($event, col.collection)" mat-icon-button aria-label="Parādīt/Paslēpt kolonnu grupu" matTooltip="Parādīt/Paslēpt kolonnu grupu">
-            <mat-icon>switch_left</mat-icon>
-          </button>
-            }
-          </div>
-        </th>
-        }@else{
+        @if (col.sortable) {
+          <th mat-header-cell *matHeaderCellDef
+              mat-sort-header
+              [class]="col.style">
+            <div class="header-container">
+              <span>{{ col.name }}</span>
+              @if (col.isMain) {
+                <button (click)="clickEvent($event, col.collection)" mat-icon-button
+                        aria-label="Parādīt/Paslēpt kolonnu grupu" matTooltip="Parādīt/Paslēpt kolonnu grupu">
+                  <mat-icon>switch_left</mat-icon>
+                </button>
+              }
+              @if (isColumnFiltered(col.pathTo)) {
+                <button (click)="openFilterDialog($event, col)" mat-icon-button matTooltip="Filtrēt kolonu">
+                  <mat-icon>filter_list_off</mat-icon>
+                </button>
+              } @else {
+                <button (click)="openFilterDialog($event, col)" mat-icon-button matTooltip="Filtrēt kolonu">
+                  <mat-icon>filter_list</mat-icon>
+                </button>
+              }
+            </div>
+          </th>
+        } @else {
           <th mat-header-cell *matHeaderCellDef
               [class]="col.style">
             <div class="header-container">
-            <span>{{ col.name }}</span>
-              @if(col.isMain){
-            <button (click)="clickEvent($event, col.collection)" mat-icon-button aria-label="Parādīt/Paslēpt kolonnu grupu" matTooltip="Parādīt/Paslēpt kolonnu grupu">
-              <mat-icon>switch_left</mat-icon>
-            </button>
+              <span>{{ col.name }}</span>
+              @if (col.isMain) {
+                <button (click)="clickEvent($event, col.collection)" mat-icon-button
+                        aria-label="Parādīt/Paslēpt kolonnu grupu" matTooltip="Parādīt/Paslēpt kolonnu grupu">
+                  <mat-icon>switch_left</mat-icon>
+                </button>
               }
             </div>
           </th>
@@ -45,13 +56,13 @@
           {{ getNestedProperty(element, col) }}
         </td>
       </ng-container>
-        }
+    }
 
-    <tr mat-header-row *matHeaderRowDef="mapDisplayedColumns()" ></tr>
-    <tr       mat-row
-              (click)="clickedRow(myRowData)"
-              [class.row-is-clicked]="isClicked(myRowData)"
-              *matRowDef="let myRowData; columns: mapDisplayedColumns()"></tr>
+    <tr mat-header-row *matHeaderRowDef="mapDisplayedColumns()"></tr>
+    <tr mat-row
+        (click)="clickedRow(myRowData)"
+        [class.row-is-clicked]="isClicked(myRowData)"
+        *matRowDef="let myRowData; columns: mapDisplayedColumns()"></tr>
   </table>
   @if (isLoadingResults) {
     <div class="example-loading-shade">

@@ -15,6 +15,7 @@ export interface FindAllWorkloads$Params {
   size?: number;
   sort?: string;
   direction?: string;
+  filters?: string;
 }
 
 export function findAllWorkloads(http: HttpClient, rootUrl: string, params?: FindAllWorkloads$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseWorkloadResponse>> {
@@ -24,6 +25,7 @@ export function findAllWorkloads(http: HttpClient, rootUrl: string, params?: Fin
     rb.query('size', params.size, {});
     rb.query('sort', params.sort, {});
     rb.query('direction', params.direction, {});
+    rb.query('filters', params.filters, {});
   }
 
   return http.request(
