@@ -1,0 +1,26 @@
+<h2 mat-dialog-title>Filter {{data.column.name}}</h2>
+<mat-dialog-content>
+  <mat-form-field appearance="fill">
+    <mat-label>Filtra veids</mat-label>
+    <mat-select [formControl]="columnFilter.controls.operatorCtrl">
+      <mat-option value="contains">Ietilpst</mat-option>
+      <mat-option value="equals">Vienāds</mat-option>
+      <mat-option value="startsWith">Sākas ar</mat-option>
+      <mat-option value="endsWith">Beidzas ar</mat-option>
+<!--      <mat-option value="boolVal">Patiess/aplams</mat-option>-->
+    </mat-select>
+  </mat-form-field>
+<!--  @if(boolInput()){-->
+<!--    <mat-slide-toggle [formControl]="columnFilter.controls.filterBoolCtrl">Patiess</mat-slide-toggle>-->
+<!--  } @else {-->
+    <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Filtra veids</mat-label>
+    <input matInput [formControl]="columnFilter.controls.filterTextCtrl" placeholder="Ievadi tekstu">
+    </mat-form-field>
+<!--  }-->
+</mat-dialog-content>
+<mat-dialog-actions >
+  <button mat-button (click)="clearFilter()">Notīrīt filtru</button>
+  <button mat-button (click)="close()">Atcelt</button>
+  <button mat-button (click)="applyFilter()">Filtrēt</button>
+</mat-dialog-actions>
