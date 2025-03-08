@@ -1,5 +1,7 @@
 @use '../../../../../node_modules/@angular/material/index' as mat;
 form{
+  display: flex;
+  flex-direction: column;
   @include mat.fab-overrides((
     container-color: var(--mat-sys-surface),
 
@@ -23,10 +25,8 @@ form{
   ));
   @include mat.fab-overrides((
     container-color: var(--mat-sys-surface),
-
   ));
-  display: flex;
-  flex-direction: column;
+
 }
 
 .backdrop {

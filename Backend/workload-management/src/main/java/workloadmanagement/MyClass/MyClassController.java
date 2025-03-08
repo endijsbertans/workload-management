@@ -31,4 +31,8 @@ public class MyClassController {
     public ResponseEntity<List<MyClassResponse>> findAllMyClass(){
         return ResponseEntity.ok(myClassService.findAllMyClass());
     }
+    @GetMapping("/getDegreeEnums")
+    public ResponseEntity<Degree[]> getEnums() {
+        return ResponseEntity.ok(Degree.values());
+    }
 }

@@ -13,19 +13,21 @@ public class MyClassMapper {
 
     public MyClass toMyClass(MyClassRequest request, Faculty faculty){
         return MyClass.builder()
-                .className(request.className())
+                .classLevel(request.classLevel())
                 .classFaculty(faculty)
                 .myClassProgram(request.myClassProgram())
+                .degree(request.degree())
                 .build();
     }
 
     public MyClassResponse toMyClassResponse(MyClass myClass){
         return MyClassResponse.builder()
                 .classId(myClass.getClassId())
-                .className(myClass.getClassName())
+                .classLevel(myClass.getClassLevel())
                 .classFaculty(facultyMapper.toFacultyResponse(myClass.getClassFaculty()))
                 .myClassProgram(myClass.getMyClassProgram())
-                .classNameAndProgram(myClass.classNameAndProgram())
+                .classLevelAndProgram(myClass.classLevelAndProgram())
+                .degree(myClass.getDegree())
                 .build();
     }
 }

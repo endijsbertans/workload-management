@@ -180,7 +180,7 @@ export class WorkloadFormComponent implements OnInit {
   protected filterMyClasses() {
     const search = this.workloadForm.controls.myClassFilterCtrl.value?.toLowerCase() ?? '';
     this.filteredMyClasses.next(
-      this.myClasses()?.filter(myClass => myClass.classNameAndProgram?.toLowerCase().includes(search)) ?? []
+      this.myClasses()?.filter(myClass => myClass.classLevelAndProgram?.toLowerCase().includes(search)) ?? []
     );
   }
 

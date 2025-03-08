@@ -22,9 +22,9 @@ public class MyClass {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int classId;
-    private String className;
+    private int classLevel;
     private String myClassProgram;
-
+    private Degree degree;
     @ManyToOne
     @JoinColumn(name="class_faculty_id")
     private Faculty classFaculty;
@@ -33,7 +33,7 @@ public class MyClass {
     @JsonIgnore
     private List<Workload> myWorkloads = new ArrayList<>();
 
-    public String classNameAndProgram() {
-        return className + " " + myClassProgram;
+    public String classLevelAndProgram() {
+        return classLevel + myClassProgram;
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import workloadmanagement.MyClass.Degree;
 import workloadmanagement.MyClass.MyClass;
 import workloadmanagement.academicrank.AcademicRank;
 import workloadmanagement.academicrank.academicrankDetails.AcademicRankDetails;
@@ -131,13 +132,14 @@ public class WorkloadManagementApplication {
 					facultyRepo.save(f1);
 
 					MyClass ac1 = MyClass.builder()
-							.className("3EIB")
+							.classLevel(3)
 							.classFaculty(f1)
 							.myClassProgram("EIB")
+							.degree(Degree.BACHELOR)
 							.build();
 					myClassRepo.save(ac1);
 					MyClass ac2 = MyClass.builder()
-							.className("1ITB")
+							.classLevel(1)
 							.myClassProgram("ITB")
 							.classFaculty(f1)
 							.build();

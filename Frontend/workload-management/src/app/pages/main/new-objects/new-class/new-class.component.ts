@@ -11,7 +11,7 @@ import {FacultyService} from "../../../../services/services/faculty.service";
 import {MyClassRequest} from "../../../../services/models/my-class-request";
 import {MyClassService} from "../../../../services/services/my-class.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
-
+import {Degree, EnumTranslationService} from "../../../../services/translation/EnumTranslationService";
 @Component({
   selector: 'app-new-class',
   imports: [
@@ -35,14 +35,16 @@ export class NewClassComponent implements OnInit{
   private readonly _snackBar = inject(MatSnackBar);
   private readonly facultyService = inject(FacultyService)
   private readonly myClassService = inject(MyClassService)
-
+  degrees: Degree[] | undefined;
   errorMessage = signal('');
   faculties = signal<FacultyResponse[] | undefined>(undefined);
+  enumService = inject(EnumTranslationService);
   myClassRequest?:MyClassRequest;
   classForm = new FormGroup({
-    className: new FormControl('', {
+    classLevel: new FormControl<number | undefined>(undefined, {
       validators: [
-        Validators.minLength(3),
+        Validators.min(1),
+        Validators.max(4),
         Validators.required],
     }),
     program: new FormControl('', {
@@ -53,20 +55,28 @@ export class NewClassComponent implements OnInit{
     classFacultyId: new FormControl<number | undefined>(undefined, {
       validators: [
         Validators.required],
+    }),
+    degree: new FormControl<Degree | undefined>(undefined, {
+      validators: [
+        Validators.required],
     })
   })
   ngOnInit(): void {
     this.fetchFaculties();
+    this.degrees = Object.values(this.enumService.enumTypes.degree);
   }
   onSubmit() {
     console.log(this.classForm.controls);
-    if (this.classForm.value.className &&
-      this.classForm.value.classFacultyId
-
+    if (this.classForm.value.classLevel &&
+      this.classForm.value.classFacultyId &&
+      this.classForm.value.program &&
+      this.classForm.value.degree
     ) {
       this.myClassRequest = {
-        className: this.classForm.value.className,
+        classLevel: this.classForm.value.classLevel,
         classFacultyId: this.classForm.value.classFacultyId,
+        myClassProgram: this.classForm.value.program,
+        degree: this.classForm.value.degree
       };
 
       this.myClassService.saveMyClass({
@@ -100,7 +110,6 @@ export class NewClassComponent implements OnInit{
         subscription.unsubscribe();
       });
     }
-
   updateErrorMessage(controlName: keyof typeof this.classForm.controls) {
     const control = this.classForm.controls[controlName];
     if (control.errors) {

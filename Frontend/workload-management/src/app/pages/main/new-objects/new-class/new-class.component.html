@@ -1,18 +1,19 @@
 <div class="backdrop"></div>
 <dialog open>
   <form [formGroup]="classForm" (ngSubmit)="onSubmit()">
-    <h2>Pievienot jaunu klasi</h2>
+    <h2>Pievienot jaunu kursu</h2>
 
     <mat-form-field appearance="outline">
-      @if (classForm.controls.className.invalid) {
+      @if (classForm.controls.classLevel.invalid) {
         <mat-error>{{ errorMessage() }}</mat-error>
       }
-      <mat-label>Ievadi klases abreviatūru</mat-label>
+      <mat-label>Ievadi kursa līmeni</mat-label>
       <input
+        type="number"
         matInput
         placeholder="3ITB"
-        [formControl]="classForm.controls.className"
-        (blur)="updateErrorMessage('className')"
+        [formControl]="classForm.controls.classLevel"
+        (blur)="updateErrorMessage('classLevel')"
         required
       />
     </mat-form-field>
@@ -52,6 +53,30 @@
         </mat-label>
       } @else {
         <mat-label>Izvēlies fakultāti</mat-label>
+      }
+    </mat-form-field>
+    <mat-form-field class="input-flex">
+      <mat-select required [formControl]="classForm.controls.degree">
+        @if (degrees) {
+          @if (degrees.length === 0) {
+            <mat-option>
+              Nebija iespējams iegūt studiju programmas
+            </mat-option>
+          } @else {
+            @for (degree of degrees; track $index) {
+              <mat-option [value]="degree">
+                {{ enumService.translate('degree', degree) }}
+              </mat-option>
+            }
+          }
+        }
+      </mat-select>
+      @if (!faculties()) {
+        <mat-label>
+          <em>Lādē datus...</em>
+        </mat-label>
+      } @else {
+        <mat-label>Izvēlies grādu</mat-label>
       }
     </mat-form-field>
 

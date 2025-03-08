@@ -7,15 +7,12 @@ import jakarta.validation.constraints.Size;
 import workloadmanagement.faculty.FacultyResponse;
 
 public record MyClassRequest (
-    @Size.List({
-            @Size(min = 1, message = "130"),
-            @Size(max = 45, message = "130")
-    })
-    @NotNull(message = "130")
     @NotEmpty(message = "130")
-    String className,
-
+    int classLevel,
     @NotNull(message = "132")
     int classFacultyId,
-    String myClassProgram
+    @NotNull(message = "132")
+    String myClassProgram,
+    @NotNull(message = "132")
+    Degree degree
 ){}

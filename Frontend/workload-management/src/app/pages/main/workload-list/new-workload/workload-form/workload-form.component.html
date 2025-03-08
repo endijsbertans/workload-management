@@ -117,7 +117,7 @@
               </mat-option>
               @for (myClass of filteredMyClasses | async; track myClass.classId) {
                 <mat-option [value]="myClass.classId">
-                  {{ myClass.className}}
+                  {{ myClass.classLevelAndProgram}}
                 </mat-option>
               }
             }
@@ -177,7 +177,7 @@
               </mat-option>
               @for (myClass of filteredMyClasses | async; track myClass.classId) {
                 <mat-option [value]="myClass.classId">
-                  {{ myClass.className}}
+                  {{ myClass.classLevel}}
                 </mat-option>
               }
             }

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import {Component, inject, Input} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CourseResponse } from "../../../../services/models/course-response";
 import { MyClassResponse } from "../../../../services/models/my-class-response";
@@ -8,6 +8,7 @@ import { SemesterResponse } from "../../../../services/models/semester-response"
 import { ColumnNames } from "../../new-objects/object-columns";
 import { TeachingStaffResponse } from "../../../../services/models/teaching-staff-response";
 import {AcademicRankDetailsResponse} from "../../../../services/models/academic-rank-details-response";
+import {EnumTranslationService} from "../../../../services/translation/EnumTranslationService";
 
 @Component({
   selector: 'app-object-list',
@@ -26,7 +27,7 @@ export class ObjectListComponent {
   @Input() semesters?: SemesterResponse[];
   @Input() displayedColumns?: ColumnNames[] = [];
   @Input() selectedTableType: string = 'teachingStaff';
-
+  enumService = inject(EnumTranslationService)
   getDataItems(): any[] {
     switch (this.selectedTableType) {
       case 'teachingStaff': return this.tStaff || [];
@@ -43,10 +44,18 @@ export class ObjectListComponent {
     console.log(this.getDataItems());
   }
   getNestedPropertyForItem(item: any, column: ColumnNames, defaultValue: any = "") {
-    return this.digInObject(item, column.pathTo, defaultValue);
+    const value = this.digInObject(item, column.pathTo, defaultValue);
+
+    // Check if this is a degree field and translate it
+    if (column.pathTo === 'degree' && value) {
+      return this.enumService.translate('degree', value);
+    }
+
+    return value;
   }
 
   digInObject(obj: any, path: string, defaultValue: any = "") {
+
     if (!obj || !path) return defaultValue;
     return path.split('.')
       .reduce((acc, part) => acc && acc[part] !== undefined ? acc[part] : defaultValue, obj);
