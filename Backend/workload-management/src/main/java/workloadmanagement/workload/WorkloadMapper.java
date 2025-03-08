@@ -11,7 +11,9 @@ import workloadmanagement.course.Course;
 import workloadmanagement.statustype.StatusType;
 import workloadmanagement.teachingstaff.TeachingStaff;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class WorkloadMapper {
@@ -77,8 +79,9 @@ public class WorkloadMapper {
                 .cpProportionOnFullTime(workload.getCpProportionOnFullTime())
                 .salaryPerMonth(workload.getSalaryPerMonth())
                 // Calculated values
-                .myClasses(workload.getMyClasses())
-
+                .myClasses(workload.getMyClasses().stream()
+                        .map(myClassMapper::toMyClassResponse)
+                        .collect(Collectors.toList()))
                 .cpForFullTime(workload.getAcademicRankDetails().getCpForFullTime())
                 .monthSum(workload.getMonthSum())
                 .totalCreditPoints(workload.getTotalCreditPoints())

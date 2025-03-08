@@ -6,7 +6,8 @@ import { FacultyResponse } from '../models/faculty-response';
 export interface MyClassResponse {
   classFaculty?: FacultyResponse;
   classId?: number;
-  className?: string;
-  classNameAndProgram?: string;
+  classLevel?: number;
+  classLevelAndProgram?: string;
+  degree?: 'BACHELOR' | 'MASTER' | 'DOCTORATE';
   myClassProgram?: string;
 }

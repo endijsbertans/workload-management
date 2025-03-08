@@ -4,6 +4,7 @@
 
 export interface MyClassRequest {
   classFacultyId: number;
-  className: string;
-  myClassProgram?: string;
+  classLevel: number;
+  degree: 'BACHELOR' | 'MASTER' | 'DOCTORATE';
+  myClassProgram: string;
 }

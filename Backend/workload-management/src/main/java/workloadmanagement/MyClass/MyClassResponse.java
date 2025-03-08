@@ -11,8 +11,9 @@ import workloadmanagement.faculty.FacultyResponse;
 @Builder
 public class MyClassResponse {
     private int classId;
-    private String className;
+    private int classLevel;
     private FacultyResponse classFaculty;
     private String myClassProgram;
-    private String classNameAndProgram;
+    private String classLevelAndProgram;
+    private Degree degree;
 }

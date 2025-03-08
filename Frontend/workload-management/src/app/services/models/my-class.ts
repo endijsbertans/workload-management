@@ -6,6 +6,7 @@ import { Faculty } from '../models/faculty';
 export interface MyClass {
   classFaculty?: Faculty;
   classId?: number;
-  className?: string;
+  classLevel?: number;
+  degree?: 'BACHELOR' | 'MASTER' | 'DOCTORATE';
   myClassProgram?: string;
 }

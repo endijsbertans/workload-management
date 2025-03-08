@@ -15,6 +15,8 @@ import { findAllMyClass } from '../fn/my-class/find-all-my-class';
 import { FindAllMyClass$Params } from '../fn/my-class/find-all-my-class';
 import { findMyClassById } from '../fn/my-class/find-my-class-by-id';
 import { FindMyClassById$Params } from '../fn/my-class/find-my-class-by-id';
+import { getEnums } from '../fn/my-class/get-enums';
+import { GetEnums$Params } from '../fn/my-class/get-enums';
 import { MyClassResponse } from '../models/my-class-response';
 import { saveMyClass } from '../fn/my-class/save-my-class';
 import { SaveMyClass$Params } from '../fn/my-class/save-my-class';
@@ -97,6 +99,31 @@ export class MyClassService extends BaseService {
   findMyClassById(params: FindMyClassById$Params, context?: HttpContext): Observable<MyClassResponse> {
     return this.findMyClassById$Response(params, context).pipe(
       map((r: StrictHttpResponse<MyClassResponse>): MyClassResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `getEnums()` */
+  static readonly GetEnumsPath = '/my-class/getDegreeEnums';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getEnums()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getEnums$Response(params?: GetEnums$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<'BACHELOR' | 'MASTER' | 'DOCTORATE'>>> {
+    return getEnums(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getEnums$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getEnums(params?: GetEnums$Params, context?: HttpContext): Observable<Array<'BACHELOR' | 'MASTER' | 'DOCTORATE'>> {
+    return this.getEnums$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<'BACHELOR' | 'MASTER' | 'DOCTORATE'>>): Array<'BACHELOR' | 'MASTER' | 'DOCTORATE'> => r.body)
     );
   }
 

@@ -96,26 +96,32 @@ export const ColumnsForCourseResponse: ColumnNames[] = [
 ];
 export const ColumnsForClassResponse: ColumnNames[] = [
   {
-    name: 'Klase',
-    pathTo: 'className',
+    name: 'Kursa līmenis',
+    pathTo: 'classLevel',
     collection: 'ColumnsForClass',
     sortable: true
   },
   {
-    name: 'Klases programma',
+    name: 'Kursa programma',
     pathTo: 'myClassProgram',
     collection: 'ColumnsForClass',
     sortable: true
   },
   {
-    name: 'Klases fakultāte',
+    name: 'Kursa fakultāte',
     pathTo: 'classFaculty.facultyName',
     collection: 'ColumnsForClass',
     sortable: true
   },
   {
-    name: 'Klases fakultāte',
+    name: 'Fakultātes pilnais nos.',
     pathTo: 'classFaculty.facultyFullName',
+    collection: 'ColumnsForClass',
+    sortable: true
+  },
+  {
+    name: 'Grāds',
+    pathTo: 'degree',
     collection: 'ColumnsForClass',
     sortable: true
   }

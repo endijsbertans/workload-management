@@ -36,7 +36,7 @@ public class WorkloadResponse {
     private MyClassResponse groupForSemester;
     private Course course;
     private AcademicRankDetails academicRankDetails;
-    private List<MyClass> myClasses;
+    private List<MyClassResponse> myClasses;
     private double creditPointsPerGroup;
     private double totalCreditPoints;
     private double cpProportionOnFullTime;

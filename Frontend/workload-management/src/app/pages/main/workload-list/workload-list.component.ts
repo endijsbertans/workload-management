@@ -171,7 +171,7 @@ export class WorkloadListComponent implements OnInit {
 
         // Array of MyClasses filtering
         (data.myClasses?.some(myClass =>
-          myClass.className?.toLowerCase().includes(lowercaseFilter) ||
+          myClass.classLevel?.toString().includes(lowercaseFilter) ||
           myClass.classFaculty?.facultyName?.toLowerCase().includes(lowercaseFilter) ||
           myClass.myClassProgram?.toLowerCase().includes(lowercaseFilter)
         ) ?? false)
