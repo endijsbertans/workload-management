@@ -16,6 +16,7 @@ import {WorkloadListSettingsService} from "./workload-list-settings/workload-lis
 import {ShownColumns, WorkloadColumnSettings} from "./workload-list-columns";
 import {ColumnFilterDialogComponent} from "./column-filter-dialog/column-filter-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
+import {EnumTranslationService} from "../../../services/translation/EnumTranslationService";
 
 
 
@@ -41,6 +42,7 @@ import {MatDialog} from "@angular/material/dialog";
   styleUrl: './workload-list.component.scss'
 })
 export class WorkloadListComponent implements OnInit {
+  enumService = inject(EnumTranslationService);
   private readonly workloadService = inject(WorkloadService);
   private readonly router = inject(Router);
   private readonly columnSettingsService = inject(WorkloadListSettingsService);
@@ -108,16 +110,24 @@ export class WorkloadListComponent implements OnInit {
     });
   }
 
-  getNestedProperty(obj: any, col: WorkloadColumnSettings) {
+  getNestedProperty(obj: any, col: WorkloadColumnSettings, defaultValue: any = "") {
     if (col.collection.includes("columnsForWorkloadClasses")) {
       let result: string[] = [];
       let val = this.digInObject(obj, "myClasses");
-      val.forEach(function (val: any) {
-          result.push(val?.[col.pathTo]);
+      val.forEach(function(val: any) {
+        result.push(val?.[col.pathTo]);
       });
       return result.join(', ');
     }
-    return this.digInObject(obj, col.pathTo);
+
+    const value = this.digInObject(obj, col.pathTo, defaultValue);
+
+    // Check if this is a budgetPosition field and translate it
+    if (col.pathTo === 'budgetPosition' && value) {
+      return this.enumService.translate('budgetPosition', value);
+    }
+
+    return value;
   }
   digInObject(obj: any, key: string, defaultValue: any = "") {
     return key.split('.')

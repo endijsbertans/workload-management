@@ -14,7 +14,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(withInterceptors([authInterceptor])),
     provideAnimations(),
-    importProvidersFrom(ApiModule.forRoot({ rootUrl: prodEnvironment.apiUrl }))
+    importProvidersFrom(ApiModule.forRoot({ rootUrl: environment.apiUrl }))
   ]
 };
 

@@ -57,8 +57,8 @@ export class ObjectContainerComponent implements OnInit {
 
   tableTypes = [
     {id: 'teachingStaff', name: 'Docenti'},
-    {id: 'courses', name: 'Kursi'},
-    {id: 'classes', name: 'Klases'},
+    {id: 'courses', name: 'Studiju priekšmeti'},
+    {id: 'classes', name: 'Kurss'},
     {id: 'academicRanks', name: 'Amatu grupas'},
     {id: 'academicRankDetails', name: 'Amatu grupu detaļas'},
     {id: 'statusTypes', name: 'Statusi'},

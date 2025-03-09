@@ -24,7 +24,7 @@ public class WorkloadResponse {
     private Semester semester;
     private String comments;
     private String includeInBudget;
-    private boolean budgetPosition;
+    private BudgetPositions budgetPosition;
     private double industryCoefficient;
     private double programCoefficient;
     private int vacationMonths;
@@ -32,7 +32,6 @@ public class WorkloadResponse {
     private double expectedSalary;
     private int groupAmount;
     private double contactHours;
-    private boolean program;
     private MyClassResponse groupForSemester;
     private Course course;
     private AcademicRankDetails academicRankDetails;

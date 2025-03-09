@@ -4,13 +4,12 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Path;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import workloadmanagement.MyClass.Degree;
 import workloadmanagement.MyClass.MyClass;
 import workloadmanagement.MyClass.MyClassService;
 
@@ -47,7 +46,7 @@ public class WorkloadService {
 
     public Integer save(WorkloadRequest request) {
         WorkloadEntities entities = resolveEntities(request);
-        double programCoefficient = getProgramCoefficient(request.program());
+        double programCoefficient = getProgramCoefficient(entities.groupForSemester);
         double totalCreditPoints = getTotalCreditPoints(request.groupAmount(), request.creditPointsPerGroup(), programCoefficient);
         double cpProportionOnFullTime = getCpProportionOnFullTime(entities.academicRankDetails().getCpForFullTime(), totalCreditPoints);
         double salaryPerMonth = getSalaryPerMonth(entities.academicRankDetails.getSalary(), cpProportionOnFullTime, request.industryCoefficient());
@@ -216,12 +215,12 @@ public PageResponse<WorkloadResponse> findAllWorkloads(Pageable pageable, Map<St
         existingWorkload.setWorkingMonths(request.workingMonths());
 
         existingWorkload.setGroupAmount(request.groupAmount());
-        existingWorkload.setContactHours(request.contactHours());
-        existingWorkload.setProgram(request.program());
-        double programCoefficient = getProgramCoefficient(request.program());
+
+        double programCoefficient = getProgramCoefficient(entities.groupForSemester);
         existingWorkload.setProgramCoefficient(programCoefficient);
         double totalCreditPoints = getTotalCreditPoints(request.groupAmount(), request.creditPointsPerGroup(), programCoefficient);
         existingWorkload.setTotalCreditPoints(totalCreditPoints);
+        existingWorkload.setContactHours(totalCreditPoints);
         double cpProportionOnFullTime = getCpProportionOnFullTime(entities.academicRankDetails().getCpForFullTime(), totalCreditPoints);
         existingWorkload.setCpProportionOnFullTime(cpProportionOnFullTime);
         double salaryPerMonth = getSalaryPerMonth(entities.academicRankDetails.getSalary(), cpProportionOnFullTime, request.industryCoefficient());
@@ -247,8 +246,8 @@ public PageResponse<WorkloadResponse> findAllWorkloads(Pageable pageable, Map<St
                 academicRankDetailsService.findAcademicRankDetailsFromResponseId(request.academicRankId(), semester);
         return new WorkloadEntities(teachingStaff, semester, course, academicRankDetails, myClasses, groupForSemester);
     }
-    private double getProgramCoefficient(Boolean isMasters){
-        if(isMasters){
+    private double getProgramCoefficient(MyClass groupForSemester){
+        if(groupForSemester.getDegree() == Degree.MASTER){
             return 0.75;
         } else {
             return 1;
@@ -256,15 +255,15 @@ public PageResponse<WorkloadResponse> findAllWorkloads(Pageable pageable, Map<St
     }
     public double getTotalCreditPoints(double groupAmount, double creditPointsPerGroup, double programCoefficient){
         System.out.println("getTotalCreditPoints: " + groupAmount + " * " + creditPointsPerGroup + " * " + programCoefficient + " = " + groupAmount*creditPointsPerGroup*programCoefficient);
-        return round(groupAmount*creditPointsPerGroup*programCoefficient,2);
+        return round(groupAmount*creditPointsPerGroup*programCoefficient,3);
     }
     public double getSalaryPerMonth(double salary, double creditPointsOnFullTime, double industryCoefficient){
         System.out.println("getSalaryPerMonth: "+ salary + " *" + creditPointsOnFullTime + " *" + industryCoefficient + "=" + salary * creditPointsOnFullTime * industryCoefficient);
-        return round(salary * creditPointsOnFullTime * industryCoefficient,2);
+        return round(salary * creditPointsOnFullTime * industryCoefficient,3);
     }
     public double getCpProportionOnFullTime(double cpForFullTime, double totalCreditPoints){
         System.out.println("getCpProportionOnFullTime: "+totalCreditPoints + " / " +  cpForFullTime + " = "+ totalCreditPoints/cpForFullTime);
-        return round(totalCreditPoints/cpForFullTime,2);
+        return round(totalCreditPoints/cpForFullTime,3);
     }
     public static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();

@@ -29,7 +29,7 @@ public record WorkloadRequest (
     String includeInBudget,
 
     @NotNull(message = "115")
-    boolean budgetPosition,
+    BudgetPositions budgetPosition,
 
     @NotNull(message = "116")
     double industryCoefficient,
@@ -45,12 +45,6 @@ public record WorkloadRequest (
     @NotNull(message = "120")
     int groupAmount,
 
-    @Min(value = 0, message = "121")
-    @NotNull(message = "121")
-    double contactHours,
-
-    @NotNull(message = "122")
-    boolean program,
     @NotNull(message = "123")
     int groupForSemesterId,
 

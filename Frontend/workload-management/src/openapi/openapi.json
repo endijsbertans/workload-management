@@ -1004,7 +1004,13 @@
             "type": "string"
           },
           "budgetPosition": {
-            "type": "boolean"
+            "type": "string",
+            "enum": [
+              "ZB",
+              "PF",
+              "M",
+              "grant"
+            ]
           },
           "industryCoefficient": {
             "type": "number",
@@ -1024,14 +1030,6 @@
             "type": "integer",
             "format": "int32",
             "minimum": 0
-          },
-          "contactHours": {
-            "type": "number",
-            "format": "double",
-            "minimum": 0
-          },
-          "program": {
-            "type": "boolean"
           },
           "groupForSemesterId": {
             "type": "integer",
@@ -1062,7 +1060,6 @@
           "academicRankId",
           "budgetPosition",
           "comments",
-          "contactHours",
           "courseId",
           "creditPointsPerGroup",
           "groupAmount",
@@ -1070,7 +1067,6 @@
           "includeInBudget",
           "industryCoefficient",
           "myClassIds",
-          "program",
           "semesterId",
           "teachingStaffId",
           "vacationMonths"
@@ -1411,33 +1407,6 @@
           }
         }
       },
-      "MyClass": {
-        "type": "object",
-        "properties": {
-          "classId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "classLevel": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "myClassProgram": {
-            "type": "string"
-          },
-          "degree": {
-            "type": "string",
-            "enum": [
-              "BACHELOR",
-              "MASTER",
-              "DOCTORATE"
-            ]
-          },
-          "classFaculty": {
-            "$ref": "#/components/schemas/Faculty"
-          }
-        }
-      },
       "MyClassResponse": {
         "type": "object",
         "properties": {
@@ -1561,10 +1530,10 @@
           "staffPhoto": {
             "type": "string"
           },
-          "staffFullName": {
+          "rankFullName": {
             "type": "string"
           },
-          "rankFullName": {
+          "staffFullName": {
             "type": "string"
           }
         }
@@ -1589,7 +1558,13 @@
             "type": "string"
           },
           "budgetPosition": {
-            "type": "boolean"
+            "type": "string",
+            "enum": [
+              "ZB",
+              "PF",
+              "M",
+              "grant"
+            ]
           },
           "industryCoefficient": {
             "type": "number",
@@ -1615,9 +1590,6 @@
             "type": "number",
             "format": "double"
           },
-          "program": {
-            "type": "boolean"
-          },
           "groupForSemester": {
             "$ref": "#/components/schemas/MyClassResponse"
           },
@@ -1630,7 +1602,7 @@
           "myClasses": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/MyClass"
+              "$ref": "#/components/schemas/MyClassResponse"
             }
           },
           "creditPointsPerGroup": {
@@ -1709,10 +1681,10 @@
           "username": {
             "type": "string"
           },
-          "credentialsNonExpired": {
+          "accountNonExpired": {
             "type": "boolean"
           },
-          "accountNonExpired": {
+          "credentialsNonExpired": {
             "type": "boolean"
           },
           "accountNonLocked": {

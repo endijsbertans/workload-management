@@ -17,7 +17,6 @@ export { Faculty } from './models/faculty';
 export { FacultyRequest } from './models/faculty-request';
 export { FacultyResponse } from './models/faculty-response';
 export { GrantedAuthority } from './models/granted-authority';
-export { MyClass } from './models/my-class';
 export { MyClassRequest } from './models/my-class-request';
 export { MyClassResponse } from './models/my-class-response';
 export { MyUser } from './models/my-user';

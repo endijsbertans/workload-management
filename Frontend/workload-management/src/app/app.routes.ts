@@ -22,6 +22,11 @@ import {NewSemesterComponent} from "./pages/main/new-objects/new-semester/new-se
 
 export const routes: Routes = [
   {
+    path: '',
+    redirectTo: 'main',
+    pathMatch: 'full'
+  },
+  {
     path: 'auth',
     loadComponent: () => import('./pages/auth/auth-wrapper/auth-wrapper.component').then(m => m.AuthWrapperComponent),
     children: [{
@@ -110,7 +115,11 @@ export const routes: Routes = [
            component: NewSemesterComponent
          }
        ],
-    }
+    },
+      {
+        path: '**',
+        redirectTo: 'main'
+      }
     ]
   }
 

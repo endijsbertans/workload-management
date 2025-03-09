@@ -31,7 +31,7 @@ public class Workload {
     private Semester semester;
     private String comments;
     private String includeInBudget;
-    private boolean budgetPosition;
+    private BudgetPositions budgetPosition;
     private double industryCoefficient;
     private double programCoefficient;
     private int vacationMonths;
@@ -39,7 +39,6 @@ public class Workload {
     private double expectedSalary;
     private int groupAmount;
     private double contactHours;
-    private boolean program;
 
     private double creditPointsPerGroup;
 

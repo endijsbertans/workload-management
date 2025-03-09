@@ -22,6 +22,7 @@ import workloadmanagement.faculty.Faculty;
 import workloadmanagement.repo.*;
 import workloadmanagement.statustype.StatusType;
 import workloadmanagement.teachingstaff.TeachingStaff;
+import workloadmanagement.workload.BudgetPositions;
 import workloadmanagement.workload.Workload;
 
 import java.time.LocalDate;
@@ -178,20 +179,18 @@ public class WorkloadManagementApplication {
 									.semester(s1)
 									.comments("praktiskie darbi")
 									.includeInBudget("1")
-									.budgetPosition(false)
+									.budgetPosition(BudgetPositions.ZB)
 									.industryCoefficient(1)
 									.vacationMonths(0)
 									.workingMonths(5)
 									.expectedSalary(577)
 									.groupAmount(1)
 									.contactHours(1)
-									.program(true)
 									.groupForSemester(ac1)
 									.course(c1)
 									.academicRankDetails(ard1)
 									.myClasses(List.of(ac1,ac2))
 									.programCoefficient(0.75)
-									.program(true)
 									.creditPointsPerGroup(2)
 									.totalCreditPoints(3)
 									.build();
