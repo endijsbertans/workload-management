@@ -22,7 +22,7 @@ import {TeachingStaffRequest} from "../../../../services/models/teaching-staff-r
 import {AcademicRankResponse} from "../../../../services/models/academic-rank-response";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {StatusTypeResponse} from "../../../../services/models/status-type-response";
-
+import { Location } from '@angular/common';
 
 
 @Component({
@@ -51,7 +51,7 @@ export class NewTeachingStaffComponent implements OnInit {
   private readonly academicRankService = inject(AcademicRankService);
   private readonly _snackBar = inject(MatSnackBar);
   private readonly statusTypeService = inject(StatusTypeService);
-
+  protected readonly location = inject(Location);
   statusTypes = signal<StatusTypeResponse[] | undefined>(undefined);
   faculties = signal<FacultyResponse[] | undefined>(undefined);
   academicRanks = signal<AcademicRankResponse[] | undefined>(undefined);
@@ -59,6 +59,10 @@ export class NewTeachingStaffComponent implements OnInit {
   userAuthDetails = signal< RegistrationRequest | undefined>(undefined);
   authButtonText = signal("Izveidot autentifikācijas detaļas");
   errorMessage = signal('');
+
+  editMode = signal(false);
+  objectId = signal<number | undefined>(undefined);
+  pageTitle = signal('Pievienot jaunu docentu');
 
   teachingStaffRequest?: TeachingStaffRequest;
   teachingStaffForm = new FormGroup({
@@ -90,45 +94,97 @@ export class NewTeachingStaffComponent implements OnInit {
     this.fetchFaculties();
     this.fetchAcademicRanks();
     this.fetchStatusTypes();
+    this.activeRoute.params.subscribe(params => {
+      if (params['id']) {
+        this.objectId.set(+params['id']);
+        this.editMode.set(true);
+        this.pageTitle.set('Rediģēt docentu');
+        this.loadTeachingStaffData(this.objectId());
+      }
+    });
+  }
+  private loadTeachingStaffData(id: number | undefined): void {
+    if (!id) return;
+    this.teachingStaffService.findTeachingStaffById({ "tstaff-id": id }).subscribe({
+      next: (staff) => {
+        // Populate form with existing data
+        this.teachingStaffForm.patchValue({
+          name: staff.name,
+          surname: staff.surname,
+          statusTypeId: staff.status?.statusTypeId,
+          staffFacultyId: staff.staffFaculty?.facultyId,
+          academicRankId: staff.staffAcademicRank?.academicRankId
+        });
+
+        if (staff.user) {
+          this.userAuthDetails.set(staff.user);
+          this.authButtonText.set("rediģēt ēpastu");
+        }
+      },
+      error: (err) => {
+        this._snackBar.open("Neizdevās ielādēt datus", "Aizvērt", { duration: 5000 });
+        console.error(err);
+      }
+    });
+  }
+  onSubmit() {
+    if (this.teachingStaffForm.valid) {
+      const formData = this.prepareFormData();
+
+      if (this.editMode()) {
+        this.updateTeachingStaff(formData);
+      } else {
+        this.createTeachingStaff(formData);
+      }
+    }
   }
 
-  onSubmit() {
-    console.log(this.teachingStaffForm.controls);
-      if (this.teachingStaffForm.value.name &&
-        this.teachingStaffForm.value.surname &&
-        this.teachingStaffForm.value.statusTypeId &&
-        this.teachingStaffForm.value.staffFacultyId &&
-        this.teachingStaffForm.value.academicRankId
-      ) {
-        this.teachingStaffRequest = {
-          name: this.teachingStaffForm.value.name,
-          surname: this.teachingStaffForm.value.surname,
-          statusId: this.teachingStaffForm.value.statusTypeId,
-          staffFacultyId: this.teachingStaffForm.value.staffFacultyId,
-          staffAcademicRankId: this.teachingStaffForm.value.academicRankId,
-          authDetails: this.userAuthDetails() || undefined
-        };
-        if(this.userAuthDetails()){
-          this.teachingStaffRequest.authDetails = this.userAuthDetails();
-        }
-        this.teachingStaffService.saveTeachingStaff({
-          body: this.teachingStaffRequest
-        }).subscribe({
-          next: (id) => {
-            this.emitTeachingStaff.emit( id );
-            this._snackBar.open("Saglabāts", "Aizvērt", { duration: 5000 });
-
-          },
-          error: (err) => {
-            console.log(err);
-            this._snackBar.open(err.error.errorMsg, "Aizvērt", { duration: 5000 });
-          }
-        })
+  private prepareFormData(): TeachingStaffRequest {
+    return {
+      name: this.teachingStaffForm.value.name!,
+      surname: this.teachingStaffForm.value.surname!,
+      statusId: this.teachingStaffForm.value.statusTypeId!,
+      staffFacultyId: this.teachingStaffForm.value.staffFacultyId!,
+      staffAcademicRankId: this.teachingStaffForm.value.academicRankId!,
+      authDetails: this.userAuthDetails() || undefined
+    };
+  }
+  private createTeachingStaff(data: TeachingStaffRequest): void {
+    this.teachingStaffService.saveTeachingStaff({
+      body: data
+    }).subscribe({
+      next: (id) => {
+        this.emitTeachingStaff.emit(id);
+        this._snackBar.open("Saglabāts", "Aizvērt", { duration: 5000 });
+        this.navigateBack();
+      },
+      error: (err) => {
+        console.log(err);
+        this._snackBar.open(err.error.errorMsg, "Aizvērt", { duration: 5000 });
       }
+    });
+  }
 
-      this.router.navigate(['..'], {
-        relativeTo: this.activeRoute,
-        replaceUrl: true});
+  private updateTeachingStaff(data: TeachingStaffRequest): void {
+    const id = this.objectId();
+    if (id === undefined) return;
+    this.teachingStaffService.updateTeachingStaffById({"tstaff-id":id, body: data}).subscribe({
+      next: () => {
+        this._snackBar.open("Izmaiņas saglabātas", "Aizvērt", { duration: 5000 });
+        this.navigateBack();
+      },
+      error: (err) => {
+        console.log(err);
+        this._snackBar.open(err.error.errorMsg, "Aizvērt", { duration: 5000 });
+      }
+    });
+  }
+
+  private navigateBack(): void {
+    this.router.navigate(['..'], {
+      relativeTo: this.activeRoute,
+      replaceUrl: true
+    });
   }
 
   private fetchFaculties():Promise<void> {
@@ -205,4 +261,7 @@ export class NewTeachingStaffComponent implements OnInit {
       this.errorMessage.set('');
     }
   }
+    goBack() {
+      this.router.navigate(['..'], { relativeTo: this.activeRoute });
+    }
 }

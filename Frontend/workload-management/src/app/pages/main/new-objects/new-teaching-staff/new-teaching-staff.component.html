@@ -1,7 +1,6 @@
-<div class="backdrop"></div>
 <dialog open>
   <form [formGroup]="teachingStaffForm" (ngSubmit)="onSubmit()">
-    <h2>Pievienot jaunu docentu</h2>
+    <h2>{{ pageTitle() }}</h2>
     <mat-form-field appearance="outline">
       @if (teachingStaffForm.controls.name.invalid) {
         <mat-error>{{ errorMessage() }}</mat-error>
@@ -117,7 +116,7 @@
                     class="inserted"/>
     }
     <div class="action-wrapper">
-      <button mat-raised-button type="button" routerLink="..">Cancel</button>
+      <button mat-raised-button type="button" (click)="location.back()" >Cancel</button>
       <button mat-raised-button type="submit" [disabled]="teachingStaffForm.invalid">Create</button>
     </div>
   </form>

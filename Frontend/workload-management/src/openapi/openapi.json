@@ -690,6 +690,46 @@
             }
           }
         }
+      },
+      "patch": {
+        "tags": [
+          "TeachingStaff"
+        ],
+        "operationId": "updateTeachingStaffById",
+        "parameters": [
+          {
+            "name": "tstaff-id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TeachingStaffRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/statuses/{statusTypeId}": {
@@ -1530,10 +1570,10 @@
           "staffPhoto": {
             "type": "string"
           },
-          "rankFullName": {
+          "staffFullName": {
             "type": "string"
           },
-          "staffFullName": {
+          "rankFullName": {
             "type": "string"
           }
         }
