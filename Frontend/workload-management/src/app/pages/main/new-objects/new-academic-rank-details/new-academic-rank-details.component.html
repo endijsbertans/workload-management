@@ -1,5 +1,6 @@
 <div class="backdrop"></div>
 <dialog open>
+  <h2>{{ pageTitle() }}</h2>
   <form [formGroup]="academicRankDetailsForm" (ngSubmit)="onSubmit()">
     <h2>Pievienot amata detaļas</h2>
 
@@ -98,8 +99,13 @@
       }
     </mat-form-field>
     <div class="action-wrapper">
-      <button mat-raised-button type="button" routerLink="..">Cancel</button>
-      <button mat-raised-button type="Submit" [disabled]="academicRankDetailsForm.invalid">Create</button>
+      @if(editMode()){
+        <button mat-raised-button type="button" (click)="navigateBackFromEditMode()">Atcelt</button>
+        <button mat-raised-button type="submit" [disabled]="academicRankDetailsForm.invalid">Rediģēt</button>
+      }@else{
+        <button mat-raised-button type="button" (click)="navigateBackFromCreateMode()">Atcelt</button>
+        <button mat-raised-button type="submit" [disabled]="academicRankDetailsForm.invalid">Izveidot</button>
+      }
     </div>
   </form>
 </dialog>

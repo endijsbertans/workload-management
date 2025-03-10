@@ -120,6 +120,8 @@ export const routes: Routes = [
         {path: 'edit-course/:id', component: NewCourseComponent},
         {path: 'edit-my-class/:id', component: NewClassComponent},
         {path: 'edit-faculties/:id', component: NewFacultyComponent},
+        {path: 'edit-academic-rank/:id', component: NewAcademicRankComponent},
+        {path: 'edit-academic-rank-details/:id', component: NewAcademicRankDetailsComponent},
 
       ],
     },

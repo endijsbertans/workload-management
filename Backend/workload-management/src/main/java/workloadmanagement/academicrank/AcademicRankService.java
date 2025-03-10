@@ -1,6 +1,8 @@
 package workloadmanagement.academicrank;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import workloadmanagement.course.CourseRequest;
 import workloadmanagement.faculty.Faculty;
 import workloadmanagement.faculty.FacultyResponse;
 import workloadmanagement.repo.IAcademicRankRepo;
@@ -13,6 +15,12 @@ public class AcademicRankService {
     public Integer save(AcademicRankRequest request) {
         AcademicRank academicRank = academicRankMapper.toAcademicRank(request);
         return academicRankRepo.save(academicRank).getAcademicRankId();
+    }
+    public Integer update(Integer academicRankId, @Valid AcademicRankRequest request) {
+        AcademicRank existingAcademicRank = findAcademicRankFromResponseId(academicRankId);
+        AcademicRank updatedAcademicRank = academicRankMapper.toAcademicRank(request);
+        updatedAcademicRank.setAcademicRankId(existingAcademicRank.getAcademicRankId());
+        return academicRankRepo.save(updatedAcademicRank).getAcademicRankId();
     }
 
     public AcademicRank findAcademicRankFromResponseId(int id) {
@@ -31,4 +39,6 @@ public class AcademicRankService {
                 .map(academicRankMapper::toAcademicRankResponse)
                 .toList();
     }
+
+
 }

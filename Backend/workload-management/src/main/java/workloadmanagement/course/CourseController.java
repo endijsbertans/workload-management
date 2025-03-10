@@ -4,6 +4,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import workloadmanagement.faculty.FacultyRequest;
+
 import java.util.List;
 @RestController
 @RequestMapping("course")
@@ -16,9 +18,16 @@ public class CourseController {
             @Valid @RequestBody CourseRequest request) {
         return ResponseEntity.ok(courseService.save(request));
     }
-    @GetMapping("{course-id}")
+    @PatchMapping("{courseId}")
+    public ResponseEntity<Integer> updateCourseById(
+            @PathVariable Integer courseId,
+            @Valid @RequestBody CourseRequest request
+    ){
+        return ResponseEntity.ok(courseService.update(courseId, request));
+    }
+    @GetMapping("{courseId}")
     public ResponseEntity<CourseResponse> findCourseById(
-            @PathVariable("course-id") Integer courseId) {
+            @PathVariable Integer courseId) {
         return ResponseEntity.ok(courseService.findById(courseId));
     }
     @GetMapping

@@ -18,6 +18,8 @@ import { findCourseById } from '../fn/course/find-course-by-id';
 import { FindCourseById$Params } from '../fn/course/find-course-by-id';
 import { saveCourse } from '../fn/course/save-course';
 import { SaveCourse$Params } from '../fn/course/save-course';
+import { updateCourseById } from '../fn/course/update-course-by-id';
+import { UpdateCourseById$Params } from '../fn/course/update-course-by-id';
 
 @Injectable({ providedIn: 'root' })
 export class CourseService extends BaseService {
@@ -76,7 +78,7 @@ export class CourseService extends BaseService {
   }
 
   /** Path part for operation `findCourseById()` */
-  static readonly FindCourseByIdPath = '/course/{course-id}';
+  static readonly FindCourseByIdPath = '/course/{courseId}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -97,6 +99,31 @@ export class CourseService extends BaseService {
   findCourseById(params: FindCourseById$Params, context?: HttpContext): Observable<CourseResponse> {
     return this.findCourseById$Response(params, context).pipe(
       map((r: StrictHttpResponse<CourseResponse>): CourseResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `updateCourseById()` */
+  static readonly UpdateCourseByIdPath = '/course/{courseId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateCourseById()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateCourseById$Response(params: UpdateCourseById$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return updateCourseById(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateCourseById$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateCourseById(params: UpdateCourseById$Params, context?: HttpContext): Observable<number> {
+    return this.updateCourseById$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
     );
   }
 

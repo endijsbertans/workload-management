@@ -18,6 +18,8 @@ import { findAllAcademicRank } from '../fn/academic-rank/find-all-academic-rank'
 import { FindAllAcademicRank$Params } from '../fn/academic-rank/find-all-academic-rank';
 import { saveAcademicRank } from '../fn/academic-rank/save-academic-rank';
 import { SaveAcademicRank$Params } from '../fn/academic-rank/save-academic-rank';
+import { updateAcademicRankById } from '../fn/academic-rank/update-academic-rank-by-id';
+import { UpdateAcademicRankById$Params } from '../fn/academic-rank/update-academic-rank-by-id';
 
 @Injectable({ providedIn: 'root' })
 export class AcademicRankService extends BaseService {
@@ -97,6 +99,31 @@ export class AcademicRankService extends BaseService {
   findAcademicRankById(params: FindAcademicRankById$Params, context?: HttpContext): Observable<AcademicRankResponse> {
     return this.findAcademicRankById$Response(params, context).pipe(
       map((r: StrictHttpResponse<AcademicRankResponse>): AcademicRankResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `updateAcademicRankById()` */
+  static readonly UpdateAcademicRankByIdPath = '/academic-rank/{academic-rank-id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateAcademicRankById()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateAcademicRankById$Response(params: UpdateAcademicRankById$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return updateAcademicRankById(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateAcademicRankById$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateAcademicRankById(params: UpdateAcademicRankById$Params, context?: HttpContext): Observable<number> {
+    return this.updateAcademicRankById$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
     );
   }
 

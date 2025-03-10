@@ -1,5 +1,6 @@
 package workloadmanagement.course;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import workloadmanagement.academicrank.AcademicRank;
@@ -20,6 +21,13 @@ public class CourseService {
         Course course = courseMapper.toCourse(request, necessaryAcademicRank);
         return courseRepo.save(course).getCourseId();
     }
+    public Integer update(Integer courseId, @Valid CourseRequest request) {
+        Course existingCourse = findCourseFromResponseId(courseId);
+        AcademicRank necessaryAcademicRank = academicRankService.findAcademicRankFromResponseId(request.necessaryAcademicRankId());
+        Course updatedCourse = courseMapper.toCourse(request, necessaryAcademicRank);
+        updatedCourse.setCourseId(existingCourse.getCourseId());
+        return courseRepo.save(updatedCourse).getCourseId();
+    }
     public Course findCourseFromResponseId(int id) {
         return courseRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Course with id: " + id + " not found."));
@@ -35,4 +43,6 @@ public class CourseService {
                 .map(courseMapper::toCourseResponse)
                 .toList();
     }
+
+
 }

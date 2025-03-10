@@ -8,7 +8,7 @@ import {FacultyResponse} from "../../../../services/models/faculty-response";
 import {EnumTranslationService} from "../../../../services/translation/EnumTranslationService";
 import {MatButton} from "@angular/material/button";
 import {MyClassRequest} from "../../../../services/models/my-class-request";
-import {ActivatedRoute, Router, RouterLink} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {FacultyService} from "../../../../services/services/faculty.service";
 import {MyClassService} from "../../../../services/services/my-class.service";
@@ -25,8 +25,7 @@ import {MyClassService} from "../../../../services/services/my-class.service";
     MatLabel,
     ReactiveFormsModule,
     MatOption,
-    MatSelect,
-    RouterLink
+    MatSelect
   ],
   templateUrl: './new-class.component.html',
   styleUrls: ['./new-class.component.scss', '../new-object-style.scss']

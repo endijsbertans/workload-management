@@ -8,16 +8,18 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { CourseResponse } from '../../models/course-response';
+import { CourseRequest } from '../../models/course-request';
 
-export interface FindCourseById$Params {
+export interface UpdateCourseById$Params {
   courseId: number;
+      body: CourseRequest
 }
 
-export function findCourseById(http: HttpClient, rootUrl: string, params: FindCourseById$Params, context?: HttpContext): Observable<StrictHttpResponse<CourseResponse>> {
-  const rb = new RequestBuilder(rootUrl, findCourseById.PATH, 'get');
+export function updateCourseById(http: HttpClient, rootUrl: string, params: UpdateCourseById$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+  const rb = new RequestBuilder(rootUrl, updateCourseById.PATH, 'patch');
   if (params) {
     rb.path('courseId', params.courseId, {});
+    rb.body(params.body, 'application/json');
   }
 
   return http.request(
@@ -25,9 +27,9 @@ export function findCourseById(http: HttpClient, rootUrl: string, params: FindCo
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<CourseResponse>;
+      return (r as HttpResponse<any>).clone({ body: parseFloat(String((r as HttpResponse<any>).body)) }) as StrictHttpResponse<number>;
     })
   );
 }
 
-findCourseById.PATH = '/course/{courseId}';
+updateCourseById.PATH = '/course/{courseId}';

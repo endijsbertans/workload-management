@@ -1,18 +1,17 @@
 package workloadmanagement.academicrank.academicrankDetails;
 import org.springframework.stereotype.Service;
-import workloadmanagement.academicrank.AcademicRank;
-import workloadmanagement.semester.Semester;
+import workloadmanagement.academicrank.academicrankDetails.AcademicRankDetailsService.AcademicRankDetailsEntities;
 
 
 @Service
 public class AcademicRankDetailsMapper {
-    public AcademicRankDetails toAcademicRankDetails(AcademicRankDetailsRequest request, AcademicRank academicRank, Semester semester){
+    public AcademicRankDetails toAcademicRankDetails(AcademicRankDetailsRequest request, AcademicRankDetailsEntities entities){
         return AcademicRankDetails.builder()
                 .cpForFullTime(request.cpForFullTime())
                 .salary(request.salary())
                 .contactHoursForFullTime(request.contactHoursForFullTime())
-                .semester(semester)
-                .academicRank(academicRank)
+                .semester(entities.semester())
+                .academicRank(entities.academicRank())
                 .build();
     }
 

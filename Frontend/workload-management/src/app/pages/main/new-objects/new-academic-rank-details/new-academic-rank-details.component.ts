@@ -1,5 +1,5 @@
 import {Component, DestroyRef, EventEmitter, inject, OnInit, Output, signal} from '@angular/core';
-import {ActivatedRoute, Router, RouterLink} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {AcademicRankDetailsService} from "../../../../services/services/academic-rank-details.service";
@@ -22,8 +22,7 @@ import {AcademicRankResponse} from "../../../../services/models/academic-rank-re
     MatLabel,
     MatOption,
     MatSelect,
-    MatButton,
-    RouterLink
+    MatButton
   ],
   templateUrl: './new-academic-rank-details.component.html',
   standalone: true,
@@ -38,27 +37,31 @@ export class NewAcademicRankDetailsComponent implements OnInit{
   private readonly academicRankService = inject(AcademicRankService);
   private readonly semesterService = inject(SemesterControllerService);
   private readonly destroyRef = inject(DestroyRef);
+
   semesters = signal<SemesterResponse[] | undefined>(undefined);
   academicRanks = signal<AcademicRankResponse[] | undefined>(undefined);
-
   errorMessage = signal('');
+  editMode = signal(false);
+  objectId = signal<number | undefined>(undefined);
+  pageTitle = signal('Pievienot jaunas amata detaļas');
+
   academicRankDetailsRequest?: AcademicRankDetailsRequest;
   academicRankDetailsForm = new FormGroup({
-    cpForFullTime: new FormControl(null, {
+    cpForFullTime: new FormControl(1, {
       validators: [
         Validators.required,
         Validators.min(0),
         Validators.max(30)
       ]
     }),
-    salary: new FormControl(null, {
+    salary: new FormControl(1, {
       validators: [
         Validators.required,
         Validators.min(0),
         Validators.max(10000)
       ]
     }),
-    contactHoursForFullTime: new FormControl(null, {
+    contactHoursForFullTime: new FormControl(1, {
       validators: [
         Validators.required,
         Validators.min(0),
@@ -74,38 +77,106 @@ export class NewAcademicRankDetailsComponent implements OnInit{
         Validators.required],
     }),
   })
-  ngOnInit(){
-    this.fetchSemesters();
-    this.fetchAllAcademicRanks();
-  }
-  onSubmit() {
-    console.log(this.academicRankDetailsForm.controls);
-    if (this.academicRankDetailsForm.value.cpForFullTime &&
-      this.academicRankDetailsForm.value.salary &&
-      this.academicRankDetailsForm.value.contactHoursForFullTime &&
-      this.academicRankDetailsForm.value.semesterId&&
-      this.academicRankDetailsForm.value.academicRankId
-    ) {
-      this.academicRankDetailsRequest = {
-        cpForFullTime: this.academicRankDetailsForm.value.cpForFullTime,
-        salary: this.academicRankDetailsForm.value.salary,
-        contactHoursForFullTime: this.academicRankDetailsForm.value.contactHoursForFullTime,
-        semesterId: this.academicRankDetailsForm.value.semesterId,
-        academicRankId: this.academicRankDetailsForm.value.academicRankId
-      };
 
-      this.academicRankDetailsService.saveAcademicRankDetails({
-        body: this.academicRankDetailsRequest
-      }).subscribe({
-        next: (id) => {
-          this.emitMyAcademicRankDetails.emit(id);
-          this._snackBar.open("Saglabāts", "Aizvērt", {duration: 5000});
-        },
-        error: (err) => {
-          this._snackBar.open(err.error.errorMsg, "Aizvērt", {duration: 5000});
-        }
-      })
+  ngOnInit(){
+    this.activeRoute.params.subscribe(params => {
+      if (params['id']) {
+        this.objectId.set(+params['id']);
+        this.editMode.set(true);
+        this.pageTitle.set('Rediģēt amata detaļas');
+        this.fetchSemesters(() => {
+          this.fetchAllAcademicRanks(() => {
+            this.loadAcademicRankDetailsData(this.objectId());
+          });
+        });
+      } else {
+        this.fetchSemesters();
+        this.fetchAllAcademicRanks();
+      }
+    });
+  }
+
+  private loadAcademicRankDetailsData(id: number | undefined): void {
+    if (!id) return;
+
+    this.academicRankDetailsService.findAcademicRankDetailsById({ "academic-rank-id": id }).subscribe({
+      next: (detailsData) => {
+        this.academicRankDetailsForm.patchValue({
+          cpForFullTime: detailsData.cpForFullTime,
+          salary: detailsData.salary,
+          contactHoursForFullTime: detailsData.contactHoursForFullTime,
+          semesterId: detailsData.semester?.semesterId,
+          academicRankId: detailsData.academicRank?.academicRankId
+        });
+      },
+      error: (err) => {
+        this._snackBar.open("Neizdevās ielādēt datus", "Aizvērt", { duration: 5000 });
+        console.error(err);
+      }
+    });
+  }
+
+  onSubmit() {
+    if (this.academicRankDetailsForm.valid) {
+      const formData = this.prepareFormData();
+
+      if (this.editMode()) {
+        this.updateAcademicRankDetails(formData);
+      } else {
+        this.createAcademicRankDetails(formData);
+      }
     }
+  }
+
+  private prepareFormData(): AcademicRankDetailsRequest {
+    return {
+      cpForFullTime: this.academicRankDetailsForm.value.cpForFullTime!,
+      salary: this.academicRankDetailsForm.value.salary!,
+      contactHoursForFullTime: this.academicRankDetailsForm.value.contactHoursForFullTime!,
+      semesterId: this.academicRankDetailsForm.value.semesterId!,
+      academicRankId: this.academicRankDetailsForm.value.academicRankId!
+    };
+  }
+
+  private createAcademicRankDetails(data: AcademicRankDetailsRequest) {
+    this.academicRankDetailsService.saveAcademicRankDetails({
+      body: data
+    }).subscribe({
+      next: (id) => {
+        this.emitMyAcademicRankDetails.emit(id);
+        this._snackBar.open("Saglabāts", "Aizvērt", {duration: 5000});
+        this.navigateBackFromCreateMode();
+      },
+      error: (err) => {
+        this._snackBar.open(err.error.errorMsg, "Aizvērt", {duration: 5000});
+      }
+    });
+  }
+
+  private updateAcademicRankDetails(data: AcademicRankDetailsRequest): void {
+    const id = this.objectId();
+    if (id === undefined) return;
+
+    this.academicRankDetailsService.updateAcademicRankDetailsById({ "academic-rank-id": id, body: data }).subscribe({
+      next: () => {
+        this._snackBar.open("Izmaiņas saglabātas", "Aizvērt", { duration: 5000 });
+        this.navigateBackFromEditMode();
+      },
+      error: (err) => {
+        console.error(err);
+        this._snackBar.open(err.error.errorMsg || "Kļūda atjaunojot amata detaļas", "Aizvērt", { duration: 5000 });
+      }
+    });
+  }
+
+  public navigateBackFromEditMode(): void {
+    this.router.navigate(['../../'], {
+      relativeTo: this.activeRoute,
+      replaceUrl: true
+    });
+  }
+
+  public navigateBackFromCreateMode(): void {
     this.router.navigate(['..'], {
       relativeTo: this.activeRoute,
       replaceUrl: true
@@ -122,6 +193,7 @@ export class NewAcademicRankDetailsComponent implements OnInit{
     });
     this.destroyRef.onDestroy(() => subscription.unsubscribe());
   }
+
   private fetchAllAcademicRanks(callback?: () => void) {
     const subscription = this.academicRankService.findAllAcademicRank().subscribe({
       next: (academicRanks) => {
@@ -132,6 +204,7 @@ export class NewAcademicRankDetailsComponent implements OnInit{
     });
     this.destroyRef.onDestroy(() => subscription.unsubscribe());
   }
+
   updateErrorMessage(controlName: keyof typeof this.academicRankDetailsForm.controls) {
     const control = this.academicRankDetailsForm.controls[controlName];
     if (control.errors) {

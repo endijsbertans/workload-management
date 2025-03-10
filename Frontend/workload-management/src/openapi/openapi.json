@@ -1016,6 +1016,219 @@
         }
       }
     },
+    "/course/{courseId}": {
+      "get": {
+        "tags": [
+          "Course"
+        ],
+        "operationId": "findCourseById",
+        "parameters": [
+          {
+            "name": "courseId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CourseResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Course"
+        ],
+        "operationId": "updateCourseById",
+        "parameters": [
+          {
+            "name": "courseId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CourseRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/academic-rank/{academic-rank-id}": {
+      "get": {
+        "tags": [
+          "AcademicRank"
+        ],
+        "operationId": "findAcademicRankById",
+        "parameters": [
+          {
+            "name": "academic-rank-id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AcademicRankResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "AcademicRank"
+        ],
+        "operationId": "updateAcademicRankById",
+        "parameters": [
+          {
+            "name": "academic-rank-id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AcademicRankRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/academic-rank/details/{academic-rank-id}": {
+      "get": {
+        "tags": [
+          "AcademicRankDetails"
+        ],
+        "operationId": "findAcademicRankDetailsById",
+        "parameters": [
+          {
+            "name": "academic-rank-id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AcademicRankDetailsResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "AcademicRankDetails"
+        ],
+        "operationId": "updateAcademicRankDetailsById",
+        "parameters": [
+          {
+            "name": "academic-rank-id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AcademicRankDetailsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/my-class/getDegreeEnums": {
       "get": {
         "tags": [
@@ -1037,37 +1250,6 @@
                       "DOCTORATE"
                     ]
                   }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/course/{course-id}": {
-      "get": {
-        "tags": [
-          "Course"
-        ],
-        "operationId": "findCourseById",
-        "parameters": [
-          {
-            "name": "course-id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CourseResponse"
                 }
               }
             }
@@ -1117,68 +1299,6 @@
         "responses": {
           "200": {
             "description": "OK"
-          }
-        }
-      }
-    },
-    "/academic-rank/{academic-rank-id}": {
-      "get": {
-        "tags": [
-          "AcademicRank"
-        ],
-        "operationId": "findAcademicRankById",
-        "parameters": [
-          {
-            "name": "academic-rank-id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AcademicRankResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/academic-rank/details/{academic-rank-id}": {
-      "get": {
-        "tags": [
-          "AcademicRankDetails"
-        ],
-        "operationId": "findAcademicRankDetailsById",
-        "parameters": [
-          {
-            "name": "academic-rank-id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AcademicRankDetailsResponse"
-                }
-              }
-            }
           }
         }
       }
@@ -1878,16 +1998,16 @@
           "name": {
             "type": "string"
           },
-          "username": {
-            "type": "string"
-          },
-          "accountNonLocked": {
+          "credentialsNonExpired": {
             "type": "boolean"
           },
           "accountNonExpired": {
             "type": "boolean"
           },
-          "credentialsNonExpired": {
+          "username": {
+            "type": "string"
+          },
+          "accountNonLocked": {
             "type": "boolean"
           }
         },

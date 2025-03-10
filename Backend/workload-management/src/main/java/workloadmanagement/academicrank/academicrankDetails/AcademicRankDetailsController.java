@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import workloadmanagement.academicrank.AcademicRankRequest;
 
 import java.util.List;
 
@@ -19,6 +20,13 @@ public class AcademicRankDetailsController {
             @Valid @RequestBody AcademicRankDetailsRequest request
     ){
         return ResponseEntity.ok(academicRankDetailsService.save(request));
+    }
+    @PatchMapping("{academic-rank-id}")
+    public ResponseEntity<Integer> updateAcademicRankDetailsById(
+            @PathVariable("academic-rank-id") Integer academicRankId,
+            @Valid @RequestBody AcademicRankDetailsRequest request
+    ){
+        return ResponseEntity.ok(academicRankDetailsService.update(academicRankId, request));
     }
     @GetMapping("{academic-rank-id}")
     public ResponseEntity<AcademicRankDetailsResponse> findAcademicRankDetailsById(
