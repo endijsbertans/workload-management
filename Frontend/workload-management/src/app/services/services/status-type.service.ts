@@ -18,6 +18,8 @@ import { FindStatusTypeById$Params } from '../fn/status-type/find-status-type-by
 import { saveStatusType } from '../fn/status-type/save-status-type';
 import { SaveStatusType$Params } from '../fn/status-type/save-status-type';
 import { StatusTypeResponse } from '../models/status-type-response';
+import { updateStatusTypeById } from '../fn/status-type/update-status-type-by-id';
+import { UpdateStatusTypeById$Params } from '../fn/status-type/update-status-type-by-id';
 
 @Injectable({ providedIn: 'root' })
 export class StatusTypeService extends BaseService {
@@ -97,6 +99,31 @@ export class StatusTypeService extends BaseService {
   findStatusTypeById(params: FindStatusTypeById$Params, context?: HttpContext): Observable<StatusTypeResponse> {
     return this.findStatusTypeById$Response(params, context).pipe(
       map((r: StrictHttpResponse<StatusTypeResponse>): StatusTypeResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `updateStatusTypeById()` */
+  static readonly UpdateStatusTypeByIdPath = '/status-type/{statusTypeId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateStatusTypeById()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateStatusTypeById$Response(params: UpdateStatusTypeById$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return updateStatusTypeById(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateStatusTypeById$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateStatusTypeById(params: UpdateStatusTypeById$Params, context?: HttpContext): Observable<number> {
+    return this.updateStatusTypeById$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
     );
   }
 

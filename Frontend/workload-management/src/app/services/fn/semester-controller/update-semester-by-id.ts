@@ -8,16 +8,18 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SemesterResponse } from '../../models/semester-response';
+import { SemesterRequest } from '../../models/semester-request';
 
-export interface FindSemesterById$Params {
+export interface UpdateSemesterById$Params {
   semesterId: number;
+      body: SemesterRequest
 }
 
-export function findSemesterById(http: HttpClient, rootUrl: string, params: FindSemesterById$Params, context?: HttpContext): Observable<StrictHttpResponse<SemesterResponse>> {
-  const rb = new RequestBuilder(rootUrl, findSemesterById.PATH, 'get');
+export function updateSemesterById(http: HttpClient, rootUrl: string, params: UpdateSemesterById$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+  const rb = new RequestBuilder(rootUrl, updateSemesterById.PATH, 'patch');
   if (params) {
     rb.path('semesterId', params.semesterId, {});
+    rb.body(params.body, 'application/json');
   }
 
   return http.request(
@@ -25,9 +27,9 @@ export function findSemesterById(http: HttpClient, rootUrl: string, params: Find
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SemesterResponse>;
+      return (r as HttpResponse<any>).clone({ body: parseFloat(String((r as HttpResponse<any>).body)) }) as StrictHttpResponse<number>;
     })
   );
 }
 
-findSemesterById.PATH = '/semester/{semesterId}';
+updateSemesterById.PATH = '/semester/{semesterId}';

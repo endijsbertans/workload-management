@@ -28,4 +28,4 @@ export function findAllSemesters(http: HttpClient, rootUrl: string, params?: Fin
   );
 }
 
-findAllSemesters.PATH = '/statuses';
+findAllSemesters.PATH = '/semester';

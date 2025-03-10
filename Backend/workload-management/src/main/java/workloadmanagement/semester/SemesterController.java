@@ -4,11 +4,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import workloadmanagement.statustype.StatusTypeRequest;
+
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("statuses")
+@RequestMapping("semester")
 public class SemesterController {
     private final SemesterService semesterService;
     @PostMapping
@@ -16,10 +18,17 @@ public class SemesterController {
             @Valid @RequestBody SemesterRequest request){
         return ResponseEntity.ok(semesterService.save(request));
     }
-    @GetMapping("{statusTypeId}")
+    @PatchMapping("{semesterId}")
+    public ResponseEntity<Integer> updateSemesterById(
+            @PathVariable Integer semesterId,
+            @Valid @RequestBody SemesterRequest request
+    ){
+        return ResponseEntity.ok(semesterService.update(semesterId, request));
+    }
+    @GetMapping("{semesterId}")
     public ResponseEntity<SemesterResponse> findSemesterById(
-            @PathVariable Integer statusTypeId){
-        return ResponseEntity.ok(semesterService.findById(statusTypeId));
+            @PathVariable Integer semesterId){
+        return ResponseEntity.ok(semesterService.findById(semesterId));
     }
     @GetMapping
     public ResponseEntity<List<SemesterResponse>> findAllSemesters(){

@@ -4,8 +4,8 @@
 
 export { WorkloadService } from './services/workload.service';
 export { TeachingStaffService } from './services/teaching-staff.service';
-export { SemesterControllerService } from './services/semester-controller.service';
 export { StatusTypeService } from './services/status-type.service';
+export { SemesterControllerService } from './services/semester-controller.service';
 export { MyClassService } from './services/my-class.service';
 export { FacultyService } from './services/faculty.service';
 export { CourseService } from './services/course.service';

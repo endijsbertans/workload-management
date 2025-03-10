@@ -166,58 +166,6 @@
         }
       }
     },
-    "/statuses": {
-      "get": {
-        "tags": [
-          "semester-controller"
-        ],
-        "operationId": "findAllSemesters",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/SemesterResponse"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "semester-controller"
-        ],
-        "operationId": "saveSemester",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SemesterRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/status-type": {
       "get": {
         "tags": [
@@ -250,6 +198,58 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/StatusTypeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/semester": {
+      "get": {
+        "tags": [
+          "semester-controller"
+        ],
+        "operationId": "findAllSemesters",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SemesterResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "semester-controller"
+        ],
+        "operationId": "saveSemester",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SemesterRequest"
               }
             }
           },
@@ -732,37 +732,6 @@
         }
       }
     },
-    "/statuses/{statusTypeId}": {
-      "get": {
-        "tags": [
-          "semester-controller"
-        ],
-        "operationId": "findSemesterById",
-        "parameters": [
-          {
-            "name": "statusTypeId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SemesterResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/status-type/{statusTypeId}": {
       "get": {
         "tags": [
@@ -787,6 +756,117 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/StatusTypeResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "StatusType"
+        ],
+        "operationId": "updateStatusTypeById",
+        "parameters": [
+          {
+            "name": "statusTypeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StatusTypeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/semester/{semesterId}": {
+      "get": {
+        "tags": [
+          "semester-controller"
+        ],
+        "operationId": "findSemesterById",
+        "parameters": [
+          {
+            "name": "semesterId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SemesterResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "semester-controller"
+        ],
+        "operationId": "updateSemesterById",
+        "parameters": [
+          {
+            "name": "semesterId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SemesterRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
                 }
               }
             }
@@ -1156,6 +1236,17 @@
           "surname"
         ]
       },
+      "StatusTypeRequest": {
+        "type": "object",
+        "properties": {
+          "statusTypeName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "statusTypeName"
+        ]
+      },
       "SemesterRequest": {
         "type": "object",
         "properties": {
@@ -1174,17 +1265,6 @@
         "required": [
           "semesterName",
           "year"
-        ]
-      },
-      "StatusTypeRequest": {
-        "type": "object",
-        "properties": {
-          "statusTypeName": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "statusTypeName"
         ]
       },
       "MyClassRequest": {
@@ -1570,10 +1650,10 @@
           "staffPhoto": {
             "type": "string"
           },
-          "staffFullName": {
+          "rankFullName": {
             "type": "string"
           },
-          "rankFullName": {
+          "staffFullName": {
             "type": "string"
           }
         }
@@ -1718,16 +1798,16 @@
           "name": {
             "type": "string"
           },
+          "accountNonLocked": {
+            "type": "boolean"
+          },
           "username": {
             "type": "string"
-          },
-          "accountNonExpired": {
-            "type": "boolean"
           },
           "credentialsNonExpired": {
             "type": "boolean"
           },
-          "accountNonLocked": {
+          "accountNonExpired": {
             "type": "boolean"
           }
         },
@@ -1775,6 +1855,18 @@
           }
         }
       },
+      "StatusTypeResponse": {
+        "type": "object",
+        "properties": {
+          "statusTypeId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "statusTypeName": {
+            "type": "string"
+          }
+        }
+      },
       "SemesterResponse": {
         "type": "object",
         "properties": {
@@ -1792,18 +1884,6 @@
           "year": {
             "type": "integer",
             "format": "int32"
-          }
-        }
-      },
-      "StatusTypeResponse": {
-        "type": "object",
-        "properties": {
-          "statusTypeId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "statusTypeName": {
-            "type": "string"
           }
         }
       },

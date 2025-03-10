@@ -8,7 +8,7 @@ import {
 import {FacultyResponse} from "../../../../services/models/faculty-response";
 
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {ActivatedRoute, Router, RouterLink} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
@@ -22,13 +22,10 @@ import {TeachingStaffRequest} from "../../../../services/models/teaching-staff-r
 import {AcademicRankResponse} from "../../../../services/models/academic-rank-response";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {StatusTypeResponse} from "../../../../services/models/status-type-response";
-import { Location } from '@angular/common';
-
 
 @Component({
   selector: 'app-new-teaching-staff',
   imports: [
-    RouterLink,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
@@ -51,12 +48,11 @@ export class NewTeachingStaffComponent implements OnInit {
   private readonly academicRankService = inject(AcademicRankService);
   private readonly _snackBar = inject(MatSnackBar);
   private readonly statusTypeService = inject(StatusTypeService);
-  protected readonly location = inject(Location);
   statusTypes = signal<StatusTypeResponse[] | undefined>(undefined);
   faculties = signal<FacultyResponse[] | undefined>(undefined);
   academicRanks = signal<AcademicRankResponse[] | undefined>(undefined);
   onAddUserAuthDetails = signal(false);
-  userAuthDetails = signal< RegistrationRequest | undefined>(undefined);
+  userAuthDetails = signal<RegistrationRequest | undefined>(undefined);
   authButtonText = signal("Izveidot autentifikācijas detaļas");
   errorMessage = signal('');
 
@@ -103,9 +99,10 @@ export class NewTeachingStaffComponent implements OnInit {
       }
     });
   }
+
   private loadTeachingStaffData(id: number | undefined): void {
     if (!id) return;
-    this.teachingStaffService.findTeachingStaffById({ "tstaff-id": id }).subscribe({
+    this.teachingStaffService.findTeachingStaffById({"tstaff-id": id}).subscribe({
       next: (staff) => {
         // Populate form with existing data
         this.teachingStaffForm.patchValue({
@@ -122,11 +119,12 @@ export class NewTeachingStaffComponent implements OnInit {
         }
       },
       error: (err) => {
-        this._snackBar.open("Neizdevās ielādēt datus", "Aizvērt", { duration: 5000 });
+        this._snackBar.open("Neizdevās ielādēt datus", "Aizvērt", {duration: 5000});
         console.error(err);
       }
     });
   }
+
   onSubmit() {
     if (this.teachingStaffForm.valid) {
       const formData = this.prepareFormData();
@@ -149,18 +147,19 @@ export class NewTeachingStaffComponent implements OnInit {
       authDetails: this.userAuthDetails() || undefined
     };
   }
+
   private createTeachingStaff(data: TeachingStaffRequest): void {
     this.teachingStaffService.saveTeachingStaff({
       body: data
     }).subscribe({
       next: (id) => {
         this.emitTeachingStaff.emit(id);
-        this._snackBar.open("Saglabāts", "Aizvērt", { duration: 5000 });
-        this.navigateBack();
+        this._snackBar.open("Saglabāts", "Aizvērt", {duration: 5000});
+        this.navigateBackFromCreateMode();
       },
       error: (err) => {
         console.log(err);
-        this._snackBar.open(err.error.errorMsg, "Aizvērt", { duration: 5000 });
+        this._snackBar.open(err.error.errorMsg, "Aizvērt", {duration: 5000});
       }
     });
   }
@@ -168,26 +167,32 @@ export class NewTeachingStaffComponent implements OnInit {
   private updateTeachingStaff(data: TeachingStaffRequest): void {
     const id = this.objectId();
     if (id === undefined) return;
-    this.teachingStaffService.updateTeachingStaffById({"tstaff-id":id, body: data}).subscribe({
+    this.teachingStaffService.updateTeachingStaffById({"tstaff-id": id, body: data}).subscribe({
       next: () => {
-        this._snackBar.open("Izmaiņas saglabātas", "Aizvērt", { duration: 5000 });
-        this.navigateBack();
+        this._snackBar.open("Izmaiņas saglabātas", "Aizvērt", {duration: 5000});
+        this.navigateBackFromEditMode();
       },
       error: (err) => {
         console.log(err);
-        this._snackBar.open(err.error.errorMsg, "Aizvērt", { duration: 5000 });
+        this._snackBar.open(err.error.errorMsg, "Aizvērt", {duration: 5000});
       }
     });
   }
 
-  private navigateBack(): void {
+  public navigateBackFromEditMode(): void {
+    this.router.navigate(['../../'], {
+      relativeTo: this.activeRoute,
+      replaceUrl: true
+    });
+  }
+  public navigateBackFromCreateMode(): void {
     this.router.navigate(['..'], {
       relativeTo: this.activeRoute,
       replaceUrl: true
     });
   }
 
-  private fetchFaculties():Promise<void> {
+  private fetchFaculties(): Promise<void> {
     return new Promise((resolve, reject) => {
       const subscription = this.facultyService.findAllFaculties().subscribe({
         next: (faculties) => {
@@ -204,7 +209,8 @@ export class NewTeachingStaffComponent implements OnInit {
       });
     });
   }
-  private fetchAcademicRanks():Promise<void> {
+
+  private fetchAcademicRanks(): Promise<void> {
     return new Promise((resolve, reject) => {
       const subscription = this.academicRankService.findAllAcademicRank().subscribe({
         next: (ranks) => {
@@ -221,6 +227,7 @@ export class NewTeachingStaffComponent implements OnInit {
       });
     });
   }
+
   private fetchStatusTypes(callback?: () => void) {
     const subscription = this.statusTypeService.findAllStatusTypes().subscribe({
       next: (statusTypes) => {
@@ -231,6 +238,7 @@ export class NewTeachingStaffComponent implements OnInit {
     });
     this.destroyRef.onDestroy(() => subscription.unsubscribe());
   }
+
   onEmittedUserAuthDetails(authDetails: RegistrationRequest) {
     this.onAddUserAuthDetails.set(false);
     this.userAuthDetails.set(authDetails);
@@ -241,6 +249,7 @@ export class NewTeachingStaffComponent implements OnInit {
   closeOrOpenAuthDetails() {
     this.onAddUserAuthDetails.set(!this.onAddUserAuthDetails());
   }
+
   updateErrorMessage(controlName: keyof typeof this.teachingStaffForm.controls) {
     const control = this.teachingStaffForm.controls[controlName];
     if (control.errors) {
@@ -261,7 +270,4 @@ export class NewTeachingStaffComponent implements OnInit {
       this.errorMessage.set('');
     }
   }
-    goBack() {
-      this.router.navigate(['..'], { relativeTo: this.activeRoute });
-    }
 }

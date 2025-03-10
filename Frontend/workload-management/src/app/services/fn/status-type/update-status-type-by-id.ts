@@ -8,15 +8,17 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SemesterRequest } from '../../models/semester-request';
+import { StatusTypeRequest } from '../../models/status-type-request';
 
-export interface SaveSemester$Params {
-      body: SemesterRequest
+export interface UpdateStatusTypeById$Params {
+  statusTypeId: number;
+      body: StatusTypeRequest
 }
 
-export function saveSemester(http: HttpClient, rootUrl: string, params: SaveSemester$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
-  const rb = new RequestBuilder(rootUrl, saveSemester.PATH, 'post');
+export function updateStatusTypeById(http: HttpClient, rootUrl: string, params: UpdateStatusTypeById$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+  const rb = new RequestBuilder(rootUrl, updateStatusTypeById.PATH, 'patch');
   if (params) {
+    rb.path('statusTypeId', params.statusTypeId, {});
     rb.body(params.body, 'application/json');
   }
 
@@ -30,4 +32,4 @@ export function saveSemester(http: HttpClient, rootUrl: string, params: SaveSeme
   );
 }
 
-saveSemester.PATH = '/semester';
+updateStatusTypeById.PATH = '/status-type/{statusTypeId}';
