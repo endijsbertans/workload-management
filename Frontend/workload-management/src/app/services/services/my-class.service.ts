@@ -20,6 +20,8 @@ import { GetEnums$Params } from '../fn/my-class/get-enums';
 import { MyClassResponse } from '../models/my-class-response';
 import { saveMyClass } from '../fn/my-class/save-my-class';
 import { SaveMyClass$Params } from '../fn/my-class/save-my-class';
+import { updateMyClass } from '../fn/my-class/update-my-class';
+import { UpdateMyClass$Params } from '../fn/my-class/update-my-class';
 
 @Injectable({ providedIn: 'root' })
 export class MyClassService extends BaseService {
@@ -99,6 +101,31 @@ export class MyClassService extends BaseService {
   findMyClassById(params: FindMyClassById$Params, context?: HttpContext): Observable<MyClassResponse> {
     return this.findMyClassById$Response(params, context).pipe(
       map((r: StrictHttpResponse<MyClassResponse>): MyClassResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `updateMyClass()` */
+  static readonly UpdateMyClassPath = '/my-class/{myclass-id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateMyClass()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateMyClass$Response(params: UpdateMyClass$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return updateMyClass(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateMyClass$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateMyClass(params: UpdateMyClass$Params, context?: HttpContext): Observable<number> {
+    return this.updateMyClass$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
     );
   }
 

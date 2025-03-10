@@ -1,5 +1,6 @@
 package workloadmanagement.faculty;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import workloadmanagement.repo.IFacultyRepo;
@@ -15,6 +16,12 @@ public class FacultyService {
     public Integer save(FacultyRequest request) {
         Faculty faculty = facultyMapper.toFaculty(request);
         return facultyRepo.save(faculty).getFacultyId();
+    }
+    public Integer update(Integer myclassId, @Valid FacultyRequest request) {
+        Faculty existingFaculty = findFacultyFromResponseId(myclassId);
+        Faculty updatedFaculty = facultyMapper.toFaculty(request);
+        updatedFaculty.setFacultyId(existingFaculty.getFacultyId());
+        return facultyRepo.save(updatedFaculty).getFacultyId();
     }
 
     public FacultyResponse findFacultyById(Integer facultyId) {
@@ -32,4 +39,6 @@ public class FacultyService {
                 .map(facultyMapper::toFacultyResponse)
                 .toList();
     }
+
+
 }

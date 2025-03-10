@@ -141,6 +141,20 @@ export const ColumnsForAcademicRankResponse: ColumnNames[] = [
     sortable: true
   }
 ];
+export const ColumnsForFacultyResponse: ColumnNames[] = [
+  {
+    name: 'Abreviatūra',
+    pathTo: 'facultyName',
+    collection: 'columnsForFacultyResponse',
+    sortable: true
+  }
+  , {
+    name: 'Abreviatūra',
+    pathTo: 'facultyFullName',
+    collection: 'columnsForFacultyResponse',
+    sortable: true
+  }
+];
 export const ColumnsForAcademicRankDetailsResponse: ColumnNames[] = [
   {
     name: 'Kredīta punkti pilnai slodzei',

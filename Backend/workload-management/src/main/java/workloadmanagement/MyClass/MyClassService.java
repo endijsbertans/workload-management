@@ -1,5 +1,6 @@
 package workloadmanagement.MyClass;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import workloadmanagement.faculty.Faculty;
@@ -19,6 +20,13 @@ public class MyClassService {
         MyClass myClass = MyClassMapper.toMyClass(request, faculty);
         return myClassRepo.save(myClass).getClassId();
     }
+    public Integer update(Integer myclassId, @Valid MyClassRequest request) {
+        MyClass existingMyClass = findMyClassFromResponseId(myclassId);
+        Faculty faculty = facultyService.findFacultyFromResponseId(request.classFacultyId());
+        MyClass updatedMyClass = MyClassMapper.toMyClass(request, faculty);
+        updatedMyClass.setClassId(existingMyClass.getClassId());
+        return myClassRepo.save(updatedMyClass).getClassId();
+    }
     public MyClass findMyClassFromResponseId(int id) {
         return myClassRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("MyClass with id: " + id + " not found."));
@@ -35,4 +43,6 @@ public class MyClassService {
                 .map(MyClassMapper::toMyClassResponse)
                 .toList();
     }
+
+
 }
