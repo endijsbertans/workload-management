@@ -113,7 +113,9 @@ export const routes: Routes = [
          {
            path: 'new-semester',
            component: NewSemesterComponent
-         }
+         },
+         { path: 'edit-teaching-staff/:id', component: NewTeachingStaffComponent },
+         { path: 'edit-course/:id', component: NewCourseComponent },
        ],
     },
       {

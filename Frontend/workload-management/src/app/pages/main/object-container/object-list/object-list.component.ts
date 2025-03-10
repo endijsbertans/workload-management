@@ -9,6 +9,7 @@ import { ColumnNames } from "../../new-objects/object-columns";
 import { TeachingStaffResponse } from "../../../../services/models/teaching-staff-response";
 import {AcademicRankDetailsResponse} from "../../../../services/models/academic-rank-details-response";
 import {EnumTranslationService} from "../../../../services/translation/EnumTranslationService";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-object-list',
@@ -28,6 +29,7 @@ export class ObjectListComponent {
   @Input() displayedColumns?: ColumnNames[] = [];
   @Input() selectedTableType: string = 'teachingStaff';
   enumService = inject(EnumTranslationService)
+  private router = inject(Router);
   getDataItems(): any[] {
     switch (this.selectedTableType) {
       case 'teachingStaff': return this.tStaff || [];
@@ -59,5 +61,32 @@ export class ObjectListComponent {
     if (!obj || !path) return defaultValue;
     return path.split('.')
       .reduce((acc, part) => acc && acc[part] !== undefined ? acc[part] : defaultValue, obj);
+  }
+
+  editRow(clickedRow: any) {
+    const route = this.getEditRoute(clickedRow);
+    if (route) {
+      this.router.navigate([route]);
+    }
+  }
+  private getEditRoute(item: any): string | null {
+    switch (this.selectedTableType) {
+      case 'teachingStaff':
+        return `/main/objects/edit-teaching-staff/${item.teachingStaffId}`;
+      case 'courses':
+        return `/main/objects/edit-course/${item.courseId}`;
+      case 'classes':
+        return `/main/objects/edit-class/${item.classId}`;
+      case 'academicRanks':
+        return `/main/objects/edit-academic-rank/${item.academicRankId}`;
+      case 'academicRankDetails':
+        return `/main/objects/edit-academic-rank-details/${item.academicRankDetailsId}`;
+      case 'statusTypes':
+        return `/main/objects/edit-status-type/${item.statusTypeId}`;
+      case 'semesters':
+        return `/main/objects/edit-semester/${item.semesterId}`;
+      default:
+        return null;
+    }
   }
 }

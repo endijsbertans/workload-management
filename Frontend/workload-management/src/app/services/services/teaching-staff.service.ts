@@ -18,6 +18,8 @@ import { FindTeachingStaffById$Params } from '../fn/teaching-staff/find-teaching
 import { saveTeachingStaff } from '../fn/teaching-staff/save-teaching-staff';
 import { SaveTeachingStaff$Params } from '../fn/teaching-staff/save-teaching-staff';
 import { TeachingStaffResponse } from '../models/teaching-staff-response';
+import { updateTeachingStaffById } from '../fn/teaching-staff/update-teaching-staff-by-id';
+import { UpdateTeachingStaffById$Params } from '../fn/teaching-staff/update-teaching-staff-by-id';
 
 @Injectable({ providedIn: 'root' })
 export class TeachingStaffService extends BaseService {
@@ -97,6 +99,31 @@ export class TeachingStaffService extends BaseService {
   findTeachingStaffById(params: FindTeachingStaffById$Params, context?: HttpContext): Observable<TeachingStaffResponse> {
     return this.findTeachingStaffById$Response(params, context).pipe(
       map((r: StrictHttpResponse<TeachingStaffResponse>): TeachingStaffResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `updateTeachingStaffById()` */
+  static readonly UpdateTeachingStaffByIdPath = '/teaching-staff/{tstaff-id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateTeachingStaffById()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateTeachingStaffById$Response(params: UpdateTeachingStaffById$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return updateTeachingStaffById(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateTeachingStaffById$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateTeachingStaffById(params: UpdateTeachingStaffById$Params, context?: HttpContext): Observable<number> {
+    return this.updateTeachingStaffById$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
     );
   }
 

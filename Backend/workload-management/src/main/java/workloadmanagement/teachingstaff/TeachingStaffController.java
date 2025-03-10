@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import workloadmanagement.workload.WorkloadRequest;
 
 
 import java.util.List;
@@ -26,6 +27,13 @@ public class TeachingStaffController {
             @Valid @RequestBody TeachingStaffRequest request
             ) throws MessagingException {
         return ResponseEntity.ok(tStaffService.save(request));
+    }
+    @PatchMapping("{tstaff-id}")
+    public ResponseEntity<Integer> updateTeachingStaffById(
+            @PathVariable("tstaff-id") Integer tStaffId,
+            @Valid @RequestBody TeachingStaffRequest request
+    ){
+        return ResponseEntity.ok(tStaffService.update(tStaffId, request));
     }
     @GetMapping("{tstaff-id}")
     public ResponseEntity<TeachingStaffResponse> findTeachingStaffById(
