@@ -10,7 +10,7 @@ import {
   ColumnsForClassResponse,
   ColumnsForAcademicRankResponse,
   ColumnsForStatusTypeResponse,
-  ColumnsForSemesterResponse, ColumnsForAcademicRankDetailsResponse
+  ColumnsForSemesterResponse, ColumnsForAcademicRankDetailsResponse, ColumnsForFacultyResponse
 } from '../new-objects/object-columns';
 import {Router, RouterOutlet} from '@angular/router';
 import {TeachingStaffService} from "../../../services/services/teaching-staff.service";
@@ -26,6 +26,9 @@ import {StatusTypeResponse} from '../../../services/models/status-type-response'
 import {SemesterResponse} from '../../../services/models/semester-response';
 import {AcademicRankDetailsService} from "../../../services/services/academic-rank-details.service";
 import {AcademicRankDetailsResponse} from "../../../services/models/academic-rank-details-response";
+import {FacultyResponse} from "../../../services/models/faculty-response";
+import {FacultyService} from "../../../services/services/faculty.service";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-object-container',
@@ -37,6 +40,7 @@ import {AcademicRankDetailsResponse} from "../../../services/models/academic-ran
 export class ObjectContainerComponent implements OnInit {
   private readonly teachingStaffService = inject(TeachingStaffService);
   private readonly courseService = inject(CourseService);
+  private readonly facultyService = inject(FacultyService);
   private readonly myClassService = inject(MyClassService);
   private readonly academicRankService = inject(AcademicRankService);
   private readonly academicRankDetailsService = inject(AcademicRankDetailsService);
@@ -44,6 +48,7 @@ export class ObjectContainerComponent implements OnInit {
   private readonly semesterService = inject(SemesterControllerService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly router = inject(Router);
+  private readonly _snackBar = inject(MatSnackBar);
 
   tStaff = signal<TeachingStaffResponse[] | undefined>(undefined);
   courses = signal<CourseResponse[] | undefined>(undefined);
@@ -54,6 +59,7 @@ export class ObjectContainerComponent implements OnInit {
   semesters = signal<SemesterResponse[] | undefined>(undefined);
   displayedColumns = signal<ColumnNames[] | undefined>(undefined);
   isLoading = signal<boolean>(false);
+  faculties = signal<FacultyResponse[] | undefined>(undefined);
 
   tableTypes = [
     {id: 'teachingStaff', name: 'Docenti'},
@@ -62,7 +68,8 @@ export class ObjectContainerComponent implements OnInit {
     {id: 'academicRanks', name: 'Amatu grupas'},
     {id: 'academicRankDetails', name: 'Amatu grupu detaļas'},
     {id: 'statusTypes', name: 'Statusi'},
-    {id: 'semesters', name: 'Semestri'}
+    {id: 'semesters', name: 'Semestri'},
+    {id: 'faculties', name: 'Fakultātes'}
   ];
   selectedTableType: string = 'teachingStaff';
 
@@ -107,6 +114,10 @@ export class ObjectContainerComponent implements OnInit {
         this.fetchAllSemesters();
         this.displayedColumns.set([...ColumnsForSemesterResponse]);
         break;
+      case 'faculties':
+        this.fetchAllFaculties();
+        this.displayedColumns.set([...ColumnsForFacultyResponse]);
+        break;
     }
   }
 
@@ -145,6 +156,19 @@ export class ObjectContainerComponent implements OnInit {
         break;
     }
   }
+  private fetchAllFaculties(): void {
+    this.facultyService.findAllFaculties().subscribe({
+      next: (data) => {
+        this.faculties.set(data);
+        this.isLoading.set(false);
+      },
+      error: (err) => {
+        console.error('Failed to load faculties', err);
+        this._snackBar.open('Kļūda lādējot fakultātes', 'Aizvērt', { duration: 5000 });
+        this.isLoading.set(false);
+      }
+    });
+  }
   private fetchAllTeachingStaff() {
     const subscription = this.teachingStaffService.findAllTeachingStaff().subscribe({
       next: (data) => {
@@ -153,6 +177,7 @@ export class ObjectContainerComponent implements OnInit {
       },
       error: (err) => {
         console.error(err);
+        this._snackBar.open('Kļūda lādējot docentus', 'Aizvērt', { duration: 5000 });
         this.isLoading.set(false);
       }
     });
@@ -168,6 +193,7 @@ export class ObjectContainerComponent implements OnInit {
       error: (err) => {
         console.error(err);
         this.isLoading.set(false);
+        this._snackBar.open('Kļūda lādējot studiju programmas', 'Aizvērt', { duration: 5000 });
       }
     });
     this.destroyRef.onDestroy(() => subscription.unsubscribe());
@@ -182,6 +208,7 @@ export class ObjectContainerComponent implements OnInit {
       error: (err) => {
         console.error(err);
         this.isLoading.set(false);
+        this._snackBar.open('Kļūda lādējot kursus', 'Aizvērt', { duration: 5000 });
       }
     });
     this.destroyRef.onDestroy(() => subscription.unsubscribe());
@@ -196,6 +223,7 @@ export class ObjectContainerComponent implements OnInit {
       error: (err) => {
         console.error(err);
         this.isLoading.set(false);
+        this._snackBar.open('Kļūda lādējot amatu grupas', 'Aizvērt', { duration: 5000 });
       }
     });
     this.destroyRef.onDestroy(() => subscription.unsubscribe());
@@ -209,6 +237,7 @@ export class ObjectContainerComponent implements OnInit {
       error: (err) => {
         console.error(err);
         this.isLoading.set(false);
+        this._snackBar.open('Kļūda lādējot amatu grupu detaļas', 'Aizvērt', { duration: 5000 });
       }
     });
     this.destroyRef.onDestroy(() => subscription.unsubscribe());
@@ -222,6 +251,7 @@ export class ObjectContainerComponent implements OnInit {
       error: (err) => {
         console.error(err);
         this.isLoading.set(false);
+        this._snackBar.open('Kļūda lādējot statusus', 'Aizvērt', { duration: 5000 });
       }
     });
     this.destroyRef.onDestroy(() => subscription.unsubscribe());
@@ -236,6 +266,7 @@ export class ObjectContainerComponent implements OnInit {
       error: (err) => {
         console.error(err);
         this.isLoading.set(false);
+        this._snackBar.open('Kļūda lādējot semestrus', 'Aizvērt', { duration: 5000 });
       }
     });
     this.destroyRef.onDestroy(() => subscription.unsubscribe());

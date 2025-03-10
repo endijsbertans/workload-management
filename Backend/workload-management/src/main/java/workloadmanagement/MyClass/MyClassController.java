@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import workloadmanagement.semester.SemesterRequest;
 
 import java.util.List;
 
@@ -20,6 +21,13 @@ public class MyClassController {
             @Valid @RequestBody MyClassRequest request
     ){
         return ResponseEntity.ok(myClassService.save(request));
+    }
+    @PatchMapping("{myclass-id}")
+    public ResponseEntity<Integer> updateMyClass(
+            @PathVariable("myclass-id") Integer myclassId,
+            @Valid @RequestBody MyClassRequest request
+    ){
+        return ResponseEntity.ok(myClassService.update(myclassId, request));
     }
     @GetMapping("{myclass-id}")
     public ResponseEntity<MyClassResponse> findMyClassById(

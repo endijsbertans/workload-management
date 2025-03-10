@@ -903,29 +903,41 @@
             }
           }
         }
-      }
-    },
-    "/my-class/getDegreeEnums": {
-      "get": {
+      },
+      "patch": {
         "tags": [
           "MyClass"
         ],
-        "operationId": "getEnums",
+        "operationId": "updateMyClass",
+        "parameters": [
+          {
+            "name": "myclass-id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MyClassRequest"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "string",
-                    "enum": [
-                      "BACHELOR",
-                      "MASTER",
-                      "DOCTORATE"
-                    ]
-                  }
+                  "type": "integer",
+                  "format": "int32"
                 }
               }
             }
@@ -957,6 +969,74 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/FacultyResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Faculty"
+        ],
+        "operationId": "updateFaculty",
+        "parameters": [
+          {
+            "name": "facultyId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FacultyRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/my-class/getDegreeEnums": {
+      "get": {
+        "tags": [
+          "MyClass"
+        ],
+        "operationId": "getEnums",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "BACHELOR",
+                      "MASTER",
+                      "DOCTORATE"
+                    ]
+                  }
                 }
               }
             }
@@ -1650,10 +1730,10 @@
           "staffPhoto": {
             "type": "string"
           },
-          "rankFullName": {
+          "staffFullName": {
             "type": "string"
           },
-          "staffFullName": {
+          "rankFullName": {
             "type": "string"
           }
         }
@@ -1798,16 +1878,16 @@
           "name": {
             "type": "string"
           },
-          "accountNonLocked": {
-            "type": "boolean"
-          },
           "username": {
             "type": "string"
           },
-          "credentialsNonExpired": {
+          "accountNonLocked": {
             "type": "boolean"
           },
           "accountNonExpired": {
+            "type": "boolean"
+          },
+          "credentialsNonExpired": {
             "type": "boolean"
           }
         },

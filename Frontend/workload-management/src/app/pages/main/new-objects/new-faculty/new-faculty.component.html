@@ -1,33 +1,41 @@
+<div class="backdrop"></div>
+<dialog open>
 <h2>Pievienot jaunu fakultāti</h2>
 <form [formGroup]="facultyForm" (ngSubmit)="onSubmit()">
-  <div class="form-field-wrapper">
   <mat-form-field appearance="outline">
-    @if (facultyForm.controls.name.invalid) {
+    @if (facultyForm.controls.facultyName.invalid) {
       <mat-error>{{ errorMessage() }}</mat-error>
     }
     <mat-label>Ievadi fakultātes abreviatūru</mat-label>
     <input
       matInput
       placeholder="abreviatūra"
-      [formControl]="facultyForm.controls.name"
-      (blur)="updateErrorMessage('name')"
+      [formControl]="facultyForm.controls.facultyName"
+      (blur)="updateErrorMessage('facultyName')"
       required
     />
   </mat-form-field>
   <mat-form-field appearance="outline">
-    @if (facultyForm.controls.fullName.invalid) {
+    @if (facultyForm.controls.facultyFullName.invalid) {
       <mat-error>{{ errorMessage() }}</mat-error>
     }
     <mat-label>Ievadi fakultātes pilno nosaukumu</mat-label>
     <input
       matInput
       placeholder="pilnais nosaukums"
-      [formControl]="facultyForm.controls.fullName"
-      (blur)="updateErrorMessage('fullName')"
+      [formControl]="facultyForm.controls.facultyFullName"
+      (blur)="updateErrorMessage('facultyFullName')"
       required
     />
   </mat-form-field>
+
+  <div class="action-wrapper">
+    @if(editMode()){
+      <button mat-raised-button type="button" (click)="navigateBackFromEditMode()" >Atcelt</button>
+      <button mat-raised-button type="submit" [disabled]="facultyForm.invalid">Rediģēt</button>
+    }@else{
+      <button mat-raised-button type="button" (click)="navigateBackFromCreateMode()" >Atcelt</button>
+      <button mat-raised-button type="submit" [disabled]="facultyForm.invalid">Izveidot</button>
+    }
   </div>
-  <button mat-raised-button type="button" routerLink="..">Cancel</button>
-  <button mat-raised-button type="submit" [disabled]="facultyForm.invalid"> Izveidot</button>
 </form>

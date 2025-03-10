@@ -65,9 +65,9 @@ export const routes: Routes = [
           path: 'new-workload',
           component: WorkloadContainerComponent,
           children: [{
-              path: 'new-teaching-staff',
-              component: NewTeachingStaffComponent
-            },
+            path: 'new-teaching-staff',
+            component: NewTeachingStaffComponent
+          },
             {
               path: 'new-course',
               component: NewCourseComponent
@@ -81,45 +81,47 @@ export const routes: Routes = [
     }, {
       path: 'objects',
       component: ObjectContainerComponent,
-       children: [
-         {
-         path: 'new-teaching-staff',
-         component: NewTeachingStaffComponent
+      children: [
+        {
+          path: 'new-teaching-staff',
+          component: NewTeachingStaffComponent
         },
-         {
-           path: 'new-course',
-           component: NewCourseComponent
-         },
-         {
-           path: 'new-class',
-           component: NewClassComponent
-         },
-         {
-           path: 'new-faculty',
-           component: NewFacultyComponent
-         },
-         {
-           path: 'new-academic-rank',
-           component: NewAcademicRankComponent
-         },
-         {
-           path: 'new-academic-rank-details',
-           component: NewAcademicRankDetailsComponent
-         },
-         {
-           path: 'new-status-type',
-           component: NewStatusTypesComponent
-         },
-         {
-           path: 'new-semester',
-           component: NewSemesterComponent
-         },
-         { path: 'edit-teaching-staff/:id', component: NewTeachingStaffComponent },
-         { path: 'edit-status-type/:id', component: NewStatusTypesComponent },
-         { path: 'edit-semester/:id', component: NewSemesterComponent },
-         { path: 'edit-course/:id', component: NewCourseComponent },
+        {
+          path: 'new-course',
+          component: NewCourseComponent
+        },
+        {
+          path: 'new-class',
+          component: NewClassComponent
+        },
+        {
+          path: 'new-faculty',
+          component: NewFacultyComponent
+        },
+        {
+          path: 'new-academic-rank',
+          component: NewAcademicRankComponent
+        },
+        {
+          path: 'new-academic-rank-details',
+          component: NewAcademicRankDetailsComponent
+        },
+        {
+          path: 'new-status-type',
+          component: NewStatusTypesComponent
+        },
+        {
+          path: 'new-semester',
+          component: NewSemesterComponent
+        },
+        {path: 'edit-teaching-staff/:id', component: NewTeachingStaffComponent},
+        {path: 'edit-status-type/:id', component: NewStatusTypesComponent},
+        {path: 'edit-semester/:id', component: NewSemesterComponent},
+        {path: 'edit-course/:id', component: NewCourseComponent},
+        {path: 'edit-my-class/:id', component: NewClassComponent},
+        {path: 'edit-faculties/:id', component: NewFacultyComponent},
 
-       ],
+      ],
     },
       {
         path: '**',
