@@ -22,18 +22,24 @@ public class MyClassController {
     ){
         return ResponseEntity.ok(myClassService.save(request));
     }
-    @PatchMapping("{myclass-id}")
+    @PatchMapping("{myClassId}")
     public ResponseEntity<Integer> updateMyClass(
-            @PathVariable("myclass-id") Integer myclassId,
+            @PathVariable("myClassId") Integer myClassId,
             @Valid @RequestBody MyClassRequest request
     ){
-        return ResponseEntity.ok(myClassService.update(myclassId, request));
+        return ResponseEntity.ok(myClassService.update(myClassId, request));
     }
-    @GetMapping("{myclass-id}")
+    @GetMapping("{myClassId}")
     public ResponseEntity<MyClassResponse> findMyClassById(
-            @PathVariable("myclass-id") Integer myclassId
+            @PathVariable("myClassId") Integer myClassId
     ){
-        return ResponseEntity.ok(myClassService.findById(myclassId));
+        return ResponseEntity.ok(myClassService.findById(myClassId));
+    }
+    @DeleteMapping("{myClassId}")
+    public ResponseEntity<Integer> deleteMyClassById(
+            @PathVariable Integer myClassId
+    ){
+        return ResponseEntity.ok(myClassService.delete(myClassId));
     }
     @GetMapping
     public ResponseEntity<List<MyClassResponse>> findAllMyClass(){

@@ -18,6 +18,7 @@ public class TeachingStaffMapper {
                 .status(tStaffEntities.statusType())
                 .staffFaculty(tStaffEntities.faculty())
                 .staffAcademicRank(tStaffEntities.academicRank())
+                .isDeleted(false)
                 //.staffPhoto(request.staffPhoto())
                 .build();
     }
@@ -34,6 +35,7 @@ public class TeachingStaffMapper {
                 .staffAcademicRank(teachingStaff.getStaffAcademicRank())
                 .staffFullName(teachingStaff.getStaffFullName())
                 .rankFullName(teachingStaff.getRankFullName())
+                .isDeleted(teachingStaff.isDeleted())
                 //.staffPhoto() TODO
                 .build();
     }

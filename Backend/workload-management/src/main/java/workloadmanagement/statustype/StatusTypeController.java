@@ -27,6 +27,12 @@ public class StatusTypeController {
     ){
         return ResponseEntity.ok(statusTypeService.update(statusTypeId, request));
     }
+    @DeleteMapping("{statusTypeId}")
+    public ResponseEntity<Integer> deleteStatusTypeById(
+            @PathVariable Integer statusTypeId
+    ){
+        return ResponseEntity.ok(statusTypeService.delete(statusTypeId));
+    }
     @GetMapping("{statusTypeId}")
     public ResponseEntity<StatusTypeResponse> findStatusTypeById(
             @PathVariable Integer statusTypeId){

@@ -164,6 +164,12 @@ public PageResponse<WorkloadResponse> findAllWorkloads(Pageable pageable, Map<St
 
         return workloadRepo.save(updatedWorkload).getWorkloadId();
     }
+    public Integer delete(Integer workloadId) {
+        Workload existingWorkload = workloadRepo.findById(workloadId)
+                .orElseThrow(() -> new EntityNotFoundException("Workload with id: " + workloadId + " not found."));
+        workloadRepo.delete(existingWorkload);
+        return workloadId;
+    }
 
   // gets objects from database using their response ids
     private WorkloadEntities resolveEntities(WorkloadRequest request) {
@@ -179,6 +185,8 @@ public PageResponse<WorkloadResponse> findAllWorkloads(Pageable pageable, Map<St
                 academicRankDetailsService.findAcademicRankDetailsFromResponseId(request.academicRankId(), semester);
         return new WorkloadEntities(teachingStaff, semester, course, academicRankDetails, myClasses, groupForSemester);
     }
+
+
 
     public record WorkloadEntities(
             TeachingStaff teachingStaff,

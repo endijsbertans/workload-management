@@ -9,6 +9,7 @@ export interface AcademicRankDetailsResponse {
   academicRankDetailsId?: number;
   contactHoursForFullTime?: number;
   cpForFullTime?: number;
+  deleted?: boolean;
   salary?: number;
   semester?: Semester;
 }

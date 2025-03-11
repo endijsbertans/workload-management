@@ -11,6 +11,8 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { deleteMyClassById } from '../fn/my-class/delete-my-class-by-id';
+import { DeleteMyClassById$Params } from '../fn/my-class/delete-my-class-by-id';
 import { findAllMyClass } from '../fn/my-class/find-all-my-class';
 import { FindAllMyClass$Params } from '../fn/my-class/find-all-my-class';
 import { findMyClassById } from '../fn/my-class/find-my-class-by-id';
@@ -80,7 +82,7 @@ export class MyClassService extends BaseService {
   }
 
   /** Path part for operation `findMyClassById()` */
-  static readonly FindMyClassByIdPath = '/my-class/{myclass-id}';
+  static readonly FindMyClassByIdPath = '/my-class/{myClassId}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -104,8 +106,33 @@ export class MyClassService extends BaseService {
     );
   }
 
+  /** Path part for operation `deleteMyClassById()` */
+  static readonly DeleteMyClassByIdPath = '/my-class/{myClassId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteMyClassById()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteMyClassById$Response(params: DeleteMyClassById$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return deleteMyClassById(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `deleteMyClassById$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteMyClassById(params: DeleteMyClassById$Params, context?: HttpContext): Observable<number> {
+    return this.deleteMyClassById$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
   /** Path part for operation `updateMyClass()` */
-  static readonly UpdateMyClassPath = '/my-class/{myclass-id}';
+  static readonly UpdateMyClassPath = '/my-class/{myClassId}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.

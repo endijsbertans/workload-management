@@ -11,14 +11,14 @@ import { RequestBuilder } from '../../request-builder';
 import { WorkloadRequest } from '../../models/workload-request';
 
 export interface UpdateWorkloadById$Params {
-  'workload-id': number;
+  workloadId: number;
       body: WorkloadRequest
 }
 
 export function updateWorkloadById(http: HttpClient, rootUrl: string, params: UpdateWorkloadById$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
   const rb = new RequestBuilder(rootUrl, updateWorkloadById.PATH, 'patch');
   if (params) {
-    rb.path('workload-id', params['workload-id'], {});
+    rb.path('workloadId', params.workloadId, {});
     rb.body(params.body, 'application/json');
   }
 
@@ -32,4 +32,4 @@ export function updateWorkloadById(http: HttpClient, rootUrl: string, params: Up
   );
 }
 
-updateWorkloadById.PATH = '/workload/{workload-id}';
+updateWorkloadById.PATH = '/workload/{workloadId}';

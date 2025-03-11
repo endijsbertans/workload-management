@@ -16,4 +16,5 @@ public class MyClassResponse {
     private String myClassProgram;
     private String classLevelAndProgram;
     private Degree degree;
+    private boolean isDeleted;
 }

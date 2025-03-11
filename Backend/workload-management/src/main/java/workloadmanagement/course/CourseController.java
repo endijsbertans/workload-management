@@ -25,6 +25,12 @@ public class CourseController {
     ){
         return ResponseEntity.ok(courseService.update(courseId, request));
     }
+    @DeleteMapping("{courseId}")
+    public ResponseEntity<Integer> deleteCourseById(
+            @PathVariable Integer courseId
+    ){
+        return ResponseEntity.ok(courseService.delete(courseId));
+    }
     @GetMapping("{courseId}")
     public ResponseEntity<CourseResponse> findCourseById(
             @PathVariable Integer courseId) {

@@ -34,4 +34,5 @@ public class Course {
     private int studyLevel;
     
     private String section;
+    private boolean isDeleted;
 }

@@ -28,19 +28,26 @@ public class WorkloadController {
     ){
         return ResponseEntity.ok(workloadService.save(request));
     }
-    @PatchMapping("{workload-id}")
+    @PatchMapping("{workloadId}")
     public ResponseEntity<Integer> updateWorkloadById(
-            @PathVariable("workload-id") Integer workloadId,
+            @PathVariable Integer workloadId,
             @Valid @RequestBody WorkloadRequest request
     ){
         return ResponseEntity.ok(workloadService.update(workloadId, request));
     }
-    @GetMapping("{workload-id}")
+    @GetMapping("{workloadId}")
     public ResponseEntity<WorkloadResponse> findWorkloadById(
-            @PathVariable("workload-id") Integer workloadId
+            @PathVariable Integer workloadId
     ){
         return ResponseEntity.ok(workloadService.findById(workloadId));
     }
+    @DeleteMapping("{workloadId}")
+    public ResponseEntity<Integer> deleteWorkloadById(
+            @PathVariable Integer workloadId
+    ){
+        return ResponseEntity.ok(workloadService.delete(workloadId));
+    }
+
     @GetMapping
     public ResponseEntity<PageResponse<WorkloadResponse>> findAllWorkloads(
             @RequestParam(name = "page", defaultValue = "0") int page,

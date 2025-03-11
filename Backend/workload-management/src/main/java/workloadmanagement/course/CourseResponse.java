@@ -17,4 +17,5 @@ public class CourseResponse {
     private String registrationType;
     private int studyLevel;
     private String section;
+    private boolean isDeleted;
 }

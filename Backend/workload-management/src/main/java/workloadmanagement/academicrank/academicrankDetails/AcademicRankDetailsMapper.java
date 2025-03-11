@@ -12,6 +12,7 @@ public class AcademicRankDetailsMapper {
                 .contactHoursForFullTime(request.contactHoursForFullTime())
                 .semester(entities.semester())
                 .academicRank(entities.academicRank())
+                .isDeleted(false)
                 .build();
     }
 
@@ -23,6 +24,7 @@ public class AcademicRankDetailsMapper {
                 .salary(academicRankDetails.getSalary())
                 .contactHoursForFullTime(academicRankDetails.getContactHoursForFullTime())
                 .semester(academicRankDetails.getSemester())
+                .isDeleted(academicRankDetails.isDeleted())
                 .build();
     }
 }

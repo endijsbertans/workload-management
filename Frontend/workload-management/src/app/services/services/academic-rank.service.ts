@@ -12,6 +12,8 @@ import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
 import { AcademicRankResponse } from '../models/academic-rank-response';
+import { deleteAcademicRankById } from '../fn/academic-rank/delete-academic-rank-by-id';
+import { DeleteAcademicRankById$Params } from '../fn/academic-rank/delete-academic-rank-by-id';
 import { findAcademicRankById } from '../fn/academic-rank/find-academic-rank-by-id';
 import { FindAcademicRankById$Params } from '../fn/academic-rank/find-academic-rank-by-id';
 import { findAllAcademicRank } from '../fn/academic-rank/find-all-academic-rank';
@@ -78,7 +80,7 @@ export class AcademicRankService extends BaseService {
   }
 
   /** Path part for operation `findAcademicRankById()` */
-  static readonly FindAcademicRankByIdPath = '/academic-rank/{academic-rank-id}';
+  static readonly FindAcademicRankByIdPath = '/academic-rank/{academicRankId}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -102,8 +104,33 @@ export class AcademicRankService extends BaseService {
     );
   }
 
+  /** Path part for operation `deleteAcademicRankById()` */
+  static readonly DeleteAcademicRankByIdPath = '/academic-rank/{academicRankId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteAcademicRankById()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteAcademicRankById$Response(params: DeleteAcademicRankById$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return deleteAcademicRankById(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `deleteAcademicRankById$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteAcademicRankById(params: DeleteAcademicRankById$Params, context?: HttpContext): Observable<number> {
+    return this.deleteAcademicRankById$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
   /** Path part for operation `updateAcademicRankById()` */
-  static readonly UpdateAcademicRankByIdPath = '/academic-rank/{academic-rank-id}';
+  static readonly UpdateAcademicRankByIdPath = '/academic-rank/{academicRankId}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.

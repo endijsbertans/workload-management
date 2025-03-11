@@ -1,4 +1,4 @@
-import {Component, inject, Input} from '@angular/core';
+import {Component, EventEmitter, inject, Input, Output} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {CourseResponse} from "../../../../services/models/course-response";
 import {MyClassResponse} from "../../../../services/models/my-class-response";
@@ -12,6 +12,13 @@ import {EnumTranslationService} from "../../../../services/translation/EnumTrans
 import {Router} from "@angular/router";
 
 import {FacultyResponse} from "../../../../services/models/faculty-response";
+import {
+  AcademicRankDetailsService,
+  AcademicRankService,
+  FacultyService,
+  MyClassService, TeachingStaffService
+} from "../../../../services/services";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-object-list',
@@ -31,6 +38,13 @@ export class ObjectListComponent {
   @Input() faculties?: FacultyResponse[];
   @Input() displayedColumns?: ColumnNames[] = [];
   @Input() selectedTableType: string = 'teachingStaff';
+  @Output() refreshData = new EventEmitter<void>();
+  private readonly facultyService = inject(FacultyService);
+  private readonly academicRankService = inject(AcademicRankService);
+  private readonly academicRankDetailsService = inject(AcademicRankDetailsService);
+  private readonly myClassService = inject(MyClassService);
+  private readonly teachingStaffService = inject(TeachingStaffService);
+  private readonly _snackBar = inject(MatSnackBar);
   enumService = inject(EnumTranslationService)
   private router = inject(Router);
 
@@ -106,6 +120,76 @@ export class ObjectListComponent {
         return `/main/objects/edit-faculties/${item.facultyId}`;
       default:
         return null;
+    }
+  }
+
+  deleteRow(item: any): void {
+    const confirmDelete = window.confirm('Vai tiešām vēlaties dzēst šo ierakstu?');
+
+    if (!confirmDelete) {
+      return;
+    }
+    const id = this.getItemId(item);
+
+    if (!id) {
+      this._snackBar.open("Neizdevās atrast ieraksta ID", "Aizvērt", { duration: 5000 });
+      return;
+    }
+    let deleteOperation;
+
+    switch(this.selectedTableType) {
+      case 'faculties':
+        deleteOperation = this.facultyService.deleteFacultyIdById({ facultyId: id });
+        break;
+      case 'academicRanks':
+        deleteOperation = this.academicRankService.deleteAcademicRankById({ academicRankId: id });
+        break;
+      case 'academicRankDetails':
+        deleteOperation = this.academicRankDetailsService.deleteAcademicRankDetailsById({ academicRankDetailsId: id });
+        break;
+      case 'classes':
+        deleteOperation = this.myClassService.deleteMyClassById({ myClassId: id });
+        break;
+      case 'teachingStaff':
+        deleteOperation = this.teachingStaffService.deleteTeachingStaffById({ tStaffId: id });
+        break;
+      default:
+        this._snackBar.open(`Dzēšana nav implementēta šim objekta tipam: ${this.selectedTableType}`, "Aizvērt", { duration: 5000 });
+        return;
+    }
+
+    if (deleteOperation) {
+      deleteOperation.subscribe({
+        next: () => {
+          this._snackBar.open("Ieraksts dzēsts veiksmīgi", "Aizvērt", { duration: 5000 });
+          this.refreshData.emit();
+        },
+        error: (err) => {
+          console.error('Error deleting item:', err);
+          this._snackBar.open(
+            err.error?.errorMsg || "Kļūda dzēšot ierakstu",
+            "Aizvērt",
+            { duration: 5000 }
+          );
+        }
+      });
+    }
+  }
+
+  private getItemId(item: any): number | undefined {
+    switch(this.selectedTableType) {
+      case 'faculties':
+        return item.facultyId;
+      case 'academicRanks':
+        return item.academicRankId;
+      case 'academicRankDetails':
+        return item.academicRankDetailsId;
+      case 'classes':
+        return item.classId;
+      case 'teachingStaff':
+        return item.teachingStaffId;
+      default:
+        return undefined;
     }
   }
 }

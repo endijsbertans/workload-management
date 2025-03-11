@@ -8,6 +8,7 @@ export interface CourseResponse {
   courseId?: number;
   courseName?: string;
   creditPoints?: number;
+  deleted?: boolean;
   necessaryAcademicRank?: AcademicRank;
   registrationType?: string;
   section?: string;

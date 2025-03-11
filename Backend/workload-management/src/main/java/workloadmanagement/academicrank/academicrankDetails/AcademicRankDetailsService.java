@@ -46,10 +46,16 @@ public class AcademicRankDetailsService {
     }
 
     public List<AcademicRankDetailsResponse> findAllAcademicRankDetails() {
-        List<AcademicRankDetails> academicRanks = (List<AcademicRankDetails>) academicRankDetailsRepo.findAll();
+        List<AcademicRankDetails> academicRanks = academicRankDetailsRepo.findByIsDeletedFalse();
         return academicRanks.stream()
                 .map(academicRankDetailsMapper::toAcademicRankDetailsResponse)
                 .toList();
+    }
+    public Integer delete(Integer academicRankDetailsId) {
+        AcademicRankDetails academicRankDetails = findExistingAcademicRankDetailsById(academicRankDetailsId);
+        academicRankDetails.setDeleted(true);
+        academicRankDetailsRepo.save(academicRankDetails);
+        return academicRankDetailsId;
     }
     // gets objects from database using their response ids
     private AcademicRankDetailsEntities resolveEntities(AcademicRankDetailsRequest request) {
@@ -57,6 +63,7 @@ public class AcademicRankDetailsService {
         Semester semester = semesterService.findSemesterFromResponseId(request.semesterId());
         return new AcademicRankDetailsEntities(academicRank, semester);
     }
+
     public record AcademicRankDetailsEntities(
             AcademicRank academicRank,
             Semester semester

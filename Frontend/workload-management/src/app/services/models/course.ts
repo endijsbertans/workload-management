@@ -8,6 +8,7 @@ export interface Course {
   courseId?: number;
   courseName?: string;
   creditPoints?: number;
+  deleted?: boolean;
   necessaryRank?: AcademicRank;
   registrationType?: string;
   section?: string;

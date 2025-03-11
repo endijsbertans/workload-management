@@ -34,11 +34,17 @@ public class FacultyService {
                 .orElseThrow(() -> new RuntimeException("Faculty with id: " + id + " not found."));
     }
     public List<FacultyResponse> findAllFaculties() {
-        List<Faculty> faculties = (List<Faculty>) facultyRepo.findAll();
+        List<Faculty> faculties = facultyRepo.findByIsDeletedFalse();
         return faculties.stream()
                 .map(facultyMapper::toFacultyResponse)
                 .toList();
     }
 
 
+    public Integer delete(Integer facultyId) {
+        Faculty faculty = findFacultyFromResponseId(facultyId);
+        faculty.setDeleted(true);
+        facultyRepo.save(faculty);
+        return facultyId;
+    }
 }

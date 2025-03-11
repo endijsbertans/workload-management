@@ -38,11 +38,17 @@ public class MyClassService {
     }
 
     public List<MyClassResponse> findAllMyClass() {
-        List<MyClass> myClass = (List<MyClass>) myClassRepo.findAll();
+        List<MyClass> myClass = myClassRepo.findByIsDeletedFalse();
         return myClass.stream()
                 .map(MyClassMapper::toMyClassResponse)
                 .toList();
     }
 
 
+    public Integer delete(Integer myClassId) {
+        MyClass myClass = findMyClassFromResponseId(myClassId);
+        myClass.setDeleted(true);
+        myClassRepo.save(myClass);
+        return myClassId;
+    }
 }

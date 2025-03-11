@@ -102,7 +102,7 @@ export class NewTeachingStaffComponent implements OnInit {
 
   private loadTeachingStaffData(id: number | undefined): void {
     if (!id) return;
-    this.teachingStaffService.findTeachingStaffById({"tstaff-id": id}).subscribe({
+    this.teachingStaffService.findTeachingStaffById({tStaffId: id}).subscribe({
       next: (staff) => {
         // Populate form with existing data
         this.teachingStaffForm.patchValue({
@@ -167,7 +167,7 @@ export class NewTeachingStaffComponent implements OnInit {
   private updateTeachingStaff(data: TeachingStaffRequest): void {
     const id = this.objectId();
     if (id === undefined) return;
-    this.teachingStaffService.updateTeachingStaffById({"tstaff-id": id, body: data}).subscribe({
+    this.teachingStaffService.updateTeachingStaffById({tStaffId: id, body: data}).subscribe({
       next: () => {
         this._snackBar.open("Izmaiņas saglabātas", "Aizvērt", {duration: 5000});
         this.navigateBackFromEditMode();

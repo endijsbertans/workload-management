@@ -11,6 +11,8 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { deleteStatusTypeById } from '../fn/status-type/delete-status-type-by-id';
+import { DeleteStatusTypeById$Params } from '../fn/status-type/delete-status-type-by-id';
 import { findAllStatusTypes } from '../fn/status-type/find-all-status-types';
 import { FindAllStatusTypes$Params } from '../fn/status-type/find-all-status-types';
 import { findStatusTypeById } from '../fn/status-type/find-status-type-by-id';
@@ -99,6 +101,31 @@ export class StatusTypeService extends BaseService {
   findStatusTypeById(params: FindStatusTypeById$Params, context?: HttpContext): Observable<StatusTypeResponse> {
     return this.findStatusTypeById$Response(params, context).pipe(
       map((r: StrictHttpResponse<StatusTypeResponse>): StatusTypeResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `deleteStatusTypeById()` */
+  static readonly DeleteStatusTypeByIdPath = '/status-type/{statusTypeId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteStatusTypeById()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteStatusTypeById$Response(params: DeleteStatusTypeById$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return deleteStatusTypeById(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `deleteStatusTypeById$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteStatusTypeById(params: DeleteStatusTypeById$Params, context?: HttpContext): Observable<number> {
+    return this.deleteStatusTypeById$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
     );
   }
 

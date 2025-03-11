@@ -22,16 +22,22 @@ public class AcademicRankController {
     ){
         return ResponseEntity.ok(academicRankService.save(request));
     }
-    @PatchMapping("{academic-rank-id}")
+    @PatchMapping("{academicRankId}")
     public ResponseEntity<Integer> updateAcademicRankById(
-            @PathVariable("academic-rank-id") Integer academicRankId,
+            @PathVariable Integer academicRankId,
             @Valid @RequestBody AcademicRankRequest request
     ){
         return ResponseEntity.ok(academicRankService.update(academicRankId, request));
     }
-    @GetMapping("{academic-rank-id}")
+    @DeleteMapping("{academicRankId}")
+    public ResponseEntity<Integer> deleteAcademicRankById(
+            @PathVariable Integer academicRankId
+    ){
+        return ResponseEntity.ok(academicRankService.delete(academicRankId));
+    }
+    @GetMapping("{academicRankId}")
     public ResponseEntity<AcademicRankResponse> findAcademicRankById(
-            @PathVariable("academic-rank-id") Integer academicRankId
+            @PathVariable Integer academicRankId
     ){
         return ResponseEntity.ok(academicRankService.findById(academicRankId));
     }

@@ -25,6 +25,7 @@ public class MyClass {
     private int classLevel;
     private String myClassProgram;
     private Degree degree;
+    private boolean isDeleted;
     @ManyToOne
     @JoinColumn(name="class_faculty_id")
     private Faculty classFaculty;

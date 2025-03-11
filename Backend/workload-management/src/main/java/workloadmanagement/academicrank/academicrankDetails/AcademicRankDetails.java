@@ -29,4 +29,5 @@ public class AcademicRankDetails{
     @ManyToOne
     @JoinColumn(name="academic_rank_id")
     private AcademicRank academicRank;
+    private boolean isDeleted;
 }

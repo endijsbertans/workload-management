@@ -17,6 +17,7 @@ public class MyClassMapper {
                 .classFaculty(faculty)
                 .myClassProgram(request.myClassProgram())
                 .degree(request.degree())
+                .isDeleted(false)
                 .build();
     }
 
@@ -28,6 +29,7 @@ public class MyClassMapper {
                 .myClassProgram(myClass.getMyClassProgram())
                 .classLevelAndProgram(myClass.classLevelAndProgram())
                 .degree(myClass.getDegree())
+                .isDeleted(myClass.isDeleted())
                 .build();
     }
 }

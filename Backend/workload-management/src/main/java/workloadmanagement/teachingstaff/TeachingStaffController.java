@@ -28,18 +28,24 @@ public class TeachingStaffController {
             ) throws MessagingException {
         return ResponseEntity.ok(tStaffService.save(request));
     }
-    @PatchMapping("{tstaff-id}")
+    @PatchMapping("{tStaffId}")
     public ResponseEntity<Integer> updateTeachingStaffById(
-            @PathVariable("tstaff-id") Integer tStaffId,
+            @PathVariable Integer tStaffId,
             @Valid @RequestBody TeachingStaffRequest request
     ){
         return ResponseEntity.ok(tStaffService.update(tStaffId, request));
     }
-    @GetMapping("{tstaff-id}")
+    @GetMapping("{tStaffId}")
     public ResponseEntity<TeachingStaffResponse> findTeachingStaffById(
-            @PathVariable("tstaff-id") Integer tstaffId
+            @PathVariable Integer tStaffId
     ){
-        return ResponseEntity.ok(tStaffService.findById(tstaffId));
+        return ResponseEntity.ok(tStaffService.findById(tStaffId));
+    }
+    @DeleteMapping("{tStaffId}")
+    public ResponseEntity<Integer> deleteTeachingStaffById(
+            @PathVariable Integer tStaffId
+    ){
+        return ResponseEntity.ok(tStaffService.delete(tStaffId));
     }
     @GetMapping
     public ResponseEntity<List<TeachingStaffResponse>> findAllTeachingStaff(){

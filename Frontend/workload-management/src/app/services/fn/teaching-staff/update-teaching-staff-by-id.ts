@@ -11,14 +11,14 @@ import { RequestBuilder } from '../../request-builder';
 import { TeachingStaffRequest } from '../../models/teaching-staff-request';
 
 export interface UpdateTeachingStaffById$Params {
-  'tstaff-id': number;
+  tStaffId: number;
       body: TeachingStaffRequest
 }
 
 export function updateTeachingStaffById(http: HttpClient, rootUrl: string, params: UpdateTeachingStaffById$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
   const rb = new RequestBuilder(rootUrl, updateTeachingStaffById.PATH, 'patch');
   if (params) {
-    rb.path('tstaff-id', params['tstaff-id'], {});
+    rb.path('tStaffId', params.tStaffId, {});
     rb.body(params.body, 'application/json');
   }
 
@@ -32,4 +32,4 @@ export function updateTeachingStaffById(http: HttpClient, rootUrl: string, param
   );
 }
 
-updateTeachingStaffById.PATH = '/teaching-staff/{tstaff-id}';
+updateTeachingStaffById.PATH = '/teaching-staff/{tStaffId}';

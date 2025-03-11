@@ -11,14 +11,14 @@ import { RequestBuilder } from '../../request-builder';
 import { MyClassRequest } from '../../models/my-class-request';
 
 export interface UpdateMyClass$Params {
-  'myclass-id': number;
+  myClassId: number;
       body: MyClassRequest
 }
 
 export function updateMyClass(http: HttpClient, rootUrl: string, params: UpdateMyClass$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
   const rb = new RequestBuilder(rootUrl, updateMyClass.PATH, 'patch');
   if (params) {
-    rb.path('myclass-id', params['myclass-id'], {});
+    rb.path('myClassId', params.myClassId, {});
     rb.body(params.body, 'application/json');
   }
 
@@ -32,4 +32,4 @@ export function updateMyClass(http: HttpClient, rootUrl: string, params: UpdateM
   );
 }
 
-updateMyClass.PATH = '/my-class/{myclass-id}';
+updateMyClass.PATH = '/my-class/{myClassId}';

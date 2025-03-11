@@ -13,6 +13,7 @@ public class CourseMapper {
                 .registrationType(request.registrationType())
                 .studyLevel(request.studyLevel())
                 .section(request.section())
+                .isDeleted(false)
                 .build();
     }
     public CourseResponse toCourseResponse(Course course){
@@ -25,6 +26,7 @@ public class CourseMapper {
                 .registrationType(course.getRegistrationType())
                 .studyLevel(course.getStudyLevel())
                 .section(course.getSection())
+                .isDeleted(course.isDeleted())
                 .build();
     }
 }

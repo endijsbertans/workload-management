@@ -17,6 +17,8 @@ import {ShownColumns, WorkloadColumnSettings} from "./workload-list-columns";
 import {ColumnFilterDialogComponent} from "./column-filter-dialog/column-filter-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {EnumTranslationService} from "../../../services/translation/EnumTranslationService";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {TeachingStaffResponse} from "../../../services/models/teaching-staff-response";
 
 
 
@@ -47,6 +49,7 @@ export class WorkloadListComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly columnSettingsService = inject(WorkloadListSettingsService);
   private readonly dialog = inject(MatDialog);
+  private readonly _snackBar = inject(MatSnackBar);
   activeFilters: Map<string, {value: string, operator: string}> = new Map();
 
   columnsToDisplay? = computed(() => {
@@ -55,7 +58,7 @@ export class WorkloadListComponent implements OnInit {
   dataSource = new MatTableDataSource<WorkloadResponse>([]);
   workloadResponse?: WorkloadResponse[];
   isLoadingResults = true;
-  clickedWorkloadRow?: WorkloadResponse;
+  clickedWorkloadRow = signal<WorkloadResponse | undefined>(undefined);
   @ViewChild(MatSort) sort!: MatSort;
   length: number | undefined = 50;
   pageSize = 5;
@@ -121,8 +124,6 @@ export class WorkloadListComponent implements OnInit {
     }
 
     const value = this.digInObject(obj, col.pathTo, defaultValue);
-
-    // Check if this is a budgetPosition field and translate it
     if (col.pathTo === 'budgetPosition' && value) {
       return this.enumService.translate('budgetPosition', value);
     }
@@ -199,13 +200,18 @@ export class WorkloadListComponent implements OnInit {
   }
 
   clickedRow(row: WorkloadResponse) {
-    this.clickedWorkloadRow = row;
-    this.router.navigate(['/main/workload/edit-workload', row.workloadId]);
-
+    if(row.workloadId === this.clickedWorkloadRow()?.workloadId) {
+      this.clickedWorkloadRow.set(undefined);
+      return;
+    }
+    this.clickedWorkloadRow.set(row);
+  }
+  onEditWorkload(){
+    this.router.navigate(['/main/workload/edit-workload', this.clickedWorkloadRow()?.workloadId]);
   }
 
   isClicked(row: WorkloadResponse):boolean {
-    if(row.workloadId == this.clickedWorkloadRow?.workloadId) {
+    if(row.workloadId == this.clickedWorkloadRow()?.workloadId) {
       return true;
     }
     return false
@@ -240,5 +246,34 @@ export class WorkloadListComponent implements OnInit {
   }
   isColumnFiltered(columnPath: string): boolean {
     return this.activeFilters.has(columnPath);
+  }
+
+  onDeleteWorkload() {
+    const id = this.clickedWorkloadRow()?.workloadId;
+    if(id){
+    this.workloadService.deleteWorkloadById({workloadId: id}).subscribe({
+      next: workload => {
+        if (workload) {
+          this._snackBar.open("Dzēsts", "Aizvērt", { duration: 5000 });
+          this.findAllWorkloads();
+        }
+      },
+      error: (err) => {
+        console.log(err);
+        this._snackBar.open(err.error.errorMsg, "Aizvērt", { duration: 5000 });
+        this.router.navigate(['/main/workload'], { replaceUrl: true });
+      }
+    });
+    }
+    }
+
+  isDeleted(element: any, col: WorkloadColumnSettings) {
+    const TeachingStaffResponse: TeachingStaffResponse = element.teachingStaff;
+      if (col.pathTo.includes(".")) {
+        const [mainPath] = col.pathTo.split(".");
+        console.log("main: "+mainPath + " isDeleted: "+element[mainPath]?.deleted);
+        return element[mainPath]?.deleted ?? false;
+      }
+      return false;
   }
 }

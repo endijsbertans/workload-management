@@ -38,11 +38,17 @@ public class CourseService {
                 .orElseThrow(() -> new RuntimeException("Course with id " + courseId + " not found"));
     }
     public List<CourseResponse> findAllCourses() {
-        List<Course> courses = (List<Course>) courseRepo.findAll();
+        List<Course> courses = courseRepo.findByIsDeletedFalse();
         return courses.stream()
                 .map(courseMapper::toCourseResponse)
                 .toList();
     }
 
 
+    public Integer delete(Integer courseId) {
+        Course course = findCourseFromResponseId(courseId);
+        course.setDeleted(true);
+        courseRepo.save(course);
+        return courseId;
+    }
 }

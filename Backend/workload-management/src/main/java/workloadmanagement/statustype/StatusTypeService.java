@@ -39,10 +39,16 @@ public class StatusTypeService {
     }
 
     public List<StatusTypeResponse> findAllStatusTypes() {
-        List<StatusType> statusTypes = (List<StatusType>) statusTypeRepo.findAll();
+        List<StatusType> statusTypes = statusTypeRepo.findByIsDeletedFalse();
         return statusTypes.stream()
                 .map(statusTypeMapper::toStatusTypeResponse)
                 .toList();
     }
 
+    public Integer delete(Integer statusTypeId) {
+        StatusType statusType = findStatusTypeFromResponseId(statusTypeId);
+        statusType.setDeleted(true);
+        statusTypeRepo.save(statusType);
+        return statusTypeId;
+    }
 }

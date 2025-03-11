@@ -94,7 +94,7 @@ export class NewClassComponent implements OnInit {
   private loadClassData(id: number | undefined): void {
     if (!id) return;
 
-    this.classService.findMyClassById({ "myclass-id": id }).subscribe({
+    this.classService.findMyClassById({ myClassId: id }).subscribe({
       next: (classData) => {
         this.classForm.patchValue({
           classLevel: classData.classLevel,
@@ -148,7 +148,7 @@ export class NewClassComponent implements OnInit {
     const id = this.objectId();
     if (id === undefined) return;
 
-    this.classService.updateMyClass({ "myclass-id": id, body: data }).subscribe({
+    this.classService.updateMyClass({ myClassId: id, body: data }).subscribe({
       next: () => {
         this._snackBar.open("Izmaiņas saglabātas", "Aizvērt", { duration: 5000 });
         this.navigateBackFromEditMode();

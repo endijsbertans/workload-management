@@ -10,6 +10,14 @@
   <button mat-raised-button routerLink="new-workload" type="button">
     Pievienot datus
   </button>
+  @if (clickedWorkloadRow()) {
+    <button mat-raised-button (click)="onEditWorkload()" type="button">
+      Rediģēt
+    </button>
+    <button mat-raised-button (click)="onDeleteWorkload()" id="deleteButton" type="button">
+      Dzēst
+    </button>
+  }
 </div>
 <div class="wrapper">
   <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)">
@@ -52,8 +60,8 @@
             </div>
           </th>
         }
-        <td mat-cell *matCellDef="let element">
-          {{ getNestedProperty(element, col) }}
+        <td mat-cell *matCellDef="let element" [class.row-is-deleted]="isDeleted(element, col)">
+          {{ getNestedProperty(element, col) }} {{isDeleted(element, col)}}
         </td>
       </ng-container>
     }
@@ -61,6 +69,7 @@
     <tr mat-header-row *matHeaderRowDef="mapDisplayedColumns()"></tr>
     <tr mat-row
         (click)="clickedRow(myRowData)"
+
         [class.row-is-clicked]="isClicked(myRowData)"
         *matRowDef="let myRowData; columns: mapDisplayedColumns()"></tr>
   </table>

@@ -34,11 +34,17 @@ public class AcademicRankService {
     }
 
     public List<AcademicRankResponse> findAllAcademicRank() {
-        List<AcademicRank> academicRanks = (List<AcademicRank>) academicRankRepo.findAll();
+        List<AcademicRank> academicRanks = academicRankRepo.findByIsDeletedFalse();
         return academicRanks.stream()
                 .map(academicRankMapper::toAcademicRankResponse)
                 .toList();
     }
 
 
+    public Integer delete(Integer academicRankId) {
+        AcademicRank academicRank = findAcademicRankFromResponseId(academicRankId);
+        academicRank.setDeleted(true);
+        academicRankRepo.save(academicRank);
+        return academicRankId;
+    }
 }

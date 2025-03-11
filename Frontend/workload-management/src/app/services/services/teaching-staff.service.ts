@@ -11,6 +11,8 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { deleteTeachingStaffById } from '../fn/teaching-staff/delete-teaching-staff-by-id';
+import { DeleteTeachingStaffById$Params } from '../fn/teaching-staff/delete-teaching-staff-by-id';
 import { findAllTeachingStaff } from '../fn/teaching-staff/find-all-teaching-staff';
 import { FindAllTeachingStaff$Params } from '../fn/teaching-staff/find-all-teaching-staff';
 import { findTeachingStaffById } from '../fn/teaching-staff/find-teaching-staff-by-id';
@@ -78,7 +80,7 @@ export class TeachingStaffService extends BaseService {
   }
 
   /** Path part for operation `findTeachingStaffById()` */
-  static readonly FindTeachingStaffByIdPath = '/teaching-staff/{tstaff-id}';
+  static readonly FindTeachingStaffByIdPath = '/teaching-staff/{tStaffId}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -102,8 +104,33 @@ export class TeachingStaffService extends BaseService {
     );
   }
 
+  /** Path part for operation `deleteTeachingStaffById()` */
+  static readonly DeleteTeachingStaffByIdPath = '/teaching-staff/{tStaffId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteTeachingStaffById()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteTeachingStaffById$Response(params: DeleteTeachingStaffById$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return deleteTeachingStaffById(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `deleteTeachingStaffById$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteTeachingStaffById(params: DeleteTeachingStaffById$Params, context?: HttpContext): Observable<number> {
+    return this.deleteTeachingStaffById$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
   /** Path part for operation `updateTeachingStaffById()` */
-  static readonly UpdateTeachingStaffByIdPath = '/teaching-staff/{tstaff-id}';
+  static readonly UpdateTeachingStaffByIdPath = '/teaching-staff/{tStaffId}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.

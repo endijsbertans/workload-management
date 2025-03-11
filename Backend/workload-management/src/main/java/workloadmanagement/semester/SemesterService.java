@@ -37,9 +37,16 @@ public class SemesterService {
                 .orElseThrow(()-> new EntityNotFoundException("Semester with id: " + statusTypeId + " not found"));
     }
     public List<SemesterResponse> findAllStatusTypes() {
-        List<Semester> semesters = (List<Semester>) semesterRepo.findAll();
+        List<Semester> semesters = semesterRepo.findByIsDeletedFalse();
         return semesters.stream()
                 .map(semesterMapper::toSemesterResponse)
                 .toList();
+    }
+
+    public Integer delete(Integer semesterId) {
+        Semester semester = findSemesterFromResponseId(semesterId);
+        semester.setDeleted(true);
+        semesterRepo.save(semester);
+        return semesterId;
     }
 }

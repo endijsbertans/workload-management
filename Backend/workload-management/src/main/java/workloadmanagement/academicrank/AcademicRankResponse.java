@@ -11,4 +11,5 @@ public class AcademicRankResponse {
     private int academicRankId;
     private String rankName;
     private String abbreviation;
+    private boolean isDeleted;
 }

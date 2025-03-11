@@ -25,6 +25,12 @@ public class SemesterController {
     ){
         return ResponseEntity.ok(semesterService.update(semesterId, request));
     }
+    @DeleteMapping("{semesterId}")
+    public ResponseEntity<Integer> deleteSemesterById(
+            @PathVariable Integer semesterId
+    ){
+        return ResponseEntity.ok(semesterService.delete(semesterId));
+    }
     @GetMapping("{semesterId}")
     public ResponseEntity<SemesterResponse> findSemesterById(
             @PathVariable Integer semesterId){

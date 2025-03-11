@@ -63,7 +63,7 @@ export class NewAcademicRankComponent implements OnInit {
   private loadAcademicRankData(id: number | undefined): void {
     if (!id) return;
 
-    this.academicRankService.findAcademicRankById({ "academic-rank-id": id }).subscribe({
+    this.academicRankService.findAcademicRankById({ academicRankId: id }).subscribe({
       next: (rankData) => {
         this.academicRankForm.patchValue({
           rankName: rankData.rankName,
@@ -113,7 +113,7 @@ export class NewAcademicRankComponent implements OnInit {
     const id = this.objectId();
     if (id === undefined) return;
 
-    this.academicRankService.updateAcademicRankById({ "academic-rank-id": id, body: data }).subscribe({
+    this.academicRankService.updateAcademicRankById({ academicRankId: id, body: data }).subscribe({
       next: () => {
         this._snackBar.open("Izmaiņas saglabātas", "Aizvērt", { duration: 5000 });
         this.navigateBackFromEditMode();

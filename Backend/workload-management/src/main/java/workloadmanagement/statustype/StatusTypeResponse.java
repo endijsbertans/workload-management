@@ -10,4 +10,5 @@ import lombok.*;
 public class StatusTypeResponse {
     private int statusTypeId;
     private String statusTypeName;
+    private boolean isDeleted;
 }

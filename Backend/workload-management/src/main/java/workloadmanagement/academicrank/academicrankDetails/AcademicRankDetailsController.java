@@ -21,18 +21,24 @@ public class AcademicRankDetailsController {
     ){
         return ResponseEntity.ok(academicRankDetailsService.save(request));
     }
-    @PatchMapping("{academic-rank-id}")
+    @PatchMapping("{academicRankDetailsId}")
     public ResponseEntity<Integer> updateAcademicRankDetailsById(
-            @PathVariable("academic-rank-id") Integer academicRankId,
+            @PathVariable Integer academicRankDetailsId,
             @Valid @RequestBody AcademicRankDetailsRequest request
     ){
-        return ResponseEntity.ok(academicRankDetailsService.update(academicRankId, request));
+        return ResponseEntity.ok(academicRankDetailsService.update(academicRankDetailsId, request));
     }
-    @GetMapping("{academic-rank-id}")
-    public ResponseEntity<AcademicRankDetailsResponse> findAcademicRankDetailsById(
-            @PathVariable("academic-rank-id") Integer academicRankId
+    @DeleteMapping("{academicRankDetailsId}")
+    public ResponseEntity<Integer> deleteAcademicRankDetailsById(
+            @PathVariable Integer academicRankDetailsId
     ){
-        return ResponseEntity.ok(academicRankDetailsService.findAcademicRankDetailsById(academicRankId));
+        return ResponseEntity.ok(academicRankDetailsService.delete(academicRankDetailsId));
+    }
+    @GetMapping("{academicRankDetailsId}")
+    public ResponseEntity<AcademicRankDetailsResponse> findAcademicRankDetailsById(
+            @PathVariable Integer academicRankDetailsId
+    ){
+        return ResponseEntity.ok(academicRankDetailsService.findAcademicRankDetailsById(academicRankDetailsId));
     }
     @GetMapping
     public ResponseEntity<List<AcademicRankDetailsResponse>> findAllAcademicRankDetails(){

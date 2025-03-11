@@ -12,6 +12,8 @@ import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
 import { CourseResponse } from '../models/course-response';
+import { deleteCourseById } from '../fn/course/delete-course-by-id';
+import { DeleteCourseById$Params } from '../fn/course/delete-course-by-id';
 import { findAllCourses } from '../fn/course/find-all-courses';
 import { FindAllCourses$Params } from '../fn/course/find-all-courses';
 import { findCourseById } from '../fn/course/find-course-by-id';
@@ -99,6 +101,31 @@ export class CourseService extends BaseService {
   findCourseById(params: FindCourseById$Params, context?: HttpContext): Observable<CourseResponse> {
     return this.findCourseById$Response(params, context).pipe(
       map((r: StrictHttpResponse<CourseResponse>): CourseResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `deleteCourseById()` */
+  static readonly DeleteCourseByIdPath = '/course/{courseId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteCourseById()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteCourseById$Response(params: DeleteCourseById$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return deleteCourseById(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `deleteCourseById$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteCourseById(params: DeleteCourseById$Params, context?: HttpContext): Observable<number> {
+    return this.deleteCourseById$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
     );
   }
 

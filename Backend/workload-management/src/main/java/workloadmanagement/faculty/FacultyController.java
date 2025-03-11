@@ -27,6 +27,12 @@ public class FacultyController {
     ){
         return ResponseEntity.ok(facultyService.update(facultyId, request));
     }
+    @DeleteMapping("{facultyId}")
+    public ResponseEntity<Integer> deleteFacultyIdById(
+            @PathVariable Integer facultyId
+    ){
+        return ResponseEntity.ok(facultyService.delete(facultyId));
+    }
     @GetMapping("{facultyId}")
     public ResponseEntity<FacultyResponse> findFacultyById(
             @PathVariable Integer facultyId){

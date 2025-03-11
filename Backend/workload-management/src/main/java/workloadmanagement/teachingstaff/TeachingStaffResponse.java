@@ -26,4 +26,5 @@ public class TeachingStaffResponse {
     private byte[] staffPhoto;
     private String staffFullName;
     private String rankFullName;
+    private boolean isDeleted;
 }

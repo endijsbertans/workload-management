@@ -63,7 +63,7 @@ public class TeachingStaffService{
     }
 
     public List<TeachingStaffResponse> findAllTeachingStaff() {
-        List<TeachingStaff> staff = (List<TeachingStaff>) tStaffRepo.findAll();
+        List<TeachingStaff> staff = tStaffRepo.findByIsDeletedFalse();
         return staff.stream()
                 .map(tStaffMapper::toTeachingStaffResponse)
                 .toList();
@@ -90,6 +90,14 @@ public class TeachingStaffService{
         StatusType statusType = statusTypeService.findStatusTypeFromResponseId(request.statusId());
         return new TStaffEntities(faculty, academicRank, statusType);
     }
+
+    public Integer delete(Integer tStaffId) {
+        TeachingStaff staff = findTeachingStaffFromResponseId(tStaffId);
+        staff.setDeleted(true);
+        tStaffRepo.save(staff);
+        return tStaffId;
+    }
+
     public record TStaffEntities(
             Faculty faculty,
             AcademicRank academicRank,
