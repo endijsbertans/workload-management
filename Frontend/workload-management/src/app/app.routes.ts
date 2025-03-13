@@ -18,6 +18,9 @@ import {
 } from "./pages/main/new-objects/new-academic-rank-details/new-academic-rank-details.component";
 import {NewStatusTypesComponent} from "./pages/main/new-objects/new-status-types/new-status-types.component";
 import {NewSemesterComponent} from "./pages/main/new-objects/new-semester/new-semester.component";
+import {
+  WorkloadListSettingsComponent
+} from "./pages/main/workload-list/workload-list-settings/workload-list-settings.component";
 
 
 export const routes: Routes = [
@@ -45,22 +48,28 @@ export const routes: Routes = [
     children: [{
       path: 'workload',
       component: WorkloadListComponent,
-      children: [{
-        path: 'edit-workload/:id',
-        component: WorkloadContainerComponent,
-        children: [{
-          path: 'new-teaching-staff',
-          component: NewTeachingStaffComponent
+      children: [
+        {
+          path: 'column-settings',
+          component: WorkloadListSettingsComponent
         },
-          {
-            path: 'new-course',
-            component: NewCourseComponent
+        {
+          path: 'edit-workload/:id',
+          component: WorkloadContainerComponent,
+
+          children: [{
+            path: 'new-teaching-staff',
+            component: NewTeachingStaffComponent
           },
-          {
-            path: 'new-class',
-            component: NewClassComponent
-          }]
-      },
+            {
+              path: 'new-course',
+              component: NewCourseComponent
+            },
+            {
+              path: 'new-class',
+              component: NewClassComponent
+            }]
+        },
         {
           path: 'new-workload',
           component: WorkloadContainerComponent,

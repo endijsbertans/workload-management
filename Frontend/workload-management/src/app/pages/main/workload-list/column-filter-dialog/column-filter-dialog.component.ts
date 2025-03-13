@@ -1,5 +1,5 @@
-// src/app/pages/main/workload-list/column-filter-dialog/column-filter-dialog.component.ts
-import {Component, inject, Inject, OnInit, signal} from '@angular/core';
+
+import {Component, inject, OnInit, signal} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {
   MAT_DIALOG_DATA,
@@ -12,7 +12,7 @@ import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
 import {MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from "@angular/material/form-field";
-import {MatSlideToggle} from "@angular/material/slide-toggle";
+
 
 
 

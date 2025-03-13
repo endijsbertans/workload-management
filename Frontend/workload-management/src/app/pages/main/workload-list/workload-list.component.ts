@@ -18,7 +18,10 @@ import {ColumnFilterDialogComponent} from "./column-filter-dialog/column-filter-
 import {MatDialog} from "@angular/material/dialog";
 import {EnumTranslationService} from "../../../services/translation/EnumTranslationService";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {TeachingStaffResponse} from "../../../services/models/teaching-staff-response";
+import {WorkloadSettingsResponse} from "../../../services/models/workload-settings-response";
+import {MatOption, MatSelect} from "@angular/material/select";
+import {AsyncPipe} from "@angular/common";
+
 
 
 
@@ -38,7 +41,9 @@ import {TeachingStaffResponse} from "../../../services/models/teaching-staff-res
     RouterOutlet,
     MatPaginator,
     MatProgressSpinner,
-    WorkloadListSettingsComponent,
+    MatSelect,
+    MatOption,
+    AsyncPipe,
   ],
   templateUrl: './workload-list.component.html',
   styleUrl: './workload-list.component.scss'
@@ -51,10 +56,16 @@ export class WorkloadListComponent implements OnInit {
   private readonly dialog = inject(MatDialog);
   private readonly _snackBar = inject(MatSnackBar);
   activeFilters: Map<string, {value: string, operator: string}> = new Map();
+  availableSettings$ = this.columnSettingsService.availableSettings$;
 
-  columnsToDisplay? = computed(() => {
-    return this.columnSettingsService.getSettings().filter((column) => column.visible) ?? []
-  });
+  columnsToDisplay = computed(() =>
+    this.columnSettingsService.listSettings()
+      .filter(column => column.visible)
+  );
+  applySettings(setting: WorkloadSettingsResponse) {
+    this.columnSettingsService.applySettings(setting);
+    this.findAllWorkloads();
+  }
   dataSource = new MatTableDataSource<WorkloadResponse>([]);
   workloadResponse?: WorkloadResponse[];
   isLoadingResults = true;
@@ -135,16 +146,9 @@ export class WorkloadListComponent implements OnInit {
       .reduce((acc, part) => acc?.[part], obj) ?? defaultValue;
   }
   mapDisplayedColumns(): string[] {
-    if (this.columnsToDisplay) {
-      return this.columnsToDisplay().map(col => col.pathTo);
-    }
-    return [];
+    return this.columnsToDisplay().map(col => col.pathTo);
   }
-  clickEvent(event: MouseEvent, name: string) {
-    event.preventDefault();
-    event.stopPropagation();
-    this.columnSettingsService.hideWorkloadGroup(name as keyof ShownColumns);
-  }
+
 
 
   applyFilter(event: Event) {
@@ -268,12 +272,19 @@ export class WorkloadListComponent implements OnInit {
     }
 
   isDeleted(element: any, col: WorkloadColumnSettings) {
-    const TeachingStaffResponse: TeachingStaffResponse = element.teachingStaff;
-      if (col.pathTo.includes(".")) {
-        const [mainPath] = col.pathTo.split(".");
-        console.log("main: "+mainPath + " isDeleted: "+element[mainPath]?.deleted);
-        return element[mainPath]?.deleted ?? false;
-      }
+    const path = col.pathTo;
+
+    if (!path.includes('.')) {
       return false;
+    }
+
+    const parts = path.split('.');
+
+    // Remove the last part to get the path to the parent object
+    const parentPath = parts.slice(0, -1).join('.');
+    // gets object
+    const parentObject = this.digInObject(element, parentPath);
+
+    return parentObject?.deleted ?? false;
   }
 }

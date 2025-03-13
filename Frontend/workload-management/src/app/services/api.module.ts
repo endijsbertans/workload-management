@@ -7,6 +7,7 @@ import { HttpClient } from '@angular/common/http';
 import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
 import { WorkloadService } from './services/workload.service';
+import { WorkloadSettingsService } from './services/workload-settings.service';
 import { TeachingStaffService } from './services/teaching-staff.service';
 import { StatusTypeService } from './services/status-type.service';
 import { SemesterControllerService } from './services/semester-controller.service';
@@ -26,6 +27,7 @@ import { AcademicRankDetailsService } from './services/academic-rank-details.ser
   declarations: [],
   providers: [
     WorkloadService,
+    WorkloadSettingsService,
     TeachingStaffService,
     StatusTypeService,
     SemesterControllerService,

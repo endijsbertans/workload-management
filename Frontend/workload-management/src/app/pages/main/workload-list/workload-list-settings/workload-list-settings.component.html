@@ -1,34 +1,49 @@
+<div class="backdrop"></div>
+<dialog open>
+  <h2>Noslodzes tabulas kolonu iestatījumi</h2>
 
-<h2>Noslodzes tabulas kolonu iestatījumi</h2>
-<div style="display:flex; align-content: center">
-@for(column of columnSettingsService.getSettings(); track column.pathTo){
-    <section class="example-section">
-      @if(column.isMain){
-      <span class="example-list-section">
+  <div class="settings-drop-down">
+    <mat-form-field appearance="fill">
+      <mat-label>Iestatījumi</mat-label>
+      <mat-select [value]="selectedSetting()" (selectionChange)="onSettingSelected($event)">
+        @for (setting of availableSettings$ | async; track $index) {
+          <mat-option [value]="setting">
+            {{ setting.settingName }} {{ setting.default ? '(noklusējuma)' : '' }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
 
-        <mat-checkbox
-          [checked]="column.visible"
-          (change)="toggleGroupVisibility(column.pathTo, column.visible)">
-          {{ column.name  }}
-        </mat-checkbox>
+    <div class="settings-actions"></div>
+  </div>
 
-      </span>
-
-      }@else{
-      <span class="example-list-section">
-        <ul>
-            <li>
+  <section class="settings">
+    <div class="settings-wrapper">
+      @for (column of getMainSettings(); track $index) {
+        <div class="settings-column">
+          <h2>{{ column.name }}</h2>
+          <ul>
+            @for (subColumn of getSubSettings(column.collection); track subColumn.pathTo) {
+              <li>
                 <mat-checkbox
-                  [checked]="column.visible"
-                  (change)="toggleGroupVisibility(column.pathTo, column.visible)">
-                  {{ column.name  }}
+                  class="row"
+                  [checked]="subColumn.visible"
+                  (change)="toggleGroupVisibility(subColumn.pathTo, subColumn.visible)">
+                  <p>{{ subColumn.name }}</p>
                 </mat-checkbox>
-            </li>
+              </li>
+            }
           </ul>
-      </span>
-
+        </div>
       }
-    </section>
-  }
-
-</div>
+    </div>
+  </section>
+  <div class="actions">
+    <mat-slide-toggle [checked]="isDefault()" (change)="toggleDefaultSetting($event.checked)">
+      Iestatīt kā noklusējumu
+    </mat-slide-toggle>
+    <button mat-raised-button type="button" routerLink="../">Atcelt</button>
+    <button mat-raised-button color="primary" (click)="saveChanges()">Saglabāt</button>
+    <button mat-raised-button (click)="openSaveDialog()">Saglabāt kā jaunu šablonu</button>
+  </div>
+</dialog>

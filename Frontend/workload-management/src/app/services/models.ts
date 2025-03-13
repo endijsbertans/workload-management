@@ -33,3 +33,5 @@ export { TeachingStaffRequest } from './models/teaching-staff-request';
 export { TeachingStaffResponse } from './models/teaching-staff-response';
 export { WorkloadRequest } from './models/workload-request';
 export { WorkloadResponse } from './models/workload-response';
+export { WorkloadSettingsRequest } from './models/workload-settings-request';
+export { WorkloadSettingsResponse } from './models/workload-settings-response';

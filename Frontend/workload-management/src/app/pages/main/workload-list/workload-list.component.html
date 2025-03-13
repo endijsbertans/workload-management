@@ -1,7 +1,6 @@
 <h2>Noslodzes saraksts</h2>
 <hr>
 <router-outlet/>
-<app-workload-list-settings/>
 <div class="actions-with-table">
   <mat-form-field>
     <mat-label>Meklēt (ciparus neatrod)</mat-label>
@@ -10,6 +9,17 @@
   <button mat-raised-button routerLink="new-workload" type="button">
     Pievienot datus
   </button>
+  <mat-form-field>
+    <mat-label>Iestatījumi</mat-label>
+    <mat-select>
+      @for (setting of availableSettings$ | async; track setting.workloadSettingsId) {
+        <mat-option [value]="setting" (click)="applySettings(setting)">
+          {{ setting.settingName }} {{ setting.default ? '(noklusējuma)' : '' }}
+        </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+  <button mat-raised-button type="button" routerLink="column-settings" >Iestatījumi</button>
   @if (clickedWorkloadRow()) {
     <button mat-raised-button (click)="onEditWorkload()" type="button">
       Rediģēt
@@ -21,7 +31,7 @@
 </div>
 <div class="wrapper">
   <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)">
-    @for (col of columnsToDisplay ? columnsToDisplay() : []; track col.pathTo) {
+    @for (col of columnsToDisplay(); track col.pathTo) {
       <ng-container [matColumnDef]="col.pathTo">
         @if (col.sortable) {
           <th mat-header-cell *matHeaderCellDef
@@ -29,12 +39,6 @@
               [class]="col.style">
             <div class="header-container">
               <span>{{ col.name }}</span>
-              @if (col.isMain) {
-                <button (click)="clickEvent($event, col.collection)" mat-icon-button
-                        aria-label="Parādīt/Paslēpt kolonnu grupu" matTooltip="Parādīt/Paslēpt kolonnu grupu">
-                  <mat-icon>switch_left</mat-icon>
-                </button>
-              }
               @if (isColumnFiltered(col.pathTo)) {
                 <button (click)="openFilterDialog($event, col)" mat-icon-button matTooltip="Filtrēt kolonu">
                   <mat-icon>filter_list_off</mat-icon>
@@ -51,17 +55,11 @@
               [class]="col.style">
             <div class="header-container">
               <span>{{ col.name }}</span>
-              @if (col.isMain) {
-                <button (click)="clickEvent($event, col.collection)" mat-icon-button
-                        aria-label="Parādīt/Paslēpt kolonnu grupu" matTooltip="Parādīt/Paslēpt kolonnu grupu">
-                  <mat-icon>switch_left</mat-icon>
-                </button>
-              }
             </div>
           </th>
         }
         <td mat-cell *matCellDef="let element" [class.row-is-deleted]="isDeleted(element, col)">
-          {{ getNestedProperty(element, col) }} {{isDeleted(element, col)}}
+          {{ getNestedProperty(element, col) }}
         </td>
       </ng-container>
     }

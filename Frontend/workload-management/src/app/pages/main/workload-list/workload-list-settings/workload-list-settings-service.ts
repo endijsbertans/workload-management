@@ -1,89 +1,99 @@
-import {Injectable, OnInit, signal} from "@angular/core";
-import {
-  ColumnsForWorkloadList,
-  ShownColumns,
-  WorkloadColumnSettings
-} from "../workload-list-columns";
+import { inject, Injectable, signal } from "@angular/core";
+import { BehaviorSubject } from "rxjs";
+import { WorkloadSettingsService } from "../../../../services/services";
+import { WorkloadSettingsResponse } from "../../../../services/models/workload-settings-response";
+import { WorkloadSettingsRequest } from "../../../../services/models/workload-settings-request";
+import { ColumnsForWorkloadList, WorkloadColumnSettings } from "../workload-list-columns";
 
 @Injectable({
   providedIn: 'root'
 })
-export class WorkloadListSettingsService implements OnInit{
-  private readonly STORAGE_KEY_LIST_SETTINGS = "workloadListSettings";
-  private readonly STORAGE_KEY_VISIBLE_GROUPS = "visibleWorkloadGroups";
+export class WorkloadListSettingsService {
+  private readonly workloadListSettingsService = inject(WorkloadSettingsService);
+  private readonly availableSettings = new BehaviorSubject<WorkloadSettingsResponse[]>([]);
+  availableSettings$ = this.availableSettings.asObservable();
 
-  listSettings = signal<WorkloadColumnSettings[]>(this.loadListSettings());
-  visibleWorkloadGroups = signal<ShownColumns>(this.loadVisibleWorkloadGroups());
+  currentSettings = signal<WorkloadSettingsResponse | null>(null);
+  listSettings = signal<WorkloadColumnSettings[]>([...ColumnsForWorkloadList]);
 
-  getSettings = this.listSettings.asReadonly();
-  ngOnInit() {
-    this.saveSettings();
+  constructor() {
+    this.loadSettingsFromServer();
   }
 
-  hideWorkloadGroup(columnGroup: keyof ShownColumns) {
-    this.visibleWorkloadGroups.set({
-      ...this.visibleWorkloadGroups(),
-      [columnGroup]: !this.visibleWorkloadGroups()[columnGroup]
-    });
-    this.updateWorkloadGroup();
-    this.saveSettings();
-  }
-
-  updateWorkloadColumnSetting(pathTo: string, newVisible: boolean) {
-    this.listSettings.update((old) =>
-      old.map((column) =>
-        column.pathTo === pathTo ? { ...column, visible: newVisible } : column
-      )
-    );
-    this.saveSettings();
-  }
-  updateWorkloadGroup() {
-    const visibleGroups = this.visibleWorkloadGroups();
-    const currentSettings = this.listSettings();
-    const newSettings: WorkloadColumnSettings[] = [];
-
-
-    ColumnsForWorkloadList.forEach(originalColumn => {
-
-      const userSetting = currentSettings.find(col => col.pathTo === originalColumn.pathTo);
-
-      const groupVisible = visibleGroups[originalColumn.collection as keyof ShownColumns];
-      const shouldInclude = groupVisible || originalColumn.isMain;
-
-      if (shouldInclude) {
-
-        newSettings.push({
-          ...originalColumn,
-          visible: userSetting ? userSetting.visible : originalColumn.visible
-        });
+  loadSettingsFromServer() {
+    this.workloadListSettingsService.findAllWorkloadSettings().subscribe({
+      next: (settings) => {
+        this.availableSettings.next(settings);
+        if (settings.length > 0) {
+          const defaultSetting = settings.find(s => s.default) || settings[0];
+          this.applySettings(defaultSetting);
+        }
       }
     });
-
-    this.listSettings.set(newSettings);
-    this.saveSettings();
   }
 
-  private saveSettings() {
-    localStorage.setItem(this.STORAGE_KEY_LIST_SETTINGS, JSON.stringify(this.listSettings()));
-    localStorage.setItem(this.STORAGE_KEY_VISIBLE_GROUPS, JSON.stringify(this.visibleWorkloadGroups()));
+  applySettings(settings: WorkloadSettingsResponse) {
+    this.currentSettings.set(settings);
+
+    const newListSettings = ColumnsForWorkloadList.map(col => ({
+      ...col,
+      visible: settings?.visibleColumns?.includes(col.pathTo) || false
+    }));
+
+    this.listSettings.set(newListSettings);
   }
 
-  private loadListSettings(): WorkloadColumnSettings[] {
-    const savedSettings = localStorage.getItem(this.STORAGE_KEY_LIST_SETTINGS);
-    return savedSettings ? JSON.parse(savedSettings) : [...ColumnsForWorkloadList];
+  createNewSettings(name: string, isDefault: boolean = false, currentSettings?: WorkloadColumnSettings[]) {
+  const settingsToUse = currentSettings || this.listSettings();
+
+    const currentVisibleColumns = settingsToUse
+      .filter(col => col.visible)
+      .map(col => col.pathTo);
+
+    const newSettings: WorkloadSettingsRequest = {
+      settingName: name,
+      visibleColumns: currentVisibleColumns,
+      isDefault: isDefault
+    };
+
+    this.workloadListSettingsService.saveWorkloadSettings({body: newSettings}).subscribe({
+      next: (result) => {
+        this.loadSettingsFromServer();
+      }
+    });
   }
 
-  private loadVisibleWorkloadGroups(): ShownColumns {
-    const savedGroups = localStorage.getItem(this.STORAGE_KEY_VISIBLE_GROUPS);
-    return savedGroups
-      ? JSON.parse(savedGroups)
-      : {
-        columnsForTeacher: true,
-        columnsForCourse: true,
-        columnsForCalc: true,
-        columnsForGeneralInfo: true,
-        columnsForSalary: true,
-        columnsForWorkloadClasses: true
-      };
+  updateCurrentSettings(isDefault: boolean) {
+    const currentSetting = this.currentSettings();
+    if (!currentSetting) return;
+
+    const currentVisibleColumns = this.listSettings()
+      .filter(col => col.visible)
+      .map(col => col.pathTo);
+
+    const updatedSettings: WorkloadSettingsRequest = {
+      settingName: currentSetting.settingName,
+      visibleColumns: currentVisibleColumns,
+      isDefault: isDefault
+    };
+    if(currentSetting.workloadSettingsId) {
+    this.workloadListSettingsService.updateWorkloadSettingsById({
+      semesterId: currentSetting.workloadSettingsId,
+      body: updatedSettings
+    }).subscribe({
+      next: () => {
+        this.loadSettingsFromServer();
+      }
+    });
+  }
+  }
+  getMainSettings(): ({ name: string; collection: string }[]) {
+    return [
+      {collection: "columnsForTeacher", name: "Docenti"},
+      {collection: "columnsForCourse", name: "StudijuPriekšmeti"},
+      {collection: "columnsForCalc", name: "Aprēķini"},
+      {collection: "columnsForWorkloadClasses", name: "Kursi"},
+      {collection: "columnsForSalary", name: "Budžeta"}
+    ];
   }
 }
