@@ -1769,12 +1769,33 @@
         }
       }
     },
+    "/teaching-staff/template": {
+      "get": {
+        "tags": [
+          "TeachingStaff"
+        ],
+        "operationId": "getTStaffCSVTemplate",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/csv": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/my-class/template": {
       "get": {
         "tags": [
           "MyClass"
         ],
-        "operationId": "getCSVTemplate",
+        "operationId": "getClassCSVTemplate",
         "responses": {
           "200": {
             "description": "OK",
@@ -1811,6 +1832,27 @@
                       "DOCTORATE"
                     ]
                   }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/course/template": {
+      "get": {
+        "tags": [
+          "Course"
+        ],
+        "operationId": "getCourseCSVTemplate",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/csv": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
                 }
               }
             }
@@ -2553,12 +2595,12 @@
               "type": "string"
             }
           },
-          "default": {
-            "type": "boolean"
-          },
           "workloadSettingsId": {
             "type": "integer",
             "format": "int32"
+          },
+          "default": {
+            "type": "boolean"
           }
         }
       },
@@ -2606,20 +2648,20 @@
               "$ref": "#/components/schemas/GrantedAuthority"
             }
           },
-          "name": {
-            "type": "string"
-          },
           "username": {
             "type": "string"
-          },
-          "accountNonLocked": {
-            "type": "boolean"
           },
           "credentialsNonExpired": {
             "type": "boolean"
           },
           "accountNonExpired": {
             "type": "boolean"
+          },
+          "accountNonLocked": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string"
           }
         },
         "required": [

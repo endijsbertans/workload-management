@@ -140,6 +140,7 @@
     }
 
     <div class="button-group">
+      <button mat-raised-button type="button" (click)="downloadCsv()">Ielādēt paraugu</button>
       <button mat-raised-button type="button" (click)="navigateBackFromCreateMode()">Atcelt</button>
       <button mat-raised-button (click)="submitFileToBackend()"
               [disabled]="!selectedFile || fileLoading()">

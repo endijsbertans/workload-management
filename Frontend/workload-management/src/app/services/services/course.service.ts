@@ -18,6 +18,8 @@ import { findAllCourses } from '../fn/course/find-all-courses';
 import { FindAllCourses$Params } from '../fn/course/find-all-courses';
 import { findCourseById } from '../fn/course/find-course-by-id';
 import { FindCourseById$Params } from '../fn/course/find-course-by-id';
+import { getCourseCsvTemplate } from '../fn/course/get-course-csv-template';
+import { GetCourseCsvTemplate$Params } from '../fn/course/get-course-csv-template';
 import { saveCourse } from '../fn/course/save-course';
 import { SaveCourse$Params } from '../fn/course/save-course';
 import { updateCourseById } from '../fn/course/update-course-by-id';
@@ -178,6 +180,31 @@ export class CourseService extends BaseService {
   updateCourseById(params: UpdateCourseById$Params, context?: HttpContext): Observable<number> {
     return this.updateCourseById$Response(params, context).pipe(
       map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
+  /** Path part for operation `getCourseCsvTemplate()` */
+  static readonly GetCourseCsvTemplatePath = '/course/template';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getCourseCsvTemplate()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCourseCsvTemplate$Response(params?: GetCourseCsvTemplate$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
+    return getCourseCsvTemplate(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getCourseCsvTemplate$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCourseCsvTemplate(params?: GetCourseCsvTemplate$Params, context?: HttpContext): Observable<Blob> {
+    return this.getCourseCsvTemplate$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Blob>): Blob => r.body)
     );
   }
 

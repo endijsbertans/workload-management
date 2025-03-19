@@ -90,4 +90,12 @@ public class CourseService {
                     .collect(Collectors.toSet());
         }
     }
+
+    public byte[] generateCsvTemplate() {
+        StringBuilder csvContent = new StringBuilder();
+        csvContent.append("courseCode;courseName;creditPoints;registrationType;section\n");
+        csvContent.append("# Piemers zemak, pirms publicesanas izdzest visu kas sakas ar #, ka ari pasu piemeru\n");
+        csvContent.append("LAIS123;Matematika;2;Automatiska;Pamatnozare\n");
+        return csvContent.toString().getBytes();
+    }
 }

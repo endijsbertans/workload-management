@@ -251,7 +251,7 @@ export class NewClassComponent implements OnInit {
 
   downloadCsv() {
     this.fileLoading.set(true);
-    this.classService.getCsvTemplate().subscribe({
+    this.classService.getClassCsvTemplate().subscribe({
       next: (blob) => {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');

@@ -17,6 +17,8 @@ import { findAllTeachingStaff } from '../fn/teaching-staff/find-all-teaching-sta
 import { FindAllTeachingStaff$Params } from '../fn/teaching-staff/find-all-teaching-staff';
 import { findTeachingStaffById } from '../fn/teaching-staff/find-teaching-staff-by-id';
 import { FindTeachingStaffById$Params } from '../fn/teaching-staff/find-teaching-staff-by-id';
+import { getTStaffCsvTemplate } from '../fn/teaching-staff/get-t-staff-csv-template';
+import { GetTStaffCsvTemplate$Params } from '../fn/teaching-staff/get-t-staff-csv-template';
 import { saveTeachingStaff } from '../fn/teaching-staff/save-teaching-staff';
 import { SaveTeachingStaff$Params } from '../fn/teaching-staff/save-teaching-staff';
 import { TeachingStaffResponse } from '../models/teaching-staff-response';
@@ -178,6 +180,31 @@ export class TeachingStaffService extends BaseService {
   updateTeachingStaffById(params: UpdateTeachingStaffById$Params, context?: HttpContext): Observable<number> {
     return this.updateTeachingStaffById$Response(params, context).pipe(
       map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
+  /** Path part for operation `getTStaffCsvTemplate()` */
+  static readonly GetTStaffCsvTemplatePath = '/teaching-staff/template';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getTStaffCsvTemplate()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getTStaffCsvTemplate$Response(params?: GetTStaffCsvTemplate$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
+    return getTStaffCsvTemplate(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getTStaffCsvTemplate$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getTStaffCsvTemplate(params?: GetTStaffCsvTemplate$Params, context?: HttpContext): Observable<Blob> {
+    return this.getTStaffCsvTemplate$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Blob>): Blob => r.body)
     );
   }
 
