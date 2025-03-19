@@ -17,8 +17,8 @@ import { findAllMyClass } from '../fn/my-class/find-all-my-class';
 import { FindAllMyClass$Params } from '../fn/my-class/find-all-my-class';
 import { findMyClassById } from '../fn/my-class/find-my-class-by-id';
 import { FindMyClassById$Params } from '../fn/my-class/find-my-class-by-id';
-import { getCsvTemplate } from '../fn/my-class/get-csv-template';
-import { GetCsvTemplate$Params } from '../fn/my-class/get-csv-template';
+import { getClassCsvTemplate } from '../fn/my-class/get-class-csv-template';
+import { GetClassCsvTemplate$Params } from '../fn/my-class/get-class-csv-template';
 import { getEnums } from '../fn/my-class/get-enums';
 import { GetEnums$Params } from '../fn/my-class/get-enums';
 import { MyClassResponse } from '../models/my-class-response';
@@ -185,27 +185,27 @@ export class MyClassService extends BaseService {
     );
   }
 
-  /** Path part for operation `getCsvTemplate()` */
-  static readonly GetCsvTemplatePath = '/my-class/template';
+  /** Path part for operation `getClassCsvTemplate()` */
+  static readonly GetClassCsvTemplatePath = '/my-class/template';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getCsvTemplate()` instead.
+   * To access only the response body, use `getClassCsvTemplate()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getCsvTemplate$Response(params?: GetCsvTemplate$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
-    return getCsvTemplate(this.http, this.rootUrl, params, context);
+  getClassCsvTemplate$Response(params?: GetClassCsvTemplate$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
+    return getClassCsvTemplate(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getCsvTemplate$Response()` instead.
+   * To access the full response (for headers, for example), `getClassCsvTemplate$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getCsvTemplate(params?: GetCsvTemplate$Params, context?: HttpContext): Observable<Blob> {
-    return this.getCsvTemplate$Response(params, context).pipe(
+  getClassCsvTemplate(params?: GetClassCsvTemplate$Params, context?: HttpContext): Observable<Blob> {
+    return this.getClassCsvTemplate$Response(params, context).pipe(
       map((r: StrictHttpResponse<Blob>): Blob => r.body)
     );
   }

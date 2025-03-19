@@ -6,6 +6,9 @@ import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -58,5 +61,14 @@ public class TeachingStaffController {
             @RequestParam("file") MultipartFile file
     ) throws IOException {
         return ResponseEntity.ok(tStaffService.uploadTeachingStaff(file));
+    }
+    @GetMapping(value = "/template", produces = "text/csv")
+    public ResponseEntity<ByteArrayResource> getTStaffCSVTemplate() {
+        String filename = "tStaff_import_template.csv";
+        ByteArrayResource resource = new ByteArrayResource(tStaffService.generateCsvTemplate());
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+                .contentType(MediaType.parseMediaType("text/csv"))
+                .body(resource);
     }
 }

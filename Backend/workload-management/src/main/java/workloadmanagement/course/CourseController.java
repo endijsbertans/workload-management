@@ -2,6 +2,9 @@ package workloadmanagement.course;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,5 +50,15 @@ public class CourseController {
             @RequestPart("file") MultipartFile file
     ) throws IOException {
         return ResponseEntity.ok(courseService.uploadCourse(file));
+    }
+    @GetMapping(value = "/template", produces = "text/csv")
+    public ResponseEntity<ByteArrayResource> getCourseCSVTemplate(){
+        String filename = "course_import_template.csv";
+        ByteArrayResource resource = new ByteArrayResource(courseService.generateCsvTemplate());
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+                .contentType(MediaType.parseMediaType("text/csv"))
+                .body(resource);
     }
 }

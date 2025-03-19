@@ -58,7 +58,7 @@ public class MyClassController {
         return ResponseEntity.ok(myClassService.uploadMyClass(file));
     }
     @GetMapping(value = "/template", produces = "text/csv")
-    public ResponseEntity<ByteArrayResource> getCSVTemplate() throws IOException {
+    public ResponseEntity<ByteArrayResource> getClassCSVTemplate(){
         String filename = "class_import_template.csv";
         ByteArrayResource resource = new ByteArrayResource(myClassService.generateCsvTemplate());
 

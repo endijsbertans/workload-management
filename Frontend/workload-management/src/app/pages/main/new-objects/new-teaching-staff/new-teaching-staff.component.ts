@@ -327,4 +327,27 @@ export class NewTeachingStaffComponent implements OnInit {
       }
     });
   }
+  downloadCsv() {
+    this.fileLoading.set(true);
+    this.teachingStaffService.getTStaffCsvTemplate().subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'tStaff_import_template.csv';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        a.remove();
+      },
+      complete: () => {
+        this._snackBar.open( "Ielāde veiksmīga", "Aizvērt", {duration: 5000});
+        this.fileLoading.set(false);
+      },
+      error: (err) => {
+        this._snackBar.open(err.error.errorMsg, "Aizvērt", {duration: 5000});
+        this.fileLoading.set(false);
+      }
+    });
+  }
 }

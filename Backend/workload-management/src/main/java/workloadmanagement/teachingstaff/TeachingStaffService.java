@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import workloadmanagement.MyClass.MyClass;
 import workloadmanagement.academicrank.AcademicRank;
+import workloadmanagement.academicrank.AcademicRankResponse;
 import workloadmanagement.academicrank.AcademicRankService;
 import workloadmanagement.academicrank.academicrankDetails.AcademicRankDetails;
 import workloadmanagement.auth.AuthenticationService;
@@ -21,6 +22,7 @@ import workloadmanagement.auth.security.MyUser;
 import workloadmanagement.auth.security.MyUserService;
 import workloadmanagement.course.Course;
 import workloadmanagement.faculty.Faculty;
+import workloadmanagement.faculty.FacultyResponse;
 import workloadmanagement.faculty.FacultyService;
 import workloadmanagement.repo.ITeachingStaffRepo;
 import workloadmanagement.semester.Semester;
@@ -156,6 +158,29 @@ public class TeachingStaffService{
                     })
                     .collect(Collectors.toSet());
         }
+    }
+
+    public byte[] generateCsvTemplate() {
+        List<FacultyResponse> faculties = facultyService.findAllFaculties();
+        List<AcademicRankResponse> academicRanks =  academicRankService.findAllAcademicRank();
+
+        StringBuilder csvContent = new StringBuilder();
+        csvContent.append("name;surname;email;staffFacultyId;staffAcademicRankId;statusId\n");
+
+        csvContent.append("# Piemers zemak, pirms publicesanas izdzest visu kas sakas ar #, ka ari pasu piemeru\n");
+        csvContent.append("epasts@venta.lv;1;1;1;Jon;Doe\n\n");
+
+        csvContent.append("# Pieejamie fakultasu id:\n");
+        for (FacultyResponse faculty : faculties) {
+            csvContent.append("# ").append(faculty.getFacultyId())
+                    .append(" - ").append(faculty.getFacultyName()).append("\n");
+        }
+        csvContent.append("# Pieejamas amatu grupas id:\n");
+        for (AcademicRankResponse aRanks : academicRanks) {
+            csvContent.append("# ").append(aRanks.getAcademicRankId())
+                    .append(" - ").append(aRanks.getAbbreviation()).append("\n");
+        }
+        return csvContent.toString().getBytes();
     }
 
 
