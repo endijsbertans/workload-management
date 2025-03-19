@@ -317,7 +317,7 @@ export class NewTeachingStaffComponent implements OnInit {
       }
     }).subscribe({
       next: (response) => {
-        this._snackBar.open(response + " Kursi veiksmīgi pievienoti", "Aizvērt", {duration: 5000});
+        this._snackBar.open(response + " Docenti veiksmīgi pievienoti", "Aizvērt", {duration: 5000});
         this.navigateBackFromCreateMode();
         this.fileLoading.set(false);
       },

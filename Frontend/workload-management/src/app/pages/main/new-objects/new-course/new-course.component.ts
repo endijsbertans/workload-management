@@ -223,7 +223,6 @@ export class NewCourseComponent implements OnInit {
 
     this.fileLoading.set(true);
 
-    // Match the expected interface structure
     this.courseService.uploadCourse({
       body: {
         file: this.selectedFile

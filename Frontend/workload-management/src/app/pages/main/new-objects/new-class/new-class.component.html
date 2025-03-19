@@ -1,94 +1,117 @@
 <div class="backdrop"></div>
 <dialog open>
   <h2>{{ pageTitle() }}</h2>
-  <form [formGroup]="classForm" (ngSubmit)="onSubmit()">
-    <h2>Pievienot jaunu kursu</h2>
+  @if (!bulkMode()) {
+    <form [formGroup]="classForm" (ngSubmit)="onSubmit()">
+      <h2>Pievienot jaunu kursu</h2>
 
-    <mat-form-field appearance="outline">
-      @if (classForm.controls.classLevel.invalid) {
-        <mat-error>{{ errorMessage() }}</mat-error>
-      }
-      <mat-label>Ievadi kursa līmeni</mat-label>
-      <input
-        type="number"
-        matInput
-        placeholder="3ITB"
-        [formControl]="classForm.controls.classLevel"
-        (blur)="updateErrorMessage('classLevel')"
-        required
-      />
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      @if (classForm.controls.program.invalid) {
-        <mat-error>{{ errorMessage() }}</mat-error>
-      }
-      <mat-label>Ievadi programmu</mat-label>
-      <input
-        matInput
-        placeholder="ITM"
-        [formControl]="classForm.controls.program"
-        (blur)="updateErrorMessage('program')"
-        required
-      />
-    </mat-form-field>
+      <mat-form-field appearance="outline">
+        @if (classForm.controls.classLevel.invalid) {
+          <mat-error>{{ errorMessage() }}</mat-error>
+        }
+        <mat-label>Ievadi kursa līmeni</mat-label>
+        <input
+          type="number"
+          matInput
+          placeholder="3ITB"
+          [formControl]="classForm.controls.classLevel"
+          (blur)="updateErrorMessage('classLevel')"
+          required
+        />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        @if (classForm.controls.program.invalid) {
+          <mat-error>{{ errorMessage() }}</mat-error>
+        }
+        <mat-label>Ievadi programmu</mat-label>
+        <input
+          matInput
+          placeholder="ITM"
+          [formControl]="classForm.controls.program"
+          (blur)="updateErrorMessage('program')"
+          required
+        />
+      </mat-form-field>
 
-    <mat-form-field class="input-flex">
-      <mat-select required [formControl]="classForm.controls.classFacultyId">
-        @if (faculties()) {
-          @if (faculties()?.length === 0) {
-            <mat-option>
-              Izveidojiet fakultātes!
-            </mat-option>
-          } @else {
-            @for (faculties of faculties(); track faculties.facultyId) {
-              <mat-option [value]="faculties.facultyId">
-                {{ faculties.facultyName }}
+      <mat-form-field class="input-flex">
+        <mat-select required [formControl]="classForm.controls.classFacultyId">
+          @if (faculties()) {
+            @if (faculties()?.length === 0) {
+              <mat-option>
+                Izveidojiet fakultātes!
               </mat-option>
+            } @else {
+              @for (faculties of faculties(); track faculties.facultyId) {
+                <mat-option [value]="faculties.facultyId">
+                  {{ faculties.facultyName }}
+                </mat-option>
+              }
             }
           }
+        </mat-select>
+        @if (!faculties()) {
+          <mat-label>
+            <em>Lādē datus...</em>
+          </mat-label>
+        } @else {
+          <mat-label>Izvēlies fakultāti</mat-label>
         }
-      </mat-select>
-      @if (!faculties()) {
-        <mat-label>
-          <em>Lādē datus...</em>
-        </mat-label>
-      } @else {
-        <mat-label>Izvēlies fakultāti</mat-label>
-      }
-    </mat-form-field>
-    <mat-form-field class="input-flex">
-      <mat-select required [formControl]="classForm.controls.degree">
-        @if (degrees) {
-          @if (degrees.length === 0) {
-            <mat-option>
-              Nebija iespējams iegūt studiju programmas
-            </mat-option>
-          } @else {
-            @for (degree of degrees; track $index) {
-              <mat-option [value]="degree">
-                {{ enumService.translate('degree', degree) }}
+      </mat-form-field>
+      <mat-form-field class="input-flex">
+        <mat-select required [formControl]="classForm.controls.degree">
+          @if (degrees) {
+            @if (degrees.length === 0) {
+              <mat-option>
+                Nebija iespējams iegūt studiju programmas
               </mat-option>
+            } @else {
+              @for (degree of degrees; track $index) {
+                <mat-option [value]="degree">
+                  {{ enumService.translate('degree', degree) }}
+                </mat-option>
+              }
             }
           }
+        </mat-select>
+        @if (!degrees) {
+          <mat-label>
+            <em>Lādē datus...</em>
+          </mat-label>
+        } @else {
+          <mat-label>Izvēlies grādu</mat-label>
         }
-      </mat-select>
-      @if (!degrees) {
-        <mat-label>
-          <em>Lādē datus...</em>
-        </mat-label>
-      } @else {
-        <mat-label>Izvēlies grādu</mat-label>
-      }
-    </mat-form-field>
+      </mat-form-field>
 
-    <div class="action-wrapper">
-      @if(editMode()){
-        <button mat-raised-button type="button" (click)="navigateBackFromEditMode()">Atcelt</button>
-        <button mat-raised-button type="submit" [disabled]="classForm.invalid">Rediģēt</button>
-      }@else{
+      <div class="action-wrapper">
+        @if(editMode()){
+          <button mat-raised-button type="button" (click)="navigateBackFromEditMode()">Atcelt</button>
+          <button mat-raised-button type="submit" [disabled]="classForm.invalid">Rediģēt</button>
+        }@else{
+          <button mat-raised-button type="button" (click)="navigateBackFromCreateMode()">Atcelt</button>
+          <button mat-raised-button type="submit" [disabled]="classForm.invalid">Izveidot</button>
+          <button mat-raised-button type="submit" (click)="onSelectBulkMode()">Izveidot no faila</button>
+        }
+      </div>
+    </form>
+  } @else {
+    <div class="file-upload-container">
+      <input
+        type="file"
+        (change)="onFileSelected($event)"
+        accept="*.csv">
+
+      @if(fileLoading()) {
+        <mat-progress-bar mode="indeterminate" class="upload-progress"></mat-progress-bar>
+      }
+
+      <div class="button-group">
         <button mat-raised-button type="button" (click)="navigateBackFromCreateMode()">Atcelt</button>
-        <button mat-raised-button type="submit" [disabled]="classForm.invalid">Izveidot</button>
-      }
+        <button mat-raised-button type="button" (click)="downloadCsv()">Ielādēt paraugu</button>
+        <button mat-raised-button (click)="submitFileToBackend()"
+                [disabled]="!selectedFile || fileLoading()">
+          {{ fileLoading() ? 'Ielādē...' : 'Izveidot' }}
+        </button>
+      </div>
     </div>
-  </form>
+  }
 </dialog>

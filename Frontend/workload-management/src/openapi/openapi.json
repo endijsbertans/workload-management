@@ -413,6 +413,45 @@
         }
       }
     },
+    "/my-class/upload": {
+      "post": {
+        "tags": [
+          "MyClass"
+        ],
+        "operationId": "uploadMyClass",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "required": [
+                  "file"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/faculty": {
       "get": {
         "tags": [
@@ -1730,6 +1769,27 @@
         }
       }
     },
+    "/my-class/template": {
+      "get": {
+        "tags": [
+          "MyClass"
+        ],
+        "operationId": "getCSVTemplate",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/csv": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/my-class/getDegreeEnums": {
       "get": {
         "tags": [
@@ -2377,14 +2437,14 @@
           "staffPhoto": {
             "type": "string"
           },
-          "rankFullName": {
-            "type": "string"
+          "deleted": {
+            "type": "boolean"
           },
           "staffFullName": {
             "type": "string"
           },
-          "deleted": {
-            "type": "boolean"
+          "rankFullName": {
+            "type": "string"
           }
         }
       },
@@ -2555,10 +2615,10 @@
           "accountNonLocked": {
             "type": "boolean"
           },
-          "accountNonExpired": {
+          "credentialsNonExpired": {
             "type": "boolean"
           },
-          "credentialsNonExpired": {
+          "accountNonExpired": {
             "type": "boolean"
           }
         },

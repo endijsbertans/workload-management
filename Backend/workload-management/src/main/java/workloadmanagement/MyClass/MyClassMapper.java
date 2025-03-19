@@ -20,7 +20,15 @@ public class MyClassMapper {
                 .isDeleted(false)
                 .build();
     }
-
+    public MyClass toMyClass(MyClassCsvRepresentation request, Faculty faculty){
+        return MyClass.builder()
+                .classLevel(request.classLevel)
+                .classFaculty(faculty)
+                .myClassProgram(request.myClassProgram)
+                .degree(request.degree)
+                .isDeleted(false)
+                .build();
+    }
     public MyClassResponse toMyClassResponse(MyClass myClass){
         return MyClassResponse.builder()
                 .classId(myClass.getClassId())

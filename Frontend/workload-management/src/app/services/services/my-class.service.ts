@@ -17,6 +17,8 @@ import { findAllMyClass } from '../fn/my-class/find-all-my-class';
 import { FindAllMyClass$Params } from '../fn/my-class/find-all-my-class';
 import { findMyClassById } from '../fn/my-class/find-my-class-by-id';
 import { FindMyClassById$Params } from '../fn/my-class/find-my-class-by-id';
+import { getCsvTemplate } from '../fn/my-class/get-csv-template';
+import { GetCsvTemplate$Params } from '../fn/my-class/get-csv-template';
 import { getEnums } from '../fn/my-class/get-enums';
 import { GetEnums$Params } from '../fn/my-class/get-enums';
 import { MyClassResponse } from '../models/my-class-response';
@@ -24,6 +26,8 @@ import { saveMyClass } from '../fn/my-class/save-my-class';
 import { SaveMyClass$Params } from '../fn/my-class/save-my-class';
 import { updateMyClass } from '../fn/my-class/update-my-class';
 import { UpdateMyClass$Params } from '../fn/my-class/update-my-class';
+import { uploadMyClass } from '../fn/my-class/upload-my-class';
+import { UploadMyClass$Params } from '../fn/my-class/upload-my-class';
 
 @Injectable({ providedIn: 'root' })
 export class MyClassService extends BaseService {
@@ -77,6 +81,31 @@ export class MyClassService extends BaseService {
    */
   saveMyClass(params: SaveMyClass$Params, context?: HttpContext): Observable<number> {
     return this.saveMyClass$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
+  /** Path part for operation `uploadMyClass()` */
+  static readonly UploadMyClassPath = '/my-class/upload';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `uploadMyClass()` instead.
+   *
+   * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
+   */
+  uploadMyClass$Response(params?: UploadMyClass$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return uploadMyClass(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `uploadMyClass$Response()` instead.
+   *
+   * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
+   */
+  uploadMyClass(params?: UploadMyClass$Params, context?: HttpContext): Observable<number> {
+    return this.uploadMyClass$Response(params, context).pipe(
       map((r: StrictHttpResponse<number>): number => r.body)
     );
   }
@@ -153,6 +182,31 @@ export class MyClassService extends BaseService {
   updateMyClass(params: UpdateMyClass$Params, context?: HttpContext): Observable<number> {
     return this.updateMyClass$Response(params, context).pipe(
       map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
+  /** Path part for operation `getCsvTemplate()` */
+  static readonly GetCsvTemplatePath = '/my-class/template';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getCsvTemplate()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCsvTemplate$Response(params?: GetCsvTemplate$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
+    return getCsvTemplate(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getCsvTemplate$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCsvTemplate(params?: GetCsvTemplate$Params, context?: HttpContext): Observable<Blob> {
+    return this.getCsvTemplate$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Blob>): Blob => r.body)
     );
   }
 

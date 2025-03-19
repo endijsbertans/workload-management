@@ -12,6 +12,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {FacultyService} from "../../../../services/services/faculty.service";
 import {MyClassService} from "../../../../services/services/my-class.service";
+import {MatProgressBar} from "@angular/material/progress-bar";
 
 @Component({
   selector: 'app-new-class',
@@ -25,7 +26,8 @@ import {MyClassService} from "../../../../services/services/my-class.service";
     MatLabel,
     ReactiveFormsModule,
     MatOption,
-    MatSelect
+    MatSelect,
+    MatProgressBar
   ],
   templateUrl: './new-class.component.html',
   styleUrls: ['./new-class.component.scss', '../new-object-style.scss']
@@ -45,6 +47,11 @@ export class NewClassComponent implements OnInit {
   editMode = signal(false);
   objectId = signal<number | undefined>(undefined);
   pageTitle = signal('Pievienot jaunu grupu');
+
+  selectedFile: any;
+  fileLoading = signal(false);
+  fileContent: string | null = null;
+  bulkMode = signal(false);
 
   classForm = new FormGroup({
     classLevel: new FormControl<number | undefined>(undefined, {
@@ -189,5 +196,80 @@ export class NewClassComponent implements OnInit {
     } else {
       this.errorMessage.set('');
     }
+  }
+  onSelectBulkMode() {
+    this.pageTitle.set("pievienot no faila");
+    this.bulkMode.set(true);
+  }
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    if (!file.name.endsWith('.csv')) {
+      this._snackBar.open("Lūdzu atlasiet CSV failu", "Aizvērt", {duration: 5000});
+      return;
+    }
+
+    this.fileLoading.set(true);
+    this.selectedFile = file;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.fileContent = reader.result as string;
+      this.fileLoading.set(false);
+    };
+    reader.onerror = () => {
+      this._snackBar.open("Kļūda nolasot failu", "Aizvērt", {duration: 5000});
+      this.fileLoading.set(false);
+      this.selectedFile = null;
+    };
+    reader.readAsText(file);
+  }
+
+  submitFileToBackend() {
+    if (!this.selectedFile) return;
+
+    this.fileLoading.set(true);
+
+    // Match the expected interface structure
+    this.classService.uploadMyClass({
+      body: {
+        file: this.selectedFile
+      }
+    }).subscribe({
+      next: (response) => {
+        this._snackBar.open(response + " klases veiksmīgi pievienoti", "Aizvērt", {duration: 5000});
+        this.navigateBackFromCreateMode();
+        this.fileLoading.set(false);
+      },
+      error: (err) => {
+        this._snackBar.open(err.error.errorMsg, "Aizvērt", {duration: 5000});
+        this.fileLoading.set(false);
+      }
+    });
+  }
+
+  downloadCsv() {
+    this.fileLoading.set(true);
+    this.classService.getCsvTemplate().subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'class_import_template.csv';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        a.remove();
+      },
+      complete: () => {
+        this._snackBar.open( "Ielāde veiksmīga", "Aizvērt", {duration: 5000});
+        this.fileLoading.set(false);
+      },
+      error: (err) => {
+        this._snackBar.open(err.error.errorMsg, "Aizvērt", {duration: 5000});
+        this.fileLoading.set(false);
+      }
+    });
   }
 }
