@@ -4,15 +4,10 @@ import {MatButton} from "@angular/material/button";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
-import {AcademicRankService} from "../../../../services/services/academic-rank.service";
-
-import {AcademicRankResponse} from "../../../../services/models/academic-rank-response";
-import {MatOption} from "@angular/material/core";
-import {MatSelect} from "@angular/material/select";
 import {CourseService} from "../../../../services/services";
 import {CourseRequest} from "../../../../services/models/course-request";
 import {MatSnackBar} from "@angular/material/snack-bar";
-
+import {MatProgressBar} from "@angular/material/progress-bar";
 
 
 @Component({
@@ -22,30 +17,30 @@ import {MatSnackBar} from "@angular/material/snack-bar";
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInput,
-    MatOption,
-    MatSelect,
+    MatProgressBar,
   ],
   templateUrl: './new-course.component.html',
   standalone: true,
   styleUrls: ['./new-course.component.scss', '../new-object-style.scss']
 })
-export class NewCourseComponent implements OnInit{
+export class NewCourseComponent implements OnInit {
   @Output() emitCourse = new EventEmitter<number>();
   private readonly router = inject(Router);
   private readonly activeRoute = inject(ActivatedRoute);
   private readonly destroyRef = inject(DestroyRef);
-  academicRankService = inject(AcademicRankService)
   courseService = inject(CourseService);
   private readonly _snackBar = inject(MatSnackBar);
 
-  academicRanks = signal<AcademicRankResponse[] | undefined>(undefined);
+
   errorMessage = signal('');
   editMode = signal(false);
   objectId = signal<number | undefined>(undefined);
   pageTitle = signal('Pievienot jaunu kursu');
   errorMsg: Array<string> = [];
-
-
+  selectedFile: any;
+  fileLoading = signal(false);
+  fileContent: string | null = null;
+  bulkMode = signal(false);
   courseForm = new FormGroup({
     name: new FormControl('', {
       validators: [
@@ -70,20 +65,10 @@ export class NewCourseComponent implements OnInit{
       validators: [
         Validators.minLength(3),
         Validators.required],
-    }),
-    studyLevel: new FormControl<number | undefined>(undefined, {
-      validators: [
-        Validators.required],
-    }),
-    academicRankId: new FormControl<number | undefined>(undefined, {
-      validators: [
-        Validators.required],
-    }),
+    })
   });
 
   ngOnInit(): void {
-    this.fetchAcademicRanks();
-
     this.activeRoute.params.subscribe(params => {
       if (params['id']) {
         this.objectId.set(+params['id']);
@@ -96,7 +81,7 @@ export class NewCourseComponent implements OnInit{
 
   private loadCourseData(id: number | undefined): void {
     if (!id) return;
-    this.courseService.findCourseById({courseId: id }).subscribe({
+    this.courseService.findCourseById({courseId: id}).subscribe({
       next: (course) => {
         this.courseForm.patchValue({
           name: course.courseName,
@@ -104,12 +89,10 @@ export class NewCourseComponent implements OnInit{
           creditPoints: course.creditPoints,
           registrationType: course.registrationType,
           section: course.section,
-          studyLevel: course.studyLevel,
-          academicRankId: course.necessaryAcademicRank?.academicRankId
         });
       },
       error: (err) => {
-        this._snackBar.open("Neizdevās ielādēt datus", "Aizvērt", { duration: 5000 });
+        this._snackBar.open("Neizdevās ielādēt datus", "Aizvērt", {duration: 5000});
         console.error(err);
       }
     });
@@ -134,8 +117,6 @@ export class NewCourseComponent implements OnInit{
       creditPoints: this.courseForm.value.creditPoints!,
       registrationType: this.courseForm.value.registrationType!,
       section: this.courseForm.value.section!,
-      studyLevel: this.courseForm.value.studyLevel!,
-      necessaryAcademicRankId: this.courseForm.value.academicRankId!
     };
   }
 
@@ -145,11 +126,11 @@ export class NewCourseComponent implements OnInit{
     }).subscribe({
       next: (id) => {
         this.emitCourse.emit(id);
-        this._snackBar.open("Saglabāts", "Aizvērt", { duration: 5000 });
+        this._snackBar.open("Saglabāts", "Aizvērt", {duration: 5000});
         this.navigateBackFromCreateMode();
       },
       error: (err) => {
-        this._snackBar.open(err.error.errorMsg, "Aizvērt", { duration: 5000 });
+        this._snackBar.open(err.error.errorMsg, "Aizvērt", {duration: 5000});
       }
     });
   }
@@ -158,14 +139,14 @@ export class NewCourseComponent implements OnInit{
     const id = this.objectId();
     if (id === undefined) return;
 
-    this.courseService.updateCourseById({ "courseId": id, body: data }).subscribe({
+    this.courseService.updateCourseById({"courseId": id, body: data}).subscribe({
       next: () => {
-        this._snackBar.open("Izmaiņas saglabātas", "Aizvērt", { duration: 5000 });
+        this._snackBar.open("Izmaiņas saglabātas", "Aizvērt", {duration: 5000});
         this.navigateBackFromEditMode();
       },
       error: (err) => {
         console.error(err);
-        this._snackBar.open(err.error.errorMsg || "Kļūda atjaunojot kursu", "Aizvērt", { duration: 5000 });
+        this._snackBar.open(err.error.errorMsg || "Kļūda atjaunojot kursu", "Aizvērt", {duration: 5000});
       }
     });
   }
@@ -184,21 +165,7 @@ export class NewCourseComponent implements OnInit{
     });
   }
 
-  private fetchAcademicRanks(){
-    const subscription = this.academicRankService.findAllAcademicRank().subscribe({
-      next: (ranks) => {
-        if (ranks) {
-          this.academicRanks.set(ranks);
-        }
-      },
-      error: (err) => {
-        console.log(err);
-      }
-    });
-    this.destroyRef.onDestroy(() => {
-      subscription.unsubscribe();
-    });
-  }
+
 
   updateErrorMessage(controlName: keyof typeof this.courseForm.controls) {
     const control = this.courseForm.controls[controlName];
@@ -220,4 +187,58 @@ export class NewCourseComponent implements OnInit{
       this.errorMessage.set('');
     }
   }
+
+
+  onSelectBulkMode() {
+    this.pageTitle.set("pievienot no faila");
+    this.bulkMode.set(true);
+  }
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    if (!file.name.endsWith('.csv')) {
+      this._snackBar.open("Lūdzu atlasiet CSV failu", "Aizvērt", {duration: 5000});
+      return;
+    }
+
+    this.fileLoading.set(true);
+    this.selectedFile = file;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.fileContent = reader.result as string;
+      this.fileLoading.set(false);
+    };
+    reader.onerror = () => {
+      this._snackBar.open("Kļūda nolasot failu", "Aizvērt", {duration: 5000});
+      this.fileLoading.set(false);
+      this.selectedFile = null;
+    };
+    reader.readAsText(file);
+  }
+
+  submitFileToBackend() {
+    if (!this.selectedFile) return;
+
+    this.fileLoading.set(true);
+
+    // Match the expected interface structure
+    this.courseService.uploadCourse({
+      body: {
+        file: this.selectedFile
+      }
+    }).subscribe({
+      next: (response) => {
+        this._snackBar.open(response + " Kursi veiksmīgi pievienoti", "Aizvērt", {duration: 5000});
+        this.navigateBackFromCreateMode();
+        this.fileLoading.set(false);
+      },
+      error: (err) => {
+        this._snackBar.open(err.error.errorMsg, "Aizvērt", {duration: 5000});
+        this.fileLoading.set(false);
+      }
+    });
+  }
+
 }

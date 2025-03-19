@@ -1,118 +1,105 @@
 <div class="backdrop"></div>
 <dialog open>
   <h2>{{ pageTitle() }}</h2>
-  <form [formGroup]="courseForm" (ngSubmit)="onSubmit()">
-    <h2>Pievienot jaunu kursu</h2>
+  @if (!bulkMode()) {
+    <form [formGroup]="courseForm" (ngSubmit)="onSubmit()">
 
-    <mat-form-field appearance="outline">
-      @if (courseForm.controls.name.invalid) {
-        <mat-error>{{ errorMessage() }}</mat-error>
-      }
-      <mat-label>Ievadi kursa nosaukumu</mat-label>
-      <input
-        matInput
-        placeholder="Algoritmu teorija"
-        [formControl]="courseForm.controls.name"
-        (blur)="updateErrorMessage('name')"
-        required
-      />
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      @if (courseForm.controls.courseCode.invalid) {
-        <mat-error>{{ errorMessage() }}</mat-error>
-      }
-      <mat-label>Lais kods</mat-label>
-      <input
-        matInput
-        placeholder="MateB008"
-        [formControl]="courseForm.controls.courseCode"
-        (blur)="updateErrorMessage('courseCode')"
-        required
-      />
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      @if (courseForm.controls.creditPoints.invalid) {
-        <mat-error>{{ errorMessage() }}</mat-error>
-      }
-      <mat-label>Kredītpunkti</mat-label>
-      <input
-        matInput
-        type="number"
-        [formControl]="courseForm.controls.creditPoints"
-        (blur)="updateErrorMessage('creditPoints')"
-        required
-      />
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      @if (courseForm.controls.registrationType.invalid) {
-        <mat-error>{{ errorMessage() }}</mat-error>
-      }
-      <mat-label>Reģistrācija</mat-label>
-      <input
-        matInput
-        placeholder="Automātiska"
-        [formControl]="courseForm.controls.registrationType"
-        (blur)="updateErrorMessage('registrationType')"
-        required
-      />
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      @if (courseForm.controls.section.invalid) {
-        <mat-error>{{ errorMessage() }}</mat-error>
-      }
-      <mat-label>Programmas daļa</mat-label>
-      <input
-        matInput
-        placeholder="Vispārizglītojošie..."
-        [formControl]="courseForm.controls.section"
-        (blur)="updateErrorMessage('section')"
-        required
-      />
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      @if (courseForm.controls.studyLevel.invalid) {
-        <mat-error>{{ errorMessage() }}</mat-error>
-      }
-      <mat-label>Studiju līmenis</mat-label>
-      <input
-        matInput
-        type="number"
-        [formControl]="courseForm.controls.studyLevel"
-        (blur)="updateErrorMessage('studyLevel')"
-        required
-      />
-    </mat-form-field>
-    <mat-form-field class="input-flex">
-      <mat-select required [formControl]="courseForm.controls.academicRankId">
-
-        @if (academicRanks()) {
-          @if (academicRanks()?.length === 0) {
-            <p>Izveidojiet Akademiskos rangus</p>
-          } @else {
-            @for (rank of academicRanks(); track rank.academicRankId) {
-              <mat-option [value]="rank.academicRankId">
-                {{ rank.rankName }}
-              </mat-option>
-            }
-          }
+      <mat-form-field appearance="outline">
+        @if (courseForm.controls.name.invalid) {
+          <mat-error>{{ errorMessage() }}</mat-error>
         }
-      </mat-select>
-      @if (academicRanks()) {
-        <mat-label>Izvēlies akadēmisko rangu</mat-label>
-      } @else {
-        <mat-label><em>Lādē datus...</em></mat-label>
-      }
-    </mat-form-field>
+        <mat-label>Ievadi kursa nosaukumu</mat-label>
+        <input
+          matInput
+          placeholder="Algoritmu teorija"
+          [formControl]="courseForm.controls.name"
+          (blur)="updateErrorMessage('name')"
+          required
+        />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        @if (courseForm.controls.courseCode.invalid) {
+          <mat-error>{{ errorMessage() }}</mat-error>
+        }
+        <mat-label>Lais kods</mat-label>
+        <input
+          matInput
+          placeholder="MateB008"
+          [formControl]="courseForm.controls.courseCode"
+          (blur)="updateErrorMessage('courseCode')"
+          required
+        />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        @if (courseForm.controls.creditPoints.invalid) {
+          <mat-error>{{ errorMessage() }}</mat-error>
+        }
+        <mat-label>Kredītpunkti</mat-label>
+        <input
+          matInput
+          type="number"
+          [formControl]="courseForm.controls.creditPoints"
+          (blur)="updateErrorMessage('creditPoints')"
+          required
+        />
+      </mat-form-field>
 
-    <div class="action-wrapper">
-      @if(editMode()){
-        <button mat-raised-button type="button" (click)="navigateBackFromEditMode()">Atcelt</button>
-        <button mat-raised-button type="submit" [disabled]="courseForm.invalid">Rediģēt</button>
-      }@else{
-        <button mat-raised-button type="button" (click)="navigateBackFromCreateMode()">Atcelt</button>
-        <button mat-raised-button type="submit" [disabled]="courseForm.invalid">Izveidot</button>
+      <mat-form-field appearance="outline">
+        @if (courseForm.controls.registrationType.invalid) {
+          <mat-error>{{ errorMessage() }}</mat-error>
+        }
+        <mat-label>Reģistrācija</mat-label>
+        <input
+          matInput
+          placeholder="Automātiska"
+          [formControl]="courseForm.controls.registrationType"
+          (blur)="updateErrorMessage('registrationType')"
+          required
+        />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        @if (courseForm.controls.section.invalid) {
+          <mat-error>{{ errorMessage() }}</mat-error>
+        }
+        <mat-label>Programmas daļa</mat-label>
+        <input
+          matInput
+          placeholder="Vispārizglītojošie..."
+          [formControl]="courseForm.controls.section"
+          (blur)="updateErrorMessage('section')"
+          required
+        />
+      </mat-form-field>
+
+      <div class="action-wrapper">
+        @if (editMode()) {
+          <button mat-raised-button type="button" (click)="navigateBackFromEditMode()">Atcelt</button>
+          <button mat-raised-button type="submit" [disabled]="courseForm.invalid">Rediģēt</button>
+        } @else {
+          <button mat-raised-button type="button" (click)="navigateBackFromCreateMode()">Atcelt</button>
+          <button mat-raised-button type="submit" [disabled]="courseForm.invalid">Izveidot</button>
+          <button mat-raised-button type="submit" (click)="onSelectBulkMode()">Izveidot no faila</button>
+        }
+      </div>
+    </form>
+  } @else {
+    <div class="file-upload-container">
+      <input
+        type="file"
+        (change)="onFileSelected($event)"
+        accept="*.csv">
+
+      @if(fileLoading()) {
+        <mat-progress-bar mode="indeterminate" class="upload-progress"></mat-progress-bar>
       }
+
+      <div class="button-group">
+        <button mat-raised-button type="button" (click)="navigateBackFromCreateMode()">Atcelt</button>
+        <button mat-raised-button (click)="submitFileToBackend()"
+                [disabled]="!selectedFile || fileLoading()">
+          {{ fileLoading() ? 'Ielādē...' : 'Izveidot' }}
+        </button>
+      </div>
     </div>
-  </form>
+  }
 </dialog>

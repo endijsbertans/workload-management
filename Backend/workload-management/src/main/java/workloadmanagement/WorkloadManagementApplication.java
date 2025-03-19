@@ -149,8 +149,6 @@ public class WorkloadManagementApplication {
 					Course c1 =  Course.builder()
 							.courseCode("MateB008")
 							.courseName("Algoritmu teorija")
-							.necessaryRank(ar1)
-							.studyLevel(2)
 							.registrationType("automātiska")
 							.section("Nozares pamatnoz")
 							.creditPoints(3.0)

@@ -8,9 +8,11 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import workloadmanagement.workload.WorkloadRequest;
 
 
+import java.io.IOException;
 import java.util.List;
 
 
@@ -50,5 +52,11 @@ public class TeachingStaffController {
     @GetMapping
     public ResponseEntity<List<TeachingStaffResponse>> findAllTeachingStaff(){
         return ResponseEntity.ok(tStaffService.findAllTeachingStaff());
+    }
+    @PostMapping(value="/upload", consumes = {"multipart/form-data"})
+    public ResponseEntity<Integer> uploadTeachingStaff(
+            @RequestParam("file") MultipartFile file
+    ) throws IOException {
+        return ResponseEntity.ok(tStaffService.uploadTeachingStaff(file));
     }
 }

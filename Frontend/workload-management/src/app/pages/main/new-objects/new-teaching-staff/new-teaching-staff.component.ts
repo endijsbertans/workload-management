@@ -22,6 +22,7 @@ import {TeachingStaffRequest} from "../../../../services/models/teaching-staff-r
 import {AcademicRankResponse} from "../../../../services/models/academic-rank-response";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {StatusTypeResponse} from "../../../../services/models/status-type-response";
+import {MatProgressBar} from "@angular/material/progress-bar";
 
 @Component({
   selector: 'app-new-teaching-staff',
@@ -33,6 +34,7 @@ import {StatusTypeResponse} from "../../../../services/models/status-type-respon
     MatSelect,
     MatButton,
     NewUserComponent,
+    MatProgressBar,
   ],
   templateUrl: './new-teaching-staff.component.html',
   standalone: true,
@@ -60,6 +62,10 @@ export class NewTeachingStaffComponent implements OnInit {
   objectId = signal<number | undefined>(undefined);
   pageTitle = signal('Pievienot jaunu docentu');
 
+  fileLoading = signal(false);
+  fileContent: string | null = null;
+  bulkMode = signal(false);
+  selectedFile: any;
   teachingStaffRequest?: TeachingStaffRequest;
   teachingStaffForm = new FormGroup({
     name: new FormControl('', {
@@ -269,5 +275,56 @@ export class NewTeachingStaffComponent implements OnInit {
     } else {
       this.errorMessage.set('');
     }
+  }
+  onSelectBulkMode() {
+    this.pageTitle.set("pievienot no faila");
+    this.bulkMode.set(true);
+  }
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    if (!file.name.endsWith('.csv')) {
+      this._snackBar.open("Lūdzu atlasiet CSV failu", "Aizvērt", {duration: 5000});
+      return;
+    }
+
+    this.fileLoading.set(true);
+    this.selectedFile = file;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.fileContent = reader.result as string;
+      this.fileLoading.set(false);
+    };
+    reader.onerror = () => {
+      this._snackBar.open("Kļūda nolasot failu", "Aizvērt", {duration: 5000});
+      this.fileLoading.set(false);
+      this.selectedFile = null;
+    };
+    reader.readAsText(file);
+  }
+
+  submitFileToBackend() {
+    if (!this.selectedFile) return;
+
+    this.fileLoading.set(true);
+
+    // Match the expected interface structure
+    this.teachingStaffService.uploadTeachingStaff({
+      body: {
+        file: this.selectedFile
+      }
+    }).subscribe({
+      next: (response) => {
+        this._snackBar.open(response + " Kursi veiksmīgi pievienoti", "Aizvērt", {duration: 5000});
+        this.navigateBackFromCreateMode();
+        this.fileLoading.set(false);
+      },
+      error: (err) => {
+        this._snackBar.open(err.error.errorMsg, "Aizvērt", {duration: 5000});
+        this.fileLoading.set(false);
+      }
+    });
   }
 }

@@ -1,0 +1,12 @@
+<h2 mat-dialog-title>Saglabāt iestatījumu šablonu</h2>
+<div mat-dialog-content>
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Nosaukums</mat-label>
+    <input matInput [(ngModel)]="data.name" required>
+  </mat-form-field>
+  <mat-checkbox [(ngModel)]="data.isDefault">Iestatīt kā noklusējuma</mat-checkbox>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Atcelt</button>
+  <button mat-button [mat-dialog-close]="data" [disabled]="!data.name">Saglabāt</button>
+</div>

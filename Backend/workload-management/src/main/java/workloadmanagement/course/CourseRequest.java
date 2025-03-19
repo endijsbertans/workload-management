@@ -24,8 +24,7 @@ public record CourseRequest (
     String courseName,
     @NotNull(message = "142")
     double creditPoints,
-    @NotNull(message = "143")
-    int necessaryAcademicRankId,
+
     @Size.List({
             @Size(min = 1, message = "144"),
             @Size(max = 45, message = "144")
@@ -33,9 +32,6 @@ public record CourseRequest (
     @NotNull(message = "144")
     @NotEmpty(message = "144")
     String registrationType,
-    @Min(value = 0, message = "145")
-    @NotNull(message = "145")
-    int studyLevel,
 
     @Size.List({
             @Size(min = 1, message = "146"),

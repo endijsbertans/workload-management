@@ -1,14 +1,24 @@
 package workloadmanagement.course;
 
+import com.opencsv.bean.CsvToBean;
+import com.opencsv.bean.CsvToBeanBuilder;
+import com.opencsv.bean.HeaderColumnNameMappingStrategy;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import workloadmanagement.academicrank.AcademicRank;
 import workloadmanagement.academicrank.AcademicRankService;
 import workloadmanagement.repo.ICourseRepo;
 
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -17,14 +27,12 @@ public class CourseService {
     private final ICourseRepo courseRepo;
     private final AcademicRankService academicRankService;
     public Integer save(CourseRequest request) {
-        AcademicRank necessaryAcademicRank = academicRankService.findAcademicRankFromResponseId(request.necessaryAcademicRankId());
-        Course course = courseMapper.toCourse(request, necessaryAcademicRank);
+        Course course = courseMapper.toCourse(request);
         return courseRepo.save(course).getCourseId();
     }
     public Integer update(Integer courseId, @Valid CourseRequest request) {
         Course existingCourse = findCourseFromResponseId(courseId);
-        AcademicRank necessaryAcademicRank = academicRankService.findAcademicRankFromResponseId(request.necessaryAcademicRankId());
-        Course updatedCourse = courseMapper.toCourse(request, necessaryAcademicRank);
+        Course updatedCourse = courseMapper.toCourse(request);
         updatedCourse.setCourseId(existingCourse.getCourseId());
         return courseRepo.save(updatedCourse).getCourseId();
     }
@@ -50,5 +58,36 @@ public class CourseService {
         course.setDeleted(true);
         courseRepo.save(course);
         return courseId;
+    }
+
+    public Integer uploadCourse(MultipartFile file) throws IOException {
+        Set<Course> courses = parseCsv(file);
+        courseRepo.saveAll(courses);
+        return courses.size();
+    }
+
+    private Set<Course> parseCsv(MultipartFile file) throws IOException {
+        try(Reader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))){
+            HeaderColumnNameMappingStrategy<CourseCsvRepresentation> strategy = new HeaderColumnNameMappingStrategy<>();
+            strategy.setType(CourseCsvRepresentation.class);
+            CsvToBean<CourseCsvRepresentation> csvToBean =
+                    new CsvToBeanBuilder<CourseCsvRepresentation>(reader)
+                            .withMappingStrategy(strategy)
+                            .withIgnoreEmptyLine(true)
+                            .withIgnoreLeadingWhiteSpace(true)
+                            .withSeparator(';')
+                            .build();
+             return csvToBean.parse()
+                    .stream()
+                    .map(csvLine -> Course.builder()
+                            .courseCode(csvLine.getCourseCode())
+                            .courseName(csvLine.getCourseName())
+                            .creditPoints(csvLine.getCreditPoints())
+                            .registrationType(csvLine.getRegistrationType())
+                            .section(csvLine.getSection())
+                            .isDeleted(false)
+                            .build())
+                    .collect(Collectors.toSet());
+        }
     }
 }

@@ -1,0 +1,15 @@
+.file-upload-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .upload-progress {
+    margin: 10px 0;
+  }
+
+  .button-group {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+  }
+}

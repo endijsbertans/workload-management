@@ -2,7 +2,6 @@ package workloadmanagement.teachingstaff;
 
 import org.springframework.stereotype.Service;
 import workloadmanagement.academicrank.AcademicRank;
-import workloadmanagement.faculty.Faculty;
 import workloadmanagement.statustype.StatusType;
 import workloadmanagement.teachingstaff.TeachingStaffService.TStaffEntities;
 
@@ -37,6 +36,17 @@ public class TeachingStaffMapper {
                 .rankFullName(teachingStaff.getRankFullName())
                 .isDeleted(teachingStaff.isDeleted())
                 //.staffPhoto() TODO
+                .build();
+    }
+    public TeachingStaff toTeachingStaff(TeachingStaffCsvRepresentation csvRepresentation, TStaffEntities tStaffEntities) {
+        return TeachingStaff.builder()
+                .name(csvRepresentation.getName())
+                .surname(csvRepresentation.getSurname())
+                .positionTitle(generatePositionTitle(tStaffEntities.academicRank(), tStaffEntities.statusType()))
+                .status(tStaffEntities.statusType())
+                .staffFaculty(tStaffEntities.faculty())
+                .staffAcademicRank(tStaffEntities.academicRank())
+                .isDeleted(false)
                 .build();
     }
     private String generatePositionTitle(AcademicRank academicRank, StatusType statusType) {

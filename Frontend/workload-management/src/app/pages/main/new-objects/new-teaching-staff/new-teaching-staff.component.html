@@ -1,129 +1,151 @@
 <div class="backdrop"></div>
 <dialog open>
+  <h2>{{ pageTitle() }}</h2>
+  @if (!bulkMode()) {
   <form [formGroup]="teachingStaffForm" (ngSubmit)="onSubmit()">
-    <h2>{{ pageTitle() }}</h2>
-    <mat-form-field appearance="outline">
-      @if (teachingStaffForm.controls.name.invalid) {
-        <mat-error>{{ errorMessage() }}</mat-error>
-      }
-      <mat-label>Ievadi vārdu</mat-label>
-      <input
-        matInput
-        placeholder="Vārds"
-        [formControl]="teachingStaffForm.controls.name"
-        (blur)="updateErrorMessage('name')"
-        required
-      />
-    </mat-form-field>
+      <mat-form-field appearance="outline">
+        @if (teachingStaffForm.controls.name.invalid) {
+          <mat-error>{{ errorMessage() }}</mat-error>
+        }
+        <mat-label>Ievadi vārdu</mat-label>
+        <input
+          matInput
+          placeholder="Vārds"
+          [formControl]="teachingStaffForm.controls.name"
+          (blur)="updateErrorMessage('name')"
+          required
+        />
+      </mat-form-field>
 
-    <mat-form-field appearance="outline">
-      @if (teachingStaffForm.controls.surname.invalid) {
-        <mat-error>{{ errorMessage() }}</mat-error>
-      }
-      <mat-label>Ievadi uzvārdu</mat-label>
-      <input
-        matInput
-        placeholder="Uzvārds"
-        [formControl]="teachingStaffForm.controls.surname"
-        (blur)="updateErrorMessage('surname')"
-        required
-      />
-    </mat-form-field>
+      <mat-form-field appearance="outline">
+        @if (teachingStaffForm.controls.surname.invalid) {
+          <mat-error>{{ errorMessage() }}</mat-error>
+        }
+        <mat-label>Ievadi uzvārdu</mat-label>
+        <input
+          matInput
+          placeholder="Uzvārds"
+          [formControl]="teachingStaffForm.controls.surname"
+          (blur)="updateErrorMessage('surname')"
+          required
+        />
+      </mat-form-field>
 
-    <mat-form-field>
-      <mat-select required [formControl]="teachingStaffForm.controls.statusTypeId">
-        @if (statusTypes()) {
-          @if (statusTypes()?.length === 0) {
-            <mat-option>
-              Izveidojiet statusus!
-            </mat-option>
-          } @else {
-            @for (statusType of statusTypes(); track statusType.statusTypeId) {
-              <mat-option [value]="statusType.statusTypeId">
-                {{ statusType.statusTypeName }}
+      <mat-form-field>
+        <mat-select required [formControl]="teachingStaffForm.controls.statusTypeId">
+          @if (statusTypes()) {
+            @if (statusTypes()?.length === 0) {
+              <mat-option>
+                Izveidojiet statusus!
               </mat-option>
+            } @else {
+              @for (statusType of statusTypes(); track statusType.statusTypeId) {
+                <mat-option [value]="statusType.statusTypeId">
+                  {{ statusType.statusTypeName }}
+                </mat-option>
+              }
             }
           }
+        </mat-select>
+        @if (!statusTypes()) {
+          <mat-label>
+            <em>Lādē datus...</em>
+          </mat-label>
+        } @else {
+          <mat-label>Izvēlies statusu</mat-label>
         }
-      </mat-select>
-      @if (!statusTypes()) {
-        <mat-label>
-          <em>Lādē datus...</em>
-        </mat-label>
-      } @else {
-        <mat-label>Izvēlies statusu</mat-label>
-      }
-    </mat-form-field>
-    <mat-form-field class="input-flex">
-      <mat-select required [formControl]="teachingStaffForm.controls.staffFacultyId">
-        @if (faculties()) {
-          @if (faculties()?.length === 0) {
-            <mat-option>
-              Izveidojiet fakultātes!
-            </mat-option>
-          } @else {
-            @for (faculties of faculties(); track faculties.facultyId) {
-              <mat-option [value]="faculties.facultyId">
-                {{ faculties.facultyName }}
+      </mat-form-field>
+      <mat-form-field class="input-flex">
+        <mat-select required [formControl]="teachingStaffForm.controls.staffFacultyId">
+          @if (faculties()) {
+            @if (faculties()?.length === 0) {
+              <mat-option>
+                Izveidojiet fakultātes!
               </mat-option>
+            } @else {
+              @for (faculties of faculties(); track faculties.facultyId) {
+                <mat-option [value]="faculties.facultyId">
+                  {{ faculties.facultyName }}
+                </mat-option>
+              }
             }
           }
+        </mat-select>
+        @if (!faculties()) {
+          <mat-label>
+            <em>Lādē datus...</em>
+          </mat-label>
+        } @else {
+          <mat-label>Izvēlies fakultāti</mat-label>
         }
-      </mat-select>
-      @if (!faculties()) {
-        <mat-label>
-          <em>Lādē datus...</em>
-        </mat-label>
-      } @else {
-        <mat-label>Izvēlies fakultāti</mat-label>
-      }
-    </mat-form-field>
-    <mat-form-field class="input-flex">
-      <mat-select required [formControl]="teachingStaffForm.controls.academicRankId">
-        @if (academicRanks()) {
-          @if (academicRanks()?.length == 0) {
-            <mat-option>
-              Nav amati lūdzu izveidojiet amatus
-            </mat-option>
-          } @else {
-            @for (rank of academicRanks(); track rank.academicRankId) {
-              <mat-option [value]="rank.academicRankId">
-                {{ rank.rankName }}
+      </mat-form-field>
+      <mat-form-field class="input-flex">
+        <mat-select required [formControl]="teachingStaffForm.controls.academicRankId">
+          @if (academicRanks()) {
+            @if (academicRanks()?.length == 0) {
+              <mat-option>
+                Nav amati lūdzu izveidojiet amatus
               </mat-option>
+            } @else {
+              @for (rank of academicRanks(); track rank.academicRankId) {
+                <mat-option [value]="rank.academicRankId">
+                  {{ rank.rankName }}
+                </mat-option>
+              }
             }
           }
+        </mat-select>
+        @if (!academicRanks()) {
+          <mat-label>
+            <em> Lādē datus...</em>
+          </mat-label>
+        } @else {
+          <mat-label> Izvēlies amatu</mat-label>
         }
-      </mat-select>
-      @if (!academicRanks()) {
-        <mat-label>
-          <em> Lādē datus...</em>
-        </mat-label>
-      } @else {
-        <mat-label> Izvēlies amatu</mat-label>
-      }
-    </mat-form-field>
+      </mat-form-field>
 
-    <div class="flex-faculty">
+      <div class="flex-faculty">
 
-      @if (userAuthDetails()?.email) {
-        <p>{{ userAuthDetails()?.email }}</p>
+        @if (userAuthDetails()?.email) {
+          <p>{{ userAuthDetails()?.email }}</p>
+        }
+        <button mat-raised-button type="button" (click)="closeOrOpenAuthDetails()"
+                id="auth-details-button">{{ authButtonText() }}
+        </button>
+      </div>
+      @if (onAddUserAuthDetails()) {
+        <app-new-user (emitUserAuthDetails)="onEmittedUserAuthDetails($event)" (emitCancel)="closeOrOpenAuthDetails()"
+                      class="inserted"/>
       }
-      <button mat-raised-button type="button" (click)="closeOrOpenAuthDetails()"
-              id="auth-details-button">{{ authButtonText() }}
+      <div class="action-wrapper">
+        @if(editMode()){
+        <button mat-raised-button type="button" (click)="navigateBackFromEditMode()" >Atcelt</button>
+        <button mat-raised-button type="submit" [disabled]="teachingStaffForm.invalid">Rediģēt</button>
+        }@else{
+          <button mat-raised-button type="submit" (click)="onSelectBulkMode()">Izveidot no faila</button>
+          <button mat-raised-button type="button" (click)="navigateBackFromCreateMode()" >Atcelt</button>
+          <button mat-raised-button type="submit" [disabled]="teachingStaffForm.invalid">Izveidot</button>
+        }
+      </div>
+    </form>
+  } @else {
+  <div class="file-upload-container">
+    <input
+      type="file"
+      (change)="onFileSelected($event)"
+      accept="*.csv">
+
+    @if(fileLoading()) {
+      <mat-progress-bar mode="indeterminate" class="upload-progress"></mat-progress-bar>
+    }
+
+    <div class="button-group">
+      <button mat-raised-button type="button" (click)="navigateBackFromCreateMode()">Atcelt</button>
+      <button mat-raised-button (click)="submitFileToBackend()"
+              [disabled]="!selectedFile || fileLoading()">
+        {{ fileLoading() ? 'Ielādē...' : 'Izveidot' }}
       </button>
     </div>
-    @if (onAddUserAuthDetails()) {
-      <app-new-user (emitUserAuthDetails)="onEmittedUserAuthDetails($event)" (emitCancel)="closeOrOpenAuthDetails()"
-                    class="inserted"/>
-    }
-    <div class="action-wrapper">
-      @if(editMode()){
-      <button mat-raised-button type="button" (click)="navigateBackFromEditMode()" >Atcelt</button>
-      <button mat-raised-button type="submit" [disabled]="teachingStaffForm.invalid">Rediģēt</button>
-      }@else{
-        <button mat-raised-button type="button" (click)="navigateBackFromCreateMode()" >Atcelt</button>
-        <button mat-raised-button type="submit" [disabled]="teachingStaffForm.invalid">Izveidot</button>
-      }
-    </div>
-  </form>
+  </div>
+}
 </dialog>

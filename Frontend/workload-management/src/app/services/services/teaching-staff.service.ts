@@ -22,6 +22,8 @@ import { SaveTeachingStaff$Params } from '../fn/teaching-staff/save-teaching-sta
 import { TeachingStaffResponse } from '../models/teaching-staff-response';
 import { updateTeachingStaffById } from '../fn/teaching-staff/update-teaching-staff-by-id';
 import { UpdateTeachingStaffById$Params } from '../fn/teaching-staff/update-teaching-staff-by-id';
+import { uploadTeachingStaff } from '../fn/teaching-staff/upload-teaching-staff';
+import { UploadTeachingStaff$Params } from '../fn/teaching-staff/upload-teaching-staff';
 
 @Injectable({ providedIn: 'root' })
 export class TeachingStaffService extends BaseService {
@@ -75,6 +77,31 @@ export class TeachingStaffService extends BaseService {
    */
   saveTeachingStaff(params: SaveTeachingStaff$Params, context?: HttpContext): Observable<number> {
     return this.saveTeachingStaff$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
+  /** Path part for operation `uploadTeachingStaff()` */
+  static readonly UploadTeachingStaffPath = '/teaching-staff/upload';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `uploadTeachingStaff()` instead.
+   *
+   * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
+   */
+  uploadTeachingStaff$Response(params?: UploadTeachingStaff$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return uploadTeachingStaff(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `uploadTeachingStaff$Response()` instead.
+   *
+   * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
+   */
+  uploadTeachingStaff(params?: UploadTeachingStaff$Params, context?: HttpContext): Observable<number> {
+    return this.uploadTeachingStaff$Response(params, context).pipe(
       map((r: StrictHttpResponse<number>): number => r.body)
     );
   }

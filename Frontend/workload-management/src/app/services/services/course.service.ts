@@ -22,6 +22,8 @@ import { saveCourse } from '../fn/course/save-course';
 import { SaveCourse$Params } from '../fn/course/save-course';
 import { updateCourseById } from '../fn/course/update-course-by-id';
 import { UpdateCourseById$Params } from '../fn/course/update-course-by-id';
+import { uploadCourse } from '../fn/course/upload-course';
+import { UploadCourse$Params } from '../fn/course/upload-course';
 
 @Injectable({ providedIn: 'root' })
 export class CourseService extends BaseService {
@@ -75,6 +77,31 @@ export class CourseService extends BaseService {
    */
   saveCourse(params: SaveCourse$Params, context?: HttpContext): Observable<number> {
     return this.saveCourse$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
+  /** Path part for operation `uploadCourse()` */
+  static readonly UploadCoursePath = '/course/upload';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `uploadCourse()` instead.
+   *
+   * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
+   */
+  uploadCourse$Response(params?: UploadCourse$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return uploadCourse(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `uploadCourse$Response()` instead.
+   *
+   * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
+   */
+  uploadCourse(params?: UploadCourse$Params, context?: HttpContext): Observable<number> {
+    return this.uploadCourse$Response(params, context).pipe(
       map((r: StrictHttpResponse<number>): number => r.body)
     );
   }

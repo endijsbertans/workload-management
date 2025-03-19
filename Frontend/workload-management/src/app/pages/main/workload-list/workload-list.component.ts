@@ -172,8 +172,6 @@ export class WorkloadListComponent implements OnInit {
         (data.course?.courseCode?.toLowerCase().includes(lowercaseFilter) ?? false) ||
         (data.course?.registrationType?.toLowerCase().includes(lowercaseFilter) ?? false) ||
         (data.course?.section?.toLowerCase().includes(lowercaseFilter) ?? false) ||
-        (data.course?.necessaryRank?.rankName?.toLowerCase().includes(lowercaseFilter) ?? false) ||
-
         // Teaching Staff filtering
         (data.teachingStaff?.staffFullName?.toLowerCase().includes(lowercaseFilter) ?? false) ||
         (data.teachingStaff?.positionTitle?.toLowerCase().includes(lowercaseFilter) ?? false) ||

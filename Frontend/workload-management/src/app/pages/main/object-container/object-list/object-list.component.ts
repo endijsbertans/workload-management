@@ -14,9 +14,9 @@ import {Router} from "@angular/router";
 import {FacultyResponse} from "../../../../services/models/faculty-response";
 import {
   AcademicRankDetailsService,
-  AcademicRankService,
+  AcademicRankService, CourseService,
   FacultyService,
-  MyClassService, TeachingStaffService
+  MyClassService, SemesterControllerService, StatusTypeService, TeachingStaffService
 } from "../../../../services/services";
 import {MatSnackBar} from "@angular/material/snack-bar";
 
@@ -44,6 +44,9 @@ export class ObjectListComponent {
   private readonly academicRankDetailsService = inject(AcademicRankDetailsService);
   private readonly myClassService = inject(MyClassService);
   private readonly teachingStaffService = inject(TeachingStaffService);
+  private readonly coursesService = inject(CourseService);
+  private readonly statusTypesService = inject(StatusTypeService);
+  private readonly semesterService = inject(SemesterControllerService);
   private readonly _snackBar = inject(MatSnackBar);
   enumService = inject(EnumTranslationService)
   private router = inject(Router);
@@ -153,6 +156,15 @@ export class ObjectListComponent {
       case 'teachingStaff':
         deleteOperation = this.teachingStaffService.deleteTeachingStaffById({ tStaffId: id });
         break;
+      case 'courses':
+        deleteOperation = this.coursesService.deleteCourseById({courseId: id}) ;
+        break;
+      case 'statusTypes':
+          deleteOperation = this.statusTypesService.deleteStatusTypeById({statusTypeId: id});
+        break;
+      case 'semesters':
+        deleteOperation = this.semesterService.deleteSemesterById({semesterId: id});
+        break;
       default:
         this._snackBar.open(`Dzēšana nav implementēta šim objekta tipam: ${this.selectedTableType}`, "Aizvērt", { duration: 5000 });
         return;
@@ -188,6 +200,12 @@ export class ObjectListComponent {
         return item.classId;
       case 'teachingStaff':
         return item.teachingStaffId;
+      case 'courses':
+        return item.courseId;
+      case 'statusTypes':
+        return item.statusTypeId;
+      case 'semesters':
+        return item.semesterId;
       default:
         return undefined;
     }

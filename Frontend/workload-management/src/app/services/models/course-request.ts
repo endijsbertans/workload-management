@@ -6,8 +6,6 @@ export interface CourseRequest {
   courseCode: string;
   courseName: string;
   creditPoints: number;
-  necessaryAcademicRankId: number;
   registrationType: string;
   section: string;
-  studyLevel: number;
 }

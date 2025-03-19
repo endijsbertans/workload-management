@@ -4,8 +4,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import workloadmanagement.faculty.FacultyRequest;
 
+import java.io.IOException;
 import java.util.List;
 @RestController
 @RequestMapping("course")
@@ -39,5 +41,11 @@ public class CourseController {
     @GetMapping
     public ResponseEntity<List<CourseResponse>> findAllCourses() {
         return ResponseEntity.ok(courseService.findAllCourses());
+    }
+    @PostMapping(value = "/upload", consumes = {"multipart/form-data"})
+    public ResponseEntity<Integer> uploadCourse(
+            @RequestPart("file") MultipartFile file
+    ) throws IOException {
+        return ResponseEntity.ok(courseService.uploadCourse(file));
     }
 }
