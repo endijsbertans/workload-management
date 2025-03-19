@@ -9,11 +9,11 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 
-export interface GetCsvTemplate$Params {
+export interface GetClassCsvTemplate$Params {
 }
 
-export function getCsvTemplate(http: HttpClient, rootUrl: string, params?: GetCsvTemplate$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
-  const rb = new RequestBuilder(rootUrl, getCsvTemplate.PATH, 'get');
+export function getClassCsvTemplate(http: HttpClient, rootUrl: string, params?: GetClassCsvTemplate$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
+  const rb = new RequestBuilder(rootUrl, getClassCsvTemplate.PATH, 'get');
   if (params) {
   }
 
@@ -27,4 +27,4 @@ export function getCsvTemplate(http: HttpClient, rootUrl: string, params?: GetCs
   );
 }
 
-getCsvTemplate.PATH = '/my-class/template';
+getClassCsvTemplate.PATH = '/my-class/template';

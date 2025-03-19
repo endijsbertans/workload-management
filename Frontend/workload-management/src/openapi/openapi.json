@@ -2479,11 +2479,11 @@
           "staffPhoto": {
             "type": "string"
           },
-          "deleted": {
-            "type": "boolean"
-          },
           "staffFullName": {
             "type": "string"
+          },
+          "deleted": {
+            "type": "boolean"
           },
           "rankFullName": {
             "type": "string"
@@ -2595,12 +2595,12 @@
               "type": "string"
             }
           },
+          "default": {
+            "type": "boolean"
+          },
           "workloadSettingsId": {
             "type": "integer",
             "format": "int32"
-          },
-          "default": {
-            "type": "boolean"
           }
         }
       },
@@ -2648,20 +2648,20 @@
               "$ref": "#/components/schemas/GrantedAuthority"
             }
           },
+          "name": {
+            "type": "string"
+          },
           "username": {
             "type": "string"
           },
-          "credentialsNonExpired": {
+          "accountNonLocked": {
             "type": "boolean"
           },
           "accountNonExpired": {
             "type": "boolean"
           },
-          "accountNonLocked": {
+          "credentialsNonExpired": {
             "type": "boolean"
-          },
-          "name": {
-            "type": "string"
           }
         },
         "required": [
