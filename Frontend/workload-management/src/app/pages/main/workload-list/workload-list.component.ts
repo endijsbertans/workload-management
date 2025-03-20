@@ -240,7 +240,7 @@ export class WorkloadListComponent implements OnInit {
     this.clickedWorkloadRow.set(row);
   }
   onEditWorkload(){
-    this.router.navigate(['/main/workload/edit-workload', this.clickedWorkloadRow()?.workloadId]);
+    this.router.navigate(['/main/admin-workload/edit-workload', this.clickedWorkloadRow()?.workloadId]);
   }
 
   isClicked(row: WorkloadResponse):boolean {
@@ -294,7 +294,7 @@ export class WorkloadListComponent implements OnInit {
       error: (err) => {
         console.log(err);
         this._snackBar.open(err.error.errorMsg, "Aizvērt", { duration: 5000 });
-        this.router.navigate(['/main/workload'], { replaceUrl: true });
+        this.router.navigate(['/main/admin-workload'], { replaceUrl: true });
       }
     });
     }

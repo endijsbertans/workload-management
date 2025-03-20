@@ -22,13 +22,15 @@
     </mat-select>
   </mat-form-field>
   <button mat-raised-button type="button" routerLink="column-settings" >Iestatījumi</button>
+  @if(isAdmin()){
   @if (clickedWorkloadRow()) {
-    <button mat-raised-button (click)="onEditWorkload()" type="button">
-      Rediģēt
-    </button>
-    <button mat-raised-button (click)="onDeleteWorkload()" id="deleteButton" type="button">
-      Dzēst
-    </button>
+      <button mat-raised-button (click)="onEditWorkload()" type="button">
+        Rediģēt
+      </button>
+      <button mat-raised-button (click)="onDeleteWorkload()" id="deleteButton" type="button">
+        Dzēst
+      </button>
+    }
   }
 </div>
 <div class="wrapper">

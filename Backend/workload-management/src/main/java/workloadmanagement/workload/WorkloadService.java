@@ -78,44 +78,83 @@ public PageResponse<WorkloadResponse> findAllWorkloads(Pageable pageable, Map<St
 }
 
     private Page<Workload> findFilteredWorkloads(Pageable pageable, Map<String, FilterCriteria> filters) {
+        return workloadRepo.findAll((root, query, criteriaBuilder) ->
+                        buildFilterPredicate(filters, root, criteriaBuilder, new ArrayList<>()),
+                pageable);
+    }
+
+    private Page<Workload> findFilteredUserWorkloads(Pageable pageable, Map<String, FilterCriteria> filters, TeachingStaff staff) {
         return workloadRepo.findAll((root, query, criteriaBuilder) -> {
             List<jakarta.persistence.criteria.Predicate> predicates = new ArrayList<>();
 
-            filters.forEach((column, filter) -> {
-                // Special handling for MyClass filtering (many-to-many relationship)
-                if (column.startsWith("class")) {
-                    jakarta.persistence.criteria.Join<Workload, MyClass> classJoin = root.join("myClasses", JoinType.LEFT);
-                    System.out.println(classJoin);
-                    addPredicate(predicates, criteriaBuilder, classJoin.get(column), filter);
-                }
-                // Handle other nested properties like "teachingStaff.name"
-                else if (column.contains(".")) {
-                    String[] parts = column.split("\\.");
-                    jakarta.persistence.criteria.Join<?, ?> join = null;
+            //  user filter
+            predicates.add(criteriaBuilder.equal(root.get("teachingStaff"), staff));
 
-                    for (int i = 0; i < parts.length - 1; i++) {
-                        if (join == null) {
-                            join = root.join(parts[i], JoinType.LEFT);
-                        } else {
-                            join = join.join(parts[i], JoinType.LEFT);
-                        }
-                    }
-
-                    String lastPart = parts[parts.length - 1];
-                    addPredicate(predicates, criteriaBuilder, join.get(lastPart), filter);
-                } else {
-                    // Handle simple properties
-                    try {
-                        addPredicate(predicates, criteriaBuilder, root.get(column), filter);
-                    } catch (Exception e) {
-                        // Skip columns that can't be cast or don't exist
-                    }
-                }
-            });
-
-            return predicates.isEmpty() ? criteriaBuilder.conjunction() :
-                    criteriaBuilder.and(predicates.toArray(new jakarta.persistence.criteria.Predicate[0]));
+            // dditional filters
+            return buildFilterPredicate(filters, root, criteriaBuilder, predicates);
         }, pageable);
+    }
+
+    private jakarta.persistence.criteria.Predicate buildFilterPredicate(
+            Map<String, FilterCriteria> filters,
+            jakarta.persistence.criteria.Root<Workload> root,
+            CriteriaBuilder criteriaBuilder,
+            List<jakarta.persistence.criteria.Predicate> predicates) {
+
+        if (filters != null && !filters.isEmpty()) {
+            applyFilters(filters, root, criteriaBuilder, predicates);
+        }
+
+        return predicates.isEmpty() ? criteriaBuilder.conjunction() :
+                criteriaBuilder.and(predicates.toArray(new jakarta.persistence.criteria.Predicate[0]));
+    }
+
+    private void applyFilters(
+            Map<String, FilterCriteria> filters,
+            jakarta.persistence.criteria.Root<Workload> root,
+            CriteriaBuilder criteriaBuilder,
+            List<jakarta.persistence.criteria.Predicate> predicates) {
+
+        filters.forEach((column, filter) -> {
+            // Special handling for MyClass filtering (many-to-many relationship)
+            if (column.startsWith("class")) {
+                jakarta.persistence.criteria.Join<Workload, MyClass> classJoin = root.join("myClasses", JoinType.LEFT);
+                addPredicate(predicates, criteriaBuilder, classJoin.get(column), filter);
+            }
+            // Handle other nested properties like "teachingStaff.name"
+            else if (column.contains(".")) {
+                applyNestedFilter(column, filter, root, criteriaBuilder, predicates);
+            } else {
+                // Handle simple properties
+                try {
+                    addPredicate(predicates, criteriaBuilder, root.get(column), filter);
+                } catch (Exception e) {
+                    // Skip columns that can't be cast or don't exist
+                }
+            }
+        });
+    }
+
+    private void applyNestedFilter(
+            String column,
+            FilterCriteria filter,
+            jakarta.persistence.criteria.Root<Workload> root,
+            CriteriaBuilder criteriaBuilder,
+            List<jakarta.persistence.criteria.Predicate> predicates) {
+
+        String[] parts = column.split("\\.");
+        jakarta.persistence.criteria.Join<?, ?> join = null;
+
+        for (int i = 0; i < parts.length - 1; i++) {
+            if (join == null) {
+                join = root.join(parts[i], JoinType.LEFT);
+            } else {
+                join = join.join(parts[i], JoinType.LEFT);
+            }
+        }
+
+        String lastPart = parts[parts.length - 1];
+        addPredicate(predicates, criteriaBuilder, join.get(lastPart), filter);
     }
 
     private void addPredicate(List<jakarta.persistence.criteria.Predicate> predicates,
@@ -187,11 +226,19 @@ public PageResponse<WorkloadResponse> findAllWorkloads(Pageable pageable, Map<St
     }
 
     public PageResponse<?> findAllUserWorkloads(Pageable pageable, Map<String, FilterCriteria> filters, MyUser user) {
+        // Get the teaching staff associated with this user
         TeachingStaff staff = teachingStaffRepo.findByUser(user)
                 .orElseThrow(() -> new EntityNotFoundException("No teaching staff found for user: " + user.getEmail()));
 
-        Page<Workload> workloads = workloadRepo.findByTeachingStaff(staff, pageable);
+        // Apply both user filter and additional filters
+        Page<Workload> workloads;
+        if (filters != null && !filters.isEmpty()) {
+            workloads = findFilteredUserWorkloads(pageable, filters, staff);
+        } else {
+            workloads = workloadRepo.findByTeachingStaff(staff, pageable);
+        }
 
+        // Format the response based on user role
         boolean isAdmin = user.getAuthorities().stream()
                 .anyMatch(authority -> authority.getAuthority().equals("ADMIN"));
 

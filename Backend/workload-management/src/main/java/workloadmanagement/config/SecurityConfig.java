@@ -26,17 +26,33 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req ->
                             req.requestMatchers(
-                                    "v3/api-docs/**",
+                                    "/v3/api-docs/**",
                                     "/auth/**",
-                                    "/v2/api-docs",
-                                    "swagger-resources",
-                                    "swagger-resources/**",
-                                    "configuration/ui",
-                                    "swagger-ui/**",
+                                    "/v2/api-docs/**",
+                                    "/swagger-resources",
+                                    "/swagger-resources/**",
+                                    "/configuration/ui",
+                                    "/swagger-ui/**",
                                     "/webjars/**",
                                     "/swagger-ui.html"
                             ).permitAll()
-                                    .anyRequest().authenticated()
+                            .requestMatchers(
+                                    "/workload-settings/**",
+                                    "/workload/my-workloads/**"
+                            ).hasAnyAuthority("ADMIN", "USER")
+                            .requestMatchers(
+                                    "/academicRankDetails/**",
+                                    "/teaching-staff/**",
+                                    "/status-type/**",
+                                    "/semester/**",
+                                    "/myClass/**",
+                                    "/faculty/**",
+                                    "/course/**",
+                                    "/academicRank/**",
+                                    "/workload/**"
+                            ).hasAuthority("ADMIN")
+
+                            .anyRequest().authenticated()
                         )
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider)
