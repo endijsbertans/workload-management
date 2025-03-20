@@ -24,8 +24,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Tag(name = "TeachingStaff")
 public class TeachingStaffController {
-    // Authentication conncetedUser // vēlākam lai iegūtu savu slodzi
-    // MyUser user = ((User) connectedUser.getPrincipal())
     private final TeachingStaffService tStaffService;
     @PostMapping
     public ResponseEntity<Integer> saveTeachingStaff(

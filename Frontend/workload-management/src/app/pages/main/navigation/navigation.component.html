@@ -1,24 +1,25 @@
-
 <header>
   <img src="VeaLogo.svg" class="VeaLogo">
   <nav class="flex">
-        <a mat-fab extended routerLink="workload">
-          <mat-icon>favorite</mat-icon>
-          Lielā tabula
-        </a>
-        <a mat-fab extended routerLink=".">
-          <mat-icon>favorite</mat-icon>
-          Savi dati
-        </a>
-        <a mat-fab extended routerLink="objects">
-          <mat-icon>favorite</mat-icon>
-          Specifiska tabula
-        </a>
-      <h1>{{this.authDetails.fullName}} {{this.authDetails.authorities}}</h1>
-      <a mat-fab extended (click)="logout()">
-        <mat-icon>logout</mat-icon>
-        atslēgties
-      </a>
+    <a mat-fab extended routerLink="user-workload">
+      <mat-icon>favorite</mat-icon>
+      Savi dati
+    </a>
+    @if(isAdmin()){
+    <a mat-fab extended routerLink="admin-workload">
+      <mat-icon>favorite</mat-icon>
+      Lielā tabula
+    </a>
+    <a mat-fab extended routerLink="objects">
+      <mat-icon>favorite</mat-icon>
+      Specifiska tabula
+    </a>
+    }
+    <h1>{{ this.authDetails.fullName }} {{ this.authDetails.authorities }}</h1>
+    <a mat-fab extended (click)="logout()">
+      <mat-icon>logout</mat-icon>
+      atslēgties
+    </a>
   </nav>
 </header>
 

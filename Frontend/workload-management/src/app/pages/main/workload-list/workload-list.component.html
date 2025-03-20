@@ -6,9 +6,11 @@
     <mat-label>Meklēt (ciparus neatrod)</mat-label>
     <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
   </mat-form-field>
+  @if(isAdmin()){
   <button mat-raised-button routerLink="new-workload" type="button">
     Pievienot datus
   </button>
+  }
   <mat-form-field>
     <mat-label>Iestatījumi</mat-label>
     <mat-select>

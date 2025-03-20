@@ -21,6 +21,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {WorkloadSettingsResponse} from "../../../services/models/workload-settings-response";
 import {MatOption, MatSelect} from "@angular/material/select";
 import {AsyncPipe} from "@angular/common";
+import {TokenService} from "../../../services/token/token.service";
 
 
 
@@ -49,6 +50,9 @@ import {AsyncPipe} from "@angular/common";
   styleUrl: './workload-list.component.scss'
 })
 export class WorkloadListComponent implements OnInit {
+  private readonly tokenService = inject(TokenService);
+  isAdmin = signal(this.tokenService.isAdmin());
+
   enumService = inject(EnumTranslationService);
   private readonly workloadService = inject(WorkloadService);
   private readonly router = inject(Router);
@@ -80,6 +84,7 @@ export class WorkloadListComponent implements OnInit {
   ngOnInit() {
     this.dataSource.sort = this.sort;
     this.findAllWorkloads();
+
     this.setupFiltering();
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
@@ -88,7 +93,6 @@ export class WorkloadListComponent implements OnInit {
     });
   }
   private findAllWorkloads() {
-    // Convert the activeFilters Map to a JSON string
     let filtersJson: string | undefined;
     if (this.activeFilters.size > 0) {
       const filtersObject: Record<string, { value: string, operator: string }> = {};
@@ -97,32 +101,59 @@ export class WorkloadListComponent implements OnInit {
       });
       filtersJson = JSON.stringify(filtersObject);
     }
-
-    this.workloadService.findAllWorkloads({
-      page: this.pageIndex,
-      size: this.pageSize,
-      sort: this.sortColumn.active,
-      direction: this.sortColumn.direction,
-      filters: filtersJson
-    }).subscribe({
-      next: (workloads) => {
-        this.isLoadingResults = true;
-        if (workloads.content) {
-          this.dataSource.data = workloads.content;
-          this.pages = Array(workloads.totalPages)
-            .fill(0)
-            .map((x, i) => i);
-          this.length = workloads.totalElements;
-          console.log(this.pages);
+    if (this.router.url.includes('admin-workload')) {
+      this.workloadService.findAllWorkloads({
+        page: this.pageIndex,
+        size: this.pageSize,
+        sort: this.sortColumn.active,
+        direction: this.sortColumn.direction,
+        filters: filtersJson
+      }).subscribe({
+        next: (workloads) => {
+          this.isLoadingResults = true;
+          if (workloads.content) {
+            this.dataSource.data = workloads.content;
+            this.pages = Array(workloads.totalPages)
+              .fill(0)
+              .map((x, i) => i);
+            this.length = workloads.totalElements;
+            console.log(this.pages);
+          }
+          this.workloadResponse = workloads.content;
+          console.log(this.workloadResponse);
+        },
+        complete: () => {
+          this.isLoadingResults = false;
         }
-        this.workloadResponse = workloads.content;
-        console.log(this.workloadResponse);
-      },
-      complete: () => {
-        this.isLoadingResults = false;
-      }
-    });
+      });
+    } else {
+      this.workloadService.findAllMyWorkloads({
+        page: this.pageIndex,
+        size: this.pageSize,
+        sort: this.sortColumn.active,
+        direction: this.sortColumn.direction,
+        filters: filtersJson
+      }).subscribe({
+        next: (workloads) => {
+          this.isLoadingResults = true;
+          if (workloads.content) {
+            this.dataSource.data = workloads.content;
+            this.pages = Array(workloads.totalPages)
+              .fill(0)
+              .map((x, i) => i);
+            this.length = workloads.totalElements;
+            console.log(this.pages);
+          }
+          this.workloadResponse = workloads.content;
+          console.log(this.workloadResponse);
+        },
+        complete: () => {
+          this.isLoadingResults = false;
+        }
+      });
+    }
   }
+
 
   getNestedProperty(obj: any, col: WorkloadColumnSettings, defaultValue: any = "") {
     if (col.collection.includes("columnsForWorkloadClasses")) {

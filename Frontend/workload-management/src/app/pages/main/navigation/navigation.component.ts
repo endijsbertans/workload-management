@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, signal} from '@angular/core';
 import {RouterLink} from "@angular/router";
 import {MatIcon} from "@angular/material/icon";
 import {MatFabAnchor} from "@angular/material/button";
@@ -17,6 +17,7 @@ import {TokenService} from "../../../services/token/token.service";
 })
 export class NavigationComponent {
   private readonly tokenService = inject(TokenService);
+  isAdmin = signal(this.tokenService.isAdmin());
   authDetails = this.tokenService.getAuthDetails();
   constructor() {
     console.log("AUTH: " + this.authDetails.fullName + " " + this.authDetails.authorities);

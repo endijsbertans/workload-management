@@ -15,6 +15,8 @@ import workloadmanagement.MyClass.MyClassService;
 
 import workloadmanagement.academicrank.academicrankDetails.AcademicRankDetails;
 import workloadmanagement.academicrank.academicrankDetails.AcademicRankDetailsService;
+import workloadmanagement.auth.security.MyUser;
+import workloadmanagement.repo.ITeachingStaffRepo;
 import workloadmanagement.semester.Semester;
 import workloadmanagement.semester.SemesterService;
 import workloadmanagement.common.PageResponse;
@@ -26,10 +28,7 @@ import workloadmanagement.teachingstaff.TeachingStaffService;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -39,6 +38,7 @@ public class WorkloadService {
     private final WorkloadMapper workloadMapper;
     private final IWorkloadRepo workloadRepo;
     private final TeachingStaffService teachingStaffService;
+    private final ITeachingStaffRepo teachingStaffRepo;
     private final SemesterService semesterService;
     private final CourseService courseService;
     private final AcademicRankDetailsService academicRankDetailsService;
@@ -186,6 +186,31 @@ public PageResponse<WorkloadResponse> findAllWorkloads(Pageable pageable, Map<St
         return new WorkloadEntities(teachingStaff, semester, course, academicRankDetails, myClasses, groupForSemester);
     }
 
+    public PageResponse<?> findAllUserWorkloads(Pageable pageable, Map<String, FilterCriteria> filters, MyUser user) {
+        TeachingStaff staff = teachingStaffRepo.findByUser(user)
+                .orElseThrow(() -> new EntityNotFoundException("No teaching staff found for user: " + user.getEmail()));
+
+        Page<Workload> workloads = workloadRepo.findByTeachingStaff(staff, pageable);
+
+        boolean isAdmin = user.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ADMIN"));
+
+        List<?> workloadResponses = workloads.stream()
+                .map(workload -> isAdmin ?
+                        workloadMapper.toWorkloadResponse(workload) :
+                        workloadMapper.toWorkloadUserResponse(workload))
+                .toList();
+
+        return new PageResponse<>(
+                workloadResponses,
+                workloads.getNumber(),
+                workloads.getSize(),
+                workloads.getTotalElements(),
+                workloads.getTotalPages(),
+                workloads.isFirst(),
+                workloads.isLast()
+        );
+    }
 
 
     public record WorkloadEntities(

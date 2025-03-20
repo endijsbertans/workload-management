@@ -23,7 +23,7 @@ public class MyClass {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int classId;
     private int classLevel;
-    private String myClassProgram;
+    private String classProgram;
     private Degree degree;
     private boolean isDeleted;
     @ManyToOne
@@ -35,6 +35,6 @@ public class MyClass {
     private List<Workload> myWorkloads = new ArrayList<>();
 
     public String classLevelAndProgram() {
-        return classLevel + myClassProgram;
+        return classLevel + classProgram;
     }
 }

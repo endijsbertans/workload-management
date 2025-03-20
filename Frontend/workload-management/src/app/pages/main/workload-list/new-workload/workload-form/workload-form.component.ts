@@ -107,7 +107,6 @@ export class WorkloadFormComponent implements OnInit {
     industryCoefficientCtrl: new FormControl<number>(1, [Validators.required]),
     vacationMonthsCtrl: new FormControl<number>(0, [Validators.required]),
     groupAmountCtrl: new FormControl<number | null>(null, [Validators.required]),
-    contactHoursCtrl: new FormControl<number | null>(null, [Validators.required]),
     groupForSemesterCtrl: new FormControl<number | null>(null, [Validators.required]),
     commentsCtrl: new FormControl<string | null>(null, [Validators.required]),
   });
@@ -166,7 +165,6 @@ export class WorkloadFormComponent implements OnInit {
     this.workloadForm.controls.industryCoefficientCtrl.setValue(workload.industryCoefficient ?? null);
     this.workloadForm.controls.vacationMonthsCtrl.setValue(workload.vacationMonths ?? 0);
     this.workloadForm.controls.groupAmountCtrl.setValue(workload.groupAmount ?? null);
-    this.workloadForm.controls.contactHoursCtrl.setValue(workload.contactHours ?? null);
     this.workloadForm.controls.includeInBudgetCtrl.setValue(workload.includeInBudget ?? null);
     this.workloadForm.controls.budgetPositionCtrl.setValue(workload.budgetPosition as BudgetPosition ?? undefined);
     this.workloadForm.controls.academicRankCtrl.setValue(workload.academicRankDetails?.academicRank?.academicRankId ?? null);

@@ -9,7 +9,7 @@ import {NewClassComponent} from "./pages/main/new-objects/new-class/new-class.co
 import {
   WorkloadContainerComponent
 } from "./pages/main/workload-list/new-workload/workload-container/workload-container.component";
-import {authGuard} from "./services/guard/auth.guard";
+import {authAdmin, authGuard} from "./services/guard/auth.guard";
 import {ObjectContainerComponent} from "./pages/main/object-container/object-container.component";
 import {NewFacultyComponent} from "./pages/main/new-objects/new-faculty/new-faculty.component";
 import {NewAcademicRankComponent} from "./pages/main/new-objects/new-academic-rank/new-academic-rank.component";
@@ -46,8 +46,13 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/main/main.component').then(m => m.MainComponent),
     canActivate: [authGuard],
     children: [{
-      path: 'workload',
+      path: 'user-workload',
+      component: WorkloadListComponent
+      },
+      {
+      path: 'admin-workload',
       component: WorkloadListComponent,
+      canActivate: [authAdmin],
       children: [
         {
           path: 'column-settings',
@@ -90,6 +95,7 @@ export const routes: Routes = [
     }, {
       path: 'objects',
       component: ObjectContainerComponent,
+      canActivate: [authAdmin],
       children: [
         {
           path: 'new-teaching-staff',

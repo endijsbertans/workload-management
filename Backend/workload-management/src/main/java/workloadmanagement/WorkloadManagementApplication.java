@@ -57,7 +57,7 @@ public class WorkloadManagementApplication {
 //				myAuthorityRepo.save(MyAuthority.builder().title("USER").build());
 			}
 					var authorities = myAuthorityRepo.save(MyAuthority.builder().title("USER").build());
-
+					var authorities2 = myAuthorityRepo.save(MyAuthority.builder().title("ADMIN").build());
 					MyUser u1 = MyUser.builder()
 							.email("endijsbertans@gmail.com")
 							.password(passwordEncoder.encode("123456789"))
@@ -67,6 +67,15 @@ public class WorkloadManagementApplication {
 							.build();
 					userRepo.save(u1);
 					myAuthorityRepo.save(authorities);
+					MyUser u2 = MyUser.builder()
+							.email("bertansendijs@gmail.com")
+							.password(passwordEncoder.encode("123456789"))
+							.accountLocked(false)
+							.enabled(true)
+							.authorities((List.of(authorities2)))
+							.build();
+					userRepo.save(u2);
+					myAuthorityRepo.save(authorities2);
 					Semester s1 = Semester.builder()
 							.semesterName(SemesterEnum.pavasaris)
 							.semesterYear(2024)
@@ -135,13 +144,13 @@ public class WorkloadManagementApplication {
 					MyClass ac1 = MyClass.builder()
 							.classLevel(3)
 							.classFaculty(f1)
-							.myClassProgram("EIB")
+							.classProgram("EIB")
 							.degree(Degree.BACHELOR)
 							.build();
 					myClassRepo.save(ac1);
 					MyClass ac2 = MyClass.builder()
 							.classLevel(1)
-							.myClassProgram("ITB")
+							.classProgram("ITB")
 							.classFaculty(f1)
 							.build();
 					myClassRepo.save(ac2);
@@ -171,6 +180,16 @@ public class WorkloadManagementApplication {
 							.staffAcademicRank(ar1)
 							.build();
 					teachingStaffRepo.save(ts1);
+					TeachingStaff ts2 = TeachingStaff.builder()
+							.user(u2)
+							.name("Janis")
+							.surname("Berzins")
+							.positionTitle("doc")
+							.status(st1)
+							.staffFaculty(f1)
+							.staffAcademicRank(ar1)
+							.build();
+					teachingStaffRepo.save(ts2);
 
 					Workload w1 = Workload.builder()
 									.teachingStaff(ts1)

@@ -78,6 +78,23 @@ public class WorkloadMapper {
                 .totalCreditPoints(workload.getTotalCreditPoints())
                 .build();
     }
+    public WorkloadUserResponse toWorkloadUserResponse(Workload workload){
+        return WorkloadUserResponse.builder()
+                .workloadId(workload.getWorkloadId())
+                .teachingStaff(workload.getTeachingStaff())
+                .semester(workload.getSemester())
+                .comments(workload.getComments())
+                .groupAmount(workload.getGroupAmount())
+                .contactHours(workload.getContactHours())
+                .groupForSemester(myClassMapper.toMyClassResponse(workload.getGroupForSemester()))
+                .course(workload.getCourse())
+                .creditPointsPerGroup(workload.getCreditPointsPerGroup())
+                .cpProportionOnFullTime(workload.getCpProportionOnFullTime())
+                .myClasses(workload.getMyClasses().stream()
+                        .map(myClassMapper::toMyClassResponse)
+                        .collect(Collectors.toList()))
+                .build();
+    }
     private double getProgramCoefficient(MyClass groupForSemester){
         if(groupForSemester.getDegree() == Degree.MASTER){
             return 0.75;

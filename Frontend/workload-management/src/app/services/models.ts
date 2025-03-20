@@ -20,6 +20,7 @@ export { GrantedAuthority } from './models/granted-authority';
 export { MyClassRequest } from './models/my-class-request';
 export { MyClassResponse } from './models/my-class-response';
 export { MyUser } from './models/my-user';
+export { PageResponseObject } from './models/page-response-object';
 export { PageResponseWorkloadResponse } from './models/page-response-workload-response';
 export { RegistrationRequest } from './models/registration-request';
 export { Semester } from './models/semester';
