@@ -6,10 +6,16 @@ import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import workloadmanagement.workload.WorkloadRequest;
 
 
+import java.io.IOException;
 import java.util.List;
 
 
@@ -18,8 +24,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Tag(name = "TeachingStaff")
 public class TeachingStaffController {
-    // Authentication conncetedUser // vēlākam lai iegūtu savu slodzi
-    // MyUser user = ((User) connectedUser.getPrincipal())
     private final TeachingStaffService tStaffService;
     @PostMapping
     public ResponseEntity<Integer> saveTeachingStaff(
@@ -27,14 +31,42 @@ public class TeachingStaffController {
             ) throws MessagingException {
         return ResponseEntity.ok(tStaffService.save(request));
     }
-    @GetMapping("{tstaff-id}")
-    public ResponseEntity<TeachingStaffResponse> findTeachingStaffById(
-            @PathVariable("tstaff-id") Integer tstaffId
+    @PatchMapping("{tStaffId}")
+    public ResponseEntity<Integer> updateTeachingStaffById(
+            @PathVariable Integer tStaffId,
+            @Valid @RequestBody TeachingStaffRequest request
     ){
-        return ResponseEntity.ok(tStaffService.findById(tstaffId));
+        return ResponseEntity.ok(tStaffService.update(tStaffId, request));
+    }
+    @GetMapping("{tStaffId}")
+    public ResponseEntity<TeachingStaffResponse> findTeachingStaffById(
+            @PathVariable Integer tStaffId
+    ){
+        return ResponseEntity.ok(tStaffService.findById(tStaffId));
+    }
+    @DeleteMapping("{tStaffId}")
+    public ResponseEntity<Integer> deleteTeachingStaffById(
+            @PathVariable Integer tStaffId
+    ){
+        return ResponseEntity.ok(tStaffService.delete(tStaffId));
     }
     @GetMapping
     public ResponseEntity<List<TeachingStaffResponse>> findAllTeachingStaff(){
         return ResponseEntity.ok(tStaffService.findAllTeachingStaff());
+    }
+    @PostMapping(value="/upload", consumes = {"multipart/form-data"})
+    public ResponseEntity<Integer> uploadTeachingStaff(
+            @RequestParam("file") MultipartFile file
+    ) throws IOException {
+        return ResponseEntity.ok(tStaffService.uploadTeachingStaff(file));
+    }
+    @GetMapping(value = "/template", produces = "text/csv")
+    public ResponseEntity<ByteArrayResource> getTStaffCSVTemplate() {
+        String filename = "tStaff_import_template.csv";
+        ByteArrayResource resource = new ByteArrayResource(tStaffService.generateCsvTemplate());
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+                .contentType(MediaType.parseMediaType("text/csv"))
+                .body(resource);
     }
 }

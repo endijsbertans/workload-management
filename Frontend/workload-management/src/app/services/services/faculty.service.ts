@@ -11,6 +11,8 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { deleteFacultyIdById } from '../fn/faculty/delete-faculty-id-by-id';
+import { DeleteFacultyIdById$Params } from '../fn/faculty/delete-faculty-id-by-id';
 import { FacultyResponse } from '../models/faculty-response';
 import { findAllFaculties } from '../fn/faculty/find-all-faculties';
 import { FindAllFaculties$Params } from '../fn/faculty/find-all-faculties';
@@ -18,6 +20,8 @@ import { findFacultyById } from '../fn/faculty/find-faculty-by-id';
 import { FindFacultyById$Params } from '../fn/faculty/find-faculty-by-id';
 import { saveFaculty } from '../fn/faculty/save-faculty';
 import { SaveFaculty$Params } from '../fn/faculty/save-faculty';
+import { updateFaculty } from '../fn/faculty/update-faculty';
+import { UpdateFaculty$Params } from '../fn/faculty/update-faculty';
 
 @Injectable({ providedIn: 'root' })
 export class FacultyService extends BaseService {
@@ -97,6 +101,56 @@ export class FacultyService extends BaseService {
   findFacultyById(params: FindFacultyById$Params, context?: HttpContext): Observable<FacultyResponse> {
     return this.findFacultyById$Response(params, context).pipe(
       map((r: StrictHttpResponse<FacultyResponse>): FacultyResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `deleteFacultyIdById()` */
+  static readonly DeleteFacultyIdByIdPath = '/faculty/{facultyId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteFacultyIdById()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteFacultyIdById$Response(params: DeleteFacultyIdById$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return deleteFacultyIdById(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `deleteFacultyIdById$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteFacultyIdById(params: DeleteFacultyIdById$Params, context?: HttpContext): Observable<number> {
+    return this.deleteFacultyIdById$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
+  /** Path part for operation `updateFaculty()` */
+  static readonly UpdateFacultyPath = '/faculty/{facultyId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateFaculty()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateFaculty$Response(params: UpdateFaculty$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return updateFaculty(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateFaculty$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateFaculty(params: UpdateFaculty$Params, context?: HttpContext): Observable<number> {
+    return this.updateFaculty$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
     );
   }
 

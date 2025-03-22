@@ -12,4 +12,5 @@ public class SemesterResponse {
     private int semesterId;
     private SemesterEnum semesterName;
     private int year;
+    private boolean isDeleted;
 }

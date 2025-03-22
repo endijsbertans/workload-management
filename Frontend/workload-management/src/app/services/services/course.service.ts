@@ -12,12 +12,20 @@ import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
 import { CourseResponse } from '../models/course-response';
+import { deleteCourseById } from '../fn/course/delete-course-by-id';
+import { DeleteCourseById$Params } from '../fn/course/delete-course-by-id';
 import { findAllCourses } from '../fn/course/find-all-courses';
 import { FindAllCourses$Params } from '../fn/course/find-all-courses';
 import { findCourseById } from '../fn/course/find-course-by-id';
 import { FindCourseById$Params } from '../fn/course/find-course-by-id';
+import { getCourseCsvTemplate } from '../fn/course/get-course-csv-template';
+import { GetCourseCsvTemplate$Params } from '../fn/course/get-course-csv-template';
 import { saveCourse } from '../fn/course/save-course';
 import { SaveCourse$Params } from '../fn/course/save-course';
+import { updateCourseById } from '../fn/course/update-course-by-id';
+import { UpdateCourseById$Params } from '../fn/course/update-course-by-id';
+import { uploadCourse } from '../fn/course/upload-course';
+import { UploadCourse$Params } from '../fn/course/upload-course';
 
 @Injectable({ providedIn: 'root' })
 export class CourseService extends BaseService {
@@ -75,8 +83,33 @@ export class CourseService extends BaseService {
     );
   }
 
+  /** Path part for operation `uploadCourse()` */
+  static readonly UploadCoursePath = '/course/upload';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `uploadCourse()` instead.
+   *
+   * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
+   */
+  uploadCourse$Response(params?: UploadCourse$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return uploadCourse(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `uploadCourse$Response()` instead.
+   *
+   * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
+   */
+  uploadCourse(params?: UploadCourse$Params, context?: HttpContext): Observable<number> {
+    return this.uploadCourse$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
   /** Path part for operation `findCourseById()` */
-  static readonly FindCourseByIdPath = '/course/{course-id}';
+  static readonly FindCourseByIdPath = '/course/{courseId}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -97,6 +130,81 @@ export class CourseService extends BaseService {
   findCourseById(params: FindCourseById$Params, context?: HttpContext): Observable<CourseResponse> {
     return this.findCourseById$Response(params, context).pipe(
       map((r: StrictHttpResponse<CourseResponse>): CourseResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `deleteCourseById()` */
+  static readonly DeleteCourseByIdPath = '/course/{courseId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteCourseById()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteCourseById$Response(params: DeleteCourseById$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return deleteCourseById(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `deleteCourseById$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteCourseById(params: DeleteCourseById$Params, context?: HttpContext): Observable<number> {
+    return this.deleteCourseById$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
+  /** Path part for operation `updateCourseById()` */
+  static readonly UpdateCourseByIdPath = '/course/{courseId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateCourseById()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateCourseById$Response(params: UpdateCourseById$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return updateCourseById(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateCourseById$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateCourseById(params: UpdateCourseById$Params, context?: HttpContext): Observable<number> {
+    return this.updateCourseById$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
+  /** Path part for operation `getCourseCsvTemplate()` */
+  static readonly GetCourseCsvTemplatePath = '/course/template';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getCourseCsvTemplate()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCourseCsvTemplate$Response(params?: GetCourseCsvTemplate$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
+    return getCourseCsvTemplate(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getCourseCsvTemplate$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCourseCsvTemplate(params?: GetCourseCsvTemplate$Params, context?: HttpContext): Observable<Blob> {
+    return this.getCourseCsvTemplate$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Blob>): Blob => r.body)
     );
   }
 

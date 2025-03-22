@@ -114,6 +114,58 @@
         }
       }
     },
+    "/workload-settings": {
+      "get": {
+        "tags": [
+          "WorkloadSettings"
+        ],
+        "operationId": "findAllWorkloadSettings",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WorkloadSettingsResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "WorkloadSettings"
+        ],
+        "operationId": "saveWorkloadSettings",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkloadSettingsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/teaching-staff": {
       "get": {
         "tags": [
@@ -166,42 +218,29 @@
         }
       }
     },
-    "/statuses": {
-      "get": {
+    "/teaching-staff/upload": {
+      "post": {
         "tags": [
-          "semester-controller"
+          "TeachingStaff"
         ],
-        "operationId": "findAllSemesters",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/SemesterResponse"
+        "operationId": "uploadTeachingStaff",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
                   }
-                }
+                },
+                "required": [
+                  "file"
+                ]
               }
             }
           }
-        }
-      },
-      "post": {
-        "tags": [
-          "semester-controller"
-        ],
-        "operationId": "saveSemester",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SemesterRequest"
-              }
-            }
-          },
-          "required": true
         },
         "responses": {
           "200": {
@@ -270,6 +309,58 @@
         }
       }
     },
+    "/semester": {
+      "get": {
+        "tags": [
+          "semester-controller"
+        ],
+        "operationId": "findAllSemesters",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SemesterResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "semester-controller"
+        ],
+        "operationId": "saveSemester",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SemesterRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/my-class": {
       "get": {
         "tags": [
@@ -306,6 +397,45 @@
             }
           },
           "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/my-class/upload": {
+      "post": {
+        "tags": [
+          "MyClass"
+        ],
+        "operationId": "uploadMyClass",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "required": [
+                  "file"
+                ]
+              }
+            }
+          }
         },
         "responses": {
           "200": {
@@ -410,6 +540,45 @@
             }
           },
           "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/course/upload": {
+      "post": {
+        "tags": [
+          "Course"
+        ],
+        "operationId": "uploadCourse",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "required": [
+                  "file"
+                ]
+              }
+            }
+          }
         },
         "responses": {
           "200": {
@@ -590,7 +759,7 @@
         }
       }
     },
-    "/workload/{workload-id}": {
+    "/workload/{workloadId}": {
       "get": {
         "tags": [
           "Workload"
@@ -598,7 +767,7 @@
         "operationId": "findWorkloadById",
         "parameters": [
           {
-            "name": "workload-id",
+            "name": "workloadId",
             "in": "path",
             "required": true,
             "schema": {
@@ -620,6 +789,36 @@
           }
         }
       },
+      "delete": {
+        "tags": [
+          "Workload"
+        ],
+        "operationId": "deleteWorkloadById",
+        "parameters": [
+          {
+            "name": "workloadId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      },
       "patch": {
         "tags": [
           "Workload"
@@ -627,7 +826,7 @@
         "operationId": "updateWorkloadById",
         "parameters": [
           {
-            "name": "workload-id",
+            "name": "workloadId",
             "in": "path",
             "required": true,
             "schema": {
@@ -661,7 +860,108 @@
         }
       }
     },
-    "/teaching-staff/{tstaff-id}": {
+    "/workload-settings/{semesterId}": {
+      "get": {
+        "tags": [
+          "WorkloadSettings"
+        ],
+        "operationId": "findWorkloadSettingsById",
+        "parameters": [
+          {
+            "name": "semesterId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkloadSettingsResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "WorkloadSettings"
+        ],
+        "operationId": "deleteWorkloadSettingsById",
+        "parameters": [
+          {
+            "name": "semesterId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "WorkloadSettings"
+        ],
+        "operationId": "updateWorkloadSettingsById",
+        "parameters": [
+          {
+            "name": "semesterId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkloadSettingsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/teaching-staff/{tStaffId}": {
       "get": {
         "tags": [
           "TeachingStaff"
@@ -669,7 +969,7 @@
         "operationId": "findTeachingStaffById",
         "parameters": [
           {
-            "name": "tstaff-id",
+            "name": "tStaffId",
             "in": "path",
             "required": true,
             "schema": {
@@ -690,17 +990,15 @@
             }
           }
         }
-      }
-    },
-    "/statuses/{statusTypeId}": {
-      "get": {
+      },
+      "delete": {
         "tags": [
-          "semester-controller"
+          "TeachingStaff"
         ],
-        "operationId": "findSemesterById",
+        "operationId": "deleteTeachingStaffById",
         "parameters": [
           {
-            "name": "statusTypeId",
+            "name": "tStaffId",
             "in": "path",
             "required": true,
             "schema": {
@@ -715,7 +1013,48 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SemesterResponse"
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "TeachingStaff"
+        ],
+        "operationId": "updateTeachingStaffById",
+        "parameters": [
+          {
+            "name": "tStaffId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TeachingStaffRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
                 }
               }
             }
@@ -752,9 +1091,180 @@
             }
           }
         }
+      },
+      "delete": {
+        "tags": [
+          "StatusType"
+        ],
+        "operationId": "deleteStatusTypeById",
+        "parameters": [
+          {
+            "name": "statusTypeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "StatusType"
+        ],
+        "operationId": "updateStatusTypeById",
+        "parameters": [
+          {
+            "name": "statusTypeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StatusTypeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
       }
     },
-    "/my-class/{myclass-id}": {
+    "/semester/{semesterId}": {
+      "get": {
+        "tags": [
+          "semester-controller"
+        ],
+        "operationId": "findSemesterById",
+        "parameters": [
+          {
+            "name": "semesterId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SemesterResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "semester-controller"
+        ],
+        "operationId": "deleteSemesterById",
+        "parameters": [
+          {
+            "name": "semesterId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "semester-controller"
+        ],
+        "operationId": "updateSemesterById",
+        "parameters": [
+          {
+            "name": "semesterId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SemesterRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/my-class/{myClassId}": {
       "get": {
         "tags": [
           "MyClass"
@@ -762,7 +1272,7 @@
         "operationId": "findMyClassById",
         "parameters": [
           {
-            "name": "myclass-id",
+            "name": "myClassId",
             "in": "path",
             "required": true,
             "schema": {
@@ -783,29 +1293,71 @@
             }
           }
         }
-      }
-    },
-    "/my-class/getDegreeEnums": {
-      "get": {
+      },
+      "delete": {
         "tags": [
           "MyClass"
         ],
-        "operationId": "getEnums",
+        "operationId": "deleteMyClassById",
+        "parameters": [
+          {
+            "name": "myClassId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "string",
-                    "enum": [
-                      "BACHELOR",
-                      "MASTER",
-                      "DOCTORATE"
-                    ]
-                  }
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "MyClass"
+        ],
+        "operationId": "updateMyClass",
+        "parameters": [
+          {
+            "name": "myClassId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MyClassRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
                 }
               }
             }
@@ -842,9 +1394,79 @@
             }
           }
         }
+      },
+      "delete": {
+        "tags": [
+          "Faculty"
+        ],
+        "operationId": "deleteFacultyIdById",
+        "parameters": [
+          {
+            "name": "facultyId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Faculty"
+        ],
+        "operationId": "updateFaculty",
+        "parameters": [
+          {
+            "name": "facultyId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FacultyRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
       }
     },
-    "/course/{course-id}": {
+    "/course/{courseId}": {
       "get": {
         "tags": [
           "Course"
@@ -852,7 +1474,7 @@
         "operationId": "findCourseById",
         "parameters": [
           {
-            "name": "course-id",
+            "name": "courseId",
             "in": "path",
             "required": true,
             "schema": {
@@ -868,6 +1490,437 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/CourseResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Course"
+        ],
+        "operationId": "deleteCourseById",
+        "parameters": [
+          {
+            "name": "courseId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Course"
+        ],
+        "operationId": "updateCourseById",
+        "parameters": [
+          {
+            "name": "courseId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CourseRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/academic-rank/{academicRankId}": {
+      "get": {
+        "tags": [
+          "AcademicRank"
+        ],
+        "operationId": "findAcademicRankById",
+        "parameters": [
+          {
+            "name": "academicRankId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AcademicRankResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "AcademicRank"
+        ],
+        "operationId": "deleteAcademicRankById",
+        "parameters": [
+          {
+            "name": "academicRankId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "AcademicRank"
+        ],
+        "operationId": "updateAcademicRankById",
+        "parameters": [
+          {
+            "name": "academicRankId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AcademicRankRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/academic-rank/details/{academicRankDetailsId}": {
+      "get": {
+        "tags": [
+          "AcademicRankDetails"
+        ],
+        "operationId": "findAcademicRankDetailsById",
+        "parameters": [
+          {
+            "name": "academicRankDetailsId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AcademicRankDetailsResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "AcademicRankDetails"
+        ],
+        "operationId": "deleteAcademicRankDetailsById",
+        "parameters": [
+          {
+            "name": "academicRankDetailsId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "AcademicRankDetails"
+        ],
+        "operationId": "updateAcademicRankDetailsById",
+        "parameters": [
+          {
+            "name": "academicRankDetailsId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AcademicRankDetailsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/workload/my-workloads": {
+      "get": {
+        "tags": [
+          "Workload"
+        ],
+        "operationId": "findAllMyWorkloads",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 50
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "teachingStaff.name"
+            }
+          },
+          {
+            "name": "direction",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "asc"
+            }
+          },
+          {
+            "name": "filters",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageResponseObject"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/teaching-staff/template": {
+      "get": {
+        "tags": [
+          "TeachingStaff"
+        ],
+        "operationId": "getTStaffCSVTemplate",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/csv": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/my-class/template": {
+      "get": {
+        "tags": [
+          "MyClass"
+        ],
+        "operationId": "getClassCSVTemplate",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/csv": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/my-class/getDegreeEnums": {
+      "get": {
+        "tags": [
+          "MyClass"
+        ],
+        "operationId": "getEnums",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "BACHELOR",
+                      "MASTER",
+                      "DOCTORATE"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/course/template": {
+      "get": {
+        "tags": [
+          "Course"
+        ],
+        "operationId": "getCourseCSVTemplate",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/csv": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
                 }
               }
             }
@@ -920,68 +1973,6 @@
           }
         }
       }
-    },
-    "/academic-rank/{academic-rank-id}": {
-      "get": {
-        "tags": [
-          "AcademicRank"
-        ],
-        "operationId": "findAcademicRankById",
-        "parameters": [
-          {
-            "name": "academic-rank-id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AcademicRankResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/academic-rank/details/{academic-rank-id}": {
-      "get": {
-        "tags": [
-          "AcademicRankDetails"
-        ],
-        "operationId": "findAcademicRankDetailsById",
-        "parameters": [
-          {
-            "name": "academic-rank-id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AcademicRankDetailsResponse"
-                }
-              }
-            }
-          }
-        }
-      }
     }
   },
   "components": {
@@ -1004,7 +1995,13 @@
             "type": "string"
           },
           "budgetPosition": {
-            "type": "boolean"
+            "type": "string",
+            "enum": [
+              "ZB",
+              "PF",
+              "M",
+              "grant"
+            ]
           },
           "industryCoefficient": {
             "type": "number",
@@ -1024,14 +2021,6 @@
             "type": "integer",
             "format": "int32",
             "minimum": 0
-          },
-          "contactHours": {
-            "type": "number",
-            "format": "double",
-            "minimum": 0
-          },
-          "program": {
-            "type": "boolean"
           },
           "groupForSemesterId": {
             "type": "integer",
@@ -1062,7 +2051,6 @@
           "academicRankId",
           "budgetPosition",
           "comments",
-          "contactHours",
           "courseId",
           "creditPointsPerGroup",
           "groupAmount",
@@ -1070,11 +2058,30 @@
           "includeInBudget",
           "industryCoefficient",
           "myClassIds",
-          "program",
           "semesterId",
           "teachingStaffId",
           "vacationMonths"
         ]
+      },
+      "WorkloadSettingsRequest": {
+        "type": "object",
+        "properties": {
+          "isGlobal": {
+            "type": "boolean"
+          },
+          "settingName": {
+            "type": "string"
+          },
+          "visibleColumns": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "isDefault": {
+            "type": "boolean"
+          }
+        }
       },
       "RegistrationRequest": {
         "type": "object",
@@ -1120,6 +2127,17 @@
           "surname"
         ]
       },
+      "StatusTypeRequest": {
+        "type": "object",
+        "properties": {
+          "statusTypeName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "statusTypeName"
+        ]
+      },
       "SemesterRequest": {
         "type": "object",
         "properties": {
@@ -1138,17 +2156,6 @@
         "required": [
           "semesterName",
           "year"
-        ]
-      },
-      "StatusTypeRequest": {
-        "type": "object",
-        "properties": {
-          "statusTypeName": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "statusTypeName"
         ]
       },
       "MyClassRequest": {
@@ -1209,17 +2216,8 @@
             "type": "number",
             "format": "double"
           },
-          "necessaryAcademicRankId": {
-            "type": "integer",
-            "format": "int32"
-          },
           "registrationType": {
             "type": "string"
-          },
-          "studyLevel": {
-            "type": "integer",
-            "format": "int32",
-            "minimum": 0
           },
           "section": {
             "type": "string"
@@ -1229,10 +2227,8 @@
           "courseCode",
           "courseName",
           "creditPoints",
-          "necessaryAcademicRankId",
           "registrationType",
-          "section",
-          "studyLevel"
+          "section"
         ]
       },
       "AuthenticationRequest": {
@@ -1319,6 +2315,9 @@
           },
           "abbreviation": {
             "type": "string"
+          },
+          "deleted": {
+            "type": "boolean"
           }
         }
       },
@@ -1346,6 +2345,9 @@
           },
           "academicRank": {
             "$ref": "#/components/schemas/AcademicRank"
+          },
+          "deleted": {
+            "type": "boolean"
           }
         }
       },
@@ -1366,18 +2368,14 @@
             "type": "number",
             "format": "double"
           },
-          "necessaryRank": {
-            "$ref": "#/components/schemas/AcademicRank"
-          },
           "registrationType": {
             "type": "string"
           },
-          "studyLevel": {
-            "type": "integer",
-            "format": "int32"
-          },
           "section": {
             "type": "string"
+          },
+          "deleted": {
+            "type": "boolean"
           }
         }
       },
@@ -1393,6 +2391,9 @@
           },
           "facultyFullName": {
             "type": "string"
+          },
+          "deleted": {
+            "type": "boolean"
           }
         }
       },
@@ -1408,33 +2409,9 @@
           },
           "facultyFullName": {
             "type": "string"
-          }
-        }
-      },
-      "MyClass": {
-        "type": "object",
-        "properties": {
-          "classId": {
-            "type": "integer",
-            "format": "int32"
           },
-          "classLevel": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "myClassProgram": {
-            "type": "string"
-          },
-          "degree": {
-            "type": "string",
-            "enum": [
-              "BACHELOR",
-              "MASTER",
-              "DOCTORATE"
-            ]
-          },
-          "classFaculty": {
-            "$ref": "#/components/schemas/Faculty"
+          "deleted": {
+            "type": "boolean"
           }
         }
       },
@@ -1465,6 +2442,9 @@
               "MASTER",
               "DOCTORATE"
             ]
+          },
+          "deleted": {
+            "type": "boolean"
           }
         }
       },
@@ -1518,6 +2498,9 @@
           "semesterYear": {
             "type": "integer",
             "format": "int32"
+          },
+          "deleted": {
+            "type": "boolean"
           }
         }
       },
@@ -1530,6 +2513,9 @@
           },
           "statusTypeName": {
             "type": "string"
+          },
+          "deleted": {
+            "type": "boolean"
           }
         }
       },
@@ -1561,6 +2547,9 @@
           "staffPhoto": {
             "type": "string"
           },
+          "deleted": {
+            "type": "boolean"
+          },
           "staffFullName": {
             "type": "string"
           },
@@ -1589,7 +2578,13 @@
             "type": "string"
           },
           "budgetPosition": {
-            "type": "boolean"
+            "type": "string",
+            "enum": [
+              "ZB",
+              "PF",
+              "M",
+              "grant"
+            ]
           },
           "industryCoefficient": {
             "type": "number",
@@ -1615,9 +2610,6 @@
             "type": "number",
             "format": "double"
           },
-          "program": {
-            "type": "boolean"
-          },
           "groupForSemester": {
             "$ref": "#/components/schemas/MyClassResponse"
           },
@@ -1630,7 +2622,7 @@
           "myClasses": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/MyClass"
+              "$ref": "#/components/schemas/MyClassResponse"
             }
           },
           "creditPointsPerGroup": {
@@ -1656,6 +2648,60 @@
           "monthSum": {
             "type": "number",
             "format": "double"
+          }
+        }
+      },
+      "PageResponseObject": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          }
+        }
+      },
+      "WorkloadSettingsResponse": {
+        "type": "object",
+        "properties": {
+          "settingName": {
+            "type": "string"
+          },
+          "visibleColumns": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "default": {
+            "type": "boolean"
+          },
+          "workloadSettingsId": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -1709,13 +2755,13 @@
           "username": {
             "type": "string"
           },
-          "credentialsNonExpired": {
+          "accountNonLocked": {
             "type": "boolean"
           },
           "accountNonExpired": {
             "type": "boolean"
           },
-          "accountNonLocked": {
+          "credentialsNonExpired": {
             "type": "boolean"
           }
         },
@@ -1760,6 +2806,24 @@
           },
           "rankFullName": {
             "type": "string"
+          },
+          "deleted": {
+            "type": "boolean"
+          }
+        }
+      },
+      "StatusTypeResponse": {
+        "type": "object",
+        "properties": {
+          "statusTypeId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "statusTypeName": {
+            "type": "string"
+          },
+          "deleted": {
+            "type": "boolean"
           }
         }
       },
@@ -1780,18 +2844,9 @@
           "year": {
             "type": "integer",
             "format": "int32"
-          }
-        }
-      },
-      "StatusTypeResponse": {
-        "type": "object",
-        "properties": {
-          "statusTypeId": {
-            "type": "integer",
-            "format": "int32"
           },
-          "statusTypeName": {
-            "type": "string"
+          "deleted": {
+            "type": "boolean"
           }
         }
       },
@@ -1812,18 +2867,14 @@
             "type": "number",
             "format": "double"
           },
-          "necessaryAcademicRank": {
-            "$ref": "#/components/schemas/AcademicRank"
-          },
           "registrationType": {
             "type": "string"
           },
-          "studyLevel": {
-            "type": "integer",
-            "format": "int32"
-          },
           "section": {
             "type": "string"
+          },
+          "deleted": {
+            "type": "boolean"
           }
         }
       },
@@ -1839,6 +2890,9 @@
           },
           "abbreviation": {
             "type": "string"
+          },
+          "deleted": {
+            "type": "boolean"
           }
         }
       },
@@ -1866,6 +2920,9 @@
           },
           "academicRank": {
             "$ref": "#/components/schemas/AcademicRank"
+          },
+          "deleted": {
+            "type": "boolean"
           }
         }
       }

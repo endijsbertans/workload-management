@@ -7,6 +7,7 @@ public class AcademicRankMapper {
         return AcademicRank.builder()
                 .rankName(request.rankName())
                 .abbreviation(request.abbreviation())
+                .isDeleted(false)
                 .build();
     }
 
@@ -15,6 +16,7 @@ public class AcademicRankMapper {
                 .academicRankId(academicRank.getAcademicRankId())
                 .rankName(academicRank.getRankName())
                 .abbreviation(academicRank.getAbbreviation())
+                .isDeleted(academicRank.isDeleted())
                 .build();
     }
 }

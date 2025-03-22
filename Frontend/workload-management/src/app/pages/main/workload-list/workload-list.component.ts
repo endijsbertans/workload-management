@@ -16,6 +16,13 @@ import {WorkloadListSettingsService} from "./workload-list-settings/workload-lis
 import {ShownColumns, WorkloadColumnSettings} from "./workload-list-columns";
 import {ColumnFilterDialogComponent} from "./column-filter-dialog/column-filter-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
+import {EnumTranslationService} from "../../../services/translation/EnumTranslationService";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {WorkloadSettingsResponse} from "../../../services/models/workload-settings-response";
+import {MatOption, MatSelect} from "@angular/material/select";
+import {AsyncPipe} from "@angular/common";
+import {TokenService} from "../../../services/token/token.service";
+
 
 
 
@@ -35,25 +42,38 @@ import {MatDialog} from "@angular/material/dialog";
     RouterOutlet,
     MatPaginator,
     MatProgressSpinner,
-    WorkloadListSettingsComponent,
+    MatSelect,
+    MatOption,
+    AsyncPipe,
   ],
   templateUrl: './workload-list.component.html',
   styleUrl: './workload-list.component.scss'
 })
 export class WorkloadListComponent implements OnInit {
+  private readonly tokenService = inject(TokenService);
+  isAdmin = signal(this.tokenService.isAdmin());
+
+  enumService = inject(EnumTranslationService);
   private readonly workloadService = inject(WorkloadService);
   private readonly router = inject(Router);
   private readonly columnSettingsService = inject(WorkloadListSettingsService);
   private readonly dialog = inject(MatDialog);
+  private readonly _snackBar = inject(MatSnackBar);
   activeFilters: Map<string, {value: string, operator: string}> = new Map();
+  availableSettings$ = this.columnSettingsService.availableSettings$;
 
-  columnsToDisplay? = computed(() => {
-    return this.columnSettingsService.getSettings().filter((column) => column.visible) ?? []
-  });
+  columnsToDisplay = computed(() =>
+    this.columnSettingsService.listSettings()
+      .filter(column => column.visible)
+  );
+  applySettings(setting: WorkloadSettingsResponse) {
+    this.columnSettingsService.applySettings(setting);
+    this.findAllWorkloads();
+  }
   dataSource = new MatTableDataSource<WorkloadResponse>([]);
   workloadResponse?: WorkloadResponse[];
   isLoadingResults = true;
-  clickedWorkloadRow?: WorkloadResponse;
+  clickedWorkloadRow = signal<WorkloadResponse | undefined>(undefined);
   @ViewChild(MatSort) sort!: MatSort;
   length: number | undefined = 50;
   pageSize = 5;
@@ -64,6 +84,7 @@ export class WorkloadListComponent implements OnInit {
   ngOnInit() {
     this.dataSource.sort = this.sort;
     this.findAllWorkloads();
+
     this.setupFiltering();
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
@@ -72,7 +93,6 @@ export class WorkloadListComponent implements OnInit {
     });
   }
   private findAllWorkloads() {
-    // Convert the activeFilters Map to a JSON string
     let filtersJson: string | undefined;
     if (this.activeFilters.size > 0) {
       const filtersObject: Record<string, { value: string, operator: string }> = {};
@@ -81,59 +101,85 @@ export class WorkloadListComponent implements OnInit {
       });
       filtersJson = JSON.stringify(filtersObject);
     }
-
-    this.workloadService.findAllWorkloads({
-      page: this.pageIndex,
-      size: this.pageSize,
-      sort: this.sortColumn.active,
-      direction: this.sortColumn.direction,
-      filters: filtersJson
-    }).subscribe({
-      next: (workloads) => {
-        this.isLoadingResults = true;
-        if (workloads.content) {
-          this.dataSource.data = workloads.content;
-          this.pages = Array(workloads.totalPages)
-            .fill(0)
-            .map((x, i) => i);
-          this.length = workloads.totalElements;
-          console.log(this.pages);
+    if (this.router.url.includes('admin-workload')) {
+      this.workloadService.findAllWorkloads({
+        page: this.pageIndex,
+        size: this.pageSize,
+        sort: this.sortColumn.active,
+        direction: this.sortColumn.direction,
+        filters: filtersJson
+      }).subscribe({
+        next: (workloads) => {
+          this.isLoadingResults = true;
+          if (workloads.content) {
+            this.dataSource.data = workloads.content;
+            this.pages = Array(workloads.totalPages)
+              .fill(0)
+              .map((x, i) => i);
+            this.length = workloads.totalElements;
+            console.log(this.pages);
+          }
+          this.workloadResponse = workloads.content;
+          console.log(this.workloadResponse);
+        },
+        complete: () => {
+          this.isLoadingResults = false;
         }
-        this.workloadResponse = workloads.content;
-        console.log(this.workloadResponse);
-      },
-      complete: () => {
-        this.isLoadingResults = false;
-      }
-    });
+      });
+    } else {
+      this.workloadService.findAllMyWorkloads({
+        page: this.pageIndex,
+        size: this.pageSize,
+        sort: this.sortColumn.active,
+        direction: this.sortColumn.direction,
+        filters: filtersJson
+      }).subscribe({
+        next: (workloads) => {
+          this.isLoadingResults = true;
+          if (workloads.content) {
+            this.dataSource.data = workloads.content;
+            this.pages = Array(workloads.totalPages)
+              .fill(0)
+              .map((x, i) => i);
+            this.length = workloads.totalElements;
+            console.log(this.pages);
+          }
+          this.workloadResponse = workloads.content;
+          console.log(this.workloadResponse);
+        },
+        complete: () => {
+          this.isLoadingResults = false;
+        }
+      });
+    }
   }
 
-  getNestedProperty(obj: any, col: WorkloadColumnSettings) {
+
+  getNestedProperty(obj: any, col: WorkloadColumnSettings, defaultValue: any = "") {
     if (col.collection.includes("columnsForWorkloadClasses")) {
       let result: string[] = [];
       let val = this.digInObject(obj, "myClasses");
-      val.forEach(function (val: any) {
-          result.push(val?.[col.pathTo]);
+      val.forEach(function(val: any) {
+        result.push(val?.[col.pathTo]);
       });
       return result.join(', ');
     }
-    return this.digInObject(obj, col.pathTo);
+
+    const value = this.digInObject(obj, col.pathTo, defaultValue);
+    if (col.pathTo === 'budgetPosition' && value) {
+      return this.enumService.translate('budgetPosition', value);
+    }
+
+    return value;
   }
   digInObject(obj: any, key: string, defaultValue: any = "") {
     return key.split('.')
       .reduce((acc, part) => acc?.[part], obj) ?? defaultValue;
   }
   mapDisplayedColumns(): string[] {
-    if (this.columnsToDisplay) {
-      return this.columnsToDisplay().map(col => col.pathTo);
-    }
-    return [];
+    return this.columnsToDisplay().map(col => col.pathTo);
   }
-  clickEvent(event: MouseEvent, name: string) {
-    event.preventDefault();
-    event.stopPropagation();
-    this.columnSettingsService.hideWorkloadGroup(name as keyof ShownColumns);
-  }
+
 
 
   applyFilter(event: Event) {
@@ -157,8 +203,6 @@ export class WorkloadListComponent implements OnInit {
         (data.course?.courseCode?.toLowerCase().includes(lowercaseFilter) ?? false) ||
         (data.course?.registrationType?.toLowerCase().includes(lowercaseFilter) ?? false) ||
         (data.course?.section?.toLowerCase().includes(lowercaseFilter) ?? false) ||
-        (data.course?.necessaryRank?.rankName?.toLowerCase().includes(lowercaseFilter) ?? false) ||
-
         // Teaching Staff filtering
         (data.teachingStaff?.staffFullName?.toLowerCase().includes(lowercaseFilter) ?? false) ||
         (data.teachingStaff?.positionTitle?.toLowerCase().includes(lowercaseFilter) ?? false) ||
@@ -189,13 +233,18 @@ export class WorkloadListComponent implements OnInit {
   }
 
   clickedRow(row: WorkloadResponse) {
-    this.clickedWorkloadRow = row;
-    this.router.navigate(['/main/workload/edit-workload', row.workloadId]);
-
+    if(row.workloadId === this.clickedWorkloadRow()?.workloadId) {
+      this.clickedWorkloadRow.set(undefined);
+      return;
+    }
+    this.clickedWorkloadRow.set(row);
+  }
+  onEditWorkload(){
+    this.router.navigate(['/main/admin-workload/edit-workload', this.clickedWorkloadRow()?.workloadId]);
   }
 
   isClicked(row: WorkloadResponse):boolean {
-    if(row.workloadId == this.clickedWorkloadRow?.workloadId) {
+    if(row.workloadId == this.clickedWorkloadRow()?.workloadId) {
       return true;
     }
     return false
@@ -230,5 +279,41 @@ export class WorkloadListComponent implements OnInit {
   }
   isColumnFiltered(columnPath: string): boolean {
     return this.activeFilters.has(columnPath);
+  }
+
+  onDeleteWorkload() {
+    const id = this.clickedWorkloadRow()?.workloadId;
+    if(id){
+    this.workloadService.deleteWorkloadById({workloadId: id}).subscribe({
+      next: workload => {
+        if (workload) {
+          this._snackBar.open("Dzēsts", "Aizvērt", { duration: 5000 });
+          this.findAllWorkloads();
+        }
+      },
+      error: (err) => {
+        console.log(err);
+        this._snackBar.open(err.error.errorMsg, "Aizvērt", { duration: 5000 });
+        this.router.navigate(['/main/admin-workload'], { replaceUrl: true });
+      }
+    });
+    }
+    }
+
+  isDeleted(element: any, col: WorkloadColumnSettings) {
+    const path = col.pathTo;
+
+    if (!path.includes('.')) {
+      return false;
+    }
+
+    const parts = path.split('.');
+
+    // Remove the last part to get the path to the parent object
+    const parentPath = parts.slice(0, -1).join('.');
+    // gets object
+    const parentObject = this.digInObject(element, parentPath);
+
+    return parentObject?.deleted ?? false;
   }
 }

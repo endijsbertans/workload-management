@@ -26,12 +26,8 @@ public class Course {
 
     private double creditPoints;
 
-    @ManyToOne
-    private AcademicRank necessaryRank;
-
     private String registrationType;
-
-    private int studyLevel;
     
     private String section;
+    private boolean isDeleted;
 }

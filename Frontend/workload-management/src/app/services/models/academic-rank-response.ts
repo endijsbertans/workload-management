@@ -5,5 +5,6 @@
 export interface AcademicRankResponse {
   abbreviation?: string;
   academicRankId?: number;
+  deleted?: boolean;
   rankName?: string;
 }

@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import workloadmanagement.teachingstaff.TeachingStaffRequest;
 
 import java.util.List;
 
@@ -18,6 +19,19 @@ public class StatusTypeController {
     public ResponseEntity<Integer> saveStatusType(
             @Valid @RequestBody StatusTypeRequest request){
         return ResponseEntity.ok(statusTypeService.save(request));
+    }
+    @PatchMapping("{statusTypeId}")
+    public ResponseEntity<Integer> updateStatusTypeById(
+            @PathVariable Integer statusTypeId,
+            @Valid @RequestBody StatusTypeRequest request
+    ){
+        return ResponseEntity.ok(statusTypeService.update(statusTypeId, request));
+    }
+    @DeleteMapping("{statusTypeId}")
+    public ResponseEntity<Integer> deleteStatusTypeById(
+            @PathVariable Integer statusTypeId
+    ){
+        return ResponseEntity.ok(statusTypeService.delete(statusTypeId));
     }
     @GetMapping("{statusTypeId}")
     public ResponseEntity<StatusTypeResponse> findStatusTypeById(

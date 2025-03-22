@@ -46,6 +46,7 @@ public class TeachingStaff {
     private String positionTitle;
 
     private String staffPhoto;
+    private boolean isDeleted;
     @Transient
     public String getStaffFullName(){
         return name + " " + surname;
@@ -54,4 +55,5 @@ public class TeachingStaff {
     public String getRankFullName(){
         return positionTitle + " " + getStaffFullName();
     }
+
 }

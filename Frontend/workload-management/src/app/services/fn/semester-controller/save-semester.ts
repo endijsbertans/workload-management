@@ -30,4 +30,4 @@ export function saveSemester(http: HttpClient, rootUrl: string, params: SaveSeme
   );
 }
 
-saveSemester.PATH = '/statuses';
+saveSemester.PATH = '/semester';

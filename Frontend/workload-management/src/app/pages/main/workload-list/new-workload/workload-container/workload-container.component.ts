@@ -45,7 +45,7 @@ export class WorkloadContainerComponent implements OnInit{
               return EMPTY;
             }
             this.currentWorkloadId = id;
-            return this.workloadService.findWorkloadById({ "workload-id": id });
+            return this.workloadService.findWorkloadById({ workloadId: id });
           })
         );
       })
@@ -67,7 +67,7 @@ export class WorkloadContainerComponent implements OnInit{
 
   handleFormSubmit(request: WorkloadRequest) {
     if (this.editMode && this.currentWorkloadId) {
-      this.workloadService.updateWorkloadById({"workload-id": this.currentWorkloadId, body: request }).subscribe({
+      this.workloadService.updateWorkloadById({workloadId: this.currentWorkloadId, body: request }).subscribe({
         next: id => {
           console.log('Updated workload id:', id);
           this.router.navigate(['/main/workload'], {replaceUrl: true });

@@ -13,8 +13,7 @@ public class CourseResponse {
     private String courseCode;
     private String courseName;
     private double creditPoints;
-    private AcademicRank necessaryAcademicRank;
     private String registrationType;
-    private int studyLevel;
     private String section;
+    private boolean isDeleted;
 }

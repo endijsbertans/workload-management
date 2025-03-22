@@ -15,19 +15,29 @@ public class MyClassMapper {
         return MyClass.builder()
                 .classLevel(request.classLevel())
                 .classFaculty(faculty)
-                .myClassProgram(request.myClassProgram())
+                .classProgram(request.myClassProgram())
                 .degree(request.degree())
+                .isDeleted(false)
                 .build();
     }
-
+    public MyClass toMyClass(MyClassCsvRepresentation request, Faculty faculty){
+        return MyClass.builder()
+                .classLevel(request.classLevel)
+                .classFaculty(faculty)
+                .classProgram(request.myClassProgram)
+                .degree(request.degree)
+                .isDeleted(false)
+                .build();
+    }
     public MyClassResponse toMyClassResponse(MyClass myClass){
         return MyClassResponse.builder()
                 .classId(myClass.getClassId())
                 .classLevel(myClass.getClassLevel())
                 .classFaculty(facultyMapper.toFacultyResponse(myClass.getClassFaculty()))
-                .myClassProgram(myClass.getMyClassProgram())
+                .classProgram(myClass.getClassProgram())
                 .classLevelAndProgram(myClass.classLevelAndProgram())
                 .degree(myClass.getDegree())
+                .isDeleted(myClass.isDeleted())
                 .build();
     }
 }

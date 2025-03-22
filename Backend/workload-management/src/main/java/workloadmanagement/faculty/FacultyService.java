@@ -1,5 +1,6 @@
 package workloadmanagement.faculty;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import workloadmanagement.repo.IFacultyRepo;
@@ -16,6 +17,12 @@ public class FacultyService {
         Faculty faculty = facultyMapper.toFaculty(request);
         return facultyRepo.save(faculty).getFacultyId();
     }
+    public Integer update(Integer myclassId, @Valid FacultyRequest request) {
+        Faculty existingFaculty = findFacultyFromResponseId(myclassId);
+        Faculty updatedFaculty = facultyMapper.toFaculty(request);
+        updatedFaculty.setFacultyId(existingFaculty.getFacultyId());
+        return facultyRepo.save(updatedFaculty).getFacultyId();
+    }
 
     public FacultyResponse findFacultyById(Integer facultyId) {
         return facultyRepo.findById(facultyId)
@@ -27,9 +34,17 @@ public class FacultyService {
                 .orElseThrow(() -> new RuntimeException("Faculty with id: " + id + " not found."));
     }
     public List<FacultyResponse> findAllFaculties() {
-        List<Faculty> faculties = (List<Faculty>) facultyRepo.findAll();
+        List<Faculty> faculties = facultyRepo.findByIsDeletedFalse();
         return faculties.stream()
                 .map(facultyMapper::toFacultyResponse)
                 .toList();
+    }
+
+
+    public Integer delete(Integer facultyId) {
+        Faculty faculty = findFacultyFromResponseId(facultyId);
+        faculty.setDeleted(true);
+        facultyRepo.save(faculty);
+        return facultyId;
     }
 }

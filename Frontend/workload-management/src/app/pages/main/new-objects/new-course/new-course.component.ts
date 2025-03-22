@@ -1,51 +1,46 @@
 import {Component, DestroyRef, EventEmitter, inject, OnInit, Output, signal} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatButton} from "@angular/material/button";
-import {ActivatedRoute, Router, RouterLink} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
-import {AcademicRankService} from "../../../../services/services/academic-rank.service";
-
-import {AcademicRankResponse} from "../../../../services/models/academic-rank-response";
-import {MatOption} from "@angular/material/core";
-import {MatSelect} from "@angular/material/select";
 import {CourseService} from "../../../../services/services";
 import {CourseRequest} from "../../../../services/models/course-request";
 import {MatSnackBar} from "@angular/material/snack-bar";
-
+import {MatProgressBar} from "@angular/material/progress-bar";
 
 
 @Component({
   selector: 'app-new-course',
   imports: [
     MatButton,
-    RouterLink,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInput,
-    MatOption,
-    MatSelect,
+    MatProgressBar,
   ],
   templateUrl: './new-course.component.html',
   standalone: true,
   styleUrls: ['./new-course.component.scss', '../new-object-style.scss']
 })
-export class NewCourseComponent implements OnInit{
+export class NewCourseComponent implements OnInit {
   @Output() emitCourse = new EventEmitter<number>();
   private readonly router = inject(Router);
   private readonly activeRoute = inject(ActivatedRoute);
   private readonly destroyRef = inject(DestroyRef);
-  academicRankService = inject(AcademicRankService)
   courseService = inject(CourseService);
   private readonly _snackBar = inject(MatSnackBar);
 
-  academicRanks = signal<AcademicRankResponse[] | undefined>(undefined);
+
   errorMessage = signal('');
-  //TODO THIS WONT WORK
+  editMode = signal(false);
+  objectId = signal<number | undefined>(undefined);
+  pageTitle = signal('Pievienot jaunu kursu');
   errorMsg: Array<string> = [];
-
-  courseRequest?: CourseRequest;
-
+  selectedFile: any;
+  fileLoading = signal(false);
+  fileContent: string | null = null;
+  bulkMode = signal(false);
   courseForm = new FormGroup({
     name: new FormControl('', {
       validators: [
@@ -57,7 +52,7 @@ export class NewCourseComponent implements OnInit{
         Validators.minLength(3),
         Validators.required],
     }),
-    creditPoints: new FormControl(undefined, {
+    creditPoints: new FormControl(1, {
       validators: [
         Validators.required],
     }),
@@ -70,71 +65,107 @@ export class NewCourseComponent implements OnInit{
       validators: [
         Validators.minLength(3),
         Validators.required],
-    }),
-    studyLevel: new FormControl<number | undefined>(undefined, {
-      validators: [
-        Validators.required],
-    }),
-    academicRankId: new FormControl<number | undefined>(undefined, {
-      validators: [
-        Validators.required],
-    }),
+    })
   });
-  ngOnInit(): void {
-    this.fetchAcademicRanks()
-  }
-  onSubmit() {
-    console.log(this.courseForm.controls);
-    if (this.courseForm.value.name &&
-      this.courseForm.value.courseCode &&
-      this.courseForm.value.creditPoints &&
-      this.courseForm.value.registrationType &&
-      this.courseForm.value.section &&
-      this.courseForm.value.studyLevel &&
-      this.courseForm.value.academicRankId
-    ) {
-      this.courseRequest = {
-        courseName: this.courseForm.value.name,
-        courseCode: this.courseForm.value.courseCode,
-        creditPoints: this.courseForm.value.creditPoints,
-        registrationType: this.courseForm.value.registrationType,
-        section: this.courseForm.value.section,
-        studyLevel: this.courseForm.value.studyLevel,
-        necessaryAcademicRankId: this.courseForm.value.academicRankId
-      };
 
-      this.courseService.saveCourse({
-        body: this.courseRequest
-      }).subscribe({
-        next: (id) => {
-          this.emitCourse.emit( id );
-          this._snackBar.open("Saglabāts", "Aizvērt", { duration: 5000 });
-        },
-        error: (err) => {
-          console.log(err.error.validationErrors);
-          this._snackBar.open(err.error.errorMsg, "Aizvērt", { duration: 5000 });
-        }
-      })
-     }
+  ngOnInit(): void {
+    this.activeRoute.params.subscribe(params => {
+      if (params['id']) {
+        this.objectId.set(+params['id']);
+        this.editMode.set(true);
+        this.pageTitle.set('Rediģēt kursu');
+        this.loadCourseData(this.objectId());
+      }
+    });
+  }
+
+  private loadCourseData(id: number | undefined): void {
+    if (!id) return;
+    this.courseService.findCourseById({courseId: id}).subscribe({
+      next: (course) => {
+        this.courseForm.patchValue({
+          name: course.courseName,
+          courseCode: course.courseCode,
+          creditPoints: course.creditPoints,
+          registrationType: course.registrationType,
+          section: course.section,
+        });
+      },
+      error: (err) => {
+        this._snackBar.open("Neizdevās ielādēt datus", "Aizvērt", {duration: 5000});
+        console.error(err);
+      }
+    });
+  }
+
+  onSubmit() {
+    if (this.courseForm.valid) {
+      const formData = this.prepareFormData();
+
+      if (this.editMode()) {
+        this.updateCourse(formData);
+      } else {
+        this.createCourse(formData);
+      }
+    }
+  }
+
+  private prepareFormData(): CourseRequest {
+    return {
+      courseName: this.courseForm.value.name!,
+      courseCode: this.courseForm.value.courseCode!,
+      creditPoints: this.courseForm.value.creditPoints!,
+      registrationType: this.courseForm.value.registrationType!,
+      section: this.courseForm.value.section!,
+    };
+  }
+
+  createCourse(data: CourseRequest) {
+    this.courseService.saveCourse({
+      body: data
+    }).subscribe({
+      next: (id) => {
+        this.emitCourse.emit(id);
+        this._snackBar.open("Saglabāts", "Aizvērt", {duration: 5000});
+        this.navigateBackFromCreateMode();
+      },
+      error: (err) => {
+        this._snackBar.open(err.error.errorMsg, "Aizvērt", {duration: 5000});
+      }
+    });
+  }
+
+  private updateCourse(data: CourseRequest): void {
+    const id = this.objectId();
+    if (id === undefined) return;
+
+    this.courseService.updateCourseById({"courseId": id, body: data}).subscribe({
+      next: () => {
+        this._snackBar.open("Izmaiņas saglabātas", "Aizvērt", {duration: 5000});
+        this.navigateBackFromEditMode();
+      },
+      error: (err) => {
+        console.error(err);
+        this._snackBar.open(err.error.errorMsg || "Kļūda atjaunojot kursu", "Aizvērt", {duration: 5000});
+      }
+    });
+  }
+
+  public navigateBackFromEditMode(): void {
+    this.router.navigate(['../../'], {
+      relativeTo: this.activeRoute,
+      replaceUrl: true
+    });
+  }
+
+  public navigateBackFromCreateMode(): void {
     this.router.navigate(['..'], {
       relativeTo: this.activeRoute,
-      replaceUrl: true});
+      replaceUrl: true
+    });
   }
-  private fetchAcademicRanks(){
-      const subscription = this.academicRankService.findAllAcademicRank().subscribe({
-        next: (ranks) => {
-          if (ranks) {
-            this.academicRanks.set(ranks);
-          }
-        },
-        error: (err) => {
-          console.log(err);
-        }
-      });
-      this.destroyRef.onDestroy(() => {
-        subscription.unsubscribe();
-      });
-    }
+
+
 
   updateErrorMessage(controlName: keyof typeof this.courseForm.controls) {
     const control = this.courseForm.controls[controlName];
@@ -155,5 +186,80 @@ export class NewCourseComponent implements OnInit{
     } else {
       this.errorMessage.set('');
     }
+  }
+
+
+  onSelectBulkMode() {
+    this.pageTitle.set("pievienot no faila");
+    this.bulkMode.set(true);
+  }
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    if (!file.name.endsWith('.csv')) {
+      this._snackBar.open("Lūdzu atlasiet CSV failu", "Aizvērt", {duration: 5000});
+      return;
+    }
+
+    this.fileLoading.set(true);
+    this.selectedFile = file;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.fileContent = reader.result as string;
+      this.fileLoading.set(false);
+    };
+    reader.onerror = () => {
+      this._snackBar.open("Kļūda nolasot failu", "Aizvērt", {duration: 5000});
+      this.fileLoading.set(false);
+      this.selectedFile = null;
+    };
+    reader.readAsText(file);
+  }
+
+  submitFileToBackend() {
+    if (!this.selectedFile) return;
+
+    this.fileLoading.set(true);
+
+    this.courseService.uploadCourse({
+      body: {
+        file: this.selectedFile
+      }
+    }).subscribe({
+      next: (response) => {
+        this._snackBar.open(response + " Kursi veiksmīgi pievienoti", "Aizvērt", {duration: 5000});
+        this.navigateBackFromCreateMode();
+        this.fileLoading.set(false);
+      },
+      error: (err) => {
+        this._snackBar.open(err.error.errorMsg, "Aizvērt", {duration: 5000});
+        this.fileLoading.set(false);
+      }
+    });
+  }
+  downloadCsv() {
+    this.fileLoading.set(true);
+    this.courseService.getCourseCsvTemplate().subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'course_import_template.csv';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        a.remove();
+      },
+      complete: () => {
+        this._snackBar.open( "Ielāde veiksmīga", "Aizvērt", {duration: 5000});
+        this.fileLoading.set(false);
+      },
+      error: (err) => {
+        this._snackBar.open(err.error.errorMsg, "Aizvērt", {duration: 5000});
+        this.fileLoading.set(false);
+      }
+    });
   }
 }

@@ -58,3 +58,11 @@ $orange-header: #ECCA9C !important;
 .mat-mdc-row:hover .mat-mdc-cell {
   border-color: black;
 }
+#deleteButton{
+  background-color: var(--mat-sys-error);
+  color: var(--mat-sys-on-error)
+}
+.row-is-deleted{
+  background-color: var(--mat-sys-error);
+  color: var(--mat-sys-on-error);
+}

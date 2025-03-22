@@ -11,10 +11,15 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { deleteWorkloadById } from '../fn/workload/delete-workload-by-id';
+import { DeleteWorkloadById$Params } from '../fn/workload/delete-workload-by-id';
+import { findAllMyWorkloads } from '../fn/workload/find-all-my-workloads';
+import { FindAllMyWorkloads$Params } from '../fn/workload/find-all-my-workloads';
 import { findAllWorkloads } from '../fn/workload/find-all-workloads';
 import { FindAllWorkloads$Params } from '../fn/workload/find-all-workloads';
 import { findWorkloadById } from '../fn/workload/find-workload-by-id';
 import { FindWorkloadById$Params } from '../fn/workload/find-workload-by-id';
+import { PageResponseObject } from '../models/page-response-object';
 import { PageResponseWorkloadResponse } from '../models/page-response-workload-response';
 import { saveWorkload } from '../fn/workload/save-workload';
 import { SaveWorkload$Params } from '../fn/workload/save-workload';
@@ -79,7 +84,7 @@ export class WorkloadService extends BaseService {
   }
 
   /** Path part for operation `findWorkloadById()` */
-  static readonly FindWorkloadByIdPath = '/workload/{workload-id}';
+  static readonly FindWorkloadByIdPath = '/workload/{workloadId}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -103,8 +108,33 @@ export class WorkloadService extends BaseService {
     );
   }
 
+  /** Path part for operation `deleteWorkloadById()` */
+  static readonly DeleteWorkloadByIdPath = '/workload/{workloadId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteWorkloadById()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteWorkloadById$Response(params: DeleteWorkloadById$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return deleteWorkloadById(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `deleteWorkloadById$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteWorkloadById(params: DeleteWorkloadById$Params, context?: HttpContext): Observable<number> {
+    return this.deleteWorkloadById$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
   /** Path part for operation `updateWorkloadById()` */
-  static readonly UpdateWorkloadByIdPath = '/workload/{workload-id}';
+  static readonly UpdateWorkloadByIdPath = '/workload/{workloadId}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -125,6 +155,31 @@ export class WorkloadService extends BaseService {
   updateWorkloadById(params: UpdateWorkloadById$Params, context?: HttpContext): Observable<number> {
     return this.updateWorkloadById$Response(params, context).pipe(
       map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
+  /** Path part for operation `findAllMyWorkloads()` */
+  static readonly FindAllMyWorkloadsPath = '/workload/my-workloads';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `findAllMyWorkloads()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findAllMyWorkloads$Response(params?: FindAllMyWorkloads$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseObject>> {
+    return findAllMyWorkloads(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `findAllMyWorkloads$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findAllMyWorkloads(params?: FindAllMyWorkloads$Params, context?: HttpContext): Observable<PageResponseObject> {
+    return this.findAllMyWorkloads$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PageResponseObject>): PageResponseObject => r.body)
     );
   }
 

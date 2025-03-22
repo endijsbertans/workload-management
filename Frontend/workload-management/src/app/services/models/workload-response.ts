@@ -4,13 +4,12 @@
 
 import { AcademicRankDetails } from '../models/academic-rank-details';
 import { Course } from '../models/course';
-import { MyClass } from '../models/my-class';
 import { MyClassResponse } from '../models/my-class-response';
 import { Semester } from '../models/semester';
 import { TeachingStaff } from '../models/teaching-staff';
 export interface WorkloadResponse {
   academicRankDetails?: AcademicRankDetails;
-  budgetPosition?: boolean;
+  budgetPosition?: 'ZB' | 'PF' | 'M' | 'grant';
   comments?: string;
   contactHours?: number;
   course?: Course;
@@ -23,8 +22,7 @@ export interface WorkloadResponse {
   includeInBudget?: string;
   industryCoefficient?: number;
   monthSum?: number;
-  myClasses?: Array<MyClass>;
-  program?: boolean;
+  myClasses?: Array<MyClassResponse>;
   programCoefficient?: number;
   salaryPerMonth?: number;
   semester?: Semester;

@@ -1,7 +1,7 @@
 <div class="backdrop"></div>
 <dialog open>
   <form [formGroup]="statusTypeForm" (ngSubmit)="onSubmit()">
-    <h2>Pievienot jaunu klasi</h2>
+    <h2>{{ pageTitle() }}</h2>
 
     <mat-form-field appearance="outline">
       @if (statusTypeForm.controls.statusTypeName.invalid) {
@@ -18,8 +18,13 @@
     </mat-form-field>
 
     <div class="action-wrapper">
-      <button mat-raised-button type="button" routerLink="..">Cancel</button>
-      <button mat-raised-button type="Submit" [disabled]="statusTypeForm.invalid">Create</button>
+      @if(editMode()){
+        <button mat-raised-button type="button" (click)="navigateBackFromEditMode()" >Atcelt</button>
+        <button mat-raised-button type="submit" [disabled]="statusTypeForm.invalid">Rediģēt</button>
+      }@else{
+        <button mat-raised-button type="button" (click)="navigateBackFromCreateMode()" >Atcelt</button>
+        <button mat-raised-button type="submit" [disabled]="statusTypeForm.invalid">Izveidot</button>
+      }
     </div>
   </form>
 </dialog>

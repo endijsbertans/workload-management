@@ -11,6 +11,8 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { deleteSemesterById } from '../fn/semester-controller/delete-semester-by-id';
+import { DeleteSemesterById$Params } from '../fn/semester-controller/delete-semester-by-id';
 import { findAllSemesters } from '../fn/semester-controller/find-all-semesters';
 import { FindAllSemesters$Params } from '../fn/semester-controller/find-all-semesters';
 import { findSemesterById } from '../fn/semester-controller/find-semester-by-id';
@@ -18,6 +20,8 @@ import { FindSemesterById$Params } from '../fn/semester-controller/find-semester
 import { saveSemester } from '../fn/semester-controller/save-semester';
 import { SaveSemester$Params } from '../fn/semester-controller/save-semester';
 import { SemesterResponse } from '../models/semester-response';
+import { updateSemesterById } from '../fn/semester-controller/update-semester-by-id';
+import { UpdateSemesterById$Params } from '../fn/semester-controller/update-semester-by-id';
 
 @Injectable({ providedIn: 'root' })
 export class SemesterControllerService extends BaseService {
@@ -26,7 +30,7 @@ export class SemesterControllerService extends BaseService {
   }
 
   /** Path part for operation `findAllSemesters()` */
-  static readonly FindAllSemestersPath = '/statuses';
+  static readonly FindAllSemestersPath = '/semester';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -51,7 +55,7 @@ export class SemesterControllerService extends BaseService {
   }
 
   /** Path part for operation `saveSemester()` */
-  static readonly SaveSemesterPath = '/statuses';
+  static readonly SaveSemesterPath = '/semester';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -76,7 +80,7 @@ export class SemesterControllerService extends BaseService {
   }
 
   /** Path part for operation `findSemesterById()` */
-  static readonly FindSemesterByIdPath = '/statuses/{statusTypeId}';
+  static readonly FindSemesterByIdPath = '/semester/{semesterId}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -97,6 +101,56 @@ export class SemesterControllerService extends BaseService {
   findSemesterById(params: FindSemesterById$Params, context?: HttpContext): Observable<SemesterResponse> {
     return this.findSemesterById$Response(params, context).pipe(
       map((r: StrictHttpResponse<SemesterResponse>): SemesterResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `deleteSemesterById()` */
+  static readonly DeleteSemesterByIdPath = '/semester/{semesterId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteSemesterById()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteSemesterById$Response(params: DeleteSemesterById$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return deleteSemesterById(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `deleteSemesterById$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteSemesterById(params: DeleteSemesterById$Params, context?: HttpContext): Observable<number> {
+    return this.deleteSemesterById$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
+  /** Path part for operation `updateSemesterById()` */
+  static readonly UpdateSemesterByIdPath = '/semester/{semesterId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateSemesterById()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateSemesterById$Response(params: UpdateSemesterById$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return updateSemesterById(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateSemesterById$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateSemesterById(params: UpdateSemesterById$Params, context?: HttpContext): Observable<number> {
+    return this.updateSemesterById$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
     );
   }
 

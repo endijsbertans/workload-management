@@ -3,7 +3,8 @@ import {
   DestroyRef,
   EventEmitter,
   inject,
-  Input, OnInit,
+  Input,
+  OnInit,
   Output,
   signal,
   SimpleChanges,
@@ -13,7 +14,7 @@ import {WorkloadRequest} from "../../../../../services/models/workload-request";
 import {WorkloadResponse} from "../../../../../services/models/workload-response";
 import {ReplaySubject, Subject, takeUntil} from "rxjs";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatError, MatFormField, MatLabel, MatOption, MatSelect} from "@angular/material/select";
 import {TeachingStaffResponse} from "../../../../../services/models/teaching-staff-response";
 import {CourseResponse} from "../../../../../services/models/course-response";
@@ -35,6 +36,7 @@ import {MatInput} from "@angular/material/input";
 import {MatSlideToggle} from "@angular/material/slide-toggle";
 import {NgxMatSelectSearchModule} from "ngx-mat-select-search";
 import {RouterLink, RouterOutlet} from "@angular/router";
+import {BudgetPosition, EnumTranslationService} from "../../../../../services/translation/EnumTranslationService";
 
 @Component({
   selector: 'app-workload-form',
@@ -51,7 +53,8 @@ import {RouterLink, RouterOutlet} from "@angular/router";
     NgxMatSelectSearchModule,
     ReactiveFormsModule,
     RouterLink,
-    RouterOutlet
+    RouterOutlet,
+    FormsModule
   ],
   templateUrl: './workload-form.component.html',
   standalone: true,
@@ -62,7 +65,7 @@ export class WorkloadFormComponent implements OnInit {
   @Input() editMode: boolean | undefined;
   @Output() formSubmit = new EventEmitter<WorkloadRequest>();
 
-
+  moreSettings = signal(false);
   errorMsg = signal('');
   tStaff = signal<TeachingStaffResponse[] | undefined>(undefined);
   courses = signal<CourseResponse[] | undefined>(undefined);
@@ -83,11 +86,12 @@ export class WorkloadFormComponent implements OnInit {
   public filteredCourses = new ReplaySubject<CourseResponse[]>(1);
   public filteredMyClasses = new ReplaySubject<MyClassResponse[]>(1);
   protected _onDestroy = new Subject<void>();
-
+  budgetPositions: BudgetPosition[] | undefined;
+  enumService = inject(EnumTranslationService);
   // Defined form
   workloadForm = new FormGroup({
     semesterCtrl: new FormControl<number | null>(null, [Validators.required]),
-    tStaffCtrl: new FormControl<number | null>(null, [Validators.required]),
+    tStaffCtrl: new FormControl<number | undefined>(undefined, [Validators.required]),
     tStaffFilterCtrl: new FormControl<string>(''),
     courseCtrl: new FormControl<number | null>(null, [Validators.required]),
     courseFilterCtrl: new FormControl<string>(''),
@@ -95,13 +99,14 @@ export class WorkloadFormComponent implements OnInit {
     myClassFilterCtrl: new FormControl<string>(''),
     academicRankCtrl: new FormControl<number | null>(null, [Validators.required]),
     cpForGroupCtrl: new FormControl<number | null>(null, [Validators.required]),
-    includeInBudgetCtrl: new FormControl<string | null>(null, [Validators.required]),
-    budgetPositionCtrl: new FormControl<boolean>(false, [Validators.required]),
-    industryCoefficientCtrl: new FormControl<number | null>(null, [Validators.required]),
+    includeInBudgetCtrl: new FormControl<string | null>('1', [Validators.required]),
+    budgetPositionCtrl: new FormControl<BudgetPosition | undefined>(undefined, {
+      validators: [
+        Validators.required],
+    }),
+    industryCoefficientCtrl: new FormControl<number>(1, [Validators.required]),
     vacationMonthsCtrl: new FormControl<number>(0, [Validators.required]),
     groupAmountCtrl: new FormControl<number | null>(null, [Validators.required]),
-    contactHoursCtrl: new FormControl<number | null>(null, [Validators.required]),
-    programCtrl: new FormControl<boolean | null>(false, [Validators.required]),
     groupForSemesterCtrl: new FormControl<number | null>(null, [Validators.required]),
     commentsCtrl: new FormControl<string | null>(null, [Validators.required]),
   });
@@ -113,16 +118,13 @@ export class WorkloadFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // fetch data for dropdowns
     this.fetchAllTeachingStaff();
     this.fetchSemesters();
     this.fetchAllClasses();
     this.fetchAllCourses();
     this.fetchAllAcademicRanks();
-
-    // If editing, prefill the form with the workload data
-
-    // initialize dropdowns
+    this.budgetPositions = Object.values(this.enumService.enumTypes.budgetPositions);
+    // initialize filters in dropdowns
     this.workloadForm.controls.tStaffFilterCtrl.valueChanges
       .pipe(takeUntil(this._onDestroy))
       .subscribe(() => this.filterTeachingStaff());
@@ -132,8 +134,24 @@ export class WorkloadFormComponent implements OnInit {
     this.workloadForm.controls.myClassFilterCtrl.valueChanges
       .pipe(takeUntil(this._onDestroy))
       .subscribe(() => this.filterMyClasses());
-  }
+    this.workloadForm.controls.tStaffCtrl.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe({
+        next: id => {
+          console.log(id);
+          if (!id) return;
+          const selectedStaff = this.tStaff()?.find(val => val.teachingStaffId === Number(id));
+          console.log('Selected staff:', selectedStaff);
+          if (selectedStaff?.status?.statusTypeName === "ievēlētie") {
+            console.log('Setting vacation months to 2');
+            this.workloadForm.controls.vacationMonthsCtrl.setValue(2);
+          } else {
+            console.log('Status:', selectedStaff?.status?.statusTypeName);
+          }
+        }
+      });
 
+  }
   ngOnDestroy() {
     this._onDestroy.next();
     this._onDestroy.complete();
@@ -147,10 +165,8 @@ export class WorkloadFormComponent implements OnInit {
     this.workloadForm.controls.industryCoefficientCtrl.setValue(workload.industryCoefficient ?? null);
     this.workloadForm.controls.vacationMonthsCtrl.setValue(workload.vacationMonths ?? 0);
     this.workloadForm.controls.groupAmountCtrl.setValue(workload.groupAmount ?? null);
-    this.workloadForm.controls.contactHoursCtrl.setValue(workload.contactHours ?? null);
-    this.workloadForm.controls.programCtrl.setValue(workload.program ?? false);
     this.workloadForm.controls.includeInBudgetCtrl.setValue(workload.includeInBudget ?? null);
-    this.workloadForm.controls.budgetPositionCtrl.setValue(workload.budgetPosition ?? false);
+    this.workloadForm.controls.budgetPositionCtrl.setValue(workload.budgetPosition as BudgetPosition ?? undefined);
     this.workloadForm.controls.academicRankCtrl.setValue(workload.academicRankDetails?.academicRank?.academicRankId ?? null);
     this.workloadForm.controls.groupForSemesterCtrl.setValue(workload.groupForSemester?.classId ?? null);
     this.workloadForm.controls.cpForGroupCtrl.setValue(workload.creditPointsPerGroup ?? 0);
@@ -194,12 +210,10 @@ export class WorkloadFormComponent implements OnInit {
         myClassIds: this.workloadForm.value.myClassCtrl ?? [],
         academicRankId: this.workloadForm.value.academicRankCtrl ?? 0,
         includeInBudget: this.workloadForm.value.includeInBudgetCtrl ?? '',
-        budgetPosition: this.workloadForm.value.budgetPositionCtrl ?? false,
+        budgetPosition: this.workloadForm.value.budgetPositionCtrl ?? BudgetPosition.grant,
         industryCoefficient: this.workloadForm.value.industryCoefficientCtrl ?? 0,
         vacationMonths: this.workloadForm.value.vacationMonthsCtrl ?? 0,
         groupAmount: this.workloadForm.value.groupAmountCtrl ?? 0,
-        contactHours: this.workloadForm.value.contactHoursCtrl ?? 0,
-        program: this.workloadForm.value.programCtrl ?? false,
         groupForSemesterId: this.workloadForm.value.groupForSemesterCtrl ?? 0,
         comments: this.workloadForm.value.commentsCtrl ?? '',
         creditPointsPerGroup: this.workloadForm.value.cpForGroupCtrl ?? 0,

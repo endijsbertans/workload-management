@@ -11,13 +11,13 @@ import { RequestBuilder } from '../../request-builder';
 import { MyClassResponse } from '../../models/my-class-response';
 
 export interface FindMyClassById$Params {
-  'myclass-id': number;
+  myClassId: number;
 }
 
 export function findMyClassById(http: HttpClient, rootUrl: string, params: FindMyClassById$Params, context?: HttpContext): Observable<StrictHttpResponse<MyClassResponse>> {
   const rb = new RequestBuilder(rootUrl, findMyClassById.PATH, 'get');
   if (params) {
-    rb.path('myclass-id', params['myclass-id'], {});
+    rb.path('myClassId', params.myClassId, {});
   }
 
   return http.request(
@@ -30,4 +30,4 @@ export function findMyClassById(http: HttpClient, rootUrl: string, params: FindM
   );
 }
 
-findMyClassById.PATH = '/my-class/{myclass-id}';
+findMyClassById.PATH = '/my-class/{myClassId}';

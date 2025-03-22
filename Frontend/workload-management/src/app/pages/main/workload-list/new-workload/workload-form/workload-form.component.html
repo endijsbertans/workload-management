@@ -1,9 +1,9 @@
 @if(editMode === undefined){
   <h1> Lādējas </h1>
 }@else if(editMode){
-  <h1>Izveidot jaunu</h1>
-}@else{
   <h1> Rediģēt</h1>
+}@else{
+  <h1>Izveidot jaunu</h1>
 }
 
 <form [formGroup]="workloadForm" (ngSubmit)="onSubmit()">
@@ -17,7 +17,7 @@
                 Izveidojiet docentus!
               </mat-option>
             } @else {
-              <mat-option>
+              <mat-option [disabled]="true">
                 <ngx-mat-select-search [formControl]="workloadForm.controls.tStaffFilterCtrl"
                                        placeholderLabel="Meklēt personu"
                                        noEntriesFoundLabel="Persona nav atrasta">
@@ -177,7 +177,7 @@
               </mat-option>
               @for (myClass of filteredMyClasses | async; track myClass.classId) {
                 <mat-option [value]="myClass.classId">
-                  {{ myClass.classLevel}}
+                  {{ myClass.classLevelAndProgram }}
                 </mat-option>
               }
             }
@@ -209,21 +209,7 @@
         />
       </mat-form-field>
     </div>
-    <div class="inputFieldFlex">
-      <mat-form-field appearance="outline">
-        @if (workloadForm.controls.vacationMonthsCtrl.invalid) {
-          <mat-error>{{ errorMsg() }}</mat-error>
-        }
-        <mat-label>Atvaļinājuma mēneši</mat-label>
-        <input
-          matInput
-          type="number"
-          [formControl]="workloadForm.controls.vacationMonthsCtrl"
-          (blur)="updateErrorMessage('vacationMonthsCtrl')"
-          required
-        />
-      </mat-form-field>
-    </div>
+
 
     <div class="inputFieldFlex">
       <mat-form-field appearance="outline">
@@ -257,22 +243,6 @@
     </div>
     <div class="inputFieldFlex">
       <mat-form-field appearance="outline">
-        @if (workloadForm.controls.contactHoursCtrl.invalid) {
-          <mat-error>{{ errorMsg() }}</mat-error>
-        }
-        <mat-label>Kontaktstundu skaits</mat-label>
-        <input
-          matInput
-          type="number"
-          [formControl]="workloadForm.controls.contactHoursCtrl"
-          (blur)="updateErrorMessage('contactHoursCtrl')"
-          required
-        />
-      </mat-form-field>
-    </div>
-
-    <div class="inputFieldFlex">
-      <mat-form-field appearance="outline">
         @if (workloadForm.controls.commentsCtrl.invalid) {
           <mat-error>{{ errorMsg() }}</mat-error>
         }
@@ -286,6 +256,31 @@
         />
       </mat-form-field>
     </div>
+    <mat-form-field class="input-flex">
+      <mat-select required [formControl]="workloadForm.controls.budgetPositionCtrl">
+        @if (budgetPositions) {
+          @if (budgetPositions.length === 0) {
+            <mat-option>
+              Nebija iespējams iegūt budžeta pozicijas
+            </mat-option>
+          } @else {
+            @for (position of budgetPositions; track $index) {
+              <mat-option [value]="position">
+                {{ enumService.translate('budgetPosition', position) }}
+              </mat-option>
+            }
+          }
+        }
+      </mat-select>
+      @if (!budgetPositions) {
+        <mat-label>
+          <em>Lādē datus...</em>
+        </mat-label>
+      } @else {
+        <mat-label>Izvēlies budžeta pozīciju</mat-label>
+      }
+    </mat-form-field>
+    @if(moreSettings()){
     <div class="inputFieldFlex">
       <mat-form-field appearance="outline">
         @if (workloadForm.controls.includeInBudgetCtrl.invalid) {
@@ -301,9 +296,26 @@
         />
       </mat-form-field>
     </div>
+    <div class="inputFieldFlex">
+      <mat-form-field appearance="outline">
+        @if (workloadForm.controls.vacationMonthsCtrl.invalid) {
+          <mat-error>{{ errorMsg() }}</mat-error>
+        }
+        <mat-label>Atvaļinājuma mēneši</mat-label>
+        <input
+          matInput
+          type="number"
+          [formControl]="workloadForm.controls.vacationMonthsCtrl"
+          (blur)="updateErrorMessage('vacationMonthsCtrl')"
+          required
+        />
+      </mat-form-field>
+    </div>
+    }
   </div>
+
   <div style="display: flex">
-    <button mat-raised-button type="button" routerLink="/main/workload">Cancel</button>
+    <button mat-raised-button type="button" routerLink="/main/admin-workload">Cancel</button>
     @if(editMode){
       <button mat-raised-button type="submit" [disabled]="workloadForm.invalid">
         Iesniegt labojumu
@@ -313,10 +325,8 @@
         Izveidot
       </button>
     }
-    <mat-slide-toggle [formControl]="workloadForm.controls.budgetPositionCtrl">budžeta pozicija </mat-slide-toggle>
-    <mat-slide-toggle [formControl]="workloadForm.controls.programCtrl"> Ir maģistrs? </mat-slide-toggle>
 
-
+    <mat-slide-toggle (change)="moreSettings.set(!moreSettings())" [checked]="moreSettings()">Vairāk iestatījumu</mat-slide-toggle>
   </div>
 </form>
 

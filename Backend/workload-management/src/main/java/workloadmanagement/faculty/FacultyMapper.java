@@ -10,6 +10,7 @@ public class FacultyMapper {
         return Faculty.builder()
                 .facultyName(request.facultyName())
                 .facultyFullName(request.facultyFullName())
+                .isDeleted(false)
                 .build();
     }
     public FacultyResponse toFacultyResponse(Faculty faculty){
@@ -17,6 +18,7 @@ public class FacultyMapper {
                 .facultyId(faculty.getFacultyId())
                 .facultyName(faculty.getFacultyName())
                 .facultyFullName(faculty.getFacultyFullName())
+                .isDeleted(faculty.isDeleted())
                 .build();
     }
 

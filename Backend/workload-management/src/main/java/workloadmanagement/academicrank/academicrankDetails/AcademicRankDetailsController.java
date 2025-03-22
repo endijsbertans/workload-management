@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import workloadmanagement.academicrank.AcademicRankRequest;
 
 import java.util.List;
 
@@ -20,11 +21,24 @@ public class AcademicRankDetailsController {
     ){
         return ResponseEntity.ok(academicRankDetailsService.save(request));
     }
-    @GetMapping("{academic-rank-id}")
-    public ResponseEntity<AcademicRankDetailsResponse> findAcademicRankDetailsById(
-            @PathVariable("academic-rank-id") Integer academicRankId
+    @PatchMapping("{academicRankDetailsId}")
+    public ResponseEntity<Integer> updateAcademicRankDetailsById(
+            @PathVariable Integer academicRankDetailsId,
+            @Valid @RequestBody AcademicRankDetailsRequest request
     ){
-        return ResponseEntity.ok(academicRankDetailsService.findAcademicRankDetailsById(academicRankId));
+        return ResponseEntity.ok(academicRankDetailsService.update(academicRankDetailsId, request));
+    }
+    @DeleteMapping("{academicRankDetailsId}")
+    public ResponseEntity<Integer> deleteAcademicRankDetailsById(
+            @PathVariable Integer academicRankDetailsId
+    ){
+        return ResponseEntity.ok(academicRankDetailsService.delete(academicRankDetailsId));
+    }
+    @GetMapping("{academicRankDetailsId}")
+    public ResponseEntity<AcademicRankDetailsResponse> findAcademicRankDetailsById(
+            @PathVariable Integer academicRankDetailsId
+    ){
+        return ResponseEntity.ok(academicRankDetailsService.findAcademicRankDetailsById(academicRankDetailsId));
     }
     @GetMapping
     public ResponseEntity<List<AcademicRankDetailsResponse>> findAllAcademicRankDetails(){

@@ -11,13 +11,13 @@ import { RequestBuilder } from '../../request-builder';
 import { SemesterResponse } from '../../models/semester-response';
 
 export interface FindSemesterById$Params {
-  statusTypeId: number;
+  semesterId: number;
 }
 
 export function findSemesterById(http: HttpClient, rootUrl: string, params: FindSemesterById$Params, context?: HttpContext): Observable<StrictHttpResponse<SemesterResponse>> {
   const rb = new RequestBuilder(rootUrl, findSemesterById.PATH, 'get');
   if (params) {
-    rb.path('statusTypeId', params.statusTypeId, {});
+    rb.path('semesterId', params.semesterId, {});
   }
 
   return http.request(
@@ -30,4 +30,4 @@ export function findSemesterById(http: HttpClient, rootUrl: string, params: Find
   );
 }
 
-findSemesterById.PATH = '/statuses/{statusTypeId}';
+findSemesterById.PATH = '/semester/{semesterId}';

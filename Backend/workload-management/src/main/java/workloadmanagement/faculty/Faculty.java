@@ -19,5 +19,6 @@ public class Faculty {
     private String facultyName;
 
     private String facultyFullName;
+    private boolean isDeleted;
 
 }

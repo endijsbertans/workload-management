@@ -2,21 +2,22 @@ package workloadmanagement.teachingstaff;
 
 import org.springframework.stereotype.Service;
 import workloadmanagement.academicrank.AcademicRank;
-import workloadmanagement.faculty.Faculty;
 import workloadmanagement.statustype.StatusType;
+import workloadmanagement.teachingstaff.TeachingStaffService.TStaffEntities;
 
 @Service
 public class TeachingStaffMapper {
 
-    public TeachingStaff toTeachingStaff(TeachingStaffRequest request, Faculty staffFaculty, AcademicRank staffAcademicRank, String positionTitle,
-                                         StatusType status) {
+    public TeachingStaff toTeachingStaff(TeachingStaffRequest request, TStaffEntities tStaffEntities
+                                         ) {
         return TeachingStaff.builder()
                 .name(request.name())
                 .surname(request.surname())
-                .positionTitle(positionTitle)
-                .status(status)
-                .staffFaculty(staffFaculty)
-                .staffAcademicRank(staffAcademicRank)
+                .positionTitle(generatePositionTitle(tStaffEntities.academicRank(), tStaffEntities.statusType()))
+                .status(tStaffEntities.statusType())
+                .staffFaculty(tStaffEntities.faculty())
+                .staffAcademicRank(tStaffEntities.academicRank())
+                .isDeleted(false)
                 //.staffPhoto(request.staffPhoto())
                 .build();
     }
@@ -33,7 +34,26 @@ public class TeachingStaffMapper {
                 .staffAcademicRank(teachingStaff.getStaffAcademicRank())
                 .staffFullName(teachingStaff.getStaffFullName())
                 .rankFullName(teachingStaff.getRankFullName())
+                .isDeleted(teachingStaff.isDeleted())
                 //.staffPhoto() TODO
                 .build();
+    }
+    public TeachingStaff toTeachingStaff(TeachingStaffCsvRepresentation csvRepresentation, TStaffEntities tStaffEntities) {
+        return TeachingStaff.builder()
+                .name(csvRepresentation.getName())
+                .surname(csvRepresentation.getSurname())
+                .positionTitle(generatePositionTitle(tStaffEntities.academicRank(), tStaffEntities.statusType()))
+                .status(tStaffEntities.statusType())
+                .staffFaculty(tStaffEntities.faculty())
+                .staffAcademicRank(tStaffEntities.academicRank())
+                .isDeleted(false)
+                .build();
+    }
+    private String generatePositionTitle(AcademicRank academicRank, StatusType statusType) {
+        if(statusType.getStatusTypeName().contentEquals("ievēlētie")) {
+            return academicRank.getAbbreviation();
+        } else {
+            return "vies" + academicRank.getAbbreviation();
+        }
     }
 }

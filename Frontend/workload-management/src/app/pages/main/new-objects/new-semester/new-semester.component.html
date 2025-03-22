@@ -1,7 +1,7 @@
 <div class="backdrop"></div>
 <dialog open>
+    <h2>{{ pageTitle() }}</h2>
   <form [formGroup]="semesterForm" (ngSubmit)="onSubmit()">
-    <h2>Pievienot jaunu klasi</h2>
     <mat-form-field class="input-flex">
       <mat-select required [formControl]="semesterForm.controls.semesterName">
               <mat-option value="rudens">
@@ -27,9 +27,12 @@
       />
     </mat-form-field>
 
-    <div class="action-wrapper">
-      <button mat-raised-button type="button" routerLink="..">Cancel</button>
-      <button mat-raised-button type="Submit" [disabled]="semesterForm.invalid">Create</button>
-    </div>
+    @if(editMode()){
+      <button mat-raised-button type="button" (click)="navigateBackFromEditMode()" >Atcelt</button>
+      <button mat-raised-button type="submit" [disabled]="semesterForm.invalid">Rediģēt</button>
+    }@else{
+      <button mat-raised-button type="button" (click)="navigateBackFromCreateMode()" >Atcelt</button>
+      <button mat-raised-button type="submit" [disabled]="semesterForm.invalid">Izveidot</button>
+    }
   </form>
 </dialog>

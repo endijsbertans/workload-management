@@ -4,9 +4,8 @@
 
 export interface WorkloadRequest {
   academicRankId: number;
-  budgetPosition: boolean;
+  budgetPosition: 'ZB' | 'PF' | 'M' | 'grant';
   comments: string;
-  contactHours: number;
   courseId: number;
   creditPointsPerGroup: number;
   groupAmount: number;
@@ -14,7 +13,6 @@ export interface WorkloadRequest {
   includeInBudget: string;
   industryCoefficient: number;
   myClassIds: Array<number>;
-  program: boolean;
   semesterId: number;
   teachingStaffId: number;
   vacationMonths: number;

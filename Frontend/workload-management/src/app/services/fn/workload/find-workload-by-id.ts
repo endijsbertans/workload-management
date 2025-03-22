@@ -11,13 +11,13 @@ import { RequestBuilder } from '../../request-builder';
 import { WorkloadResponse } from '../../models/workload-response';
 
 export interface FindWorkloadById$Params {
-  'workload-id': number;
+  workloadId: number;
 }
 
 export function findWorkloadById(http: HttpClient, rootUrl: string, params: FindWorkloadById$Params, context?: HttpContext): Observable<StrictHttpResponse<WorkloadResponse>> {
   const rb = new RequestBuilder(rootUrl, findWorkloadById.PATH, 'get');
   if (params) {
-    rb.path('workload-id', params['workload-id'], {});
+    rb.path('workloadId', params.workloadId, {});
   }
 
   return http.request(
@@ -30,4 +30,4 @@ export function findWorkloadById(http: HttpClient, rootUrl: string, params: Find
   );
 }
 
-findWorkloadById.PATH = '/workload/{workload-id}';
+findWorkloadById.PATH = '/workload/{workloadId}';

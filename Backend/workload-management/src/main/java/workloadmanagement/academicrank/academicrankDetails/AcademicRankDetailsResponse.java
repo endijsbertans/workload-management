@@ -16,5 +16,6 @@ public class AcademicRankDetailsResponse {
     private double contactHoursForFullTime;
     private Semester semester;
     private AcademicRank academicRank;
+    private boolean isDeleted;
 }
 

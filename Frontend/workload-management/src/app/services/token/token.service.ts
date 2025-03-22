@@ -36,4 +36,9 @@ export class TokenService {
     }
     return true;
   }
+
+  isAdmin() {
+    const authDetails = this.getAuthDetails();
+    return authDetails.authorities.includes('ADMIN');
+  }
 }

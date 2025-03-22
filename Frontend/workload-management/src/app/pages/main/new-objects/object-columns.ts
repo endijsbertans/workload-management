@@ -51,13 +51,7 @@ export const ColumnsForTeacherResponse: ColumnNames[] = [
 ];
 
 export const ColumnsForCourseResponse: ColumnNames[] = [
-  {
-    name: 'Studiju līmenis',
-    pathTo: 'studyLevel',
-    collection: 'ColumnsForCourse',
-    sortable: true
-  }
-  , {
+   {
     name: 'Priekšmeta nosaukums',
     pathTo: 'courseName',
     collection: 'ColumnsForCourse',
@@ -84,12 +78,6 @@ export const ColumnsForCourseResponse: ColumnNames[] = [
   {
     name: 'Priekšmeta KP',
     pathTo: 'creditPoints',
-    collection: 'ColumnsForCourse',
-    sortable: true
-  },
-  {
-    name: 'Nepieciešamais amats',
-    pathTo: 'necessaryAcademicRank.rankName',
     collection: 'ColumnsForCourse',
     sortable: true
   }
@@ -138,6 +126,20 @@ export const ColumnsForAcademicRankResponse: ColumnNames[] = [
     name: 'Abreviatūra',
     pathTo: 'abbreviation',
     collection: 'columnsForAcademicRankResponse',
+    sortable: true
+  }
+];
+export const ColumnsForFacultyResponse: ColumnNames[] = [
+  {
+    name: 'Abreviatūra',
+    pathTo: 'facultyName',
+    collection: 'columnsForFacultyResponse',
+    sortable: true
+  }
+  , {
+    name: 'Abreviatūra',
+    pathTo: 'facultyFullName',
+    collection: 'columnsForFacultyResponse',
     sortable: true
   }
 ];

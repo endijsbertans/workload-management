@@ -6,6 +6,7 @@ import { AcademicRank } from '../models/academic-rank';
 import { Faculty } from '../models/faculty';
 import { StatusType } from '../models/status-type';
 export interface TeachingStaff {
+  deleted?: boolean;
   name?: string;
   positionTitle?: string;
   rankFullName?: string;

@@ -17,4 +17,5 @@ public class StatusType{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int statusTypeId;
     private String statusTypeName;
+    private boolean isDeleted;
 }

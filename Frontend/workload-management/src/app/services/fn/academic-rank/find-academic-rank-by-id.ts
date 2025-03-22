@@ -11,13 +11,13 @@ import { RequestBuilder } from '../../request-builder';
 import { AcademicRankResponse } from '../../models/academic-rank-response';
 
 export interface FindAcademicRankById$Params {
-  'academic-rank-id': number;
+  academicRankId: number;
 }
 
 export function findAcademicRankById(http: HttpClient, rootUrl: string, params: FindAcademicRankById$Params, context?: HttpContext): Observable<StrictHttpResponse<AcademicRankResponse>> {
   const rb = new RequestBuilder(rootUrl, findAcademicRankById.PATH, 'get');
   if (params) {
-    rb.path('academic-rank-id', params['academic-rank-id'], {});
+    rb.path('academicRankId', params.academicRankId, {});
   }
 
   return http.request(
@@ -30,4 +30,4 @@ export function findAcademicRankById(http: HttpClient, rootUrl: string, params: 
   );
 }
 
-findAcademicRankById.PATH = '/academic-rank/{academic-rank-id}';
+findAcademicRankById.PATH = '/academic-rank/{academicRankId}';

@@ -11,13 +11,13 @@ import { RequestBuilder } from '../../request-builder';
 import { CourseResponse } from '../../models/course-response';
 
 export interface FindCourseById$Params {
-  'course-id': number;
+  courseId: number;
 }
 
 export function findCourseById(http: HttpClient, rootUrl: string, params: FindCourseById$Params, context?: HttpContext): Observable<StrictHttpResponse<CourseResponse>> {
   const rb = new RequestBuilder(rootUrl, findCourseById.PATH, 'get');
   if (params) {
-    rb.path('course-id', params['course-id'], {});
+    rb.path('courseId', params.courseId, {});
   }
 
   return http.request(
@@ -30,4 +30,4 @@ export function findCourseById(http: HttpClient, rootUrl: string, params: FindCo
   );
 }
 
-findCourseById.PATH = '/course/{course-id}';
+findCourseById.PATH = '/course/{courseId}';

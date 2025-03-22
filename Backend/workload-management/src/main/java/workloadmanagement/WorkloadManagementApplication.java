@@ -22,6 +22,7 @@ import workloadmanagement.faculty.Faculty;
 import workloadmanagement.repo.*;
 import workloadmanagement.statustype.StatusType;
 import workloadmanagement.teachingstaff.TeachingStaff;
+import workloadmanagement.workload.BudgetPositions;
 import workloadmanagement.workload.Workload;
 
 import java.time.LocalDate;
@@ -56,7 +57,7 @@ public class WorkloadManagementApplication {
 //				myAuthorityRepo.save(MyAuthority.builder().title("USER").build());
 			}
 					var authorities = myAuthorityRepo.save(MyAuthority.builder().title("USER").build());
-
+					var authorities2 = myAuthorityRepo.save(MyAuthority.builder().title("ADMIN").build());
 					MyUser u1 = MyUser.builder()
 							.email("endijsbertans@gmail.com")
 							.password(passwordEncoder.encode("123456789"))
@@ -66,6 +67,15 @@ public class WorkloadManagementApplication {
 							.build();
 					userRepo.save(u1);
 					myAuthorityRepo.save(authorities);
+					MyUser u2 = MyUser.builder()
+							.email("bertansendijs@gmail.com")
+							.password(passwordEncoder.encode("123456789"))
+							.accountLocked(false)
+							.enabled(true)
+							.authorities((List.of(authorities2)))
+							.build();
+					userRepo.save(u2);
+					myAuthorityRepo.save(authorities2);
 					Semester s1 = Semester.builder()
 							.semesterName(SemesterEnum.pavasaris)
 							.semesterYear(2024)
@@ -134,13 +144,13 @@ public class WorkloadManagementApplication {
 					MyClass ac1 = MyClass.builder()
 							.classLevel(3)
 							.classFaculty(f1)
-							.myClassProgram("EIB")
+							.classProgram("EIB")
 							.degree(Degree.BACHELOR)
 							.build();
 					myClassRepo.save(ac1);
 					MyClass ac2 = MyClass.builder()
 							.classLevel(1)
-							.myClassProgram("ITB")
+							.classProgram("ITB")
 							.classFaculty(f1)
 							.build();
 					myClassRepo.save(ac2);
@@ -148,8 +158,6 @@ public class WorkloadManagementApplication {
 					Course c1 =  Course.builder()
 							.courseCode("MateB008")
 							.courseName("Algoritmu teorija")
-							.necessaryRank(ar1)
-							.studyLevel(2)
 							.registrationType("automātiska")
 							.section("Nozares pamatnoz")
 							.creditPoints(3.0)
@@ -172,26 +180,34 @@ public class WorkloadManagementApplication {
 							.staffAcademicRank(ar1)
 							.build();
 					teachingStaffRepo.save(ts1);
+					TeachingStaff ts2 = TeachingStaff.builder()
+							.user(u2)
+							.name("Janis")
+							.surname("Berzins")
+							.positionTitle("doc")
+							.status(st1)
+							.staffFaculty(f1)
+							.staffAcademicRank(ar1)
+							.build();
+					teachingStaffRepo.save(ts2);
 
 					Workload w1 = Workload.builder()
 									.teachingStaff(ts1)
 									.semester(s1)
 									.comments("praktiskie darbi")
 									.includeInBudget("1")
-									.budgetPosition(false)
+									.budgetPosition(BudgetPositions.ZB)
 									.industryCoefficient(1)
 									.vacationMonths(0)
 									.workingMonths(5)
 									.expectedSalary(577)
 									.groupAmount(1)
 									.contactHours(1)
-									.program(true)
 									.groupForSemester(ac1)
 									.course(c1)
 									.academicRankDetails(ard1)
 									.myClasses(List.of(ac1,ac2))
 									.programCoefficient(0.75)
-									.program(true)
 									.creditPointsPerGroup(2)
 									.totalCreditPoints(3)
 									.build();
