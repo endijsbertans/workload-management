@@ -14,8 +14,4 @@ import {TokenExpirationService} from "./services/guard/token-expiration.service"
 })
 export class AppComponent{
   private readonly tokenExpirationService = inject(TokenExpirationService);
-
-  ngOnInit() {
-    this.tokenExpirationService.startExpirationCheck();
-  }
 }

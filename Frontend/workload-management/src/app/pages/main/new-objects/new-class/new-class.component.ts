@@ -105,7 +105,7 @@ export class NewClassComponent implements OnInit {
       next: (classData) => {
         this.classForm.patchValue({
           classLevel: classData.classLevel,
-          program: classData.myClassProgram,
+          program: classData.classProgram,
           classFacultyId: classData.classFaculty?.facultyId,
           degree: classData.degree as "BACHELOR" | "MASTER" | "DOCTORATE"
         });

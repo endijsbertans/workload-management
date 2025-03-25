@@ -36,9 +36,11 @@ public class AuthenticationController {
         service.activateAccount(token);
     }
     @GetMapping("/activate-account/change-password")
-    public void changePassword(
+    public ResponseEntity<Void> changePassword(
+            @RequestParam String token,
             @RequestParam String password
     ) throws MessagingException {
-        // TODO PASSWORD CHANGE
+        service.changePassword(token, password);
+        return ResponseEntity.ok().build();
     }
 }

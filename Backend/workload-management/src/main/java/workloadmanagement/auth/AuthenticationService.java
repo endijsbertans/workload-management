@@ -43,22 +43,23 @@ public class AuthenticationService {
                 .orElseThrow(() -> new IllegalStateException("Role user not found"));
 
         System.out.println(request);
+        String activationCode = generateActivationCode(6);
         var user = MyUser.builder()
                 .email(request.getEmail())
-                .password(passwordEncoder.encode(generateActivationCode(6))) // random 6 digit temp password
+                .password(passwordEncoder.encode(activationCode)) // random 6 digit temp password
                 .accountLocked(false)
                 .enabled(false)
                 .authorities(List.of(authorities))
                 .build();
         System.out.println(user);
         userRepo.save(user);
-        sendValidationEmail(user);
+        sendValidationEmail(user, activationCode);
     }
     public void registerTeachingStaff(RegistrationRequest request, TeachingStaff tStaff) throws MessagingException {
         // TODO Make admin role and in future use this as adminRegistration
         var authorities = authorityRepository.findByTitle("USER")
                 .orElseThrow(() -> new IllegalStateException("Role user not found"));
-
+        String activationCode = generateActivationCode(6);
         System.out.println(request);
         var user = MyUser.builder()
                 .email(request.getEmail())
@@ -70,30 +71,29 @@ public class AuthenticationService {
                 .build();
         System.out.println(user);
         userRepo.save(user);
-        sendValidationEmail(user);
+        sendValidationEmail(user, activationCode);
     }
-    private void sendValidationEmail(MyUser user) throws MessagingException {
-        var newToken = generateAndSaveActivationToken(user);
+    private void sendValidationEmail(MyUser user, String activationCode) throws MessagingException {
+        var newToken = generateAndSaveActivationToken(user, activationCode);
         emailService.sendEmail(
                 user.getEmail(),
                 user.getTeachingStaff().getStaffFullName(),
                 EmailTemplateName.ACTIVATE_ACCOUNT,
-                "http://localhost:4200/activate-account=" + newToken,
+                activationUrl + newToken,
                 newToken,
                 "Account activation"
         );
     }
 
-    private String generateAndSaveActivationToken(MyUser user) {
-        String generatedToken = generateActivationCode(6);
+    private String generateAndSaveActivationToken(MyUser user, String activationCode) {
         var token = MyToken.builder()
-                .token(generatedToken)
+                .token(activationCode)
                 .createdAt(LocalDateTime.now())
                 .expiresAt(LocalDateTime.now().plusMinutes(15))
                 .user(user)
                 .build();
         tokenRepo.save(token);
-        return generatedToken;
+        return activationCode;
     }
 
     private String generateActivationCode(int length) {
@@ -128,15 +128,35 @@ public class AuthenticationService {
         MyToken savedToken = tokenRepo.findByToken(token)
                 .orElseThrow(() -> new RuntimeException("Token not found"));
         if(LocalDateTime.now().isAfter(savedToken.getExpiresAt())){
-            sendValidationEmail(savedToken.getUser());
+            String activationCode = generateActivationCode(6);
+            sendValidationEmail(savedToken.getUser(), activationCode);
             throw new RuntimeException("Token expired, new token sent");
         }
         var user = userRepo.findById(savedToken.getUser().getId())
-                //TODO BETTER EXCEPTION HANDLING
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        //user.setEnabled(true); // TODO ENABLE USER
+        user.setEnabled(true);
         userRepo.save(user);
         savedToken.setValidatedAt(LocalDateTime.now());
+        tokenRepo.save(savedToken);
+    }
+    @Transactional
+    public void changePassword(String token, String newPassword) throws MessagingException {
+        MyToken savedToken = tokenRepo.findByToken(token)
+                .orElseThrow(() -> new RuntimeException("Token not found"));
+
+        if(LocalDateTime.now().isAfter(savedToken.getExpiresAt())){
+            String activationCode = generateActivationCode(6);
+            sendValidationEmail(savedToken.getUser(), activationCode);
+            throw new RuntimeException("Token expired, new token sent");
+        }
+        var user = userRepo.findById(savedToken.getUser().getId())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepo.save(user);
+
+        savedToken.setValidatedAt(LocalDateTime.now());
+        savedToken.setExpiresAt(LocalDateTime.now());
         tokenRepo.save(savedToken);
     }
 }

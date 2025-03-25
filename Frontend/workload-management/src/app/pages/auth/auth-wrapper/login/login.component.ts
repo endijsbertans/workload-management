@@ -36,10 +36,6 @@ if (savedForm) {
 })
 export class LoginComponent {
   private readonly tokenExpirationService = inject(TokenExpirationService);
-
-
-
-
   private readonly router =  inject(Router);
   private readonly authService =  inject(AuthenticationService);
   private readonly tokenService = inject(TokenService);

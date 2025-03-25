@@ -10,12 +10,14 @@ import { RequestBuilder } from '../../request-builder';
 
 
 export interface ChangePassword$Params {
+  token: string;
   password: string;
 }
 
 export function changePassword(http: HttpClient, rootUrl: string, params: ChangePassword$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
   const rb = new RequestBuilder(rootUrl, changePassword.PATH, 'get');
   if (params) {
+    rb.query('token', params.token, {});
     rb.query('password', params.password, {});
   }
 

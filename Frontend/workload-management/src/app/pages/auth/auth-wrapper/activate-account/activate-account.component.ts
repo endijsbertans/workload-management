@@ -1,42 +1,53 @@
-import { Component } from '@angular/core';
-import {Router} from "@angular/router";
+import {Component, inject} from '@angular/core';
+import {ActivatedRoute, Router} from "@angular/router";
 import {AuthenticationService} from "../../../../services/services/authentication.service";
 import {CodeInputModule} from "angular-code-input";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {ChangePasswordComponent} from "./change-password/change-password.component";
 
 @Component({
   selector: 'app-activate-account',
   standalone: true,
   imports: [
-    CodeInputModule
+    CodeInputModule,
+    ChangePasswordComponent
   ],
   templateUrl: './activate-account.component.html',
   styleUrl: './activate-account.component.scss'
 })
 export class ActivateAccountComponent {
+  private readonly route = inject(Router);
+  private readonly activatedRoute= inject(ActivatedRoute);
+  private readonly authService = inject(AuthenticationService);
+  private readonly _snackBar = inject(MatSnackBar);
+
   message = '';
   codeOk = true;
   submitted = false;
   submittedCode = '';
-
-  constructor(
-    private router: Router,
-    private authService: AuthenticationService
-  ){}
+  token: string | null = null;
+  ngOnInit() {
+    this.activatedRoute.paramMap.subscribe(params => {
+      this.token = params.get('token');
+      if (this.token) {
+        this.confirmAccount(this.token);
+      }
+    });
+  }
 
   onCodeCompleted(submittedCode: string) {
     this.confirmAccount(submittedCode);
   }
 
   redirectToLogin() {
-    this.router.navigate(['login']);
+    this.route.navigate(['login']);
   }
 
   private confirmAccount(token: string) {
     this.authService.confirm({
       token
     }).subscribe({
-      next: () =>{
-       this.message = 'Your account has been activated\n Now you can proceed to login'
+      next: () =>{this._snackBar.open('Tavs profils ir aktivizēts, ievadiet savu paroli', 'Aizvērt', { duration: 5000 });
        this.submitted = true;
        this.codeOk = true;
       },
@@ -45,7 +56,6 @@ export class ActivateAccountComponent {
           this.message = errorResponse.errorMsg;
           this.submitted = true;
           this.codeOk = false;
-
       }
       }
     )

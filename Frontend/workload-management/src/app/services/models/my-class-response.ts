@@ -8,7 +8,7 @@ export interface MyClassResponse {
   classId?: number;
   classLevel?: number;
   classLevelAndProgram?: string;
+  classProgram?: string;
   degree?: 'BACHELOR' | 'MASTER' | 'DOCTORATE';
   deleted?: boolean;
-  myClassProgram?: string;
 }

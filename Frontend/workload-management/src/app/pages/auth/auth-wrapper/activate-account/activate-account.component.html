@@ -1,8 +1,7 @@
 <div class="container">
 @if (submitted && codeOk) {
   <div>
-    <p>Tavs profils ir aktivizēts</p>
-    <button (click)="redirectToLogin()"> Pieslēgties</button>
+    <app-change-password/>
   </div>
 } @else if(submitted && !codeOk){
   <h2>{{message}}</h2>
