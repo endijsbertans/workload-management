@@ -217,7 +217,7 @@ export class WorkloadListComponent implements OnInit {
         (data.myClasses?.some(myClass =>
           myClass.classLevel?.toString().includes(lowercaseFilter) ||
           myClass.classFaculty?.facultyName?.toLowerCase().includes(lowercaseFilter) ||
-          myClass.myClassProgram?.toLowerCase().includes(lowercaseFilter)
+          myClass.classProgram?.toLowerCase().includes(lowercaseFilter)
         ) ?? false)
       );
     };

@@ -26,3 +26,6 @@ export const authAdmin: CanActivateFn = (route, state) => {
   }
   return true;
 };
+export const publicRoute: CanActivateFn = () => {
+  return true;
+};

@@ -1959,6 +1959,14 @@
         "operationId": "changePassword",
         "parameters": [
           {
+            "name": "token",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "password",
             "in": "query",
             "required": true,
@@ -2429,7 +2437,7 @@
           "classFaculty": {
             "$ref": "#/components/schemas/FacultyResponse"
           },
-          "myClassProgram": {
+          "classProgram": {
             "type": "string"
           },
           "classLevelAndProgram": {
@@ -2547,11 +2555,11 @@
           "staffPhoto": {
             "type": "string"
           },
-          "deleted": {
-            "type": "boolean"
-          },
           "staffFullName": {
             "type": "string"
+          },
+          "deleted": {
+            "type": "boolean"
           },
           "rankFullName": {
             "type": "string"

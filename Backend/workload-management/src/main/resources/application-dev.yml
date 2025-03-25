@@ -31,9 +31,9 @@ application:
       expiration: 86400000
   mailing:
     frontend:
-      activation-url: http://localhost:4200/activate-account
+      activation-url: http://${EC2_HOST}/auth/activate-account/
   cors:
 
-    origins: http://localhost:4200,http://localhost:8080,http://${EC2_HOST}:8088,http://${EC2_HOST}:8080, http://${EC2_HOST}:80, http://${EC2_HOST}
+    origins: http://${EC2_HOST}:8088, http://${EC2_HOST}:8080, http://${EC2_HOST}:80, http://${EC2_HOST}, http://${EC2_HOST},
 server:
   port: 8088
