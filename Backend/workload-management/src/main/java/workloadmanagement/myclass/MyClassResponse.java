@@ -1,7 +1,6 @@
-package workloadmanagement.MyClass;
+package workloadmanagement.myclass;
 
 import lombok.*;
-import workloadmanagement.faculty.Faculty;
 import workloadmanagement.faculty.FacultyResponse;
 
 @Getter

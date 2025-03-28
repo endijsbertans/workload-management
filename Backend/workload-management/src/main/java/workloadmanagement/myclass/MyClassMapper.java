@@ -1,10 +1,9 @@
-package workloadmanagement.MyClass;
+package workloadmanagement.myclass;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import workloadmanagement.faculty.Faculty;
 import workloadmanagement.faculty.FacultyMapper;
-import workloadmanagement.repo.IFacultyRepo;
 
 @Service
 public class MyClassMapper {

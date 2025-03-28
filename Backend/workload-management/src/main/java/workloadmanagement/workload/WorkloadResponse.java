@@ -1,13 +1,10 @@
 package workloadmanagement.workload;
 
 import lombok.*;
-import workloadmanagement.MyClass.MyClassResponse;
-import workloadmanagement.academicrank.AcademicRank;
+import workloadmanagement.myclass.MyClassResponse;
 import workloadmanagement.academicrank.academicrankDetails.AcademicRankDetails;
 import workloadmanagement.semester.Semester;
 import workloadmanagement.course.Course;
-import workloadmanagement.MyClass.MyClass;
-import workloadmanagement.statustype.StatusType;
 import workloadmanagement.teachingstaff.TeachingStaff;
 
 import java.util.List;

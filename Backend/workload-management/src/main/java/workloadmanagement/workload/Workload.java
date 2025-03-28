@@ -5,11 +5,9 @@ import lombok.*;
 import workloadmanagement.academicrank.academicrankDetails.AcademicRankDetails;
 import workloadmanagement.semester.Semester;
 import workloadmanagement.course.Course;
-import workloadmanagement.MyClass.MyClass;
+import workloadmanagement.myclass.MyClass;
 import workloadmanagement.teachingstaff.TeachingStaff;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 

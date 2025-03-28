@@ -1,4 +1,4 @@
-package workloadmanagement.MyClass;
+package workloadmanagement.myclass;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -7,7 +7,6 @@ import workloadmanagement.faculty.Faculty;
 import workloadmanagement.workload.Workload;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Getter

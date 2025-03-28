@@ -1,4 +1,4 @@
-package workloadmanagement.MyClass;
+package workloadmanagement.myclass;
 
 public enum Degree {
     BACHELOR,

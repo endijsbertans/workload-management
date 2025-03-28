@@ -9,9 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import workloadmanagement.MyClass.Degree;
-import workloadmanagement.MyClass.MyClass;
-import workloadmanagement.MyClass.MyClassService;
+import workloadmanagement.myclass.MyClass;
+import workloadmanagement.myclass.MyClassService;
 
 import workloadmanagement.academicrank.academicrankDetails.AcademicRankDetails;
 import workloadmanagement.academicrank.academicrankDetails.AcademicRankDetailsService;
@@ -26,10 +25,7 @@ import workloadmanagement.repo.IWorkloadRepo;
 import workloadmanagement.teachingstaff.TeachingStaff;
 import workloadmanagement.teachingstaff.TeachingStaffService;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 @Service

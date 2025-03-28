@@ -18,6 +18,8 @@ import { changePassword } from '../fn/authentication/change-password';
 import { ChangePassword$Params } from '../fn/authentication/change-password';
 import { confirm } from '../fn/authentication/confirm';
 import { Confirm$Params } from '../fn/authentication/confirm';
+import { forgotPassword } from '../fn/authentication/forgot-password';
+import { ForgotPassword$Params } from '../fn/authentication/forgot-password';
 import { register } from '../fn/authentication/register';
 import { Register$Params } from '../fn/authentication/register';
 
@@ -57,6 +59,31 @@ export class AuthenticationService extends BaseService {
       map((r: StrictHttpResponse<{
 }>): {
 } => r.body)
+    );
+  }
+
+  /** Path part for operation `forgotPassword()` */
+  static readonly ForgotPasswordPath = '/auth/forgot-password';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `forgotPassword()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  forgotPassword$Response(params: ForgotPassword$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return forgotPassword(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `forgotPassword$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  forgotPassword(params: ForgotPassword$Params, context?: HttpContext): Observable<void> {
+    return this.forgotPassword$Response(params, context).pipe(
+      map((r: StrictHttpResponse<void>): void => r.body)
     );
   }
 

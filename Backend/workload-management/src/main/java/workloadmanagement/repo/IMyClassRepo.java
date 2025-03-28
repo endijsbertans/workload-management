@@ -2,7 +2,7 @@ package workloadmanagement.repo;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import workloadmanagement.MyClass.MyClass;
+import workloadmanagement.myclass.MyClass;
 
 import java.util.List;
 

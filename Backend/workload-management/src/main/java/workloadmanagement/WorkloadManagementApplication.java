@@ -1,6 +1,5 @@
 package workloadmanagement;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,8 +7,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import workloadmanagement.MyClass.Degree;
-import workloadmanagement.MyClass.MyClass;
+import workloadmanagement.myclass.Degree;
+import workloadmanagement.myclass.MyClass;
 import workloadmanagement.academicrank.AcademicRank;
 import workloadmanagement.academicrank.academicrankDetails.AcademicRankDetails;
 import workloadmanagement.academicrank.academicrankDetails.IAcademicRankDetailsRepo;
@@ -25,7 +24,6 @@ import workloadmanagement.teachingstaff.TeachingStaff;
 import workloadmanagement.workload.BudgetPositions;
 import workloadmanagement.workload.Workload;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @EnableJpaAuditing()

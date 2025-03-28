@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal, Input} from '@angular/core';
 import {
   AbstractControl,
   FormControl,
@@ -8,7 +8,7 @@ import {
   ValidatorFn,
   Validators
 } from "@angular/forms";
-import { ActivatedRoute, Router } from "@angular/router";
+import { Router } from "@angular/router";
 import { AuthenticationService } from "../../../../../services/services/authentication.service";
 import { TokenService } from "../../../../../services/token/token.service";
 import { TokenExpirationService } from "../../../../../services/guard/token-expiration.service";
@@ -32,6 +32,7 @@ const passwordMatchValidator: ValidatorFn = (control: AbstractControl): Validati
 
 @Component({
   selector: 'app-change-password',
+  standalone: true,
   imports: [
     MatIcon,
     MatError,
@@ -47,26 +48,17 @@ const passwordMatchValidator: ValidatorFn = (control: AbstractControl): Validati
   styleUrl: './change-password.component.scss'
 })
 export class ChangePasswordComponent {
+  @Input() token: string = '';
+
   private readonly tokenExpirationService = inject(TokenExpirationService);
   private readonly router = inject(Router);
   private readonly authService = inject(AuthenticationService);
   private readonly tokenService = inject(TokenService);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly activatedRoute = inject(ActivatedRoute);
   private readonly _snackBar = inject(MatSnackBar);
   errorMessage = signal('');
   errorMsg: Array<string> = [];
   hide = signal(true);
-  token: string | null = null;
-
-  ngOnInit() {
-    this.activatedRoute.paramMap.subscribe(params => {
-      this.token = params.get('token');
-      if (!this.token) {
-        this._snackBar.open('Kods nav atrasts mēģiniet vēlreiz', 'Aizvērt', { duration: 5000 });
-      }
-    });
-  }
 
   form = new FormGroup({
     password: new FormControl('', {
@@ -108,7 +100,7 @@ export class ChangePasswordComponent {
   }
 
   onSubmit() {
-    if (this.form.value.confirmPassword != null && this.token != null) {
+    if (this.form.value.confirmPassword != null && this.token) {
       const password = this.form.value.confirmPassword;
       this.errorMsg = [];
       this.authService.changePassword({
@@ -131,6 +123,8 @@ export class ChangePasswordComponent {
           }
         }
       });
+    } else if (!this.token) {
+      this._snackBar.open('Kods nav atrasts mēģiniet vēlreiz', 'Aizvērt', { duration: 5000 });
     }
   }
 }

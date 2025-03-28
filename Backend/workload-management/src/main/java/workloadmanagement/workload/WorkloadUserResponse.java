@@ -1,7 +1,7 @@
 package workloadmanagement.workload;
 
 import lombok.*;
-import workloadmanagement.MyClass.MyClassResponse;
+import workloadmanagement.myclass.MyClassResponse;
 import workloadmanagement.course.Course;
 import workloadmanagement.semester.Semester;
 import workloadmanagement.teachingstaff.TeachingStaff;

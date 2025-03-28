@@ -2,7 +2,7 @@ import {Component, DestroyRef, inject, signal} from '@angular/core';
 import {AuthenticationRequest} from "../../../../services/models/authentication-request";
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {debounceTime, of} from "rxjs";
-import {Router} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 import {AuthenticationService} from "../../../../services/services/authentication.service";
 import {TokenService} from "../../../../services/token/token.service";
 import {MatFormFieldModule} from "@angular/material/form-field";
@@ -28,7 +28,8 @@ if (savedForm) {
     FormsModule,
     MatIcon,
     MatFabButton,
-    MatIconButton
+    MatIconButton,
+    RouterLink
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'

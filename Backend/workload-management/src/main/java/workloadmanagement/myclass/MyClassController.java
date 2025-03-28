@@ -1,7 +1,6 @@
-package workloadmanagement.MyClass;
+package workloadmanagement.myclass;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
@@ -10,7 +9,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import workloadmanagement.semester.SemesterRequest;
 
 import java.io.IOException;
 import java.util.List;
