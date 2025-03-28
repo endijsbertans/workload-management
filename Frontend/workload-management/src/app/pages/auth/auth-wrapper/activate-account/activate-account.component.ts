@@ -47,18 +47,20 @@ export class ActivateAccountComponent {
     this.authService.confirm({
       token
     }).subscribe({
-      next: () =>{this._snackBar.open('Tavs profils ir aktivizēts, ievadiet savu paroli', 'Aizvērt', { duration: 5000 });
-       this.submitted = true;
-       this.codeOk = true;
+      next: () => {
+        this._snackBar.open('Ievadiet savu jauno paroli', 'Aizvērt', { duration: 5000 });
+        this.submitted = true;
+        this.codeOk = true;
+        this.submittedCode = token;
       },
-      error:(err) =>{
-          const errorResponse = JSON.parse(err.error);
-          this.message = errorResponse.errorMsg;
-          this.submitted = true;
-          this.codeOk = false;
+      error: (err) => {
+        const errorResponse = JSON.parse(err.error);
+        console.log(errorResponse);
+        this.message = "Kods nav pareizs";
+        this.submitted = true;
+        this.codeOk = false;
       }
-      }
-    )
+    });
   }
   onTryAgain() {
     this.submitted = false;

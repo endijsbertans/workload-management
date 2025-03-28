@@ -1,4 +1,4 @@
-package workloadmanagement.MyClass;
+package workloadmanagement.myclass;
 
 import com.opencsv.bean.CsvBindByName;
 import lombok.*;

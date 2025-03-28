@@ -1,21 +1,20 @@
 <div class="container">
-@if (submitted && codeOk) {
-  <div>
-    <app-change-password/>
-  </div>
-} @else if(submitted && !codeOk){
-  <h2>{{message}}</h2>
-  <button (click)="onTryAgain()"> Mēģināt velreiz</button>
+  @if (submitted && codeOk) {
+    <div>
+      <app-change-password [token]="submittedCode"/>
+    </div>
+  } @else if(submitted && !codeOk){
+    <h2>{{message}}</h2>
+    <button (click)="onTryAgain()"> Mēģināt velreiz</button>
 
-}@else{
+  }@else{
 
-    <h2> Type Your Activation Code</h2>
+    <h2> Ievadi savu kodu</h2>
     <code-input [isCodeHidden]="false"
                 [codeLength]="6"
                 [code]="'number'"
                 (codeCompleted)="onCodeCompleted($event)">
 
     </code-input>
-}
+  }
 </div>
-

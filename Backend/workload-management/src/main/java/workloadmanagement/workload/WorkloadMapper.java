@@ -3,9 +3,9 @@ package workloadmanagement.workload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import workloadmanagement.MyClass.Degree;
-import workloadmanagement.MyClass.MyClass;
-import workloadmanagement.MyClass.MyClassMapper;
+import workloadmanagement.myclass.Degree;
+import workloadmanagement.myclass.MyClass;
+import workloadmanagement.myclass.MyClassMapper;
 import workloadmanagement.workload.WorkloadService.WorkloadEntities;
 
 import java.math.BigDecimal;

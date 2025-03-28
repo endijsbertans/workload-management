@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import {RouterOutlet} from "@angular/router";
+import {Component, inject} from '@angular/core';
+import {ActivatedRoute, Router, RouterOutlet} from "@angular/router";
 
 @Component({
   selector: 'app-auth-wrapper',
@@ -11,5 +11,9 @@ import {RouterOutlet} from "@angular/router";
   styleUrl: './auth-wrapper.component.scss'
 })
 export class AuthWrapperComponent {
+  private readonly router = inject(Router);
 
+  redirectToHome() {
+    this.router.navigate(['auth/login']);
+  }
 }

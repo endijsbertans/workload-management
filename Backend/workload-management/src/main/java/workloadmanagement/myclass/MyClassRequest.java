@@ -1,4 +1,4 @@
-package workloadmanagement.MyClass;
+package workloadmanagement.myclass;
 
 import jakarta.validation.constraints.NotNull;
 

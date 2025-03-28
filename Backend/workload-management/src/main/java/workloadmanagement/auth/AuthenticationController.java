@@ -35,6 +35,13 @@ public class AuthenticationController {
     ) throws MessagingException {
         service.activateAccount(token);
     }
+    @PostMapping("/forgot-password")
+    public ResponseEntity<Void> forgotPassword(
+            @RequestParam String email
+    ) throws MessagingException {
+        service.forgotPassword(email);
+        return ResponseEntity.ok().build();
+    }
     @GetMapping("/activate-account/change-password")
     public ResponseEntity<Void> changePassword(
             @RequestParam String token,

@@ -1,16 +1,15 @@
-
 <main>
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     @if (errorMsg) {
       <div class="control-error">
-        @for (msg of errorMsg; track errorMsg){
-          <mat-error>{{msg}}</mat-error>
+        @for (msg of errorMsg; track errorMsg) {
+          <mat-error>{{ msg }}</mat-error>
         }
       </div>
     }
     <mat-form-field appearance="outline">
       @if (form.controls.email.invalid) {
-        <mat-error>{{errorMessage()}}</mat-error>
+        <mat-error>{{ errorMessage() }}</mat-error>
       }
       <mat-label>Ievadi ēpastu</mat-label>
       <input
@@ -29,7 +28,7 @@
         [formControl]="form.controls.password"
         required/>
       @if (form.controls.email.invalid) {
-        <mat-error>{{updateErrorMessagePass()}}</mat-error>
+        <mat-error>{{ updateErrorMessagePass() }}</mat-error>
       }
       <button
         mat-icon-button
@@ -38,7 +37,7 @@
         [attr.aria-label]="'Hide password'"
         [attr.aria-pressed]="hide()"
       >
-        <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+        <mat-icon>{{ hide() ? 'visibility_off' : 'visibility' }}</mat-icon>
       </button>
     </mat-form-field>
     <div>
@@ -46,6 +45,9 @@
         Pieslēgties
         <mat-icon>login</mat-icon>
       </button>
+    </div>
+    <div>
+      <a routerLink="/auth/forgot-password"> Aizmirsu paroli</a>
     </div>
   </form>
 </main>

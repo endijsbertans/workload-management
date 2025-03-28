@@ -625,6 +625,29 @@
         }
       }
     },
+    "/auth/forgot-password": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "operationId": "forgotPassword",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/auth/authenticate": {
       "post": {
         "tags": [
@@ -2763,13 +2786,13 @@
           "username": {
             "type": "string"
           },
-          "accountNonLocked": {
-            "type": "boolean"
-          },
           "accountNonExpired": {
             "type": "boolean"
           },
           "credentialsNonExpired": {
+            "type": "boolean"
+          },
+          "accountNonLocked": {
             "type": "boolean"
           }
         },

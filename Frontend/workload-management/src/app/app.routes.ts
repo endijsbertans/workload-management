@@ -21,6 +21,7 @@ import {NewSemesterComponent} from "./pages/main/new-objects/new-semester/new-se
 import {
   WorkloadListSettingsComponent
 } from "./pages/main/workload-list/workload-list-settings/workload-list-settings.component";
+import {ForgotPasswordComponent} from "./pages/auth/auth-wrapper/login/forgot-password/forgot-password.component";
 
 
 export const routes: Routes = [
@@ -43,9 +44,18 @@ export const routes: Routes = [
         component: LoginComponent
       },
       {
+        path: 'activate-account',
+        component: ActivateAccountComponent,
+        canActivate: [publicRoute]
+      },
+      {
         path: 'activate-account/:token',
         component: ActivateAccountComponent,
         canActivate: [publicRoute]
+      },
+      {
+        path: 'forgot-password',
+        component: ForgotPasswordComponent
       },
     ]
   },
