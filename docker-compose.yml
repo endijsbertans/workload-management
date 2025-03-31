@@ -19,6 +19,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
   wms-backend:
     container_name: wms-api
     image: ${DOCKERHUB_USERNAME}/wms-api:latest
@@ -45,11 +46,9 @@ services:
     depends_on:
       - wms-backend
     restart: always
-
 networks:
   spring-demo:
     driver: bridge
-
 volumes:
   mysql:
     driver: local
