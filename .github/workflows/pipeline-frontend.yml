@@ -82,6 +82,9 @@ jobs:
           export EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}
           export DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
           export EC2_HOST=${{ secrets.EC2_HOST }}
+          export SECRET_KEY=${{ secrets.SECRET_KEY }}
+          export DB_NAME=${{ secrets.DB_NAME }}
+          export DB_PASSWORD=${{ secrets.DB_PASSWORD }}
 
           cd ci-cd
           ls
