@@ -11,14 +11,14 @@ import { RequestBuilder } from '../../request-builder';
 import { WorkloadSettingsRequest } from '../../models/workload-settings-request';
 
 export interface UpdateWorkloadSettingsById$Params {
-  semesterId: number;
+  workloadSettingsId: number;
       body: WorkloadSettingsRequest
 }
 
 export function updateWorkloadSettingsById(http: HttpClient, rootUrl: string, params: UpdateWorkloadSettingsById$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
   const rb = new RequestBuilder(rootUrl, updateWorkloadSettingsById.PATH, 'patch');
   if (params) {
-    rb.path('semesterId', params.semesterId, {});
+    rb.path('workloadSettingsId', params.workloadSettingsId, {});
     rb.body(params.body, 'application/json');
   }
 
@@ -32,4 +32,4 @@ export function updateWorkloadSettingsById(http: HttpClient, rootUrl: string, pa
   );
 }
 
-updateWorkloadSettingsById.PATH = '/workload-settings/{semesterId}';
+updateWorkloadSettingsById.PATH = '/workload-settings/{workloadSettingsId}';

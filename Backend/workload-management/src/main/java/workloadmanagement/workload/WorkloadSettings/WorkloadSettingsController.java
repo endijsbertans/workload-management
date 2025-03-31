@@ -4,7 +4,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import workloadmanagement.auth.security.MyUser;
 
 
 import java.util.List;
@@ -16,29 +18,34 @@ public class WorkloadSettingsController {
     private final WorkloadSettingsService workloadSettingsService;
     @PostMapping
     public ResponseEntity<Integer> saveWorkloadSettings(
-            @Valid @RequestBody WorkloadSettingsRequest request){
-        return ResponseEntity.ok(workloadSettingsService.save(request));
+            @Valid @RequestBody WorkloadSettingsRequest request,
+            Authentication connectedUser){
+        MyUser user = (MyUser) connectedUser.getPrincipal();
+        return ResponseEntity.ok(workloadSettingsService.save(request, user));
     }
-    @PatchMapping("{semesterId}")
+    @PatchMapping("{workloadSettingsId}")
     public ResponseEntity<Integer> updateWorkloadSettingsById(
-            @PathVariable Integer semesterId,
-            @Valid @RequestBody WorkloadSettingsRequest request
+            @PathVariable Integer workloadSettingsId,
+            @Valid @RequestBody WorkloadSettingsRequest request,
+            Authentication connectedUser
     ){
-        return ResponseEntity.ok(workloadSettingsService.update(semesterId, request));
+        MyUser user = (MyUser) connectedUser.getPrincipal();
+        return ResponseEntity.ok(workloadSettingsService.update(workloadSettingsId, request, user));
     }
-    @DeleteMapping("{semesterId}")
+    @DeleteMapping("{workloadSettingsId}")
     public ResponseEntity<Integer> deleteWorkloadSettingsById(
-            @PathVariable Integer semesterId
+            @PathVariable Integer workloadSettingsId
     ){
-        return ResponseEntity.ok(workloadSettingsService.delete(semesterId));
+        return ResponseEntity.ok(workloadSettingsService.delete(workloadSettingsId));
     }
-    @GetMapping("{semesterId}")
+    @GetMapping("{workloadSettingsId}")
     public ResponseEntity<WorkloadSettingsResponse> findWorkloadSettingsById(
-            @PathVariable Integer semesterId){
-        return ResponseEntity.ok(workloadSettingsService.findById(semesterId));
+            @PathVariable Integer workloadSettingsId){
+        return ResponseEntity.ok(workloadSettingsService.findById(workloadSettingsId));
     }
     @GetMapping
-    public ResponseEntity<List<WorkloadSettingsResponse>> findAllWorkloadSettings(){
-        return ResponseEntity.ok(workloadSettingsService.findAllStatusTypes());
+    public ResponseEntity<List<WorkloadSettingsResponse>> findAllWorkloadSettings(Authentication connectedUser){
+        MyUser user = (MyUser) connectedUser.getPrincipal();
+        return ResponseEntity.ok(workloadSettingsService.findAllStatusTypes(user));
     }
 }

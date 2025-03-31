@@ -3,7 +3,8 @@ import { BehaviorSubject } from "rxjs";
 import { WorkloadSettingsService } from "../../../../services/services";
 import { WorkloadSettingsResponse } from "../../../../services/models/workload-settings-response";
 import { WorkloadSettingsRequest } from "../../../../services/models/workload-settings-request";
-import { ColumnsForWorkloadList, WorkloadColumnSettings } from "../workload-list-columns";
+import { ColumnsForWorkloadList, ColumnsForWorkloadListAdmin, WorkloadColumnSettings } from "../workload-list-columns";
+import { TokenService } from "../../../../services/token/token.service";
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +16,15 @@ export class WorkloadListSettingsService {
 
   currentSettings = signal<WorkloadSettingsResponse | null>(null);
   listSettings = signal<WorkloadColumnSettings[]>([...ColumnsForWorkloadList]);
+  private readonly tokenService = inject(TokenService);
 
   constructor() {
+    const isAdmin = signal(this.tokenService.isAdmin());
+    if (isAdmin()) {
+      this.listSettings.set([...ColumnsForWorkloadListAdmin]);
+    } else {
+      this.listSettings.set([...ColumnsForWorkloadList]);
+    }
     this.loadSettingsFromServer();
   }
 
@@ -32,10 +40,18 @@ export class WorkloadListSettingsService {
     });
   }
 
+  getDefaultSetting() {
+    const settings = this.availableSettings.getValue();
+    if (settings.length > 0) {
+      const defaultSetting = settings.find((s: WorkloadSettingsResponse) => s.default) || settings[0];
+      this.applySettings(defaultSetting);
+    }
+  }
+
   applySettings(settings: WorkloadSettingsResponse) {
     this.currentSettings.set(settings);
 
-    const newListSettings = ColumnsForWorkloadList.map(col => ({
+    const newListSettings = ColumnsForWorkloadListAdmin.map(col => ({
       ...col,
       visible: settings?.visibleColumns?.includes(col.pathTo) || false
     }));
@@ -44,7 +60,7 @@ export class WorkloadListSettingsService {
   }
 
   createNewSettings(name: string, isDefault: boolean = false, currentSettings?: WorkloadColumnSettings[]) {
-  const settingsToUse = currentSettings || this.listSettings();
+    const settingsToUse = currentSettings || this.listSettings();
 
     const currentVisibleColumns = settingsToUse
       .filter(col => col.visible)
@@ -76,24 +92,46 @@ export class WorkloadListSettingsService {
       visibleColumns: currentVisibleColumns,
       isDefault: isDefault
     };
-    if(currentSetting.workloadSettingsId) {
-    this.workloadListSettingsService.updateWorkloadSettingsById({
-      semesterId: currentSetting.workloadSettingsId,
-      body: updatedSettings
+
+    if (currentSetting.workloadSettingsId) {
+      this.workloadListSettingsService.updateWorkloadSettingsById({
+        workloadSettingsId: currentSetting.workloadSettingsId,
+        body: updatedSettings
+      }).subscribe({
+        next: () => {
+          this.loadSettingsFromServer();
+        }
+      });
+    }
+  }
+  deleteSettings(settingId:number) {
+    if (!settingId) return;
+
+    this.workloadListSettingsService.deleteWorkloadSettingsById({
+      workloadSettingsId: settingId
     }).subscribe({
       next: () => {
         this.loadSettingsFromServer();
       }
     });
   }
-  }
   getMainSettings(): ({ name: string; collection: string }[]) {
-    return [
-      {collection: "columnsForTeacher", name: "Docenti"},
-      {collection: "columnsForCourse", name: "StudijuPriekšmeti"},
-      {collection: "columnsForCalc", name: "Aprēķini"},
-      {collection: "columnsForWorkloadClasses", name: "Kursi"},
-      {collection: "columnsForSalary", name: "Budžeta"}
-    ];
+    const isAdmin = signal(this.tokenService.isAdmin());
+    if (isAdmin()) {
+      return [
+        {collection: "columnsForTeacher", name: "Docenti"},
+        {collection: "columnsForCourse", name: "StudijuPriekšmeti"},
+        {collection: "columnsForCalc", name: "Aprēķini"},
+        {collection: "columnsForWorkloadClasses", name: "Kursi"},
+        {collection: "columnsForSalary", name: "Budžeta"}
+      ];
+    } else {
+      return [
+        {collection: "columnsForTeacher", name: "Docenti"},
+        {collection: "columnsForCourse", name: "StudijuPriekšmeti"},
+        {collection: "columnsForCalc", name: "Aprēķini"},
+        {collection: "columnsForWorkloadClasses", name: "Kursi"}
+      ];
+    }
   }
 }

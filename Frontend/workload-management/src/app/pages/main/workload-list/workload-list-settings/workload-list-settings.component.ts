@@ -40,11 +40,10 @@ export class WorkloadListSettingsComponent {
   isDefault = signal(this.selectedSetting()?.default || false);
   hasUnsavedChanges = signal(false);
 
-  localSettings = signal(this.columnSettingsService.listSettings());
+  loadedSettings = signal(this.columnSettingsService.listSettings());
 
   toggleGroupVisibility(column: string, visible: boolean) {
-    // Only update local state
-    this.localSettings.update(settings =>
+    this.loadedSettings.update(settings =>
       settings.map(col =>
         col.pathTo === column ? { ...col, visible: !visible } : col
       )
@@ -58,8 +57,7 @@ export class WorkloadListSettingsComponent {
       this.selectedSetting.set(selectedSetting);
       this.isDefault.set(selectedSetting.default || false);
 
-      // Update local settings to match selected setting
-      this.localSettings.set(this.columnSettingsService.listSettings().map(col => ({
+      this.loadedSettings.set(this.columnSettingsService.listSettings().map(col => ({
         ...col,
         visible: selectedSetting.visibleColumns?.includes(col.pathTo) || false
       })));
@@ -75,7 +73,7 @@ export class WorkloadListSettingsComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.columnSettingsService.createNewSettings(result.name, result.isDefault, this.localSettings());
+        this.columnSettingsService.createNewSettings(result.name, result.isDefault, this.loadedSettings());
         this.snackBar.open('Iestatījumu šablons saglabāts', 'Aizvērt', {duration: 3000});
       }
     });
@@ -88,7 +86,7 @@ export class WorkloadListSettingsComponent {
 
   saveChanges() {
 
-    this.columnSettingsService.listSettings.set(this.localSettings());
+    this.columnSettingsService.listSettings.set(this.loadedSettings());
 
     const selectedSetting = this.selectedSetting();
     if (selectedSetting) {
@@ -98,13 +96,23 @@ export class WorkloadListSettingsComponent {
     }
   }
 
-  // Helper methods
   getMainSettings() {
     return this.columnSettingsService.getMainSettings();
   }
 
   getSubSettings(collection: string) {
-    // Use local settings for checkboxes
-    return this.localSettings().filter(column => column.collection === collection && !column.isMain);
+    return this.loadedSettings().filter(column => column.collection === collection && !column.isMain);
+  }
+  deleteCurrentSetting() {
+    const selectedSetting = this.selectedSetting();
+    if (selectedSetting?.workloadSettingsId) {
+      if (confirm('Vai tiešām vēlaties dzēst šo iestatījumu šablonu?')) {
+        this.columnSettingsService.deleteSettings(selectedSetting.workloadSettingsId);
+        this.snackBar.open('Iestatījumu šablons dzēsts', 'Aizvērt', {duration: 3000});
+        this.hasUnsavedChanges.set(false);
+      }
+    } else {
+      this.snackBar.open('Nav izvēlēts iestatījumu šablons', 'Aizvērt', {duration: 3000});
+    }
   }
 }

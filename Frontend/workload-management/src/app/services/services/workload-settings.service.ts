@@ -80,7 +80,7 @@ export class WorkloadSettingsService extends BaseService {
   }
 
   /** Path part for operation `findWorkloadSettingsById()` */
-  static readonly FindWorkloadSettingsByIdPath = '/workload-settings/{semesterId}';
+  static readonly FindWorkloadSettingsByIdPath = '/workload-settings/{workloadSettingsId}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -105,7 +105,7 @@ export class WorkloadSettingsService extends BaseService {
   }
 
   /** Path part for operation `deleteWorkloadSettingsById()` */
-  static readonly DeleteWorkloadSettingsByIdPath = '/workload-settings/{semesterId}';
+  static readonly DeleteWorkloadSettingsByIdPath = '/workload-settings/{workloadSettingsId}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -130,7 +130,7 @@ export class WorkloadSettingsService extends BaseService {
   }
 
   /** Path part for operation `updateWorkloadSettingsById()` */
-  static readonly UpdateWorkloadSettingsByIdPath = '/workload-settings/{semesterId}';
+  static readonly UpdateWorkloadSettingsByIdPath = '/workload-settings/{workloadSettingsId}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.

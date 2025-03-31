@@ -11,13 +11,13 @@ import { RequestBuilder } from '../../request-builder';
 import { WorkloadSettingsResponse } from '../../models/workload-settings-response';
 
 export interface FindWorkloadSettingsById$Params {
-  semesterId: number;
+  workloadSettingsId: number;
 }
 
 export function findWorkloadSettingsById(http: HttpClient, rootUrl: string, params: FindWorkloadSettingsById$Params, context?: HttpContext): Observable<StrictHttpResponse<WorkloadSettingsResponse>> {
   const rb = new RequestBuilder(rootUrl, findWorkloadSettingsById.PATH, 'get');
   if (params) {
-    rb.path('semesterId', params.semesterId, {});
+    rb.path('workloadSettingsId', params.workloadSettingsId, {});
   }
 
   return http.request(
@@ -30,4 +30,4 @@ export function findWorkloadSettingsById(http: HttpClient, rootUrl: string, para
   );
 }
 
-findWorkloadSettingsById.PATH = '/workload-settings/{semesterId}';
+findWorkloadSettingsById.PATH = '/workload-settings/{workloadSettingsId}';

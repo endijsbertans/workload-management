@@ -13,9 +13,11 @@
   }
   <mat-form-field>
     <mat-label>Iestatījumi</mat-label>
-    <mat-select>
+    <mat-select
+      [value]="columnSettingsService.currentSettings()"
+      (selectionChange)="applySettings($event.value)">
       @for (setting of availableSettings$ | async; track setting.workloadSettingsId) {
-        <mat-option [value]="setting" (click)="applySettings(setting)">
+        <mat-option [value]="setting">
           {{ setting.settingName }} {{ setting.default ? '(noklusējuma)' : '' }}
         </mat-option>
       }
