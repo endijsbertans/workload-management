@@ -4,6 +4,8 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import workloadmanagement.auth.security.MyUser;
+import workloadmanagement.repo.ITeachingStaffRepo;
 import workloadmanagement.semester.SemesterService;
 import workloadmanagement.teachingstaff.TeachingStaff;
 import workloadmanagement.teachingstaff.TeachingStaffService;
@@ -15,18 +17,20 @@ import java.util.List;
 public class WorkloadSettingsService {
     private final WorkloadSettingsMapper workloadSettingsMapper;
     private final IWorkloadSettingsRepo workloadSettingsRepo;
-    private final TeachingStaffService teachingStaffService;
+    private final ITeachingStaffRepo teachingStaffRepo;
 
-    public Integer save(@Valid WorkloadSettingsRequest request) {
-       // TeachingStaff teachingStaff = teachingStaffService.findTeachingStaffFromResponseId(request.teachingStaffId());
-        WorkloadSettings workloadSettings = workloadSettingsMapper.toWorkloadSettings(request);
+    public Integer save(@Valid WorkloadSettingsRequest request, MyUser user) {
+        TeachingStaff tStaff = teachingStaffRepo.findByUser(user)
+                .orElseThrow(() -> new EntityNotFoundException("No teaching staff found for user: " + user.getEmail()));
+        WorkloadSettings workloadSettings = workloadSettingsMapper.toWorkloadSettings(request, tStaff);
         return workloadSettingsRepo.save(workloadSettings).getWorkloadSettingsId();
     }
 
-    public Integer update(Integer semesterId, @Valid WorkloadSettingsRequest request) {
+    public Integer update(Integer semesterId, @Valid WorkloadSettingsRequest request, MyUser user) {
+        TeachingStaff tStaff = teachingStaffRepo.findByUser(user)
+                .orElseThrow(() -> new EntityNotFoundException("No teaching staff found for user: " + user.getEmail()));
         WorkloadSettings existingSettings = findWorkloadSettingsById(semesterId);
-       // TeachingStaff teachingStaff = teachingStaffService.findTeachingStaffFromResponseId(request.teachingStaffId());
-        WorkloadSettings updatedSettings = workloadSettingsMapper.toWorkloadSettings(request);
+        WorkloadSettings updatedSettings = workloadSettingsMapper.toWorkloadSettings(request, tStaff);
         updatedSettings.setWorkloadSettingsId(existingSettings.getWorkloadSettingsId());
 
         return workloadSettingsRepo.save(updatedSettings).getWorkloadSettingsId();
@@ -44,11 +48,12 @@ public class WorkloadSettingsService {
                 .orElseThrow(() -> new EntityNotFoundException("Workload settings with id: " + semesterId + " not found."));
     }
 
-    public List<WorkloadSettingsResponse> findAllStatusTypes() {
-        List<WorkloadSettings> settings = workloadSettingsRepo.findAll();
-        System.out.println(settings.stream()
-                .map(workloadSettingsMapper::toWorkloadSettingsResponse)
-                .toList());
+    public List<WorkloadSettingsResponse> findAllStatusTypes(MyUser user) {
+        TeachingStaff staff = teachingStaffRepo.findByUser(user)
+                .orElseThrow(() -> new EntityNotFoundException("No teaching staff found for user: " + user.getEmail()));
+
+        List<WorkloadSettings> settings = workloadSettingsRepo.findByTeachingStaffStaff(staff);
+
         return settings.stream()
                 .map(workloadSettingsMapper::toWorkloadSettingsResponse)
                 .toList();

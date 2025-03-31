@@ -3,7 +3,6 @@
   <h2>{{ pageTitle() }}</h2>
   @if (!bulkMode()) {
     <form [formGroup]="classForm" (ngSubmit)="onSubmit()">
-      <h2>Pievienot jaunu kursu</h2>
 
       <mat-form-field appearance="outline">
         @if (classForm.controls.classLevel.invalid) {

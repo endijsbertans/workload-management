@@ -43,7 +43,8 @@
       Iestatīt kā noklusējumu
     </mat-slide-toggle>
     <button mat-raised-button type="button" routerLink="../">Atcelt</button>
-    <button mat-raised-button color="primary" (click)="saveChanges()">Saglabāt</button>
+    <button mat-raised-button id="delete" (click)="deleteCurrentSetting()">Dzēst</button>
+    <button mat-raised-button  (click)="saveChanges()">Saglabāt izmaiņas esošam</button>
     <button mat-raised-button (click)="openSaveDialog()">Saglabāt kā jaunu šablonu</button>
   </div>
 </dialog>

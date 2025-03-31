@@ -20,11 +20,11 @@ import java.util.List;
 public class WorkloadSettings {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int WorkloadSettingsId;
+    private int workloadSettingsId;
     private boolean isGlobal;
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private TeachingStaff tStaff;
+    private TeachingStaff teachingStaffStaff;
 
     private String settingName;
 

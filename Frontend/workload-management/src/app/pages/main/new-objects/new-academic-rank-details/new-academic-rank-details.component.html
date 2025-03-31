@@ -2,7 +2,6 @@
 <dialog open>
   <h2>{{ pageTitle() }}</h2>
   <form [formGroup]="academicRankDetailsForm" (ngSubmit)="onSubmit()">
-    <h2>Pievienot amata detaļas</h2>
 
     <mat-form-field appearance="outline">
       @if (academicRankDetailsForm.controls.cpForFullTime.invalid) {

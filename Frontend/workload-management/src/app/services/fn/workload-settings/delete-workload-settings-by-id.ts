@@ -10,13 +10,13 @@ import { RequestBuilder } from '../../request-builder';
 
 
 export interface DeleteWorkloadSettingsById$Params {
-  semesterId: number;
+  workloadSettingsId: number;
 }
 
 export function deleteWorkloadSettingsById(http: HttpClient, rootUrl: string, params: DeleteWorkloadSettingsById$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
   const rb = new RequestBuilder(rootUrl, deleteWorkloadSettingsById.PATH, 'delete');
   if (params) {
-    rb.path('semesterId', params.semesterId, {});
+    rb.path('workloadSettingsId', params.workloadSettingsId, {});
   }
 
   return http.request(
@@ -29,4 +29,4 @@ export function deleteWorkloadSettingsById(http: HttpClient, rootUrl: string, pa
   );
 }
 
-deleteWorkloadSettingsById.PATH = '/workload-settings/{semesterId}';
+deleteWorkloadSettingsById.PATH = '/workload-settings/{workloadSettingsId}';

@@ -883,7 +883,7 @@
         }
       }
     },
-    "/workload-settings/{semesterId}": {
+    "/workload-settings/{workloadSettingsId}": {
       "get": {
         "tags": [
           "WorkloadSettings"
@@ -891,7 +891,7 @@
         "operationId": "findWorkloadSettingsById",
         "parameters": [
           {
-            "name": "semesterId",
+            "name": "workloadSettingsId",
             "in": "path",
             "required": true,
             "schema": {
@@ -920,7 +920,7 @@
         "operationId": "deleteWorkloadSettingsById",
         "parameters": [
           {
-            "name": "semesterId",
+            "name": "workloadSettingsId",
             "in": "path",
             "required": true,
             "schema": {
@@ -950,7 +950,7 @@
         "operationId": "updateWorkloadSettingsById",
         "parameters": [
           {
-            "name": "semesterId",
+            "name": "workloadSettingsId",
             "in": "path",
             "required": true,
             "schema": {
@@ -2578,11 +2578,11 @@
           "staffPhoto": {
             "type": "string"
           },
-          "staffFullName": {
-            "type": "string"
-          },
           "deleted": {
             "type": "boolean"
+          },
+          "staffFullName": {
+            "type": "string"
           },
           "rankFullName": {
             "type": "string"

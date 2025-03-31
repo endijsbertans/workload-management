@@ -66,7 +66,14 @@ export const routes: Routes = [
     canActivate: [authGuard],
     children: [{
       path: 'user-workload',
-      component: WorkloadListComponent
+      component: WorkloadListComponent,
+      children: [
+        {
+          path: 'column-settings',
+          component: WorkloadListSettingsComponent
+        }
+      ]
+
     },
       {
         path: 'admin-workload',
