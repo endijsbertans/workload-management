@@ -30,6 +30,9 @@ services:
       - EMAIL_USER_NAME=${EMAIL_USER_NAME}
       - EMAIL_PASSWORD=${EMAIL_PASSWORD}
       - EC2_HOST=${EC2_HOST}
+      - SECRET_KEY=${SECRET_KEY}
+      - DB_NAME=${DB_NAME}
+      - DB_PASSWORD=${DB_PASSWORD}
     networks:
       - spring-demo
     depends_on:
