@@ -46,6 +46,7 @@ services:
     depends_on:
       - wms-backend
     restart: always
+
 networks:
   spring-demo:
     driver: bridge
