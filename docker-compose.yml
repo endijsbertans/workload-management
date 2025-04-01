@@ -38,7 +38,6 @@ services:
     depends_on:
       - mysql
     restart: always
-
   wms-frontend:
     container_name: wms-ui
     image: ${DOCKERHUB_USERNAME}/wms-ui:latest
