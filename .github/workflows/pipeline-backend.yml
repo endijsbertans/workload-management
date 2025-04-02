@@ -10,7 +10,6 @@ on:
       - 'docker-compose.yml'
       - .github/workflows/*-backend.yml
 jobs:
-
   build:
     runs-on: ubuntu-latest
     name: Build backend

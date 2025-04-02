@@ -85,7 +85,6 @@ jobs:
           export SECRET_KEY=${{ secrets.SECRET_KEY }}
           export DB_NAME=${{ secrets.DB_NAME }}
           export DB_PASSWORD=${{ secrets.DB_PASSWORD }}
-
           cd ci-cd
           ls
           sudo -E docker-compose -f docker-compose.yml pull -q
