@@ -12,7 +12,8 @@ import {
   ColumnsForStatusTypeResponse,
   ColumnsForSemesterResponse, ColumnsForAcademicRankDetailsResponse, ColumnsForFacultyResponse
 } from '../new-objects/object-columns';
-import {Router, RouterOutlet} from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
+import { NavigationEnd } from '@angular/router';
 import {TeachingStaffService} from "../../../services/services/teaching-staff.service";
 import {CourseService} from "../../../services/services/course.service";
 import {MyClassService} from "../../../services/services/my-class.service";
@@ -47,8 +48,8 @@ export class ObjectContainerComponent implements OnInit {
   private readonly statusTypeService = inject(StatusTypeService);
   private readonly semesterService = inject(SemesterControllerService);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly router = inject(Router);
   private readonly _snackBar = inject(MatSnackBar);
+  private readonly router = inject(Router);
 
   tStaff = signal<TeachingStaffResponse[] | undefined>(undefined);
   courses = signal<CourseResponse[] | undefined>(undefined);
@@ -75,6 +76,11 @@ export class ObjectContainerComponent implements OnInit {
 
   ngOnInit() {
     this.loadTableData();
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.loadTableData();
+      }
+    });
   }
 
   onTableTypeChange() {

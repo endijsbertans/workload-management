@@ -99,9 +99,6 @@ export class NewStatusTypesComponent implements OnInit{
         }
       })
     }
-    this.router.navigate(['..'], {
-      relativeTo: this.activeRoute,
-      replaceUrl: true});
   }
   private updateStatusType(data: StatusTypeRequest): void {
     const id = this.objectId();
