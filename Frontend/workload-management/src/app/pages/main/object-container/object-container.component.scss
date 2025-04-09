@@ -23,7 +23,16 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
+  }
 
+  .semester-button {
+    padding: 8px 16px;
+    background-color: var(--mat-sys-primary);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
   }
 }
 

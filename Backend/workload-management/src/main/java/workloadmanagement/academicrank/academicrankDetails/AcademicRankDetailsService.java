@@ -9,7 +9,9 @@ import workloadmanagement.academicrank.AcademicRankService;
 import workloadmanagement.semester.Semester;
 import workloadmanagement.semester.SemesterService;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +36,9 @@ public class AcademicRankDetailsService {
         return academicRankDetailsRepo.findByAcademicRank_AcademicRankIdAndSemester_SemesterYear(academicRankId, semester.getSemesterYear())
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Academic Rank with ID: " + academicRankId + " not found for year: " + semester.getSemesterYear()));
+    }
+    public Optional<AcademicRankDetails> findAcademicRankDetailsByAcademicRankAndSemester(int academicRankId, Semester semester) {
+        return academicRankDetailsRepo.findByAcademicRank_AcademicRankIdAndSemester(academicRankId, semester);
     }
     public AcademicRankDetails findExistingAcademicRankDetailsById(Integer academicRankDetailsId) {
         return academicRankDetailsRepo.findById(academicRankDetailsId)
@@ -70,4 +75,40 @@ public class AcademicRankDetailsService {
 
     ) {}
 
+    public List<AcademicRankDetailsResponse> findAcademicRankDetailsBySemester(Semester semester) {
+        List<AcademicRankDetails> academicRankDetails = academicRankDetailsRepo.findBySemesterAndIsDeletedFalse(semester);
+        return academicRankDetails.stream()
+                .map(academicRankDetailsMapper::toAcademicRankDetailsResponse)
+                .toList();
+    }
+
+    public int copyAcademicRankDetailsFromSemester(Semester sourceSemester, Semester targetSemester) {
+        List<AcademicRankDetails> sourceDetails = academicRankDetailsRepo.findBySemesterAndIsDeletedFalse(sourceSemester);
+        List<AcademicRankDetails> newDetails = new ArrayList<>();
+
+        for (AcademicRankDetails source : sourceDetails) {
+            // Check if this academic rank already has details for the target semester
+            Optional<AcademicRankDetails> existingDetails = academicRankDetailsRepo
+                    .findByAcademicRank_AcademicRankIdAndSemester(source.getAcademicRank().getAcademicRankId(), targetSemester);
+
+            if (existingDetails.isEmpty()) {
+                AcademicRankDetails newDetail = AcademicRankDetails.builder()
+                        .academicRank(source.getAcademicRank())
+                        .cpForFullTime(source.getCpForFullTime())
+                        .salary(source.getSalary())
+                        .contactHoursForFullTime(source.getContactHoursForFullTime())
+                        .semester(targetSemester)
+                        .isDeleted(false)
+                        .build();
+
+                newDetails.add(newDetail);
+            }
+        }
+
+        if (!newDetails.isEmpty()) {
+            academicRankDetailsRepo.saveAll(newDetails);
+        }
+
+        return newDetails.size();
+    }
 }

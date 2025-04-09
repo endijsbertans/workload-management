@@ -11,10 +11,18 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { copyAcademicRanksFromSemester } from '../fn/semester-controller/copy-academic-ranks-from-semester';
+import { CopyAcademicRanksFromSemester$Params } from '../fn/semester-controller/copy-academic-ranks-from-semester';
+import { copyWorkloadsFromSemester } from '../fn/semester-controller/copy-workloads-from-semester';
+import { CopyWorkloadsFromSemester$Params } from '../fn/semester-controller/copy-workloads-from-semester';
 import { deleteSemesterById } from '../fn/semester-controller/delete-semester-by-id';
 import { DeleteSemesterById$Params } from '../fn/semester-controller/delete-semester-by-id';
 import { findAllSemesters } from '../fn/semester-controller/find-all-semesters';
 import { FindAllSemesters$Params } from '../fn/semester-controller/find-all-semesters';
+import { findMostRecentSemester } from '../fn/semester-controller/find-most-recent-semester';
+import { FindMostRecentSemester$Params } from '../fn/semester-controller/find-most-recent-semester';
+import { findPreviousYearSemester } from '../fn/semester-controller/find-previous-year-semester';
+import { FindPreviousYearSemester$Params } from '../fn/semester-controller/find-previous-year-semester';
 import { findSemesterById } from '../fn/semester-controller/find-semester-by-id';
 import { FindSemesterById$Params } from '../fn/semester-controller/find-semester-by-id';
 import { saveSemester } from '../fn/semester-controller/save-semester';
@@ -75,6 +83,56 @@ export class SemesterControllerService extends BaseService {
    */
   saveSemester(params: SaveSemester$Params, context?: HttpContext): Observable<number> {
     return this.saveSemester$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
+  /** Path part for operation `copyWorkloadsFromSemester()` */
+  static readonly CopyWorkloadsFromSemesterPath = '/semester/{targetSemesterId}/copy-workloads/{sourceSemesterId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `copyWorkloadsFromSemester()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  copyWorkloadsFromSemester$Response(params: CopyWorkloadsFromSemester$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return copyWorkloadsFromSemester(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `copyWorkloadsFromSemester$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  copyWorkloadsFromSemester(params: CopyWorkloadsFromSemester$Params, context?: HttpContext): Observable<number> {
+    return this.copyWorkloadsFromSemester$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
+  /** Path part for operation `copyAcademicRanksFromSemester()` */
+  static readonly CopyAcademicRanksFromSemesterPath = '/semester/{targetSemesterId}/copy-academic-ranks/{sourceSemesterId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `copyAcademicRanksFromSemester()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  copyAcademicRanksFromSemester$Response(params: CopyAcademicRanksFromSemester$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return copyAcademicRanksFromSemester(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `copyAcademicRanksFromSemester$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  copyAcademicRanksFromSemester(params: CopyAcademicRanksFromSemester$Params, context?: HttpContext): Observable<number> {
+    return this.copyAcademicRanksFromSemester$Response(params, context).pipe(
       map((r: StrictHttpResponse<number>): number => r.body)
     );
   }
@@ -151,6 +209,56 @@ export class SemesterControllerService extends BaseService {
   updateSemesterById(params: UpdateSemesterById$Params, context?: HttpContext): Observable<number> {
     return this.updateSemesterById$Response(params, context).pipe(
       map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
+  /** Path part for operation `findPreviousYearSemester()` */
+  static readonly FindPreviousYearSemesterPath = '/semester/{semesterId}/previous-year';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `findPreviousYearSemester()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findPreviousYearSemester$Response(params: FindPreviousYearSemester$Params, context?: HttpContext): Observable<StrictHttpResponse<SemesterResponse>> {
+    return findPreviousYearSemester(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `findPreviousYearSemester$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findPreviousYearSemester(params: FindPreviousYearSemester$Params, context?: HttpContext): Observable<SemesterResponse> {
+    return this.findPreviousYearSemester$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SemesterResponse>): SemesterResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `findMostRecentSemester()` */
+  static readonly FindMostRecentSemesterPath = '/semester/most-recent';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `findMostRecentSemester()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findMostRecentSemester$Response(params?: FindMostRecentSemester$Params, context?: HttpContext): Observable<StrictHttpResponse<SemesterResponse>> {
+    return findMostRecentSemester(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `findMostRecentSemester$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  findMostRecentSemester(params?: FindMostRecentSemester$Params, context?: HttpContext): Observable<SemesterResponse> {
+    return this.findMostRecentSemester$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SemesterResponse>): SemesterResponse => r.body)
     );
   }
 

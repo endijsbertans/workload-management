@@ -20,6 +20,12 @@ header{
   @include mat.fab-overrides((
     container-color: var(--mat-sys-surface)
   ));
+
+  .semester-config-btn {
+    background-color: var(--mat-sys-surface);
+    color: var(--mat-sys-on-surface);
+    font-weight: bold;
+  }
 }
 .VeaLogo {
   position: absolute;

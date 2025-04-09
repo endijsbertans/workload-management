@@ -1,13 +1,15 @@
 <div class="backdrop"></div>
 <dialog open>
     <h2>{{ pageTitle() }}</h2>
+    <p class="config-description white-text">Izveidojiet jaunu semestri un konfigurējiet tā iestatījumus</p>
   <form [formGroup]="semesterForm" (ngSubmit)="onSubmit()">
     <mat-form-field class="input-flex">
+      <mat-label>Semestra nosaukums</mat-label>
       <mat-select required [formControl]="semesterForm.controls.semesterName">
-              <mat-option value="rudens">
+              <mat-option value="pavasaris">
                 pavasaris
               </mat-option>
-              <mat-option value="pavasaris">
+              <mat-option value="rudens">
                 rudens
               </mat-option>
       </mat-select>
@@ -27,12 +29,48 @@
       />
     </mat-form-field>
 
-    @if(editMode()){
-      <button mat-raised-button type="button" (click)="navigateBackFromEditMode()" >Atcelt</button>
-      <button mat-raised-button type="submit" [disabled]="semesterForm.invalid">Rediģēt</button>
-    }@else{
-      <button mat-raised-button type="button" (click)="navigateBackFromCreateMode()" >Atcelt</button>
-      <button mat-raised-button type="submit" [disabled]="semesterForm.invalid">Izveidot</button>
+    @if(!editMode()) {
+      <div class="options-section">
+        <h3>Konfigurācija</h3>
+
+        @if(loading()) {
+          <div class="loading-spinner">
+            <mat-spinner diameter="30"></mat-spinner>
+            <span class="white-text">Ielādē datus...</span>
+          </div>
+        } @else {
+          <div class="copy-options">
+            @if(correspondingSemester()) {
+              <div class="semester-info">
+                <p class="info-text white-text">Atrasts iepriekšējā gada {{ semesterForm.value.semesterName }} semestris ({{ correspondingSemester()?.year }})</p>
+              </div>
+            } @else if(semesterForm.value.year && semesterForm.value.semesterName) {
+              <div class="error-message">
+                <p>Nav atrasts {{ semesterForm.value.year - 1 }} gada {{ semesterForm.value.semesterName }} semestris</p>
+                <p>Kopēšanas opcijas nav pieejamas.</p>
+              </div>
+            }
+
+            <mat-checkbox [formControl]="semesterForm.controls.copyAcademicRanks" [disabled]="!correspondingSemester()" class="white-text">
+              Kopēt akadēmiskos amatus no {{ semesterForm.value.year ? (semesterForm.value.year - 1) : '' }} gada {{ semesterForm.value.semesterName }} semestra
+            </mat-checkbox>
+
+            <mat-checkbox [formControl]="semesterForm.controls.copySemesterData" [disabled]="!correspondingSemester()" class="white-text">
+              Kopēt darba slodzes no {{ semesterForm.value.year ? (semesterForm.value.year - 1) : '' }} gada {{ semesterForm.value.semesterName }} semestra
+            </mat-checkbox>
+          </div>
+        }
+      </div>
     }
+
+    <div class="button-group">
+      @if(editMode()){
+        <button mat-raised-button type="button" (click)="navigateBackFromEditMode()" >Atcelt</button>
+        <button mat-raised-button type="submit" [disabled]="semesterForm.invalid || loading()">Rediģēt</button>
+      }@else{
+        <button mat-raised-button type="button" (click)="navigateBackFromCreateMode()" >Atcelt</button>
+        <button mat-raised-button type="submit" [disabled]="semesterForm.invalid || loading()">Izveidot un konfigurēt</button>
+      }
+    </div>
   </form>
 </dialog>

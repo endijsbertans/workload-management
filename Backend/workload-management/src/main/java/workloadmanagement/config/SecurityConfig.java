@@ -38,13 +38,18 @@ public class SecurityConfig {
                             ).permitAll()
                             .requestMatchers(
                                     "/workload-settings/**",
-                                    "/workload/my-workloads/**"
+                                    "/workload/my-workloads/**",
+                                    "/semester/most-recent",
+                                    "/semester/{semesterId}/previous-year",
+                                    "/semester"
                             ).hasAnyAuthority("ADMIN", "USER")
                             .requestMatchers(
                                     "/academicRankDetails/**",
                                     "/teaching-staff/**",
                                     "/status-type/**",
-                                    "/semester/**",
+                                    "/semester/{semesterId}/copy-academic-ranks/**",
+                                    "/semester/{semesterId}/copy-workloads/**",
+                                    "/semester/{semesterId}",
                                     "/myClass/**",
                                     "/faculty/**",
                                     "/course/**",

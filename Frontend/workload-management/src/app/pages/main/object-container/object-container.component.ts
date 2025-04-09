@@ -162,6 +162,10 @@ export class ObjectContainerComponent implements OnInit {
         break;
     }
   }
+
+  createNewSemester() {
+    this.router.navigate(['/main/objects/new-semester']);
+  }
   private fetchAllFaculties(): void {
     this.facultyService.findAllFaculties().subscribe({
       next: (data) => {

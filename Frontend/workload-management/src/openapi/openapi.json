@@ -361,6 +361,88 @@
         }
       }
     },
+    "/semester/{targetSemesterId}/copy-workloads/{sourceSemesterId}": {
+      "post": {
+        "tags": [
+          "semester-controller"
+        ],
+        "operationId": "copyWorkloadsFromSemester",
+        "parameters": [
+          {
+            "name": "targetSemesterId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "sourceSemesterId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/semester/{targetSemesterId}/copy-academic-ranks/{sourceSemesterId}": {
+      "post": {
+        "tags": [
+          "semester-controller"
+        ],
+        "operationId": "copyAcademicRanksFromSemester",
+        "parameters": [
+          {
+            "name": "targetSemesterId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "sourceSemesterId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/my-class": {
       "get": {
         "tags": [
@@ -1881,6 +1963,57 @@
         }
       }
     },
+    "/semester/{semesterId}/previous-year": {
+      "get": {
+        "tags": [
+          "semester-controller"
+        ],
+        "operationId": "findPreviousYearSemester",
+        "parameters": [
+          {
+            "name": "semesterId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SemesterResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/semester/most-recent": {
+      "get": {
+        "tags": [
+          "semester-controller"
+        ],
+        "operationId": "findMostRecentSemester",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SemesterResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/my-class/template": {
       "get": {
         "tags": [
@@ -2783,14 +2916,14 @@
           "name": {
             "type": "string"
           },
-          "username": {
-            "type": "string"
+          "credentialsNonExpired": {
+            "type": "boolean"
           },
           "accountNonExpired": {
             "type": "boolean"
           },
-          "credentialsNonExpired": {
-            "type": "boolean"
+          "username": {
+            "type": "string"
           },
           "accountNonLocked": {
             "type": "boolean"

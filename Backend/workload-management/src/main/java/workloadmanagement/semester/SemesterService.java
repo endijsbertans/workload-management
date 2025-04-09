@@ -5,9 +5,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import workloadmanagement.repo.ISemesterRepo;
-import workloadmanagement.statustype.StatusType;
 
 import java.util.List;
+import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class SemesterService {
@@ -37,7 +37,7 @@ public class SemesterService {
                 .orElseThrow(()-> new EntityNotFoundException("Semester with id: " + statusTypeId + " not found"));
     }
     public List<SemesterResponse> findAllStatusTypes() {
-        List<Semester> semesters = semesterRepo.findByIsDeletedFalse();
+        List<Semester> semesters = semesterRepo.findByIsDeletedFalseOrderBySemesterYearDesc();
         return semesters.stream()
                 .map(semesterMapper::toSemesterResponse)
                 .toList();
@@ -48,5 +48,22 @@ public class SemesterService {
         semester.setDeleted(true);
         semesterRepo.save(semester);
         return semesterId;
+    }
+
+
+    public Optional<Semester> findPreviousYearSemester(Semester currentSemester) {
+        int previousYear = currentSemester.getSemesterYear() - 1;
+        return semesterRepo.findBySemesterYearAndSemesterName(previousYear, currentSemester.getSemesterName());
+    }
+
+
+    public List<Semester> findSemestersByYear(int year) {
+        return semesterRepo.findBySemesterYearAndIsDeletedFalse(year);
+    }
+
+
+    public Optional<Semester> findMostRecentSemester() {
+        List<Semester> semesters = semesterRepo.findByIsDeletedFalseOrderBySemesterYearDesc();
+        return semesters.isEmpty() ? Optional.empty() : Optional.of(semesters.get(0));
     }
 }

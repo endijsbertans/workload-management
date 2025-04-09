@@ -2,17 +2,21 @@
   <img src="VeaLogo.svg" class="VeaLogo">
   <nav class="flex">
     <a mat-fab extended routerLink="user-workload">
-      <mat-icon>favorite</mat-icon>
+      <mat-icon>person</mat-icon>
       Savi dati
     </a>
     @if(isAdmin()){
     <a mat-fab extended routerLink="admin-workload">
-      <mat-icon>favorite</mat-icon>
+      <mat-icon>view_list</mat-icon>
       Lielā tabula
     </a>
     <a mat-fab extended routerLink="objects">
-      <mat-icon>favorite</mat-icon>
+      <mat-icon>table_chart</mat-icon>
       Specifiska tabula
+    </a>
+    <a mat-fab extended routerLink="objects/new-semester" class="semester-config-btn">
+      <mat-icon>event</mat-icon>
+      Jauns semestris
     </a>
     }
     <h1>{{ this.authDetails.fullName }} {{ this.authDetails.authorities }}</h1>

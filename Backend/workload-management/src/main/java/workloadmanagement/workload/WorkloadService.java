@@ -264,4 +264,47 @@ public PageResponse<WorkloadResponse> findAllWorkloads(Pageable pageable, Map<St
             List<MyClass> myClasses,
             MyClass groupForSemester
     ) {}
+
+
+    public int copyWorkloadsFromSemester(Semester sourceSemester, Semester newSemester) {
+        List<Workload> sourceWorkloads = workloadRepo.findBySemester(sourceSemester);
+        List<Workload> newWorkloads = new ArrayList<>();
+
+        for (Workload source : sourceWorkloads) {
+
+                WorkloadRequest request = createWorkloadRequestFromSource(source, newSemester.getSemesterId());
+
+                WorkloadEntities entities = resolveEntities(request);
+                Workload newWorkload = workloadMapper.toWorkload(entities, request);
+
+                newWorkloads.add(newWorkload);
+            }
+
+        if (!newWorkloads.isEmpty()) {
+            workloadRepo.saveAll(newWorkloads);
+        }
+
+        return newWorkloads.size();
+    }
+    private WorkloadRequest createWorkloadRequestFromSource(Workload source, Integer newSemesterId) {
+        return new WorkloadRequest(
+                source.getTeachingStaff().getTeachingStaffId(),
+                newSemesterId,
+                source.getComments(),
+                source.getIncludeInBudget(),
+                source.getBudgetPosition(),
+                source.getIndustryCoefficient(),
+                source.getVacationMonths(),
+                source.getWorkingMonths(),
+                source.getGroupAmount(),
+                source.getGroupForSemester().getClassId(),
+                source.getCourse().getCourseId(),
+                source.getAcademicRankDetails().getAcademicRankDetailsId(),
+                source.getMyClasses().stream()
+                        .map(MyClass::getClassId)
+                        .mapToInt(Integer::intValue)
+                        .toArray(),
+                source.getCreditPointsPerGroup()
+        );
+    }
 }

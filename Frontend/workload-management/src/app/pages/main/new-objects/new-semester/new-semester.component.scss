@@ -1,0 +1,80 @@
+@use '@angular/material' as mat;
+
+*{
+  @include mat.checkbox-overrides((
+    label-text-color: white
+  ));
+}
+.config-description {
+  margin-bottom: 20px;
+  font-style: italic;
+  color: var(--mat-sys-on-primary);
+}
+
+.options-section {
+  margin: 20px 0;
+  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+
+  h3 {
+    margin-top: 0;
+    color: white;
+    font-size: 16px;
+  }
+}
+
+
+.copy-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.semester-info {
+  margin-bottom: 10px;
+  padding: 8px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+
+  .info-text {
+    margin: 0;
+    font-weight: bold;
+    color: var(--mat-sys-on-primary);
+  }
+}
+
+.error-message {
+  margin-bottom: 10px;
+  padding: 8px;
+  background-color: rgba(255, 0, 0, 0.1);
+  border-radius: 4px;
+  border-left: 3px solid var(--mat-sys-error);
+
+  p {
+    margin: 5px 0;
+    color: var(--mat-sys-on-primary);
+
+    &:first-child {
+      font-weight: bold;
+    }
+  }
+}
+
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+
+  span {
+    color: var(--mat-sys-on-primary);
+  }
+}
+
+.button-group {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
