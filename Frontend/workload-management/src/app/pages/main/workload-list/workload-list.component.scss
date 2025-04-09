@@ -66,3 +66,16 @@ $orange-header: #ECCA9C !important;
   background-color: var(--mat-sys-error);
   color: var(--mat-sys-on-error);
 }
+
+.totals-row-tr {
+  background-color: #f5f5f5;
+  font-weight: bold;
+}
+
+.totals-row {
+  font-weight: bold;
+}
+
+.totals-row-tr:hover .mat-mdc-cell {
+  border-color: #999;
+}

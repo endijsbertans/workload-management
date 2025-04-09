@@ -21,6 +21,7 @@ import {WorkloadSettingsResponse} from "../../../services/models/workload-settin
 import {MatOption, MatSelect} from "@angular/material/select";
 import {AsyncPipe} from "@angular/common";
 import {TokenService} from "../../../services/token/token.service";
+import {BehaviorSubject} from "rxjs";
 
 
 
@@ -80,6 +81,16 @@ export class WorkloadListComponent implements OnInit {
   pages: any = [];
   pageSizeOptions = [5, 10, 50];
   sortColumn: Sort = {active: '', direction: ''};
+  //totals row logic
+  totalsRow = new BehaviorSubject<any>({});
+  showTotals = signal<boolean>(true);
+  sumColumns: string[] = [
+    'groupAmount', 'contactHours', 'creditPointsPerGroup', 'totalCreditPoints',
+    'expectedSalary', 'salaryPerMonth', 'monthSum', 'cpProportionOnFullTime'
+  ];
+  averageColumns: string[] = [
+    'industryCoefficient', 'programCoefficient', 'vacationMonths'
+  ];
   ngOnInit() {
     this.dataSource.sort = this.sort;
     this.findAllWorkloads();
@@ -120,6 +131,7 @@ export class WorkloadListComponent implements OnInit {
           }
           this.workloadResponse = workloads.content;
           console.log(this.workloadResponse);
+          this.calculateTotals();
         },
         complete: () => {
           this.isLoadingResults = false;
@@ -145,6 +157,7 @@ export class WorkloadListComponent implements OnInit {
           }
           this.workloadResponse = workloads.content;
           console.log(this.workloadResponse);
+          this.calculateTotals();
         },
         complete: () => {
           this.isLoadingResults = false;
@@ -158,10 +171,19 @@ export class WorkloadListComponent implements OnInit {
     if (col.collection.includes("columnsForWorkloadClasses")) {
       let result: string[] = [];
       let val = this.digInObject(obj, "myClasses");
-      val.forEach(function(val: any) {
-        result.push(val?.[col.pathTo]);
-      });
-      return result.join(', ');
+
+      if (Array.isArray(val)) {
+        val.forEach(function(val: any) {
+          result.push(val?.[col.pathTo]);
+        });
+        return result.join(', ');
+      }
+
+      if (this.isTotalsRow(obj)) {
+        return '';
+      }
+
+      return defaultValue;
     }
 
     const value = this.digInObject(obj, col.pathTo, defaultValue);
@@ -308,11 +330,69 @@ export class WorkloadListComponent implements OnInit {
 
     const parts = path.split('.');
 
-    // Remove the last part to get the path to the parent object
     const parentPath = parts.slice(0, -1).join('.');
-    // gets object
     const parentObject = this.digInObject(element, parentPath);
 
     return parentObject?.deleted ?? false;
+  }
+
+  /**
+   * Calculates totals for numeric columns in the workload data
+   */
+  calculateTotals() {
+    if (!this.workloadResponse || this.workloadResponse.length === 0) {
+      this.totalsRow.next({});
+      return;
+    }
+
+    const totals: any = {};
+    const counts: any = {};
+
+    this.columnsToDisplay().forEach(col => {
+      if (this.sumColumns.includes(col.pathTo) || this.averageColumns.includes(col.pathTo)) {
+        totals[col.pathTo] = 0;
+        counts[col.pathTo] = 0;
+      }
+    });
+
+    this.workloadResponse.forEach(row => {
+      this.columnsToDisplay().forEach(col => {
+        if (this.sumColumns.includes(col.pathTo) || this.averageColumns.includes(col.pathTo)) {
+          const value = this.digInObject(row, col.pathTo);
+          if (value !== undefined && value !== null && !isNaN(Number(value))) {
+            totals[col.pathTo] += Number(value);
+            counts[col.pathTo]++;
+          }
+        }
+      });
+    });
+
+    this.averageColumns.forEach(colPath => {
+      if (counts[colPath] > 0) {
+        totals[colPath] = parseFloat((totals[colPath] / counts[colPath]).toFixed(3));
+      }
+    });
+
+    this.sumColumns.forEach(colPath => {
+      if (totals[colPath] !== undefined && totals[colPath] !== null) {
+        totals[colPath] = parseFloat(totals[colPath].toFixed(3));
+      }
+    });
+
+    totals['isTotalsRow'] = true;
+    totals['teachingStaff'] = { rankFullName: 'Kopā:' };
+
+    this.totalsRow.next(totals);
+  }
+
+  isTotalsRow(element: any): boolean {
+    return element?.isTotalsRow === true;
+  }
+
+  getDataSourceWithTotals() {
+    if (this.showTotals() && this.dataSource.data.length > 0) {
+      return [...this.dataSource.data, this.totalsRow.value];
+    }
+    return this.dataSource.data;
   }
 }

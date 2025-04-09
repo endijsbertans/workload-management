@@ -281,36 +281,36 @@
       }
     </mat-form-field>
     @if(moreSettings()){
-    <div class="inputFieldFlex">
-      <mat-form-field appearance="outline">
-        @if (workloadForm.controls.includeInBudgetCtrl.invalid) {
-          <mat-error>{{ errorMsg() }}</mat-error>
-        }
-        <mat-label>Iekļaut budžetā</mat-label>
-        <input
-          matInput
-          placeholder="Nenotiks"
-          [formControl]="workloadForm.controls.includeInBudgetCtrl"
-          (blur)="updateErrorMessage('includeInBudgetCtrl')"
-          required
-        />
-      </mat-form-field>
-    </div>
-    <div class="inputFieldFlex">
-      <mat-form-field appearance="outline">
-        @if (workloadForm.controls.vacationMonthsCtrl.invalid) {
-          <mat-error>{{ errorMsg() }}</mat-error>
-        }
-        <mat-label>Atvaļinājuma mēneši</mat-label>
-        <input
-          matInput
-          type="number"
-          [formControl]="workloadForm.controls.vacationMonthsCtrl"
-          (blur)="updateErrorMessage('vacationMonthsCtrl')"
-          required
-        />
-      </mat-form-field>
-    </div>
+      <div class="inputFieldFlex">
+        <mat-form-field appearance="outline">
+          @if (workloadForm.controls.includeInBudgetCtrl.invalid) {
+            <mat-error>{{ errorMsg() }}</mat-error>
+          }
+          <mat-label>Iekļaut budžetā</mat-label>
+          <input
+            matInput
+            placeholder="Nenotiks"
+            [formControl]="workloadForm.controls.includeInBudgetCtrl"
+            (blur)="updateErrorMessage('includeInBudgetCtrl')"
+            required
+          />
+        </mat-form-field>
+      </div>
+      <div class="inputFieldFlex">
+        <mat-form-field appearance="outline">
+          @if (workloadForm.controls.vacationMonthsCtrl.invalid) {
+            <mat-error>{{ errorMsg() }}</mat-error>
+          }
+          <mat-label>Atvaļinājuma mēneši</mat-label>
+          <input
+            matInput
+            type="number"
+            [formControl]="workloadForm.controls.vacationMonthsCtrl"
+            (blur)="updateErrorMessage('vacationMonthsCtrl')"
+            required
+          />
+        </mat-form-field>
+      </div>
     }
   </div>
 
@@ -331,4 +331,3 @@
 </form>
 
 <router-outlet (activate)="subscribeToChildEmitter($event)"/>
-

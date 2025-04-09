@@ -40,7 +40,7 @@ export class WorkloadContainerComponent implements OnInit{
             const idParam = params.get('id');
             const id = idParam ? Number(idParam) : NaN;
             if (isNaN(id) || id <= 0) {
-              this.router.navigate(['/main/workload'], { replaceUrl: true });
+              this.router.navigate(['/main/admin-workload'], { replaceUrl: true });
               this._snackBar.open("Nepareizs id", "Close", { duration: 5000 });
               return EMPTY;
             }
@@ -60,7 +60,7 @@ export class WorkloadContainerComponent implements OnInit{
       error: (err) => {
         console.log(err);
         this._snackBar.open(err.error.errorMsg, "Aizvērt", { duration: 5000 });
-        this.router.navigate(['/main/workload'], { replaceUrl: true });
+        this.router.navigate(['/main/admin-workload'], { replaceUrl: true });
       }
     });
   }
@@ -70,7 +70,7 @@ export class WorkloadContainerComponent implements OnInit{
       this.workloadService.updateWorkloadById({workloadId: this.currentWorkloadId, body: request }).subscribe({
         next: id => {
           console.log('Updated workload id:', id);
-          this.router.navigate(['/main/workload'], {replaceUrl: true });
+          this.router.navigate(['/main/admin-workload'], {replaceUrl: true });
         },
         complete: () => this._snackBar.open("Atjaunots", "Aizvērt", { duration: 5000 }),
         error: err => console.log(err)
