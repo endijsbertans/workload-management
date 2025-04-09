@@ -66,23 +66,33 @@ export class WorkloadContainerComponent implements OnInit{
   }
 
   handleFormSubmit(request: WorkloadRequest) {
+    console.log('Container received form submission:', request);
+
     if (this.editMode && this.currentWorkloadId) {
+      console.log('Updating existing workload with ID:', this.currentWorkloadId);
       this.workloadService.updateWorkloadById({workloadId: this.currentWorkloadId, body: request }).subscribe({
         next: id => {
           console.log('Updated workload id:', id);
+          this._snackBar.open("Atjaunots", "Aizvērt", { duration: 5000 });
           this.router.navigate(['/main/admin-workload'], {replaceUrl: true });
         },
-        complete: () => this._snackBar.open("Atjaunots", "Aizvērt", { duration: 5000 }),
-        error: err => console.log(err)
+        error: err => {
+          console.error('Error updating workload:', err);
+          this._snackBar.open(err.error?.errorMsg || "Kļūda atjaunojot datus", "Aizvērt", { duration: 5000 });
+        }
       });
     } else {
+      console.log('Creating new workload');
       this.workloadService.saveWorkload({ body: request }).subscribe({
         next: id => {
           console.log('Created workload id:', id);
-          this.router.navigate(['..'], { relativeTo: this.activeRoute, replaceUrl: true });
+          this._snackBar.open("Saglabāts", "Aizvērt", { duration: 5000 });
+          this.router.navigate(['/main/admin-workload'], { replaceUrl: true });
         },
-        complete: () => this._snackBar.open("Saglabāts", "Aizvērt", { duration: 5000 }),
-        error: err => console.log(err)
+        error: err => {
+          console.error('Error creating workload:', err);
+          this._snackBar.open(err.error?.errorMsg || "Kļūda saglabājot datus", "Aizvērt", { duration: 5000 });
+        }
       });
     }
   }

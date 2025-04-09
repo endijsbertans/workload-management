@@ -21,7 +21,9 @@ import {WorkloadSettingsResponse} from "../../../services/models/workload-settin
 import {MatOption, MatSelect} from "@angular/material/select";
 import {AsyncPipe} from "@angular/common";
 import {TokenService} from "../../../services/token/token.service";
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, Observable} from "rxjs";
+import {SemesterControllerService} from "../../../services/services/semester-controller.service";
+import {SemesterResponse} from "../../../services/models/semester-response";
 
 
 
@@ -55,11 +57,16 @@ export class WorkloadListComponent implements OnInit {
 
   enumService = inject(EnumTranslationService);
   private readonly workloadService = inject(WorkloadService);
+  private readonly semesterService = inject(SemesterControllerService);
   private readonly router = inject(Router);
   public readonly columnSettingsService = inject(WorkloadListSettingsService);
   private readonly dialog = inject(MatDialog);
   private readonly _snackBar = inject(MatSnackBar);
   activeFilters: Map<string, {value: string, operator: string}> = new Map();
+
+  // Semester filter
+  semesters$ = new BehaviorSubject<SemesterResponse[]>([]);
+  selectedSemester = signal<SemesterResponse | null>(null);
   availableSettings$ = this.columnSettingsService.availableSettings$;
 
   columnsToDisplay = computed(() =>
@@ -93,22 +100,70 @@ export class WorkloadListComponent implements OnInit {
   ];
   ngOnInit() {
     this.dataSource.sort = this.sort;
-    this.findAllWorkloads();
-
     this.setupFiltering();
+
+    // Load semesters first, which will then trigger findAllWorkloads
+    // after selecting the appropriate semester
+    this.loadSemesters();
+
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.findAllWorkloads();
       }
     });
   }
+  private loadSemesters() {
+    this.semesterService.findAllSemesters().subscribe({
+      next: (semesters) => {
+        this.semesters$.next(semesters);
+
+        if (semesters.length > 0) {
+          const currentYear = new Date().getFullYear();
+
+          // Try to find current year's semester
+          const currentYearSemester = semesters.find(s => s.year === currentYear);
+
+          if (currentYearSemester) {
+            this.selectedSemester.set(currentYearSemester);
+          } else {
+            // Otherwise, select the most recent semester (assuming they're sorted by year)
+            const sortedSemesters = [...semesters].sort((a, b) => (b.year || 0) - (a.year || 0));
+            this.selectedSemester.set(sortedSemesters[0]);
+          }
+          this.findAllWorkloads();
+        }
+      },
+      error: (err) => {
+        console.error('Error loading semesters:', err);
+        this._snackBar.open('Failed to load semesters', 'Close', { duration: 5000 });
+      }
+    });
+  }
+
+  onSemesterChange(semester: SemesterResponse) {
+    this.selectedSemester.set(semester);
+    this.findAllWorkloads();
+  }
+
   private findAllWorkloads() {
     let filtersJson: string | undefined;
-    if (this.activeFilters.size > 0) {
-      const filtersObject: Record<string, { value: string, operator: string }> = {};
-      this.activeFilters.forEach((value, key) => {
-        filtersObject[key] = value;
-      });
+    const filtersObject: Record<string, { value: string, operator: string }> = {};
+
+    // Add active filters
+    this.activeFilters.forEach((value, key) => {
+      filtersObject[key] = value;
+    });
+
+    // Add semester filter if selected
+    if (this.selectedSemester()) {
+      filtersObject['semester.semesterId'] = {
+        value: this.selectedSemester()?.semesterId?.toString() || '',
+        operator: 'equals'
+      };
+    }
+
+    // Only create JSON if we have filters
+    if (Object.keys(filtersObject).length > 0) {
       filtersJson = JSON.stringify(filtersObject);
     }
     if (this.router.url.includes('admin-workload')) {

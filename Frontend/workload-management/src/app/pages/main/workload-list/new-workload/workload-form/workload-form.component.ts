@@ -202,6 +202,7 @@ export class WorkloadFormComponent implements OnInit {
 
 
   onSubmit() {
+
     if (this.workloadForm.valid) {
       const request: WorkloadRequest = {
         semesterId: this.workloadForm.value.semesterCtrl ?? 0,
@@ -219,9 +220,11 @@ export class WorkloadFormComponent implements OnInit {
         creditPointsPerGroup: this.workloadForm.value.cpForGroupCtrl ?? 0,
         workingMonths: 5
       };
+      console.log('Emitting request:', request);
       this.formSubmit.emit(request);
     } else {
-      this._snackBar.open("Please fix the errors before submitting.", "Close", {duration: 5000});
+      console.error('Form is invalid');
+      this._snackBar.open("Lūdzu, izlabojiet kļūdas pirms iesniegšanas.", "Aizvērt", {duration: 5000});
     }
   }
 
@@ -317,6 +320,7 @@ export class WorkloadFormComponent implements OnInit {
   updateErrorMessage(controlName: keyof typeof this.workloadForm.controls) {
     const control = this.workloadForm.controls[controlName];
     if (control.errors) {
+      console.log(`Error in control ${controlName}:`, control.errors);
       if (control.hasError('required')) {
         this.errorMsg.set('Lauks nevar būt tukšs');
       } else if (control.hasError('minlength')) {
@@ -334,4 +338,5 @@ export class WorkloadFormComponent implements OnInit {
       this.errorMsg.set('');
     }
   }
+
 }

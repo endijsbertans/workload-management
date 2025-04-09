@@ -6,7 +6,7 @@
   <h1>Izveidot jaunu</h1>
 }
 
-<form [formGroup]="workloadForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="workloadForm" (ngSubmit)="onSubmit()" #workloadFormElement>
   <div class="grid-container">
     <div class="inputFieldFlex">
       <mat-form-field>
@@ -52,7 +52,7 @@
             } @else {
               @for (semester of semesters(); track semester.semesterId) {
                 <mat-option [value]="semester.semesterId">
-                  {{ semester.semesterName }}
+                  {{ semester.semesterName }} {{ semester.year }}
                 </mat-option>
               }
             }
@@ -321,7 +321,7 @@
         Iesniegt labojumu
       </button>
     }@else{
-      <button mat-raised-button type="submit" [disabled]="workloadForm.invalid">
+      <button mat-raised-button type="button" [disabled]="workloadForm.invalid" (click)="onSubmit()">
         Izveidot
       </button>
     }

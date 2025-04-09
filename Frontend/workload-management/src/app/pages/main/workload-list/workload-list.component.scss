@@ -2,8 +2,16 @@
 .actions-with-table {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+
   mat-form-field {
-    padding-right: 2rem;
+    padding-right: 1rem;
+    min-width: 150px;
+  }
+
+  button {
+    margin-right: 10px;
   }
 }
 

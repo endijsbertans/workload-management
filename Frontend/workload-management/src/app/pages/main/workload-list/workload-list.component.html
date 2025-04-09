@@ -12,6 +12,18 @@
   </button>
   }
   <mat-form-field>
+    <mat-label>Semestris</mat-label>
+    <mat-select
+      [value]="selectedSemester()"
+      (selectionChange)="onSemesterChange($event.value)">
+      @for (semester of semesters$ | async; track semester.semesterId) {
+        <mat-option [value]="semester">
+          {{ semester.semesterName }} {{ semester.year }}
+        </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
     <mat-label>Iestatījumi</mat-label>
     <mat-select
       [value]="columnSettingsService.currentSettings()"
