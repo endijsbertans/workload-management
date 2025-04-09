@@ -7,6 +7,7 @@ import { Faculty } from '../models/faculty';
 import { MyUser } from '../models/my-user';
 import { StatusType } from '../models/status-type';
 export interface TeachingStaffResponse {
+  admin?: boolean;
   deleted?: boolean;
   name?: string;
   positionTitle?: string;

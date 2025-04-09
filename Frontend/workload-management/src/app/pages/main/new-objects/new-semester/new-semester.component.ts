@@ -65,8 +65,8 @@ export class NewSemesterComponent implements OnInit{
         Validators.min(2024),
         Validators.required],
     }),
-    copyAcademicRanks: new FormControl<boolean>(true),
-    copySemesterData: new FormControl<boolean>(true)
+    copyAcademicRanks: new FormControl<boolean>(false),
+    copySemesterData: new FormControl<boolean>(false)
   })
   ngOnInit(){
     this.activeRoute.params.subscribe(params => {

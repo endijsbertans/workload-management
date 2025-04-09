@@ -12,6 +12,8 @@ import lombok.*;
 public class TeachingStaffCsvRepresentation {
     @CsvBindByName(column="email")
     private String email;
+    @CsvBindByName(column="admin")
+    private boolean admin;
     @CsvBindByName(column="statusId")
     int statusId;
     @CsvBindByName(column="staffFacultyId")

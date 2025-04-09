@@ -35,7 +35,7 @@ public class TeachingStaffController {
     public ResponseEntity<Integer> updateTeachingStaffById(
             @PathVariable Integer tStaffId,
             @Valid @RequestBody TeachingStaffRequest request
-    ){
+    ) throws MessagingException {
         return ResponseEntity.ok(tStaffService.update(tStaffId, request));
     }
     @GetMapping("{tStaffId}")

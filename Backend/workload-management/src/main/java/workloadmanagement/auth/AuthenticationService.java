@@ -10,6 +10,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import workloadmanagement.auth.security.MyAuthority;
 import workloadmanagement.email.EmailService;
 import workloadmanagement.email.EmailTemplateName;
 import workloadmanagement.auth.security.JwtService;
@@ -23,6 +24,7 @@ import workloadmanagement.teachingstaff.TeachingStaff;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -49,16 +51,18 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(generateActivationCode(6))) // random 6 digit temp password
                 .accountLocked(false)
                 .enabled(false)
-                .authorities(List.of(authorities))
+                .authorities(new ArrayList<>(List.of(authorities)))
                 .build();
         System.out.println(user);
         userRepo.save(user);
         sendValidationEmail(user);
     }
     public void registerTeachingStaff(RegistrationRequest request, TeachingStaff tStaff) throws MessagingException {
-        // TODO Make admin role and in future use this as adminRegistration
-        var authorities = authorityRepository.findByTitle("USER")
-                .orElseThrow(() -> new IllegalStateException("Role user not found"));
+        // Get the appropriate role based on isAdmin flag
+        var roleTitle = request.getAdmin() ? "ADMIN" : "USER";
+        var authority = authorityRepository.findByTitle(roleTitle)
+                .orElseThrow(() -> new IllegalStateException("Role " + roleTitle + " not found"));
+
         System.out.println(request);
         var user = MyUser.builder()
                 .email(request.getEmail())
@@ -66,11 +70,22 @@ public class AuthenticationService {
                 .teachingStaff(tStaff)
                 .accountLocked(false)
                 .enabled(false)
-                .authorities(List.of(authorities))
+                .authorities(new ArrayList<>(List.of(authority)))
                 .build();
         System.out.println(user);
         userRepo.save(user);
         sendValidationEmail(user);
+    }
+
+    public void updateUserRole(MyUser user, boolean isAdmin) {
+        var roleTitle = isAdmin ? "ADMIN" : "USER";
+        var authority = authorityRepository.findByTitle(roleTitle)
+                .orElseThrow(() -> new IllegalStateException("Role " + roleTitle + " not found"));
+
+        List<MyAuthority> authorities = new ArrayList<>();
+        authorities.add(authority);
+        user.setAuthorities(authorities);
+        userRepo.save(user);
     }
     private void sendValidationEmail(MyUser user) throws MessagingException {
         var newToken = generateAndSaveActivationToken(user);

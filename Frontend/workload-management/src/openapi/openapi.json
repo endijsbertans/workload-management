@@ -2252,6 +2252,9 @@
         "properties": {
           "email": {
             "type": "string"
+          },
+          "admin": {
+            "type": "boolean"
           }
         },
         "required": [
@@ -2711,11 +2714,11 @@
           "staffPhoto": {
             "type": "string"
           },
-          "deleted": {
-            "type": "boolean"
-          },
           "staffFullName": {
             "type": "string"
+          },
+          "deleted": {
+            "type": "boolean"
           },
           "rankFullName": {
             "type": "string"
@@ -2916,14 +2919,14 @@
           "name": {
             "type": "string"
           },
+          "username": {
+            "type": "string"
+          },
           "credentialsNonExpired": {
             "type": "boolean"
           },
           "accountNonExpired": {
             "type": "boolean"
-          },
-          "username": {
-            "type": "string"
           },
           "accountNonLocked": {
             "type": "boolean"
@@ -2972,6 +2975,9 @@
             "type": "string"
           },
           "deleted": {
+            "type": "boolean"
+          },
+          "admin": {
             "type": "boolean"
           }
         }

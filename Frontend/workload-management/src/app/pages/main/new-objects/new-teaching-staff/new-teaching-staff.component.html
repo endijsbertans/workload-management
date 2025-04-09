@@ -114,7 +114,7 @@
         </button>
       </div>
       @if (onAddUserAuthDetails()) {
-        <app-new-user (emitUserAuthDetails)="onEmittedUserAuthDetails($event)" (emitCancel)="closeOrOpenAuthDetails()"
+        <app-new-user #userComponent (emitUserAuthDetails)="onEmittedUserAuthDetails($event)" (emitCancel)="closeOrOpenAuthDetails()"
                       class="inserted"/>
       }
       <div class="action-wrapper">

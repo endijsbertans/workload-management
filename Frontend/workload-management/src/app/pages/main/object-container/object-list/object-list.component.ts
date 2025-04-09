@@ -89,6 +89,27 @@ export class ObjectListComponent {
     return value;
   }
 
+  formatPropertyValue(item: any, column: ColumnNames, defaultValue: any = "") {
+    const value = this.getNestedPropertyForItem(item, column, defaultValue);
+
+    if (column.pathTo === 'admin') {
+      return value === true ? 'Administrators' : 'Lietotājs';
+    }
+
+    if (typeof value === 'boolean') {
+      return value ? 'Jā' : 'Nē';
+    }
+
+    return value;
+  }
+
+  isAdmin(item: any): boolean {
+    if (this.selectedTableType === 'teachingStaff') {
+      return item.admin === true;
+    }
+    return false;
+  }
+
   digInObject(obj: any, path: string, defaultValue: any = "") {
 
     if (!obj || !path) return defaultValue;

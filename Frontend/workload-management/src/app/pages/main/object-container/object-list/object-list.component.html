@@ -12,7 +12,9 @@
       @for (item of getDataItems(); track $index) {
         <tr>
           @for (column of displayedColumns; track column.name) {
-            <td>{{ getNestedPropertyForItem(item, column) }}</td>
+            <td [class.admin-cell]="column.pathTo === 'admin' && item.admin === true">
+              {{ formatPropertyValue(item, column) }}
+            </td>
           }
           <td class="actions">
             <button class="edit-btn" (click)="editRow(item)">Rediģēt</button>

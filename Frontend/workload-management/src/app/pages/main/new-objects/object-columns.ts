@@ -47,6 +47,12 @@ export const ColumnsForTeacherResponse: ColumnNames[] = [
     pathTo: 'user.enabled',
     collection: 'ColumnsForTeacher',
     sortable: true
+  },
+  {
+    name: 'Administrators',
+    pathTo: 'admin',
+    collection: 'ColumnsForTeacher',
+    sortable: true
   }
 ];
 

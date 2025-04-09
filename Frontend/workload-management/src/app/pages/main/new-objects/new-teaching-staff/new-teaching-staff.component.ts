@@ -1,4 +1,4 @@
-import {Component, DestroyRef, EventEmitter, inject, OnInit, Output, signal} from '@angular/core';
+import {Component, DestroyRef, EventEmitter, inject, OnInit, Output, signal, ViewChild} from '@angular/core';
 import {
   AcademicRankService,
   FacultyService,
@@ -50,6 +50,8 @@ export class NewTeachingStaffComponent implements OnInit {
   private readonly academicRankService = inject(AcademicRankService);
   private readonly _snackBar = inject(MatSnackBar);
   private readonly statusTypeService = inject(StatusTypeService);
+
+  @ViewChild('userComponent') userComponent!: NewUserComponent;
   statusTypes = signal<StatusTypeResponse[] | undefined>(undefined);
   faculties = signal<FacultyResponse[] | undefined>(undefined);
   academicRanks = signal<AcademicRankResponse[] | undefined>(undefined);
@@ -110,6 +112,7 @@ export class NewTeachingStaffComponent implements OnInit {
     if (!id) return;
     this.teachingStaffService.findTeachingStaffById({tStaffId: id}).subscribe({
       next: (staff) => {
+        console.log('Loaded staff data:', staff);
         // Populate form with existing data
         this.teachingStaffForm.patchValue({
           name: staff.name,
@@ -120,7 +123,10 @@ export class NewTeachingStaffComponent implements OnInit {
         });
 
         if (staff.user) {
-          this.userAuthDetails.set(staff.user);
+          this.userAuthDetails.set({
+            email: staff.user.email,
+            admin: staff.admin
+          });
           this.authButtonText.set("rediģēt ēpastu");
         }
       },
@@ -254,6 +260,18 @@ export class NewTeachingStaffComponent implements OnInit {
 
   closeOrOpenAuthDetails() {
     this.onAddUserAuthDetails.set(!this.onAddUserAuthDetails());
+
+    if (this.onAddUserAuthDetails() && this.userAuthDetails()) {
+      // Set the form values when opening the user component
+      setTimeout(() => {
+        if (this.userComponent) {
+          this.userComponent.setFormValues(
+            this.userAuthDetails()?.email || '',
+            this.userAuthDetails()?.admin || false
+          );
+        }
+      });
+    }
   }
 
   updateErrorMessage(controlName: keyof typeof this.teachingStaffForm.controls) {

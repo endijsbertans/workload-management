@@ -75,15 +75,33 @@ public class TeachingStaffService{
     }
 
 
-    public Integer update(Integer tStaffId, @Valid TeachingStaffRequest request) {
+    public Integer update(Integer tStaffId, @Valid TeachingStaffRequest request) throws MessagingException {
         TeachingStaff existingStaff = findTeachingStaffFromResponseId(tStaffId);
         TStaffEntities tStaffEntities = resolveEntities(request);
 
         TeachingStaff updatedStaff = tStaffMapper.toTeachingStaff(request, tStaffEntities);
         updatedStaff.setTeachingStaffId(existingStaff.getTeachingStaffId());
-        MyUser user = userService.findByEmail(existingStaff.getUser().getEmail());
-        user.setEmail(request.authDetails().getEmail());
-        updatedStaff.setUser(existingStaff.getUser());
+
+        // Handle user account creation or update
+        if (request.authDetails() != null) {
+            if (existingStaff.getUser() != null) {
+                // Update existing user
+                MyUser user = userService.findByEmail(existingStaff.getUser().getEmail());
+                user.setEmail(request.authDetails().getEmail());
+                // Update the user's role if needed
+                authService.updateUserRole(user, request.authDetails().getAdmin());
+                updatedStaff.setUser(user);
+            } else {
+                // Create new user
+                tStaffRepo.save(updatedStaff); // Save first to ensure ID is set
+                authService.registerTeachingStaff(request.authDetails(), updatedStaff);
+                MyUser user = userService.findByEmail(request.authDetails().getEmail());
+                updatedStaff.setUser(user);
+            }
+        } else {
+            // No auth details provided, keep existing user if any
+            updatedStaff.setUser(existingStaff.getUser());
+        }
 
         return tStaffRepo.save(updatedStaff).getTeachingStaffId();
     }
@@ -136,7 +154,8 @@ public class TeachingStaffService{
                             if(csvLine.getEmail() != null && !csvLine.getEmail().isEmpty()) {
                                 var registrationRequest = RegistrationRequest.builder()
                                         .email(csvLine.getEmail())
-                                                .build();
+                                        .admin(csvLine.isAdmin())
+                                        .build();
                                 authService.registerTeachingStaff(registrationRequest, staff);
                                 MyUser user = userService.findByEmail(csvLine.getEmail());
                                 staff.setUser(user);
@@ -157,10 +176,13 @@ public class TeachingStaffService{
         List<AcademicRankResponse> academicRanks =  academicRankService.findAllAcademicRank();
 
         StringBuilder csvContent = new StringBuilder();
-        csvContent.append("name;surname;email;staffFacultyId;staffAcademicRankId;statusId\n");
+        csvContent.append("name;surname;email;admin;staffFacultyId;staffAcademicRankId;statusId\n");
 
         csvContent.append("# Piemers zemak, pirms publicesanas izdzest visu kas sakas ar #, ka ari pasu piemeru\n");
-        csvContent.append("epasts@venta.lv;1;1;1;Jon;Doe\n\n");
+        csvContent.append("# Lietotāja piemērs (admin=false):\n");
+        csvContent.append("Jon;Doe;epasts@venta.lv;false;1;1;1\n");
+        csvContent.append("# Administratora piemērs (admin=true):\n");
+        csvContent.append("Jane;Smith;admin@venta.lv;true;1;1;1\n\n");
 
         csvContent.append("# Pieejamie fakultasu id:\n");
         for (FacultyResponse faculty : faculties) {

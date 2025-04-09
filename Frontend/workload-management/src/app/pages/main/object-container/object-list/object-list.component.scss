@@ -22,10 +22,14 @@ table {
   tr:hover {
     background-color: var(--mat-sys-surface-dim);
   }
+  .admin-cell {
+    font-weight: bold;
+    color: white;
+    background-color: var(--mat-sys-primary);
+  }
 
   .actions {
     white-space: nowrap;
-
     button {
       margin-right: 5px;
       padding: 5px 10px;
@@ -37,6 +41,10 @@ table {
     .edit-btn {
       background-color: var(--mat-sys-primary);
       color: white;
+
+      &.admin-button {
+        background-color: #ff9800;
+      }
     }
 
     .delete-btn {
