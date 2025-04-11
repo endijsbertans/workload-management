@@ -90,3 +90,6 @@ jobs:
           sudo -E docker-compose -f docker-compose.yml pull -q
           sudo -E docker-compose -f docker-compose.yml up -d
           EOF
+          
+          
+          
