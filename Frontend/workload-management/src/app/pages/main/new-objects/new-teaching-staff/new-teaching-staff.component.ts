@@ -62,7 +62,7 @@ export class NewTeachingStaffComponent implements OnInit {
 
   editMode = signal(false);
   objectId = signal<number | undefined>(undefined);
-  pageTitle = signal('Pievienot jaunu docentu');
+  pageTitle = signal('Pievienot jaunu docētāju');
 
   fileLoading = signal(false);
   fileContent: string | null = null;

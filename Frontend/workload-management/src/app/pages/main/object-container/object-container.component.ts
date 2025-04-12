@@ -63,7 +63,7 @@ export class ObjectContainerComponent implements OnInit {
   faculties = signal<FacultyResponse[] | undefined>(undefined);
 
   tableTypes = [
-    {id: 'teachingStaff', name: 'Docenti'},
+    {id: 'teachingStaff', name: 'Docētāji'},
     {id: 'courses', name: 'Studiju priekšmeti'},
     {id: 'classes', name: 'Kurss'},
     {id: 'academicRanks', name: 'Amatu grupas'},
