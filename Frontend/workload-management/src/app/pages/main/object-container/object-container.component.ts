@@ -87,6 +87,11 @@ export class ObjectContainerComponent implements OnInit {
     this.loadTableData();
   }
 
+  onRefreshData() {
+    // This method is called when a row is deleted in the object-list component
+    this.loadTableData();
+  }
+
   loadTableData() {
     this.resetDisplayData();
     this.isLoading.set(true);
@@ -135,6 +140,7 @@ export class ObjectContainerComponent implements OnInit {
     this.statusTypes.set(undefined);
     this.semesters.set(undefined);
     this.academicRankDetails.set(undefined);
+    this.faculties.set(undefined);
   }
 
   createNewObject() {
@@ -160,12 +166,12 @@ export class ObjectContainerComponent implements OnInit {
       case 'semesters':
         this.router.navigate(['/main/objects/new-semester']);
         break;
+      case 'faculties':
+        this.router.navigate(['/main/objects/new-faculty']);
+        break;
     }
   }
 
-  createNewSemester() {
-    this.router.navigate(['/main/objects/new-semester']);
-  }
   private fetchAllFaculties(): void {
     this.facultyService.findAllFaculties().subscribe({
       next: (data) => {

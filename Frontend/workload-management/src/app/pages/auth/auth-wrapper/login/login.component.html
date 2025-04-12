@@ -11,7 +11,7 @@
       @if (form.controls.email.invalid) {
         <mat-error>{{ errorMessage() }}</mat-error>
       }
-      <mat-label>Ievadi ēpastu</mat-label>
+      <mat-label>Ievadi epastu</mat-label>
       <input
         matInput
         placeholder="epasts@venta.lv"
@@ -31,6 +31,7 @@
         <mat-error>{{ updateErrorMessagePass() }}</mat-error>
       }
       <button
+        type="button"
         mat-icon-button
         matSuffix
         (click)="clickEvent($event)"

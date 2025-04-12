@@ -9,7 +9,7 @@ import {MatFormField, MatLabel, MatOption, MatSelect, MatSelectChange} from "@an
 import {AsyncPipe} from "@angular/common";
 import {SaveSettingsDialogComponent} from "./save-settings-dialog/save-settings-dialog.component";
 import {MatButton} from "@angular/material/button";
-import {RouterLink} from "@angular/router";
+import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {MatSlideToggle} from "@angular/material/slide-toggle";
 
 
@@ -34,7 +34,8 @@ export class WorkloadListSettingsComponent {
   protected readonly columnSettingsService = inject(WorkloadListSettingsService);
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
-
+  private readonly router = inject(Router);
+  private readonly activeRoute = inject(ActivatedRoute);
   availableSettings$ = this.columnSettingsService.availableSettings$;
   selectedSetting = linkedSignal(() => this.columnSettingsService.currentSettings());
   isDefault = signal(this.selectedSetting()?.default || false);
@@ -75,6 +76,7 @@ export class WorkloadListSettingsComponent {
       if (result) {
         this.columnSettingsService.createNewSettings(result.name, result.isDefault, this.loadedSettings());
         this.snackBar.open('Iestatījumu šablons saglabāts', 'Aizvērt', {duration: 3000});
+        this.navigateBackFromCreateMode();
       }
     });
   }
@@ -93,7 +95,16 @@ export class WorkloadListSettingsComponent {
       this.columnSettingsService.updateCurrentSettings(this.isDefault());
       this.snackBar.open('Iestatījumi saglabāti', 'Aizvērt', {duration: 3000});
       this.hasUnsavedChanges.set(false);
+      this.navigateBackFromCreateMode();
+    }else{
+    this.snackBar.open('Nav izvēlēts šablons.', 'Aizvērt', {duration: 3000});
     }
+  }
+  public navigateBackFromCreateMode(): void {
+    this.router.navigate(['..'], {
+      relativeTo: this.activeRoute,
+      replaceUrl: true
+    });
   }
 
   getMainSettings() {

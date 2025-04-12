@@ -7,7 +7,6 @@
       }
     </select>
     <button (click)="createNewObject()" class="create-button">Izveidot jaunu</button>
-    <button (click)="createNewSemester()" class="semester-button">Jauns semestris</button>
   </div>
 
   <div class="table-container">
@@ -24,7 +23,8 @@
         [displayedColumns]="displayedColumns()"
         [academicRankDetails]="academicRankDetails()"
         [faculties]="faculties()"
-        [selectedTableType]="selectedTableType">
+        [selectedTableType]="selectedTableType"
+        (refreshData)="onRefreshData()">
       </app-object-list>
     }
   </div>
