@@ -3,5 +3,6 @@ package workloadmanagement.myclass;
 public enum Degree {
     BACHELOR,
     MASTER,
-    DOCTORATE
+    DOCTORATE,
+    PROFESSIONAL_QUALIFICATION
 }
