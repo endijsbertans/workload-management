@@ -97,7 +97,7 @@ export const ColumnsForClassResponse: ColumnNames[] = [
   },
   {
     name: 'Kursa programma',
-    pathTo: 'myClassProgram',
+    pathTo: 'classProgram',
     collection: 'ColumnsForClass',
     sortable: true
   },

@@ -219,7 +219,7 @@ export class MyClassService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getEnums$Response(params?: GetEnums$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<'BACHELOR' | 'MASTER' | 'DOCTORATE'>>> {
+  getEnums$Response(params?: GetEnums$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<'BACHELOR' | 'MASTER' | 'DOCTORATE' | 'PROFESSIONAL_QUALIFICATION'>>> {
     return getEnums(this.http, this.rootUrl, params, context);
   }
 
@@ -229,9 +229,9 @@ export class MyClassService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getEnums(params?: GetEnums$Params, context?: HttpContext): Observable<Array<'BACHELOR' | 'MASTER' | 'DOCTORATE'>> {
+  getEnums(params?: GetEnums$Params, context?: HttpContext): Observable<Array<'BACHELOR' | 'MASTER' | 'DOCTORATE' | 'PROFESSIONAL_QUALIFICATION'>> {
     return this.getEnums$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<'BACHELOR' | 'MASTER' | 'DOCTORATE'>>): Array<'BACHELOR' | 'MASTER' | 'DOCTORATE'> => r.body)
+      map((r: StrictHttpResponse<Array<'BACHELOR' | 'MASTER' | 'DOCTORATE' | 'PROFESSIONAL_QUALIFICATION'>>): Array<'BACHELOR' | 'MASTER' | 'DOCTORATE' | 'PROFESSIONAL_QUALIFICATION'> => r.body)
     );
   }
 

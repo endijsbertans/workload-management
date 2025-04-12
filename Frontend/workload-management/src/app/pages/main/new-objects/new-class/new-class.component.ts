@@ -67,7 +67,7 @@ export class NewClassComponent implements OnInit {
     classFacultyId: new FormControl<number | undefined>(undefined, {
       validators: [Validators.required],
     }),
-    degree: new FormControl<"BACHELOR" | "MASTER" | "DOCTORATE" | undefined>(undefined, {
+    degree: new FormControl<"BACHELOR" | "MASTER" | "DOCTORATE" | "PROFESSIONAL_QUALIFICATION" | undefined>(undefined, {
       validators: [Validators.required],
     })
   });
@@ -107,7 +107,7 @@ export class NewClassComponent implements OnInit {
           classLevel: classData.classLevel,
           program: classData.classProgram,
           classFacultyId: classData.classFaculty?.facultyId,
-          degree: classData.degree as "BACHELOR" | "MASTER" | "DOCTORATE"
+          degree: classData.degree as "BACHELOR" | "MASTER" | "DOCTORATE" | "PROFESSIONAL_QUALIFICATION"
         });
       },
       error: (err) => {

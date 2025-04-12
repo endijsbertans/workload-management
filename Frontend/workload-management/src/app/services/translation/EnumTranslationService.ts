@@ -3,7 +3,8 @@ import {Injectable} from '@angular/core';
 export enum Degree {
   BACHELOR = 'BACHELOR',
   MASTER = 'MASTER',
-  DOCTORATE = 'DOCTORATE'
+  DOCTORATE = 'DOCTORATE',
+  PROFESSIONAL_QUALIFICATION = 'PROFESSIONAL_QUALIFICATION'
 }
 
 export enum BudgetPosition {
@@ -26,7 +27,8 @@ export class EnumTranslationService {
     degree: {
       [Degree.BACHELOR]: 'Bakalaurs',
       [Degree.MASTER]: 'Maģistrs',
-      [Degree.DOCTORATE]: 'Doktors'
+      [Degree.DOCTORATE]: 'Doktors',
+      [Degree.PROFESSIONAL_QUALIFICATION]: '4. profesionālais kvalifikācijas līmenis'
     },
     budgetPosition: {
       [BudgetPosition.ZB]: 'zinātnes bāze',

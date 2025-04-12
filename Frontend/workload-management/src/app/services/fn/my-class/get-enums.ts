@@ -12,7 +12,7 @@ import { RequestBuilder } from '../../request-builder';
 export interface GetEnums$Params {
 }
 
-export function getEnums(http: HttpClient, rootUrl: string, params?: GetEnums$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<'BACHELOR' | 'MASTER' | 'DOCTORATE'>>> {
+export function getEnums(http: HttpClient, rootUrl: string, params?: GetEnums$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<'BACHELOR' | 'MASTER' | 'DOCTORATE' | 'PROFESSIONAL_QUALIFICATION'>>> {
   const rb = new RequestBuilder(rootUrl, getEnums.PATH, 'get');
   if (params) {
   }
@@ -22,7 +22,7 @@ export function getEnums(http: HttpClient, rootUrl: string, params?: GetEnums$Pa
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<'BACHELOR' | 'MASTER' | 'DOCTORATE'>>;
+      return r as StrictHttpResponse<Array<'BACHELOR' | 'MASTER' | 'DOCTORATE' | 'PROFESSIONAL_QUALIFICATION'>>;
     })
   );
 }
