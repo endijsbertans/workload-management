@@ -17,7 +17,7 @@
 
       <mat-form-field >
         <mat-label>Loma</mat-label>
-        <mat-select [formControl]="userForm.controls.isAdmin">
+        <mat-select [formControl]="userForm.controls.role">
           @for (option of roleOptions; track option.value) {
             <mat-option [value]="option.value">{{ option.label }}</mat-option>
           }

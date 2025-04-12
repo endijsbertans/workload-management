@@ -49,8 +49,8 @@ export const ColumnsForTeacherResponse: ColumnNames[] = [
     sortable: true
   },
   {
-    name: 'Administrators',
-    pathTo: 'admin',
+    name: 'Lietotāju grupa',
+    pathTo: 'role',
     collection: 'ColumnsForTeacher',
     sortable: true
   }

@@ -27,5 +27,5 @@ public class TeachingStaffResponse {
     private String staffFullName;
     private String rankFullName;
     private boolean isDeleted;
-    private boolean admin;
+    private String role;
 }

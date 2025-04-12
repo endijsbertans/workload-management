@@ -42,7 +42,7 @@ public class SecurityConfig {
                                     "/semester/most-recent",
                                     "/semester/{semesterId}/previous-year",
                                     "/semester"
-                            ).hasAnyAuthority("ADMIN", "USER")
+                            ).hasAnyAuthority("ROLE_ADMIN", "ROLE_TEACHINGSTAFF", "ROLE_DIRECTOR")
                             .requestMatchers(
                                     "/academicRankDetails/**",
                                     "/teaching-staff/**",
@@ -55,7 +55,7 @@ public class SecurityConfig {
                                     "/course/**",
                                     "/academicRank/**",
                                     "/workload/**"
-                            ).hasAuthority("ADMIN")
+                            ).hasAnyAuthority("ROLE_ADMIN", "ROLE_DIRECTOR")
 
                             .anyRequest().authenticated()
                         )

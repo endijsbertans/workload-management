@@ -81,7 +81,6 @@ export class ObjectListComponent {
   getNestedPropertyForItem(item: any, column: ColumnNames, defaultValue: any = "") {
     const value = this.digInObject(item, column.pathTo, defaultValue);
 
-    // Check if this is a degree field and translate it
     if (column.pathTo === 'degree' && value) {
       return this.enumService.translate('degree', value);
     }
@@ -92,8 +91,15 @@ export class ObjectListComponent {
   formatPropertyValue(item: any, column: ColumnNames, defaultValue: any = "") {
     const value = this.getNestedPropertyForItem(item, column, defaultValue);
 
-    if (column.pathTo === 'admin') {
-      return value === true ? 'Administrators' : 'Lietotājs';
+    if (column.pathTo === 'role') {
+      if (item.role) {
+        switch (item.role) {
+          case 'ROLE_ADMIN': return 'Administrators';
+          case 'ROLE_DIRECTOR': return 'Direktors';
+          case 'ROLE_TEACHINGSTAFF': return 'Docētājs';
+          default: return item.role;
+        }
+      }
     }
 
     if (typeof value === 'boolean') {
@@ -103,12 +109,6 @@ export class ObjectListComponent {
     return value;
   }
 
-  isAdmin(item: any): boolean {
-    if (this.selectedTableType === 'teachingStaff') {
-      return item.admin === true;
-    }
-    return false;
-  }
 
   digInObject(obj: any, path: string, defaultValue: any = "") {
 

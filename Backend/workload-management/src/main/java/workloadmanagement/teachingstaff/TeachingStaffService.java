@@ -50,7 +50,7 @@ public class TeachingStaffService{
         TeachingStaff tStaff = tStaffMapper.toTeachingStaff(request, tStaffEntities);
         tStaffRepo.save(tStaff);
         if(request.authDetails() != null) {
-            authService.registerTeachingStaff(request.authDetails(), tStaff);
+            authService.registerUser(request.authDetails(), tStaff);
             MyUser user = userService.findByEmail(request.authDetails().getEmail());
             tStaff.setUser(user);
         }
@@ -85,21 +85,20 @@ public class TeachingStaffService{
         // Handle user account creation or update
         if (request.authDetails() != null) {
             if (existingStaff.getUser() != null) {
-                // Update existing user
+
                 MyUser user = userService.findByEmail(existingStaff.getUser().getEmail());
                 user.setEmail(request.authDetails().getEmail());
-                // Update the user's role if needed
-                authService.updateUserRole(user, request.authDetails().getAdmin());
+
+                authService.updateUserRole(user, request.authDetails().getRole());
                 updatedStaff.setUser(user);
             } else {
                 // Create new user
-                tStaffRepo.save(updatedStaff); // Save first to ensure ID is set
-                authService.registerTeachingStaff(request.authDetails(), updatedStaff);
+                tStaffRepo.save(updatedStaff);
+                authService.registerUser(request.authDetails(), updatedStaff);
                 MyUser user = userService.findByEmail(request.authDetails().getEmail());
                 updatedStaff.setUser(user);
             }
         } else {
-            // No auth details provided, keep existing user if any
             updatedStaff.setUser(existingStaff.getUser());
         }
 
@@ -152,11 +151,14 @@ public class TeachingStaffService{
                         tStaffRepo.save(staff);
                         try {
                             if(csvLine.getEmail() != null && !csvLine.getEmail().isEmpty()) {
-                                var registrationRequest = RegistrationRequest.builder()
+                                // Build registration request with role
+                                String role = csvLine.getRole();
+                                var registrationRequestBuilder = RegistrationRequest.builder()
                                         .email(csvLine.getEmail())
-                                        .admin(csvLine.isAdmin())
-                                        .build();
-                                authService.registerTeachingStaff(registrationRequest, staff);
+                                        .role(role);
+
+                                var registrationRequest = registrationRequestBuilder.build();
+                                authService.registerUser(registrationRequest, staff);
                                 MyUser user = userService.findByEmail(csvLine.getEmail());
                                 staff.setUser(user);
                                 tStaffRepo.save(staff);
@@ -176,13 +178,16 @@ public class TeachingStaffService{
         List<AcademicRankResponse> academicRanks =  academicRankService.findAllAcademicRank();
 
         StringBuilder csvContent = new StringBuilder();
-        csvContent.append("name;surname;email;admin;staffFacultyId;staffAcademicRankId;statusId\n");
+        csvContent.append("name;surname;email;admin;role;staffFacultyId;staffAcademicRankId;statusId\n");
 
         csvContent.append("# Piemers zemak, pirms publicesanas izdzest visu kas sakas ar #, ka ari pasu piemeru\n");
-        csvContent.append("# Lietotāja piemērs (admin=false):\n");
-        csvContent.append("Jon;Doe;epasts@venta.lv;false;1;1;1\n");
-        csvContent.append("# Administratora piemērs (admin=true):\n");
-        csvContent.append("Jane;Smith;admin@venta.lv;true;1;1;1\n\n");
+        csvContent.append("# Docētāja piemērs (role=ROLE_TEACHINGSTAFF):\n");
+        csvContent.append("Jon;Doe;epasts@venta.lv;false;ROLE_TEACHINGSTAFF;1;1;1\n");
+        csvContent.append("# Administratora piemērs (role=ROLE_ADMIN):\n");
+        csvContent.append("Jane;Smith;admin@venta.lv;false;ROLE_ADMIN;1;1;1\n");
+        csvContent.append("# Direktora piemērs (role=ROLE_DIRECTOR):\n");
+        csvContent.append("John;Director;direktors@venta.lv;false;ROLE_DIRECTOR;1;1;1\n");
+        csvContent.append("# Piezīme: 'admin' lauks ir novecojis, lūdzu izmantojiet 'role' lauku\n\n");
 
         csvContent.append("# Pieejamie fakultasu id:\n");
         for (FacultyResponse faculty : faculties) {

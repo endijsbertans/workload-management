@@ -28,6 +28,12 @@ table {
     background-color: var(--mat-sys-primary);
   }
 
+  .direktor-cell {
+    font-weight: bold;
+    color: white;
+    background-color: #4caf50;
+  }
+
   .actions {
     white-space: nowrap;
     button {

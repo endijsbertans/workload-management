@@ -125,7 +125,7 @@ export class NewTeachingStaffComponent implements OnInit {
         if (staff.user) {
           this.userAuthDetails.set({
             email: staff.user.email,
-            admin: staff.admin
+            role: staff.role
           });
           this.authButtonText.set("rediģēt ēpastu");
         }
@@ -267,7 +267,7 @@ export class NewTeachingStaffComponent implements OnInit {
         if (this.userComponent) {
           this.userComponent.setFormValues(
             this.userAuthDetails()?.email || '',
-            this.userAuthDetails()?.admin || false
+            this.userAuthDetails()?.role
           );
         }
       });

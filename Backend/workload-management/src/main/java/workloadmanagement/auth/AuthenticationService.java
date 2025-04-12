@@ -39,27 +39,15 @@ public class AuthenticationService {
     private final JwtService jwtService;
     @Value("${application.mailing.frontend.activation-url}")
     private String activationUrl;
-    public void register(RegistrationRequest request) throws MessagingException {
-        // TODO Make admin role and in future use this as adminRegistration
-        var authorities = authorityRepository.findByTitle("USER")
-                .orElseThrow(() -> new IllegalStateException("Role user not found"));
 
-        System.out.println(request);
+    public void registerUser(RegistrationRequest request, TeachingStaff tStaff) throws MessagingException {
+        String roleTitle;
 
-        var user = MyUser.builder()
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(generateActivationCode(6))) // random 6 digit temp password
-                .accountLocked(false)
-                .enabled(false)
-                .authorities(new ArrayList<>(List.of(authorities)))
-                .build();
-        System.out.println(user);
-        userRepo.save(user);
-        sendValidationEmail(user);
-    }
-    public void registerTeachingStaff(RegistrationRequest request, TeachingStaff tStaff) throws MessagingException {
-        // Get the appropriate role based on isAdmin flag
-        var roleTitle = request.getAdmin() ? "ADMIN" : "USER";
+        if (request.getRole() == null) {
+            roleTitle = "ROLE_TEACHINGSTAFF";
+        } else {
+            roleTitle = request.getRole();
+        }
         var authority = authorityRepository.findByTitle(roleTitle)
                 .orElseThrow(() -> new IllegalStateException("Role " + roleTitle + " not found"));
 
@@ -77,10 +65,11 @@ public class AuthenticationService {
         sendValidationEmail(user);
     }
 
-    public void updateUserRole(MyUser user, boolean isAdmin) {
-        var roleTitle = isAdmin ? "ADMIN" : "USER";
-        var authority = authorityRepository.findByTitle(roleTitle)
-                .orElseThrow(() -> new IllegalStateException("Role " + roleTitle + " not found"));
+    public void updateUserRole(MyUser user, String roleTitle) {
+        String effectiveRoleTitle = roleTitle != null ? roleTitle : "ROLE_TEACHINGSTAFF";
+
+        var authority = authorityRepository.findByTitle(effectiveRoleTitle)
+                .orElseThrow(() -> new IllegalStateException("Role " + effectiveRoleTitle + " not found"));
 
         List<MyAuthority> authorities = new ArrayList<>();
         authorities.add(authority);

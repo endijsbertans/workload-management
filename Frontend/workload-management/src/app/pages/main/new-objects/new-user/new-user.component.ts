@@ -27,7 +27,7 @@ export class NewUserComponent implements OnInit {
   @Output() emitCancel = new EventEmitter();
   private readonly destroyRef = inject(DestroyRef);
   private readonly _snackBar = inject(MatSnackBar);
-  authDetailsRequest: RegistrationRequest = { email: '', admin: false };
+  authDetailsRequest: RegistrationRequest = { email: '', role: 'ROLE_TEACHINGSTAFF' };
   errorMessage = signal('');
   errorMsg: Array<string> = [];
 
@@ -35,20 +35,25 @@ export class NewUserComponent implements OnInit {
     email: new FormControl<string | null>(null, {
       validators: [Validators.email, Validators.required]
     }),
-    isAdmin: new FormControl<string>('false')
+    role: new FormControl<string>('ROLE_TEACHINGSTAFF')
   });
 
   roleOptions = [
-    { value: 'false', label: 'Lietotājs' },
-    { value: 'true', label: 'Administrators' }
+    { value: 'ROLE_TEACHINGSTAFF', label: 'Docētājs' },
+    { value: 'ROLE_ADMIN', label: 'Administrators' },
+    { value: 'ROLE_DIRECTOR', label: 'Direktors' }
   ];
 
   ngOnInit(): void {}
 
-  setFormValues(email: string, isAdmin: boolean) {
+  setFormValues(email: string,  role?: string) {
+    let roleValue = 'ROLE_TEACHINGSTAFF';
+    if (role) {
+      roleValue = role;
+    }
     this.userForm.patchValue({
       email: email,
-      isAdmin: isAdmin ? 'true' : 'false'
+      role: roleValue
     });
   }
 
@@ -65,10 +70,12 @@ export class NewUserComponent implements OnInit {
 
   onSubmit() {
     const emailValue = this.userForm.controls.email.value;
-    const isAdminValue = this.userForm.controls.isAdmin.value === 'true';
+    const roleValue = this.userForm.controls.role.value;
+
     if (emailValue) {
       this.authDetailsRequest.email = emailValue;
-      this.authDetailsRequest.admin = isAdminValue;
+      this.authDetailsRequest.role = roleValue || 'ROLE_TEACHINGSTAFF';
+
       this.emitUserAuthDetails.emit({ ...this.authDetailsRequest });
       this._snackBar.open("Saglabāts", "Aizvērt", { duration: 5000 });
     }
@@ -78,6 +85,4 @@ export class NewUserComponent implements OnInit {
     this.emitCancel.emit();
     this._snackBar.open("Atcelts", "Aizvērt", { duration: 5000 });
   }
-
-
 }

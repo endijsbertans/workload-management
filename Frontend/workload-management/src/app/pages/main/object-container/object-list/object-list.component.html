@@ -12,7 +12,8 @@
       @for (item of getDataItems(); track $index) {
         <tr>
           @for (column of displayedColumns; track column.name) {
-            <td [class.admin-cell]="column.pathTo === 'admin' && item.admin === true">
+            <td [class.admin-cell]="column.pathTo === 'role' && (item.role === 'ROLE_ADMIN')"
+                [class.direktor-cell]="column.pathTo === 'role' && (item.role === 'ROLE_DIRECTOR')">
               {{ formatPropertyValue(item, column) }}
             </td>
           }

@@ -5,4 +5,5 @@
 export interface RegistrationRequest {
   admin?: boolean;
   email: string;
+  role?: string;
 }

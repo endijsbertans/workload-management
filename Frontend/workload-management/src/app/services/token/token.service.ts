@@ -39,6 +39,7 @@ export class TokenService {
 
   isAdmin() {
     const authDetails = this.getAuthDetails();
-    return authDetails.authorities.includes('ADMIN');
+    return authDetails.authorities.includes('ROLE_ADMIN') ||
+           authDetails.authorities.includes('ROLE_DIRECTOR')
   }
 }

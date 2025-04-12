@@ -23,12 +23,6 @@ public class TeachingStaffMapper {
     }
 
     public TeachingStaffResponse toTeachingStaffResponse(TeachingStaff teachingStaff) {
-        boolean isAdmin = false;
-        if (teachingStaff.getUser() != null) {
-            isAdmin = teachingStaff.getUser().getAuthorities().stream()
-                    .anyMatch(auth -> "ADMIN".equals(auth.getAuthority()));
-        }
-
         return TeachingStaffResponse.builder()
                 .teachingStaffId(teachingStaff.getTeachingStaffId())
                 .name(teachingStaff.getName())
@@ -41,7 +35,7 @@ public class TeachingStaffMapper {
                 .staffFullName(teachingStaff.getStaffFullName())
                 .rankFullName(teachingStaff.getRankFullName())
                 .isDeleted(teachingStaff.isDeleted())
-                .admin(isAdmin)
+                .role(teachingStaff.getUser().getAuthorities().stream().toList().get(0).getAuthority())
                 //.staffPhoto() TODO
                 .build();
     }

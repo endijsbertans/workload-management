@@ -34,7 +34,7 @@ public class MyAuthority {
     private LocalDateTime lastModifiedDate;
 
     @NotNull
-    @Pattern(regexp = "^[A-Z ]+$", message = "ONLY UPPERCASE LETTERS AND SPACES")
+    @Pattern(regexp = "^[A-Z_]+$", message = "ONLY UPPERCASE LETTERS AND SPACES")
     @Column(name = "authority_title", unique = true)
     private String title;
     @ManyToMany(mappedBy = "authorities")

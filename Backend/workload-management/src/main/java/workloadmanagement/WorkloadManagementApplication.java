@@ -54,8 +54,9 @@ public class WorkloadManagementApplication {
 			if (myAuthorityRepo.findByTitle("USER").isEmpty()) {
 //				myAuthorityRepo.save(MyAuthority.builder().title("USER").build());
 			}
-					var authorities = myAuthorityRepo.save(MyAuthority.builder().title("USER").build());
-					var authorities2 = myAuthorityRepo.save(MyAuthority.builder().title("ADMIN").build());
+					var authorities = myAuthorityRepo.save(MyAuthority.builder().title("ROLE_TEACHINGSTAFF").build());
+					var authorities2 = myAuthorityRepo.save(MyAuthority.builder().title("ROLE_ADMIN").build());
+					var authorities3 = myAuthorityRepo.save(MyAuthority.builder().title("ROLE_DIRECTOR").build());
 					MyUser u1 = MyUser.builder()
 							.email("endijsbertans@gmail.com")
 							.password(passwordEncoder.encode("123456789"))
