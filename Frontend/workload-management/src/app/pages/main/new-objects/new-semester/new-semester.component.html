@@ -40,24 +40,43 @@
           </div>
         } @else {
           <div class="copy-options">
-            @if(correspondingSemester()) {
-              <div class="semester-info">
-                <p class="info-text white-text">Atrasts iepriekšējā gada {{ semesterForm.value.semesterName }} semestris ({{ correspondingSemester()?.year }})</p>
-              </div>
-            } @else if(semesterForm.value.year && semesterForm.value.semesterName) {
+            @if(allSemesters().length === 0) {
               <div class="error-message">
-                <p>Nav atrasts {{ semesterForm.value.year - 1 }} gada {{ semesterForm.value.semesterName }} semestris</p>
+                <p>Nav atrasts neviens semestris</p>
                 <p>Kopēšanas opcijas nav pieejamas.</p>
               </div>
+            } @else {
+              <div class="semester-selection">
+                <mat-form-field class="input-flex">
+                  <mat-label>Izvēlieties semestri, no kura kopēt datus</mat-label>
+                  <mat-select [formControl]="semesterForm.controls.sourceSemesterId">
+                    @for (semester of allSemesters(); track semester.semesterId) {
+                      <mat-option [value]="semester.semesterId">
+                        {{ semester.semesterName }} {{ semester.year }}
+                      </mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <mat-checkbox [formControl]="semesterForm.controls.copyAcademicRanks" [disabled]="semesterForm.value.sourceSemesterId === null" class="white-text">
+                Kopēt akadēmiskos amatus no
+                @if (getSelectedSemesterName()) {
+                  {{ getSelectedSemesterName() }} semestra
+                } @else {
+                  izvēlētā semestra
+                }
+              </mat-checkbox>
+
+              <mat-checkbox [formControl]="semesterForm.controls.copySemesterData" [disabled]="semesterForm.value.sourceSemesterId === null" class="white-text">
+                Kopēt darba slodzes no
+                @if (getSelectedSemesterName()) {
+                  {{ getSelectedSemesterName() }} semestra
+                } @else {
+                  izvēlētā semestra
+                }
+              </mat-checkbox>
             }
-
-            <mat-checkbox [formControl]="semesterForm.controls.copyAcademicRanks" [disabled]="!correspondingSemester()" class="white-text">
-              Kopēt akadēmiskos amatus no {{ semesterForm.value.year ? (semesterForm.value.year - 1) : '' }} gada {{ semesterForm.value.semesterName }} semestra
-            </mat-checkbox>
-
-            <mat-checkbox [formControl]="semesterForm.controls.copySemesterData" [disabled]="!correspondingSemester()" class="white-text">
-              Kopēt darba slodzes no {{ semesterForm.value.year ? (semesterForm.value.year - 1) : '' }} gada {{ semesterForm.value.semesterName }} semestra
-            </mat-checkbox>
           </div>
         }
       </div>

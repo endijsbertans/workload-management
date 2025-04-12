@@ -51,6 +51,7 @@ export class NewSemesterComponent implements OnInit{
   loading = signal(false);
   mostRecentSemester = signal<SemesterResponse | null>(null);
   correspondingSemester = signal<SemesterResponse | null>(null);
+  allSemesters = signal<SemesterResponse[]>([]);
   editMode = signal(false);
   objectId = signal<number | undefined>(undefined);
   pageTitle = signal('Jauna semestra konfigurācija');
@@ -65,10 +66,13 @@ export class NewSemesterComponent implements OnInit{
         Validators.min(2024),
         Validators.required],
     }),
+    sourceSemesterId: new FormControl<number | null>(null),
     copyAcademicRanks: new FormControl<boolean>(false),
     copySemesterData: new FormControl<boolean>(false)
   })
   ngOnInit(){
+    this.loadAllSemesters();
+
     this.activeRoute.params.subscribe(params => {
       if (params['id']) {
         this.objectId.set(+params['id']);
@@ -76,16 +80,47 @@ export class NewSemesterComponent implements OnInit{
         this.pageTitle.set('Rediģēt semestri');
         this.loadSemesterData(this.objectId());
       } else {
-
         this.loadMostRecentSemester();
       }
     });
-
 
     this.semesterForm.valueChanges.pipe(
       takeUntilDestroyed(this.destroyRef)
     ).subscribe(() => {
       this.findCorrespondingSemester();
+    });
+
+    this.semesterForm.controls.sourceSemesterId.valueChanges.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(value => {
+        this.semesterForm.patchValue({
+          copyAcademicRanks: false,
+          copySemesterData: false
+        });
+    });
+  }
+
+  private loadAllSemesters(): void {
+    this.loading.set(true);
+    this.semesterService.findAllSemesters().subscribe({
+      next: (semesters) => {
+        const sortedSemesters = [...semesters].sort((a, b) => {
+          const yearA = a.year ?? 0;
+          const yearB = b.year ?? 0;
+          if (yearA !== yearB) {
+            return yearB - yearA; // Descending by year
+          }
+          // If same year, sort by semester name (spring after fall)
+          return a.semesterName === 'pavasaris' ? -1 : 1;
+        });
+        this.allSemesters.set(sortedSemesters);
+      },
+      error: (err) => {
+        this._snackBar.open("Neizdevās ielādēt semestrus", "Aizvērt", { duration: 5000 });
+      },
+      complete: () => {
+        this.loading.set(false);
+      }
     });
   }
 
@@ -98,20 +133,20 @@ export class NewSemesterComponent implements OnInit{
       return;
     }
 
-    const previousYear = year - 1;
+    const previousYear = year ? year - 1 : 0;
 
-    this.semesterService.findAllSemesters().subscribe({
-      next: (semesters) => {
-        const matchingSemester = semesters.find(semester =>
-          semester.year === previousYear && semester.semesterName === semesterName);
+    // Find the corresponding semester from the previous year (for backward compatibility)
+    const matchingSemester = this.allSemesters().find(semester =>
+      semester.year === previousYear && semester.semesterName === semesterName);
 
-        this.correspondingSemester.set(matchingSemester || null);
-      },
-      error: (err) => {
-        this.correspondingSemester.set(null);
-          this._snackBar.open("Neizdevās ielādēt iepriekšējos semestrus", "Aizvērt", { duration: 5000 });
-      }
-    });
+    this.correspondingSemester.set(matchingSemester || null);
+
+    // If we found a matching semester and no source semester is selected yet, select it by default
+    if (matchingSemester && !this.semesterForm.value.sourceSemesterId) {
+      this.semesterForm.patchValue({
+        sourceSemesterId: matchingSemester.semesterId
+      });
+    }
   }
 
   private loadMostRecentSemester(): void {
@@ -183,10 +218,10 @@ export class NewSemesterComponent implements OnInit{
       this._snackBar.open("Lūdzu aizpildiet visus obligātos laukus", "Aizvērt", { duration: 5000 });
       return false;
     }
-    // Check if copy options are selected but no corresponding previous semester exists
+
     if ((this.semesterForm.value.copyAcademicRanks || this.semesterForm.value.copySemesterData) &&
-        !this.correspondingSemester()) {
-      this._snackBar.open(`Nav iepriekšējā gada ${this.semesterForm.value.semesterName} semestra, no kura kopēt datus`, "Aizvērt", { duration: 5000 });
+        this.semesterForm.value.sourceSemesterId === null) {
+      this._snackBar.open("Lūdzu izvēlieties semestri, no kura kopēt datus", "Aizvērt", { duration: 5000 });
       return false;
     }
 
@@ -198,7 +233,6 @@ export class NewSemesterComponent implements OnInit{
 
     this.loading.set(true);
 
-    // Check if semester already exists
     this.semesterService.findAllSemesters().subscribe({
       next: (semesters) => {
         const semesterExists = semesters.some(semester =>
@@ -226,29 +260,22 @@ export class NewSemesterComponent implements OnInit{
     }).pipe(
       switchMap(newSemesterId => {
 
-        if (this.semesterForm.value.copyAcademicRanks && this.correspondingSemester()) {
+        if (this.semesterForm.value.copyAcademicRanks && this.semesterForm.value.sourceSemesterId) {
+          const sourceSemesterId = this.semesterForm.value.sourceSemesterId;
 
-          const previousSemester = this.correspondingSemester()!;
-          return of(previousSemester).pipe(
-            switchMap(previousSemester => {
-
-              return this.semesterService.copyAcademicRanksFromSemester({
-                targetSemesterId: newSemesterId,
-                sourceSemesterId: previousSemester.semesterId!
-              }).pipe(
-
-                switchMap(() => {
-                  if (this.semesterForm.value.copySemesterData) {
-                    return this.semesterService.copyWorkloadsFromSemester({
-                      targetSemesterId: newSemesterId,
-                      sourceSemesterId: previousSemester.semesterId!
-                    });
-                  }
-                  return of(0);
-                })
-              );
+          return this.semesterService.copyAcademicRanksFromSemester({
+            targetSemesterId: newSemesterId,
+            sourceSemesterId: sourceSemesterId
+          }).pipe(
+            switchMap(() => {
+              if (this.semesterForm.value.copySemesterData) {
+                return this.semesterService.copyWorkloadsFromSemester({
+                  targetSemesterId: newSemesterId,
+                  sourceSemesterId: sourceSemesterId
+                });
+              }
+              return of(0);
             }),
-
             switchMap(() => of(newSemesterId))
           );
         }
@@ -260,7 +287,9 @@ export class NewSemesterComponent implements OnInit{
         this.emitMyAcademicRank.emit(id);
         let message = "Semestris izveidots veiksmīgi";
         if (this.semesterForm.value.copyAcademicRanks) {
-          message += ", akadēmiskie amati nokopēti";
+          const sourceSemester = this.allSemesters().find(s => s.semesterId === this.semesterForm.value.sourceSemesterId);
+          const semesterInfo = sourceSemester ? `${sourceSemester.semesterName ?? ''} ${sourceSemester.year ?? ''}` : '';
+          message += `, akadēmiskie amati nokopēti no ${semesterInfo} semestra`;
         }
         if (this.semesterForm.value.copySemesterData) {
           message += ", darba slodzes nokopētas";
@@ -323,5 +352,15 @@ export class NewSemesterComponent implements OnInit{
     } else {
       this.errorMessage.set('');
     }
+  }
+
+  getSelectedSemesterName(): string | null {
+    const sourceSemesterId = this.semesterForm.value.sourceSemesterId;
+    if (!sourceSemesterId) return null;
+
+    const selectedSemester = this.allSemesters().find(s => s.semesterId === sourceSemesterId);
+    if (!selectedSemester) return null;
+
+    return `${selectedSemester.semesterName ?? ''} ${selectedSemester.year ?? ''}`;
   }
 }
