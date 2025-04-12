@@ -16,7 +16,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -26,12 +28,30 @@ public class CourseService {
     private final CourseMapper courseMapper;
     private final ICourseRepo courseRepo;
     private final AcademicRankService academicRankService;
+
+    public Optional<Course> findExistingCourse(String courseCode) {
+        return courseRepo.findByCourseCodeAndIsDeletedFalse(courseCode);
+    }
+
     public Integer save(CourseRequest request) {
+        Optional<Course> existingCourse = findExistingCourse(request.courseCode());
+
+        if (existingCourse.isPresent()) {
+            throw new RuntimeException("Course with code '" + request.courseCode() + "' already exists.");
+        }
+
         Course course = courseMapper.toCourse(request);
         return courseRepo.save(course).getCourseId();
     }
     public Integer update(Integer courseId, @Valid CourseRequest request) {
         Course existingCourse = findCourseFromResponseId(courseId);
+
+     Optional<Course> duplicateCourse = findExistingCourse(request.courseCode());
+
+        if (duplicateCourse.isPresent() && duplicateCourse.get().getCourseId() != courseId) {
+            throw new RuntimeException("Another course with code '" + request.courseCode() + "' already exists.");
+        }
+
         Course updatedCourse = courseMapper.toCourse(request);
         updatedCourse.setCourseId(existingCourse.getCourseId());
         return courseRepo.save(updatedCourse).getCourseId();
@@ -62,8 +82,26 @@ public class CourseService {
 
     public Integer uploadCourse(MultipartFile file) throws IOException {
         Set<Course> courses = parseCsv(file);
-        courseRepo.saveAll(courses);
-        return courses.size();
+        List<Course> validCourses = new ArrayList<>();
+        List<String> duplicateErrors = new ArrayList<>();
+
+        for (Course course : courses) {
+            Optional<Course> existingCourse = findExistingCourse(course.getCourseCode());
+
+            if (existingCourse.isPresent()) {
+                String error = "Course with code '" + course.getCourseCode() + "' already exists.";
+                duplicateErrors.add(error);
+            } else {
+                validCourses.add(course);
+            }
+        }
+
+        if (!duplicateErrors.isEmpty()) {
+            throw new RuntimeException("Found duplicate courses: \n" + String.join("\n", duplicateErrors));
+        }
+
+        courseRepo.saveAll(validCourses);
+        return validCourses.size();
     }
 
     private Set<Course> parseCsv(MultipartFile file) throws IOException {

@@ -13,7 +13,9 @@ import workloadmanagement.faculty.FacultyService;
 import workloadmanagement.repo.IMyClassRepo;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -23,14 +25,47 @@ public class MyClassService {
     private final MyClassMapper MyClassMapper;
     private final IMyClassRepo myClassRepo;
     private final FacultyService facultyService;
+
+    public Optional<MyClass> findExistingClass(int classLevel, String classProgram, Faculty faculty, Degree degree) {
+        return myClassRepo.findByClassLevelAndClassProgramAndClassFacultyAndDegreeAndIsDeletedFalse(
+                classLevel, classProgram, faculty, degree);
+    }
+
     public Integer save(MyClassRequest request) {
         Faculty faculty = facultyService.findFacultyFromResponseId(request.classFacultyId());
+
+        // Check if class already exists
+        Optional<MyClass> existingClass = findExistingClass(
+                request.classLevel(),
+                request.myClassProgram(),
+                faculty,
+                request.degree());
+
+        if (existingClass.isPresent()) {
+            throw new RuntimeException("Class with level " + request.classLevel() + ", program '" +
+                    request.myClassProgram() + "', faculty '" + faculty.getFacultyName() +
+                    "' and degree '" + request.degree() + "' already exists.");
+        }
+
         MyClass myClass = MyClassMapper.toMyClass(request, faculty);
         return myClassRepo.save(myClass).getClassId();
     }
     public Integer update(Integer myclassId, @Valid MyClassRequest request) {
         MyClass existingMyClass = findMyClassFromResponseId(myclassId);
         Faculty faculty = facultyService.findFacultyFromResponseId(request.classFacultyId());
+
+       Optional<MyClass> duplicateClass = findExistingClass(
+                request.classLevel(),
+                request.myClassProgram(),
+                faculty,
+                request.degree());
+
+        if (duplicateClass.isPresent() && duplicateClass.get().getClassId() != myclassId) {
+            throw new RuntimeException("Another class with level " + request.classLevel() + ", program '" +
+                    request.myClassProgram() + "', faculty '" + faculty.getFacultyName() +
+                    "' and degree '" + request.degree() + "' already exists.");
+        }
+
         MyClass updatedMyClass = MyClassMapper.toMyClass(request, faculty);
         updatedMyClass.setClassId(existingMyClass.getClassId());
         return myClassRepo.save(updatedMyClass).getClassId();
@@ -62,8 +97,31 @@ public class MyClassService {
 
     public Integer uploadMyClass(MultipartFile file) throws IOException {
         Set<MyClass> myClasses = parseCsv(file);
-        myClassRepo.saveAll(myClasses);
-        return myClasses.size();
+        List<MyClass> validClasses = new ArrayList<>();
+        List<String> duplicateErrors = new ArrayList<>();
+
+        for (MyClass myClass : myClasses) {
+            Optional<MyClass> existingClass = findExistingClass(
+                    myClass.getClassLevel(),
+                    myClass.getClassProgram(),
+                    myClass.getClassFaculty(),
+                    myClass.getDegree());
+
+            if (existingClass.isPresent()) {
+                String error = "Class with level " + myClass.getClassLevel() + ", program '" +
+                        myClass.getClassProgram() + "', faculty '" + myClass.getClassFaculty().getFacultyName() +
+                        "' and degree '" + myClass.getDegree() + "' already exists.";
+                duplicateErrors.add(error);
+            } else {
+                validClasses.add(myClass);
+            }
+        }
+        if (!duplicateErrors.isEmpty()) {
+            throw new RuntimeException("Found duplicate classes: \n" + String.join("\n", duplicateErrors));
+        }
+
+        myClassRepo.saveAll(validClasses);
+        return validClasses.size();
     }
 
     private Set<MyClass> parseCsv(MultipartFile file) throws IOException {
