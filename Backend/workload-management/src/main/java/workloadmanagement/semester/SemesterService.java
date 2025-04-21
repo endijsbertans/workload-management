@@ -66,4 +66,20 @@ public class SemesterService {
         List<Semester> semesters = semesterRepo.findByIsDeletedFalseOrderBySemesterYearDesc();
         return semesters.isEmpty() ? Optional.empty() : Optional.of(semesters.get(0));
     }
+
+    public Semester findCurrentOrLatestSemester() {
+        int currentYear = java.time.LocalDate.now().getYear();
+        SemesterEnum currentSemesterName = java.time.LocalDate.now().getMonthValue() >= 8 ?
+                SemesterEnum.rudens : SemesterEnum.pavasaris;
+
+        // Try to find current semester
+        Optional<Semester> currentSemester = semesterRepo.findBySemesterYearAndSemesterName(currentYear, currentSemesterName);
+        if (currentSemester.isPresent()) {
+            return currentSemester.get();
+        }
+
+        // If not found, get the most recent semester
+        return findMostRecentSemester()
+                .orElseThrow(() -> new EntityNotFoundException("No semesters found in the system"));
+    }
 }

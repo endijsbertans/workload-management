@@ -42,12 +42,18 @@ table {
 .wrapper {
   overflow-x: auto;
 }
-
-$green-header: #A5B68D !important;
 $orange-header: #ECCA9C !important;
 
 .teacher-header, .calc-header , .general-header{
-  background: $green-header;
+  @include mat.sort-overrides((
+    arrow-color: var(--mat-sys-on-primary)
+  ));
+  background: #067650 !important;
+  color: var(--mat-sys-on-primary);
+  .mat-icon {
+    color: var(--mat-sys-on-primary);
+  }
+
 }
 
 .course-header,  .salary-header, .workloadClass-header {
@@ -76,7 +82,8 @@ $orange-header: #ECCA9C !important;
 }
 
 .totals-row-tr {
-  background-color: #f5f5f5;
+  background-color: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
   font-weight: bold;
 }
 

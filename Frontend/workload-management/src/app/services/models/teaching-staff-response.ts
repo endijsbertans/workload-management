@@ -7,11 +7,11 @@ import { Faculty } from '../models/faculty';
 import { MyUser } from '../models/my-user';
 import { StatusType } from '../models/status-type';
 export interface TeachingStaffResponse {
-  role?: string;
   deleted?: boolean;
   name?: string;
   positionTitle?: string;
   rankFullName?: string;
+  role?: string;
   staffAcademicRank?: AcademicRank;
   staffFaculty?: Faculty;
   staffFullName?: string;

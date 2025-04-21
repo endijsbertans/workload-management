@@ -1,0 +1,197 @@
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <h1>Darba slodzes pārskats</h1>
+
+    <div class="semester-selector">
+      <mat-form-field appearance="fill">
+        <mat-label>Semestris</mat-label>
+        <mat-select [(ngModel)]="selectedSemesterId" (selectionChange)="onSemesterChange()">
+          @for(semester of semesters; track semester.semesterId){
+            <mat-option  [value]="semester.semesterId">
+              {{ semester.semesterName }} {{ semester.year }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+  @if (isLoading()){
+  <div class="loading-container">
+    <mat-spinner></mat-spinner>
+  </div>
+  }
+  @if (!isLoading()){
+  <div class="dashboard-content">
+    <!-- Summary Cards -->
+    <div class="summary-cards">
+      <mat-card class="summary-card">
+        <mat-card-header>
+          <mat-card-title>Kopējais slodžu skaits</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="card-value">{{ summary['totalWorkloads'] }}</div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="summary-card">
+        <mat-card-header>
+          <mat-card-title>Kopējās kontaktstundas</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="card-value">{{ summary['totalContactHours'] | number:'1.0-2' }}</div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="summary-card">
+        <mat-card-header>
+          <mat-card-title>Kopējie kredītpunkti</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="card-value">{{ summary['totalCreditPoints'] | number:'1.0-2' }}</div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="summary-card">
+        <mat-card-header>
+          <mat-card-title>Kopējā alga</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="card-value">{{ formatCurrency(summary['totalExpectedSalary']) }}</div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="summary-card">
+        <mat-card-header>
+          <mat-card-title>Alga mēnesī</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="card-value">{{ formatCurrency(summary['monthlyExpectedSalary']) }}</div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Class Distribution -->
+    <div class="data-section">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Klašu sadalījums</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          @if(classDistribution.length === 0){
+          <div class="no-data">
+            Nav datu par klašu sadalījumu
+          </div>
+          }
+          @if(classDistribution.length > 0){
+          <div class="chart-container">
+            <div class="chart-wrapper">
+              <canvas #classChart></canvas>
+            </div>
+            <div class="data-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Klase</th>
+                    <th>Kredītpunkti</th>
+                  </tr>
+                </thead>
+                <tbody>
+                @for(item of classDistribution; track $index){
+                  <tr>
+                    <td>{{ item['className'] }}</td>
+                    <td>{{ item['creditPoints'] | number:'1.0-2' }} KP</td>
+                  </tr>
+                }
+                </tbody>
+              </table>
+            </div>
+          </div>
+          }
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Course Distribution -->
+    <div class="data-section">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Kursu sadalījums</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          @if(courseDistribution.length === 0){
+          <div class="no-data">
+            Nav datu par kursu sadalījumu
+          </div>
+          }
+          @if(courseDistribution.length > 0){
+          <div class="chart-container">
+            <div class="chart-wrapper">
+              <canvas #courseChart></canvas>
+            </div>
+            <div class="data-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Kurss</th>
+                    <th>Kredītpunkti</th>
+                  </tr>
+                </thead>
+                <tbody>
+                @for(item of courseDistribution; track $index){
+                  <tr>
+                    <td>{{ item['courseName'] }}</td>
+                    <td>{{ item['creditPoints'] | number:'1.0-2' }} KP</td>
+                  </tr>
+                }
+                </tbody>
+              </table>
+            </div>
+          </div>
+          }
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Faculty Distribution -->
+    <div class="data-section">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Fakultāšu sadalījums</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          @if(facultyDistribution.length === 0){
+          <div class="no-data">
+            Nav datu par fakultāšu sadalījumu
+          </div>
+          }
+          @if(facultyDistribution.length > 0){
+          <div class="chart-container">
+            <div class="chart-wrapper">
+              <canvas #facultyChart></canvas>
+            </div>
+            <div class="data-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Fakultāte</th>
+                    <th>Kredītpunkti</th>
+                  </tr>
+                </thead>
+                <tbody>
+                @for(item of facultyDistribution; track $index){
+                  <tr>
+                    <td>{{ item['faculty'] }}</td>
+                    <td>{{ item['creditPoints'] | number:'1.0-2' }} KP</td>
+                  </tr>
+                }
+                </tbody>
+              </table>
+            </div>
+          </div>
+          }
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+  }
+</div>

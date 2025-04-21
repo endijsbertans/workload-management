@@ -677,36 +677,6 @@
         }
       }
     },
-    "/auth/register": {
-      "post": {
-        "tags": [
-          "Authentication"
-        ],
-        "operationId": "register",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RegistrationRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "202": {
-            "description": "Accepted",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/auth/forgot-password": {
       "post": {
         "tags": [
@@ -1942,6 +1912,188 @@
         }
       }
     },
+    "/workload-stats/teacher-comparison": {
+      "get": {
+        "tags": [
+          "WorkloadStats"
+        ],
+        "operationId": "getTeacherComparison",
+        "parameters": [
+          {
+            "name": "semesterId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/workload-stats/summary": {
+      "get": {
+        "tags": [
+          "WorkloadStats"
+        ],
+        "operationId": "getWorkloadSummary",
+        "parameters": [
+          {
+            "name": "semesterId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/workload-stats/faculty-distribution": {
+      "get": {
+        "tags": [
+          "WorkloadStats"
+        ],
+        "operationId": "getFacultyDistribution",
+        "parameters": [
+          {
+            "name": "semesterId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/workload-stats/course-distribution": {
+      "get": {
+        "tags": [
+          "WorkloadStats"
+        ],
+        "operationId": "getCourseDistribution",
+        "parameters": [
+          {
+            "name": "semesterId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/workload-stats/class-distribution": {
+      "get": {
+        "tags": [
+          "WorkloadStats"
+        ],
+        "operationId": "getClassDistribution",
+        "parameters": [
+          {
+            "name": "semesterId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/teaching-staff/template": {
       "get": {
         "tags": [
@@ -2053,7 +2205,8 @@
                     "enum": [
                       "BACHELOR",
                       "MASTER",
-                      "DOCTORATE"
+                      "DOCTORATE",
+                      "PROFESSIONAL_QUALIFICATION"
                     ]
                   }
                 }
@@ -2253,8 +2406,8 @@
           "email": {
             "type": "string"
           },
-          "admin": {
-            "type": "boolean"
+          "role": {
+            "type": "string"
           }
         },
         "required": [
@@ -2344,7 +2497,8 @@
             "enum": [
               "BACHELOR",
               "MASTER",
-              "DOCTORATE"
+              "DOCTORATE",
+              "PROFESSIONAL_QUALIFICATION"
             ]
           }
         },
@@ -2607,7 +2761,8 @@
             "enum": [
               "BACHELOR",
               "MASTER",
-              "DOCTORATE"
+              "DOCTORATE",
+              "PROFESSIONAL_QUALIFICATION"
             ]
           },
           "deleted": {
@@ -2714,11 +2869,11 @@
           "staffPhoto": {
             "type": "string"
           },
-          "staffFullName": {
-            "type": "string"
-          },
           "deleted": {
             "type": "boolean"
+          },
+          "staffFullName": {
+            "type": "string"
           },
           "rankFullName": {
             "type": "string"
@@ -2922,10 +3077,10 @@
           "username": {
             "type": "string"
           },
-          "credentialsNonExpired": {
+          "accountNonExpired": {
             "type": "boolean"
           },
-          "accountNonExpired": {
+          "credentialsNonExpired": {
             "type": "boolean"
           },
           "accountNonLocked": {
@@ -2974,10 +3129,10 @@
           "rankFullName": {
             "type": "string"
           },
-          "deleted": {
-            "type": "boolean"
+          "role": {
+            "type": "string"
           },
-          "admin": {
+          "deleted": {
             "type": "boolean"
           }
         }

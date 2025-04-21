@@ -1,0 +1,192 @@
+.dashboard-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+
+  h1 {
+    margin: 0;
+    font-size: 24px;
+  }
+
+  .semester-selector {
+    min-width: 200px;
+  }
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+}
+
+.dashboard-content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.summary-card {
+  background-color: var(--mat-sys-primary);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  mat-card-header {
+    padding: 16px 16px 0;
+
+    mat-card-title {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--mat-sys-on-primary);
+    }
+  }
+
+  mat-card-content {
+    padding: 16px;
+
+    .card-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--mat-sys-on-primary);
+      text-align: center;
+    }
+  }
+}
+
+.data-section {
+  mat-card {
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+
+    mat-card-header {
+      padding: 16px 16px 0;
+
+      mat-card-title {
+        font-size: 18px;
+        font-weight: 500;
+        color: #333;
+      }
+    }
+
+    mat-card-content {
+      padding: 16px;
+    }
+  }
+}
+
+.chart-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.chart-wrapper {
+  width: 100%;
+  height: 300px;
+  position: relative;
+
+  canvas {
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
+
+.data-table, .teacher-comparison {
+  width: 100%;
+  overflow-x: auto;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th, td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+
+    th {
+      background-color:  var(--mat-sys-primary);
+      font-weight: 500;
+      color: var(--mat-sys-on-primary);
+    }
+
+    tr:hover {
+      background-color: #f9f9f9;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+  }
+}
+
+.no-data {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  color: #888;
+  font-style: italic;
+}
+
+
+
+
+
+.quick-links {
+  mat-card-content {
+    .links-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+
+      a {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+
+    .semester-selector {
+      width: 100%;
+    }
+  }
+
+  .summary-cards {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .budget-distribution, .faculty-distribution {
+    grid-template-columns: 1fr;
+  }
+}

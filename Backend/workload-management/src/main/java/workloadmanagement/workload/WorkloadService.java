@@ -9,12 +9,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import workloadmanagement.auth.security.MyUser;
 import workloadmanagement.myclass.MyClass;
 import workloadmanagement.myclass.MyClassService;
 
 import workloadmanagement.academicrank.academicrankDetails.AcademicRankDetails;
 import workloadmanagement.academicrank.academicrankDetails.AcademicRankDetailsService;
-import workloadmanagement.auth.security.MyUser;
+
 import workloadmanagement.repo.ITeachingStaffRepo;
 import workloadmanagement.semester.Semester;
 import workloadmanagement.semester.SemesterService;
@@ -306,5 +307,189 @@ public PageResponse<WorkloadResponse> findAllWorkloads(Pageable pageable, Map<St
                         .toArray(),
                 source.getCreditPointsPerGroup()
         );
+    }
+
+    // Dashboard API methods
+    public Map<String, Object> getWorkloadSummary(Semester semester, MyUser user) {
+        List<Workload> workloads;
+        boolean isAdmin = user.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ADMIN"));
+
+        if (isAdmin) {
+            workloads = workloadRepo.findBySemester(semester);
+        } else {
+            TeachingStaff staff = teachingStaffRepo.findByUser(user)
+                    .orElseThrow(() -> new EntityNotFoundException("No teaching staff found for user: " + user.getEmail()));
+            workloads = workloadRepo.findByTeachingStaffAndSemester(staff, semester);
+        }
+
+        Map<String, Object> summary = new HashMap<>();
+
+        // Calculate totals
+        double totalExpectedSalary = 0;
+        double totalContactHours = 0;
+        double totalCreditPoints = 0;
+        double monthlyExpectedSalary = 0;
+        int totalGroups = 0;
+
+        for (Workload workload : workloads) {
+            totalExpectedSalary += workload.getExpectedSalary();
+            totalContactHours += workload.getContactHours();
+            totalCreditPoints += workload.getTotalCreditPoints();
+            totalGroups += workload.getGroupAmount();
+            monthlyExpectedSalary += workload.getSalaryPerMonth();
+        }
+
+        summary.put("totalWorkloads", workloads.size());
+        summary.put("totalExpectedSalary", totalExpectedSalary);
+        summary.put("monthlyExpectedSalary", monthlyExpectedSalary);
+        summary.put("totalContactHours", totalContactHours);
+        summary.put("totalCreditPoints", totalCreditPoints);
+        summary.put("totalGroups", totalGroups);
+        summary.put("semesterName", semester.getSemesterName());
+        summary.put("semesterYear", semester.getSemesterYear());
+
+        return summary;
+    }
+
+    public List<Map<String, Object>> getClassDistribution(Semester semester, MyUser user) {
+        List<Workload> workloads;
+        boolean isAdmin = user.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ADMIN"));
+
+        if (isAdmin) {
+            workloads = workloadRepo.findBySemester(semester);
+        } else {
+            TeachingStaff staff = teachingStaffRepo.findByUser(user)
+                    .orElseThrow(() -> new EntityNotFoundException("No teaching staff found for user: " + user.getEmail()));
+            workloads = workloadRepo.findByTeachingStaffAndSemester(staff, semester);
+        }
+
+        Map<String, Double> classDistribution = new HashMap<>();
+
+        for (Workload workload : workloads) {
+            if (workload.getGroupForSemester() != null) {
+                String className = workload.getGroupForSemester().getClassLevel() + workload.getGroupForSemester().getClassProgram();
+                if (className != null) {
+                    double currentCreditPoints = classDistribution.getOrDefault(className, 0.0);
+                    classDistribution.put(className, currentCreditPoints + workload.getTotalCreditPoints());
+                }
+            }
+        }
+
+        List<Map<String, Object>> result = new ArrayList<>();
+        for (Map.Entry<String, Double> entry : classDistribution.entrySet()) {
+            Map<String, Object> item = new HashMap<>();
+            item.put("className", entry.getKey());
+            item.put("creditPoints", entry.getValue());
+            result.add(item);
+        }
+
+        return result;
+    }
+
+    public List<Map<String, Object>> getCourseDistribution(Semester semester, MyUser user) {
+        List<Workload> workloads;
+            TeachingStaff staff = teachingStaffRepo.findByUser(user)
+                    .orElseThrow(() -> new EntityNotFoundException("No teaching staff found for user: " + user.getEmail()));
+            workloads = workloadRepo.findByTeachingStaffAndSemester(staff, semester);
+
+        Map<String, Double> courseDistribution = new HashMap<>();
+
+        for (Workload workload : workloads) {
+            if (workload.getCourse() != null) {
+                String courseName = workload.getCourse().getCourseName();
+                if (courseName != null) {
+                    double currentCreditPoints = courseDistribution.getOrDefault(courseName, 0.0);
+                    courseDistribution.put(courseName, currentCreditPoints + workload.getTotalCreditPoints());
+                }
+            }
+        }
+
+        List<Map<String, Object>> result = new ArrayList<>();
+        for (Map.Entry<String, Double> entry : courseDistribution.entrySet()) {
+            Map<String, Object> item = new HashMap<>();
+            item.put("courseName", entry.getKey());
+            item.put("creditPoints", entry.getValue());
+            result.add(item);
+        }
+
+        return result;
+    }
+
+    public List<Map<String, Object>> getFacultyDistribution(Semester semester, MyUser user) {
+        List<Workload> workloads;
+        boolean isAdmin = user.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ADMIN"));
+
+        if (isAdmin) {
+            workloads = workloadRepo.findBySemester(semester);
+        } else {
+            TeachingStaff staff = teachingStaffRepo.findByUser(user)
+                    .orElseThrow(() -> new EntityNotFoundException("No teaching staff found for user: " + user.getEmail()));
+            workloads = workloadRepo.findByTeachingStaffAndSemester(staff, semester);
+        }
+
+        Map<String, Double> facultyDistribution = new HashMap<>();
+
+        for (Workload workload : workloads) {
+            if (workload.getGroupForSemester() != null && workload.getGroupForSemester().getClassFaculty() != null) {
+                String facultyName = workload.getGroupForSemester().getClassFaculty().getFacultyName();
+                double currentAmount = facultyDistribution.getOrDefault(facultyName, 0.0);
+                facultyDistribution.put(facultyName, currentAmount + workload.getTotalCreditPoints());
+            }
+        }
+
+        List<Map<String, Object>> result = new ArrayList<>();
+        for (Map.Entry<String, Double> entry : facultyDistribution.entrySet()) {
+            Map<String, Object> item = new HashMap<>();
+            item.put("faculty", entry.getKey());
+            item.put("creditPoints", entry.getValue());
+            result.add(item);
+        }
+
+        return result;
+    }
+
+    public List<Map<String, Object>> getTeacherComparison(Semester semester, MyUser user) {
+        List<Workload> workloads;
+        boolean isAdmin = user.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ADMIN"));
+
+        if (isAdmin) {
+            workloads = workloadRepo.findBySemester(semester);
+        } else {
+            TeachingStaff staff = teachingStaffRepo.findByUser(user)
+                    .orElseThrow(() -> new EntityNotFoundException("No teaching staff found for user: " + user.getEmail()));
+            workloads = workloadRepo.findByTeachingStaffAndSemester(staff, semester);
+            return Collections.emptyList(); // Non-admin users don't get comparison data
+        }
+
+        Map<Integer, Map<String, Object>> teacherData = new HashMap<>();
+
+        for (Workload workload : workloads) {
+            TeachingStaff teacher = workload.getTeachingStaff();
+            if (teacher != null) {
+                int teacherId = teacher.getTeachingStaffId();
+                Map<String, Object> data = teacherData.computeIfAbsent(teacherId, k -> {
+                    Map<String, Object> newData = new HashMap<>();
+                    newData.put("teacherId", teacherId);
+                    newData.put("teacherName", teacher.getStaffFullName());
+                    newData.put("totalCreditPoints", 0.0);
+                    newData.put("totalContactHours", 0.0);
+                    newData.put("totalExpectedSalary", 0.0);
+                    newData.put("monthlyExpectedSalary", 0.0);
+                    return newData;
+                });
+
+                data.put("totalCreditPoints", (double) data.get("totalCreditPoints") + workload.getTotalCreditPoints());
+                data.put("totalContactHours", (double) data.get("totalContactHours") + workload.getContactHours());
+                data.put("totalExpectedSalary", (double) data.get("totalExpectedSalary") + workload.getExpectedSalary());
+                // Calculate monthly salary (assuming 5 months per semester)
+                data.put("monthlyExpectedSalary", (double) data.get("totalExpectedSalary") / 5.0);
+            }
+        }
+
+        return new ArrayList<>(teacherData.values());
     }
 }

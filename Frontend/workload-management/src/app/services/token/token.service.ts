@@ -22,6 +22,19 @@ export class TokenService {
     const jwtHelper = new JwtHelperService();
     return jwtHelper.decodeToken(token);
   }
+  getAuthority(){
+    const authDetails = this.getAuthDetails();
+      switch (authDetails.authorities[0]){
+        case 'ROLE_ADMIN':
+          return 'Administrators';
+        case 'ROLE_DIRECTOR':
+          return 'Direktors';
+        case 'ROLE_TEACHINGSTAFF':
+          return 'Docētājs';
+        default:
+          return '';
+      }
+  }
   private isTokenValid(){
     const token = this.token;
     if(!token){

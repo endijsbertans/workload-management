@@ -2,6 +2,7 @@ import {Routes} from '@angular/router';
 import {LoginComponent} from "./pages/auth/auth-wrapper/login/login.component";
 import {ActivateAccountComponent} from "./pages/auth/auth-wrapper/activate-account/activate-account.component";
 import {WorkloadListComponent} from "./pages/main/workload-list/workload-list.component";
+import {DashboardComponent} from "./pages/main/dashboard/dashboard.component";
 
 import {NewTeachingStaffComponent} from "./pages/main/new-objects/new-teaching-staff/new-teaching-staff.component";
 import {NewCourseComponent} from "./pages/main/new-objects/new-course/new-course.component";
@@ -65,6 +66,9 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/main/main.component').then(m => m.MainComponent),
     canActivate: [authGuard],
     children: [{
+      path: '',
+      component: DashboardComponent
+    }, {
       path: 'user-workload',
       component: WorkloadListComponent,
       children: [

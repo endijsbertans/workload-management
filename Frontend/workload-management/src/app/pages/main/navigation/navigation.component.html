@@ -1,6 +1,10 @@
 <header>
   <img src="VeaLogo.svg" class="VeaLogo">
   <nav class="flex">
+    <a mat-fab extended routerLink="">
+      <mat-icon>dashboard</mat-icon>
+      Pārskats
+    </a>
     <a mat-fab extended routerLink="user-workload">
       <mat-icon>person</mat-icon>
       Savi dati
@@ -15,7 +19,7 @@
       Specifiska tabula
     </a>
     }
-    <h1>{{ this.authDetails.fullName }} {{ this.authDetails.authorities }}</h1>
+    <h1>{{ authority }} {{ this.authDetails.fullName }}</h1>
     <a mat-fab extended (click)="logout()">
       <mat-icon>logout</mat-icon>
       atslēgties

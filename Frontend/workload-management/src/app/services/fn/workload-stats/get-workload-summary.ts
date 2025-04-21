@@ -8,17 +8,18 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { RegistrationRequest } from '../../models/registration-request';
 
-export interface Register$Params {
-      body: RegistrationRequest
+export interface GetWorkloadSummary$Params {
+  semesterId?: number;
 }
 
-export function register(http: HttpClient, rootUrl: string, params: Register$Params, context?: HttpContext): Observable<StrictHttpResponse<{
+export function getWorkloadSummary(http: HttpClient, rootUrl: string, params?: GetWorkloadSummary$Params, context?: HttpContext): Observable<StrictHttpResponse<{
+[key: string]: {
+};
 }>> {
-  const rb = new RequestBuilder(rootUrl, register.PATH, 'post');
+  const rb = new RequestBuilder(rootUrl, getWorkloadSummary.PATH, 'get');
   if (params) {
-    rb.body(params.body, 'application/json');
+    rb.query('semesterId', params.semesterId, {});
   }
 
   return http.request(
@@ -27,9 +28,11 @@ export function register(http: HttpClient, rootUrl: string, params: Register$Par
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
       return r as StrictHttpResponse<{
+      [key: string]: {
+      };
       }>;
     })
   );
 }
 
-register.PATH = '/auth/register';
+getWorkloadSummary.PATH = '/workload-stats/summary';

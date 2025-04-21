@@ -16,6 +16,7 @@ public interface IWorkloadRepo extends JpaRepository<Workload, Integer>, JpaSpec
 
     Page<Workload> findByTeachingStaff(TeachingStaff teachingStaff, Pageable pageable);
 
-
     List<Workload> findBySemester(Semester semester);
+
+    List<Workload> findByTeachingStaffAndSemester(TeachingStaff teachingStaff, Semester semester);
 }

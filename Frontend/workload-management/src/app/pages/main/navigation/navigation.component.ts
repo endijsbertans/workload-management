@@ -19,8 +19,9 @@ export class NavigationComponent {
   private readonly tokenService = inject(TokenService);
   isAdmin = signal(this.tokenService.isAdmin());
   authDetails = this.tokenService.getAuthDetails();
+  authority = this.tokenService.getAuthority();
   constructor() {
-    console.log("AUTH: " + this.authDetails.fullName + " " + this.authDetails.authorities);
+    console.log("AUTH: " + this.authDetails.fullName + " " + this.tokenService.getAuthority());
   }
   logout(){
     localStorage.removeItem('token');

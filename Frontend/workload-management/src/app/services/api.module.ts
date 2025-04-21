@@ -17,6 +17,7 @@ import { CourseService } from './services/course.service';
 import { AuthenticationService } from './services/authentication.service';
 import { AcademicRankService } from './services/academic-rank.service';
 import { AcademicRankDetailsService } from './services/academic-rank-details.service';
+import { WorkloadStatsService } from './services/workload-stats.service';
 
 /**
  * Module that provides all services and configuration.
@@ -37,6 +38,7 @@ import { AcademicRankDetailsService } from './services/academic-rank-details.ser
     AuthenticationService,
     AcademicRankService,
     AcademicRankDetailsService,
+    WorkloadStatsService,
     ApiConfiguration
   ],
 })
