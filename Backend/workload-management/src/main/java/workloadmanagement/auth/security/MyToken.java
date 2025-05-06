@@ -3,6 +3,7 @@ package workloadmanagement.auth.security;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import workloadmanagement.auth.security.user.MyUser;
 
 import java.time.LocalDateTime;
 

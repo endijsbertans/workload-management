@@ -10,7 +10,6 @@ import workloadmanagement.workload.WorkloadService.WorkloadEntities;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.stream.Collectors;
 
 @Service
 public class WorkloadMapper {
@@ -72,7 +71,7 @@ public class WorkloadMapper {
 
                 .myClasses(workload.getMyClasses().stream()
                         .map(myClassMapper::toMyClassResponse)
-                        .collect(Collectors.toList()))
+                        .toList())
                 .cpForFullTime(workload.getAcademicRankDetails().getCpForFullTime())
                 .monthSum(workload.getMonthSum())
                 .totalCreditPoints(workload.getTotalCreditPoints())
@@ -92,7 +91,7 @@ public class WorkloadMapper {
                 .cpProportionOnFullTime(workload.getCpProportionOnFullTime())
                 .myClasses(workload.getMyClasses().stream()
                         .map(myClassMapper::toMyClassResponse)
-                        .collect(Collectors.toList()))
+                        .toList())
                 .build();
     }
     private double getProgramCoefficient(MyClass groupForSemester){
@@ -103,16 +102,13 @@ public class WorkloadMapper {
         }
     }
     public double getTotalCreditPoints(double groupAmount, double creditPointsPerGroup, double programCoefficient){
-        System.out.println("getTotalCreditPoints: " + groupAmount + " * " + creditPointsPerGroup + " * " + programCoefficient + " = " + groupAmount*creditPointsPerGroup*programCoefficient);
-        return round(groupAmount*creditPointsPerGroup*programCoefficient,3);
+      return round(groupAmount*creditPointsPerGroup*programCoefficient,3);
     }
     public double getSalaryPerMonth(double salary, double creditPointsOnFullTime, double industryCoefficient){
-        System.out.println("getSalaryPerMonth: "+ salary + " *" + creditPointsOnFullTime + " *" + industryCoefficient + "=" + salary * creditPointsOnFullTime * industryCoefficient);
         return round(salary * creditPointsOnFullTime * industryCoefficient,3);
     }
     public double getCpProportionOnFullTime(double cpForFullTime, double totalCreditPoints){
-        System.out.println("getCpProportionOnFullTime: "+totalCreditPoints + " / " +  cpForFullTime + " = "+ totalCreditPoints/cpForFullTime);
-        return round(totalCreditPoints/cpForFullTime,3);
+       return round(totalCreditPoints/cpForFullTime,3);
     }
     public static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();

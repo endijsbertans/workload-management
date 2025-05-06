@@ -45,7 +45,6 @@ export class NewAcademicRankDetailsComponent implements OnInit{
   objectId = signal<number | undefined>(undefined);
   pageTitle = signal('Pievienot jaunas amata detaļas');
 
-  academicRankDetailsRequest?: AcademicRankDetailsRequest;
   academicRankDetailsForm = new FormGroup({
     cpForFullTime: new FormControl(1, {
       validators: [

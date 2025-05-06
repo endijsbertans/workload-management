@@ -3,7 +3,7 @@ import {
   DestroyRef,
   EventEmitter,
   inject,
-  Input,
+  Input, OnChanges, OnDestroy,
   OnInit,
   Output,
   signal,
@@ -60,7 +60,7 @@ import {BudgetPosition, EnumTranslationService} from "../../../../../services/tr
   standalone: true,
   styleUrl: './workload-form.component.scss'
 })
-export class WorkloadFormComponent implements OnInit {
+export class WorkloadFormComponent implements OnInit, OnDestroy, OnChanges {
   @Input() initialWorkload?: WorkloadResponse;
   @Input() editMode: boolean | undefined;
   @Output() formSubmit = new EventEmitter<WorkloadRequest>();
@@ -79,7 +79,7 @@ export class WorkloadFormComponent implements OnInit {
   private readonly myClassService = inject(MyClassService);
   private readonly academicRankService = inject(AcademicRankService);
   private readonly semesterService = inject(SemesterControllerService);
-  private readonly workloadService = inject(WorkloadService);
+
   @ViewChild('multiSelect', {static: true}) multiSelect: MatSelect | undefined;
   // ReplaySubjects for dropdown filtering
   public filteredTeachingStaff = new ReplaySubject<TeachingStaffResponse[]>(1);
@@ -211,7 +211,7 @@ export class WorkloadFormComponent implements OnInit {
         myClassIds: this.workloadForm.value.myClassCtrl ?? [],
         academicRankId: this.workloadForm.value.academicRankCtrl ?? 0,
         includeInBudget: this.workloadForm.value.includeInBudgetCtrl ?? '',
-        budgetPosition: this.workloadForm.value.budgetPositionCtrl ?? BudgetPosition.grant,
+        budgetPosition: this.workloadForm.value.budgetPositionCtrl ?? BudgetPosition.GRANT,
         industryCoefficient: this.workloadForm.value.industryCoefficientCtrl ?? 0,
         vacationMonths: this.workloadForm.value.vacationMonthsCtrl ?? 0,
         groupAmount: this.workloadForm.value.groupAmountCtrl ?? 0,

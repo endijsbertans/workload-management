@@ -1,6 +1,5 @@
 package workloadmanagement.academicrank;
 import lombok.*;
-import workloadmanagement.semester.SemesterEnum;
 
 @Getter
 @Setter

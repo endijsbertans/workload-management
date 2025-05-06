@@ -4,7 +4,7 @@
 
 export interface WorkloadRequest {
   academicRankId: number;
-  budgetPosition: 'ZB' | 'PF' | 'M' | 'grant';
+  budgetPosition: 'ZB' | 'PF' | 'M' | 'GRANT';
   comments: string;
   courseId: number;
   creditPointsPerGroup: number;

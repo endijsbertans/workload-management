@@ -10,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 import workloadmanagement.faculty.Faculty;
 import workloadmanagement.faculty.FacultyResponse;
 import workloadmanagement.faculty.FacultyService;
-import workloadmanagement.repo.IMyClassRepo;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class MyClassService {
-    private final MyClassMapper MyClassMapper;
+    private final MyClassMapper myClassMapper;
     private final IMyClassRepo myClassRepo;
     private final FacultyService facultyService;
 
@@ -47,7 +46,7 @@ public class MyClassService {
                     "' and degree '" + request.degree() + "' already exists.");
         }
 
-        MyClass myClass = MyClassMapper.toMyClass(request, faculty);
+        MyClass myClass = myClassMapper.toMyClass(request, faculty);
         return myClassRepo.save(myClass).getClassId();
     }
     public Integer update(Integer myclassId, @Valid MyClassRequest request) {
@@ -66,7 +65,7 @@ public class MyClassService {
                     "' and degree '" + request.degree() + "' already exists.");
         }
 
-        MyClass updatedMyClass = MyClassMapper.toMyClass(request, faculty);
+        MyClass updatedMyClass = myClassMapper.toMyClass(request, faculty);
         updatedMyClass.setClassId(existingMyClass.getClassId());
         return myClassRepo.save(updatedMyClass).getClassId();
     }
@@ -76,14 +75,14 @@ public class MyClassService {
     }
     public MyClassResponse findById(Integer myClassId) {
         return myClassRepo.findById(myClassId)
-                .map(MyClassMapper::toMyClassResponse)
+                .map(myClassMapper::toMyClassResponse)
                 .orElseThrow(() -> new RuntimeException("MyClass not found"));
     }
 
     public List<MyClassResponse> findAllMyClass() {
         List<MyClass> myClass = myClassRepo.findByIsDeletedFalse();
         return myClass.stream()
-                .map(MyClassMapper::toMyClassResponse)
+                .map(myClassMapper::toMyClassResponse)
                 .toList();
     }
 
@@ -138,9 +137,8 @@ public class MyClassService {
             return csvToBean.parse()
                     .stream()
                     .map(csvLine -> {
-                        System.out.println(csvLine.classLevel + "  " + csvLine.myClassProgram + "   " +  csvLine.degree +"   " +  csvLine.classFacultyId);
                         Faculty faculty = facultyService.findFacultyFromResponseId(csvLine.classFacultyId);
-                        return  MyClassMapper.toMyClass(csvLine, faculty);
+                        return  myClassMapper.toMyClass(csvLine, faculty);
                     }).collect(Collectors.toSet());
         }
     }

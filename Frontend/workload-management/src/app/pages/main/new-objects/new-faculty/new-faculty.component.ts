@@ -1,10 +1,10 @@
-import { Component, DestroyRef, EventEmitter, inject, OnInit, Output, signal } from '@angular/core';
+import { Component, EventEmitter, inject, OnInit, Output, signal } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { MatError, MatFormField, MatLabel } from "@angular/material/form-field";
 import { MatInput } from "@angular/material/input";
 import { MatButton } from "@angular/material/button";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { ActivatedRoute, Router} from "@angular/router";
 import { FacultyRequest } from "../../../../services/models/faculty-request";
 import { FacultyService } from "../../../../services/services/faculty.service";
 

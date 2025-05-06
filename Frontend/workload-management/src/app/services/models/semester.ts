@@ -5,6 +5,6 @@
 export interface Semester {
   deleted?: boolean;
   semesterId?: number;
-  semesterName?: 'pavasaris' | 'rudens';
+  semesterName?: 'PAVASARIS' | 'RUDENS';
   semesterYear?: number;
 }

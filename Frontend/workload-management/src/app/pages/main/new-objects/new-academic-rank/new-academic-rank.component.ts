@@ -35,7 +35,6 @@ export class NewAcademicRankComponent implements OnInit {
   objectId = signal<number | undefined>(undefined);
   pageTitle = signal('Pievienot jaunu amatu');
 
-  academicRankRequest?: AcademicRankRequest;
   academicRankForm = new FormGroup({
     rankName: new FormControl('', {
       validators: [

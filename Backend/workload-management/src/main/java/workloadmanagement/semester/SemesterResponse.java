@@ -1,7 +1,6 @@
 package workloadmanagement.semester;
 
 import lombok.*;
-import java.time.LocalDate;
 
 @Getter
 @Setter

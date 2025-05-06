@@ -126,16 +126,6 @@ export class DashboardComponent implements OnInit{
       error: (err: Error) => console.error('Error loading faculty distribution', err)
     });
 
-    // Load teacher comparison (admin only)
-    if (this.isAdmin) {
-      this.workloadStatsService.getTeacherComparison({ semesterId: this.selectedSemesterId }).subscribe({
-        next: (data: Record<string, any>[]) => {
-          this.teacherComparison = data;
-          setTimeout(() => this.renderTeacherChart(), 500);
-        },
-        error: (err: Error) => console.error('Error loading teacher comparison', err)
-      });
-    }
   }
 
   onSemesterChange(): void {
@@ -299,59 +289,6 @@ export class DashboardComponent implements OnInit{
           title: {
             display: true,
             text: 'Kredītpunktu sadalījums pa fakultātēm'
-          }
-        }
-      }
-    });
-  }
-
-  renderTeacherChart(): void {
-    if (!this.teacherChartRef?.nativeElement || !this.isAdmin || this.teacherComparison.length === 0) {
-      return;
-    }
-
-    // Destroy previous chart if it exists
-    if (this.teacherChart) {
-      this.teacherChart.destroy();
-    }
-
-    const ctx = this.teacherChartRef.nativeElement.getContext('2d');
-    if (!ctx) return;
-
-    const labels = this.teacherComparison.map((item: Record<string, any>) => item['teacherName'] as string);
-    const creditPoints = this.teacherComparison.map((item: Record<string, any>) => item['totalCreditPoints'] as number);
-    const contactHours = this.teacherComparison.map((item: Record<string, any>) => item['totalContactHours'] as number);
-
-    this.teacherChart = new Chart(ctx, {
-      type: 'bar' as ChartType,
-      data: {
-        labels: labels,
-        datasets: [
-          {
-            label: 'Kredītpunkti',
-            data: creditPoints,
-            backgroundColor: 'rgba(6, 118, 80, 1)',
-            borderColor: 'rgba(6, 118, 80, 1)',
-            borderWidth: 1
-          },
-
-        ]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        },
-        plugins: {
-          legend: {
-            position: 'top',
-          },
-          title: {
-            display: true,
-            text: 'Docētāju slodžu salīdzinājums'
           }
         }
       }

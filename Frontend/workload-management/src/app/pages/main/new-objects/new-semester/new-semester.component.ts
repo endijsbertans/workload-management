@@ -1,6 +1,6 @@
 import {Component, DestroyRef, EventEmitter, inject, OnInit, Output, signal} from '@angular/core';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
-import {ActivatedRoute, Router, RouterLink} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {MatSnackBar} from "@angular/material/snack-bar";
 
 
@@ -16,7 +16,6 @@ import {MatInput} from "@angular/material/input";
 import {MatOption} from "@angular/material/core";
 import {MatSelect} from "@angular/material/select";
 import {MatCheckbox} from "@angular/material/checkbox";
-import {MatDialog} from "@angular/material/dialog";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 
 
@@ -46,7 +45,6 @@ export class NewSemesterComponent implements OnInit{
   private readonly _snackBar = inject(MatSnackBar);
   private readonly semesterService = inject(SemesterControllerService);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly dialog = inject(MatDialog);
   errorMessage = signal('');
   loading = signal(false);
   mostRecentSemester = signal<SemesterResponse | null>(null);
@@ -56,7 +54,7 @@ export class NewSemesterComponent implements OnInit{
   objectId = signal<number | undefined>(undefined);
   pageTitle = signal('Jauna semestra konfigurācija');
   semesterForm = new FormGroup({
-    semesterName: new FormControl<"pavasaris" | "rudens">("rudens", {
+    semesterName: new FormControl<"PAVASARIS" | "RUDENS">("RUDENS", {
       validators: [
         Validators.minLength(2),
         Validators.required],
@@ -92,7 +90,7 @@ export class NewSemesterComponent implements OnInit{
 
     this.semesterForm.controls.sourceSemesterId.valueChanges.pipe(
       takeUntilDestroyed(this.destroyRef)
-    ).subscribe(value => {
+    ).subscribe(() => {
         this.semesterForm.patchValue({
           copyAcademicRanks: false,
           copySemesterData: false
@@ -111,11 +109,11 @@ export class NewSemesterComponent implements OnInit{
             return yearB - yearA; // Descending by year
           }
           // If same year, sort by semester name (spring after fall)
-          return a.semesterName === 'pavasaris' ? -1 : 1;
+          return a.semesterName === 'PAVASARIS' ? -1 : 1;
         });
         this.allSemesters.set(sortedSemesters);
       },
-      error: (err) => {
+      error: () => {
         this._snackBar.open("Neizdevās ielādēt semestrus", "Aizvērt", { duration: 5000 });
       },
       complete: () => {
@@ -171,7 +169,7 @@ export class NewSemesterComponent implements OnInit{
             });
           }
         },
-        error: (err) => {
+        error: () => {
           this.correspondingSemester.set(null);
           this._snackBar.open("Neizdevās ielādēt iepriekšējos semestrus", "Aizvērt", { duration: 5000 });
         },

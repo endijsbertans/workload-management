@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {AuthenticationService} from "../../../../services/services/authentication.service";
 import {CodeInputModule} from "angular-code-input";
@@ -15,8 +15,7 @@ import {ChangePasswordComponent} from "./change-password/change-password.compone
   templateUrl: './activate-account.component.html',
   styleUrl: './activate-account.component.scss'
 })
-export class ActivateAccountComponent {
-  private readonly route = inject(Router);
+export class ActivateAccountComponent implements OnInit{
   private readonly activatedRoute= inject(ActivatedRoute);
   private readonly authService = inject(AuthenticationService);
   private readonly _snackBar = inject(MatSnackBar);
@@ -37,10 +36,6 @@ export class ActivateAccountComponent {
 
   onCodeCompleted(submittedCode: string) {
     this.confirmAccount(submittedCode);
-  }
-
-  redirectToLogin() {
-    this.route.navigate(['login']);
   }
 
   private confirmAccount(token: string) {

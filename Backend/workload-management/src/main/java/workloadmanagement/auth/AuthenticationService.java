@@ -10,15 +10,15 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import workloadmanagement.auth.security.MyAuthority;
+import workloadmanagement.auth.security.authority.MyAuthority;
 import workloadmanagement.email.EmailService;
 import workloadmanagement.email.EmailTemplateName;
 import workloadmanagement.auth.security.JwtService;
 import workloadmanagement.auth.security.MyToken;
-import workloadmanagement.repo.IMyAuthorityRepo;
-import workloadmanagement.auth.security.MyUser;
-import workloadmanagement.repo.IMyUserRepo;
-import workloadmanagement.repo.ITokenRepo;
+import workloadmanagement.auth.security.authority.IMyAuthorityRepo;
+import workloadmanagement.auth.security.user.MyUser;
+import workloadmanagement.auth.security.user.IMyUserRepo;
+import workloadmanagement.auth.security.ITokenRepo;
 import workloadmanagement.teachingstaff.TeachingStaff;
 
 import java.security.SecureRandom;
@@ -39,6 +39,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     @Value("${application.mailing.frontend.activation-url}")
     private String activationUrl;
+    private static final String ERROR_USER_NOT_FOUND = "User not found";
 
     public void registerUser(RegistrationRequest request, TeachingStaff tStaff) throws MessagingException {
         String roleTitle;
@@ -51,7 +52,6 @@ public class AuthenticationService {
         var authority = authorityRepository.findByTitle(roleTitle)
                 .orElseThrow(() -> new IllegalStateException("Role " + roleTitle + " not found"));
 
-        System.out.println(request);
         var user = MyUser.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(generateActivationCode(6))) // random 6 digit temp password
@@ -60,7 +60,6 @@ public class AuthenticationService {
                 .enabled(false)
                 .authorities(new ArrayList<>(List.of(authority)))
                 .build();
-        System.out.println(user);
         userRepo.save(user);
         sendValidationEmail(user);
     }
@@ -84,7 +83,7 @@ public class AuthenticationService {
                 EmailTemplateName.ACTIVATE_ACCOUNT,
                 activationUrl + newToken,
                 newToken,
-                "Account activation"
+                "Verifikācijas kods"
         );
     }
 
@@ -136,12 +135,11 @@ public class AuthenticationService {
         MyToken savedToken = tokenRepo.findByToken(token)
                 .orElseThrow(() -> new RuntimeException("Token not found"));
         if(LocalDateTime.now().isAfter(savedToken.getExpiresAt())){
-            String activationCode = generateActivationCode(6);
             sendValidationEmail(savedToken.getUser());
             throw new RuntimeException("Token expired, new token sent");
         }
         var user = userRepo.findById(savedToken.getUser().getId())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                .orElseThrow(() -> new UsernameNotFoundException(ERROR_USER_NOT_FOUND));
         user.setEnabled(true);
         userRepo.save(user);
         savedToken.setValidatedAt(LocalDateTime.now());
@@ -150,7 +148,7 @@ public class AuthenticationService {
     @Transactional
     public void forgotPassword(String email) throws MessagingException {
         var user = userRepo.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                .orElseThrow(() -> new UsernameNotFoundException(ERROR_USER_NOT_FOUND));
 
         generateAndSaveActivationToken(user);
         sendValidationEmail(user);
@@ -164,7 +162,7 @@ public class AuthenticationService {
             throw new RuntimeException("Token expired, new token sent");
         }
         var user = userRepo.findById(savedToken.getUser().getId())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                .orElseThrow(() -> new UsernameNotFoundException(ERROR_USER_NOT_FOUND));
 
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepo.save(user);

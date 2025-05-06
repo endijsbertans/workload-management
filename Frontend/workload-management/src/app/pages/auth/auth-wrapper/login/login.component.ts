@@ -1,4 +1,4 @@
-import {Component, DestroyRef, inject, signal} from '@angular/core';
+import {Component, DestroyRef, inject, OnInit, signal} from '@angular/core';
 import {AuthenticationRequest} from "../../../../services/models/authentication-request";
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {debounceTime, of} from "rxjs";
@@ -35,7 +35,7 @@ if (savedForm) {
   styleUrl: './login.component.scss'
 
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit{
   private readonly tokenExpirationService = inject(TokenExpirationService);
   private readonly router =  inject(Router);
   private readonly authService =  inject(AuthenticationService);

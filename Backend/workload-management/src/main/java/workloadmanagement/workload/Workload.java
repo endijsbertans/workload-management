@@ -2,7 +2,7 @@ package workloadmanagement.workload;
 
 import jakarta.persistence.*;
 import lombok.*;
-import workloadmanagement.academicrank.academicrankDetails.AcademicRankDetails;
+import workloadmanagement.academicrank.academicrankdetails.AcademicRankDetails;
 import workloadmanagement.semester.Semester;
 import workloadmanagement.course.Course;
 import workloadmanagement.myclass.MyClass;
@@ -64,9 +64,6 @@ public class Workload {
     @ManyToMany(fetch = EAGER)
     private List<MyClass> myClasses = new ArrayList<>();
 
-//    public String getMyClasses(){
-//        return myClasses.stream().map(MyClass::getClassName).collect(Collectors.joining(", "));
-//    }
     @Transient
     public double getMonthSum(){ return workingMonths + vacationMonths;}
 }

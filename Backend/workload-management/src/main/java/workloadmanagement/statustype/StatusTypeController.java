@@ -5,7 +5,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import workloadmanagement.teachingstaff.TeachingStaffRequest;
 
 import java.util.List;
 

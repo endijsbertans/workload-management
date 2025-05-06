@@ -12,18 +12,14 @@ public record WorkloadRequest (
     @NotNull(message = "112")
     int semesterId,
 
-    @Size.List({
-            @Size(min = 1, message = "113"),
-            @Size(max = 255, message = "113")
-    })
+    @Size(min = 1, message = "113")
+    @Size(max = 255, message = "113")
     @NotNull(message = "113")
     @NotEmpty(message = "113")
     String comments,
 
-    @Size.List({
-            @Size(min = 1, message = "114"),
-            @Size(max = 45, message = "114")
-    })
+    @Size(min = 1, message = "114")
+    @Size(max = 45, message = "114")
     @NotNull(message = "114")
     @NotEmpty(message = "114")
     String includeInBudget,
@@ -60,6 +56,5 @@ public record WorkloadRequest (
     @Min(value = 0, message = "126")
     @NotNull(message = "126")
     double creditPointsPerGroup
-
 ){
 }

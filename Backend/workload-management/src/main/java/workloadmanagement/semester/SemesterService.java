@@ -4,7 +4,6 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import workloadmanagement.repo.ISemesterRepo;
 
 import java.util.List;
 import java.util.Optional;
@@ -70,7 +69,7 @@ public class SemesterService {
     public Semester findCurrentOrLatestSemester() {
         int currentYear = java.time.LocalDate.now().getYear();
         SemesterEnum currentSemesterName = java.time.LocalDate.now().getMonthValue() >= 8 ?
-                SemesterEnum.rudens : SemesterEnum.pavasaris;
+                SemesterEnum.RUDENS : SemesterEnum.PAVASARIS;
 
         // Try to find current semester
         Optional<Semester> currentSemester = semesterRepo.findBySemesterYearAndSemesterName(currentYear, currentSemesterName);

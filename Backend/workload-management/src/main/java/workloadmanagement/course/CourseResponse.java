@@ -1,7 +1,6 @@
 package workloadmanagement.course;
 
 import lombok.*;
-import workloadmanagement.academicrank.AcademicRank;
 
 @Getter
 @Setter

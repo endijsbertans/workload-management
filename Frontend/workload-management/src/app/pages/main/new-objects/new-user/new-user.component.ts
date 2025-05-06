@@ -1,4 +1,4 @@
-import { Component, DestroyRef, EventEmitter, inject, OnInit, Output, signal } from '@angular/core';
+import { Component, EventEmitter, inject, OnInit, Output, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { RegistrationRequest } from "../../../../services/models/registration-request";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -25,7 +25,6 @@ import { MatOptionModule } from "@angular/material/core";
 export class NewUserComponent implements OnInit {
   @Output() emitUserAuthDetails = new EventEmitter<RegistrationRequest>();
   @Output() emitCancel = new EventEmitter();
-  private readonly destroyRef = inject(DestroyRef);
   private readonly _snackBar = inject(MatSnackBar);
   authDetailsRequest: RegistrationRequest = { email: '', role: 'ROLE_TEACHINGSTAFF' };
   errorMessage = signal('');

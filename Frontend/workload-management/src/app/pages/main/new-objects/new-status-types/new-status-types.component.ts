@@ -7,7 +7,6 @@ import {StatusTypeService} from "../../../../services/services";
 import {MatButton} from "@angular/material/button";
 import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
-import {Location} from "@angular/common";
 
 @Component({
   selector: 'app-new-status-types',
@@ -34,8 +33,6 @@ export class NewStatusTypesComponent implements OnInit{
   editMode = signal(false);
   objectId = signal<number | undefined>(undefined);
   pageTitle = signal('Pievienot jaunu statusu!');
-  protected readonly location = inject(Location);
-  statusTypeRequest?: StatusTypeRequest;
   statusTypeForm = new FormGroup({
     statusTypeName: new FormControl('', {
       validators: [

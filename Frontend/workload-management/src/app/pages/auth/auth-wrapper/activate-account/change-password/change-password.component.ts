@@ -50,11 +50,8 @@ const passwordMatchValidator: ValidatorFn = (control: AbstractControl): Validati
 export class ChangePasswordComponent {
   @Input() token: string = '';
 
-  private readonly tokenExpirationService = inject(TokenExpirationService);
   private readonly router = inject(Router);
   private readonly authService = inject(AuthenticationService);
-  private readonly tokenService = inject(TokenService);
-  private readonly destroyRef = inject(DestroyRef);
   private readonly _snackBar = inject(MatSnackBar);
   errorMessage = signal('');
   errorMsg: Array<string> = [];
@@ -106,7 +103,7 @@ export class ChangePasswordComponent {
       this.authService.changePassword({
         token: this.token, password: password
       }).subscribe({
-        next: (res) => {
+        next: () => {
           this.router.navigate(['auth/login'], {
             replaceUrl: true
           });

@@ -1,7 +1,6 @@
 package workloadmanagement.statustype;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @Getter

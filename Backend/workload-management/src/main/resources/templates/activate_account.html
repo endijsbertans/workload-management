@@ -43,7 +43,7 @@
 <div class="container">
     <h1>Profila aktivizēšana</h1>
     <p class="greeting" th:text="'Sveiks ' + ${username} + ','"></p>
-    <p>Pagaidu parole</p>
+    <p>Verifikācijas kods</p>
     <div class="activation-code"><span th:text="${activation_code}"></span></div>
     <div class="activation-link">
         <a th:href="${confirmationUrl}" target="_blank">Aktivizēt profilu</a>

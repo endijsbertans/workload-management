@@ -1,10 +1,7 @@
 package workloadmanagement.teachingstaff;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import workloadmanagement.academicrank.AcademicRankResponse;
 import workloadmanagement.auth.RegistrationRequest;
-import workloadmanagement.faculty.FacultyResponse;
 
 public record TeachingStaffRequest(
 

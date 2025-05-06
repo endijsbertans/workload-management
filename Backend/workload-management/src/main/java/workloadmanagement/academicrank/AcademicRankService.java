@@ -2,10 +2,7 @@ package workloadmanagement.academicrank;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import workloadmanagement.course.CourseRequest;
-import workloadmanagement.faculty.Faculty;
-import workloadmanagement.faculty.FacultyResponse;
-import workloadmanagement.repo.IAcademicRankRepo;
+
 import java.util.List;
 @Service
 @RequiredArgsConstructor

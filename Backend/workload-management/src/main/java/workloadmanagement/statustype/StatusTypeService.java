@@ -4,8 +4,6 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.*;
 import org.springframework.stereotype.Service;
-import workloadmanagement.repo.IStatusTypeRepo;
-import workloadmanagement.teachingstaff.TeachingStaffRequest;
 
 import java.util.List;
 

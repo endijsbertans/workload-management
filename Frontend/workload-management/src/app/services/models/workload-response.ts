@@ -9,7 +9,7 @@ import { Semester } from '../models/semester';
 import { TeachingStaff } from '../models/teaching-staff';
 export interface WorkloadResponse {
   academicRankDetails?: AcademicRankDetails;
-  budgetPosition?: 'ZB' | 'PF' | 'M' | 'grant';
+  budgetPosition?: 'ZB' | 'PF' | 'M' | 'GRANT';
   comments?: string;
   contactHours?: number;
   course?: Course;

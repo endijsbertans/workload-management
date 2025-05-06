@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import workloadmanagement.academicrank.academicrankDetails.AcademicRankDetailsService;
+import workloadmanagement.academicrank.academicrankdetails.AcademicRankDetailsService;
 import workloadmanagement.workload.WorkloadService;
 
 import java.util.List;

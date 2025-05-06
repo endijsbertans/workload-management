@@ -7,9 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import workloadmanagement.academicrank.AcademicRank;
 import workloadmanagement.academicrank.AcademicRankService;
-import workloadmanagement.repo.ICourseRepo;
 
 
 import java.io.BufferedReader;

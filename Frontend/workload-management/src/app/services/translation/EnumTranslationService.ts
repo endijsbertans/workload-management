@@ -11,7 +11,7 @@ export enum BudgetPosition {
   ZB = 'ZB',
   PF = 'PF',
   M = 'M',
-  grant = 'grant'
+  GRANT = 'GRANT'
 }
 
 @Injectable({
@@ -34,7 +34,7 @@ export class EnumTranslationService {
       [BudgetPosition.ZB]: 'zinātnes bāze',
       [BudgetPosition.PF]: 'pašvaldības finansējums',
       [BudgetPosition.M]: 'maksas pakalpojumi',
-      [BudgetPosition.grant]: 'valsts finansējums'
+      [BudgetPosition.GRANT]: 'valsts finansējums'
     }
   };
 

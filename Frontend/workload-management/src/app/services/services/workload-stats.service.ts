@@ -17,8 +17,6 @@ import { getCourseDistribution } from '../fn/workload-stats/get-course-distribut
 import { GetCourseDistribution$Params } from '../fn/workload-stats/get-course-distribution';
 import { getFacultyDistribution } from '../fn/workload-stats/get-faculty-distribution';
 import { GetFacultyDistribution$Params } from '../fn/workload-stats/get-faculty-distribution';
-import { getTeacherComparison } from '../fn/workload-stats/get-teacher-comparison';
-import { GetTeacherComparison$Params } from '../fn/workload-stats/get-teacher-comparison';
 import { getWorkloadSummary } from '../fn/workload-stats/get-workload-summary';
 import { GetWorkloadSummary$Params } from '../fn/workload-stats/get-workload-summary';
 
@@ -26,43 +24,6 @@ import { GetWorkloadSummary$Params } from '../fn/workload-stats/get-workload-sum
 export class WorkloadStatsService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
-  }
-
-  /** Path part for operation `getTeacherComparison()` */
-  static readonly GetTeacherComparisonPath = '/workload-stats/teacher-comparison';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getTeacherComparison()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getTeacherComparison$Response(params?: GetTeacherComparison$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<{
-[key: string]: {
-};
-}>>> {
-    return getTeacherComparison(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getTeacherComparison$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getTeacherComparison(params?: GetTeacherComparison$Params, context?: HttpContext): Observable<Array<{
-[key: string]: {
-};
-}>> {
-    return this.getTeacherComparison$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<{
-[key: string]: {
-};
-}>>): Array<{
-[key: string]: {
-};
-}> => r.body)
-    );
   }
 
   /** Path part for operation `getWorkloadSummary()` */

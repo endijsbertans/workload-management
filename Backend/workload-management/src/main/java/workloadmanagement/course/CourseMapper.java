@@ -1,6 +1,5 @@
 package workloadmanagement.course;
 import org.springframework.stereotype.Service;
-import workloadmanagement.academicrank.AcademicRank;
 
 @Service
 public class CourseMapper {

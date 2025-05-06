@@ -74,9 +74,6 @@ export class ObjectListComponent {
     }
   }
 
-  ngOnChanges() {
-    console.log(this.getDataItems());
-  }
 
   getNestedPropertyForItem(item: any, column: ColumnNames, defaultValue: any = "") {
     const value = this.digInObject(item, column.pathTo, defaultValue);

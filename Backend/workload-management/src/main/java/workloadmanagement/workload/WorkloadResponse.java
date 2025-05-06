@@ -2,7 +2,7 @@ package workloadmanagement.workload;
 
 import lombok.*;
 import workloadmanagement.myclass.MyClassResponse;
-import workloadmanagement.academicrank.academicrankDetails.AcademicRankDetails;
+import workloadmanagement.academicrank.academicrankdetails.AcademicRankDetails;
 import workloadmanagement.semester.Semester;
 import workloadmanagement.course.Course;
 import workloadmanagement.teachingstaff.TeachingStaff;
@@ -25,7 +25,7 @@ public class WorkloadResponse {
     private double industryCoefficient;
     private double programCoefficient;
     private int vacationMonths;
-//    private int workingMonths;
+
     private double expectedSalary;
     private int groupAmount;
     private double contactHours;

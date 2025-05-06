@@ -21,7 +21,7 @@ import {WorkloadSettingsResponse} from "../../../services/models/workload-settin
 import {MatOption, MatSelect} from "@angular/material/select";
 import {AsyncPipe} from "@angular/common";
 import {TokenService} from "../../../services/token/token.service";
-import {BehaviorSubject, Observable} from "rxjs";
+import {BehaviorSubject} from "rxjs";
 import {SemesterControllerService} from "../../../services/services/semester-controller.service";
 import {SemesterResponse} from "../../../services/models/semester-response";
 
@@ -102,8 +102,6 @@ export class WorkloadListComponent implements OnInit {
     this.dataSource.sort = this.sort;
     this.setupFiltering();
 
-    // Load semesters first, which will then trigger findAllWorkloads
-    // after selecting the appropriate semester
     this.loadSemesters();
 
     this.router.events.subscribe(event => {
@@ -126,7 +124,7 @@ export class WorkloadListComponent implements OnInit {
           if (currentYearSemester) {
             this.selectedSemester.set(currentYearSemester);
           } else {
-            // Otherwise, select the most recent semester (assuming they're sorted by year)
+            // Otherwise, select the most recent semester
             const sortedSemesters = [...semesters].sort((a, b) => (b.year || 0) - (a.year || 0));
             this.selectedSemester.set(sortedSemesters[0]);
           }
@@ -320,10 +318,8 @@ export class WorkloadListComponent implements OnInit {
   }
 
   isClicked(row: WorkloadResponse):boolean {
-    if(row.workloadId == this.clickedWorkloadRow()?.workloadId) {
-      return true;
-    }
-    return false
+    return row.workloadId == this.clickedWorkloadRow()?.workloadId;
+
   }
   openFilterDialog(event: MouseEvent, column: WorkloadColumnSettings): void {
     event.preventDefault();

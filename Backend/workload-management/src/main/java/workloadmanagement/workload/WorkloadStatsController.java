@@ -8,14 +8,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import workloadmanagement.auth.security.MyUser;
+import workloadmanagement.auth.security.user.MyUser;
 import workloadmanagement.semester.Semester;
 import workloadmanagement.semester.SemesterService;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("workload-stats")
@@ -79,19 +77,5 @@ public class WorkloadStatsController {
 
         List<Map<String, Object>> distribution = workloadService.getFacultyDistribution(semester, user);
         return ResponseEntity.ok(distribution);
-    }
-
-    @GetMapping("/teacher-comparison")
-    public ResponseEntity<List<Map<String, Object>>> getTeacherComparison(
-            @RequestParam(required = false) Integer semesterId,
-            Authentication connectedUser
-    ) {
-        MyUser user = (MyUser) connectedUser.getPrincipal();
-        Semester semester = semesterId != null
-            ? semesterService.findSemesterFromResponseId(semesterId)
-            : semesterService.findCurrentOrLatestSemester();
-
-        List<Map<String, Object>> comparison = workloadService.getTeacherComparison(semester, user);
-        return ResponseEntity.ok(comparison);
     }
 }

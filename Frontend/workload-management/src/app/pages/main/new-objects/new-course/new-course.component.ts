@@ -27,7 +27,6 @@ export class NewCourseComponent implements OnInit {
   @Output() emitCourse = new EventEmitter<number>();
   private readonly router = inject(Router);
   private readonly activeRoute = inject(ActivatedRoute);
-  private readonly destroyRef = inject(DestroyRef);
   courseService = inject(CourseService);
   private readonly _snackBar = inject(MatSnackBar);
 

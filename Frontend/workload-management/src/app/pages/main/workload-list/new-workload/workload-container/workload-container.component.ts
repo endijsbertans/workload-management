@@ -1,4 +1,4 @@
-import {Component, DestroyRef, inject, OnInit, signal} from '@angular/core';
+import {Component, inject, OnInit, signal} from '@angular/core';
 import {WorkloadRequest} from "../../../../../services/models/workload-request";
 import {EMPTY, of, switchMap} from "rxjs";
 import {MatSnackBar} from "@angular/material/snack-bar";
@@ -23,7 +23,6 @@ export class WorkloadContainerComponent implements OnInit{
   private currentWorkloadId: number | null = null;
   private readonly _snackBar = inject(MatSnackBar);
   private readonly workloadService = inject(WorkloadService);
-  private readonly destroyRef = inject(DestroyRef);
   private readonly router = inject(Router);
   private readonly activeRoute = inject(ActivatedRoute);
 

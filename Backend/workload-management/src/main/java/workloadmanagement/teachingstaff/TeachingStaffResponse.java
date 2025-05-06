@@ -1,11 +1,9 @@
 package workloadmanagement.teachingstaff;
 
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import workloadmanagement.academicrank.AcademicRank;
 import workloadmanagement.faculty.Faculty;
-import workloadmanagement.auth.security.MyUser;
+import workloadmanagement.auth.security.user.MyUser;
 import workloadmanagement.statustype.StatusType;
 
 @Getter

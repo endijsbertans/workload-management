@@ -1,4 +1,4 @@
-import {Component, DestroyRef, inject, signal} from '@angular/core';
+import {Component, DestroyRef, inject, OnInit, signal} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
@@ -25,12 +25,10 @@ import {debounceTime} from "rxjs";
   templateUrl: './forgot-password.component.html',
   styleUrl: './forgot-password.component.scss'
 })
-export class ForgotPasswordComponent {
-  private readonly tokenExpirationService = inject(TokenExpirationService);
+export class ForgotPasswordComponent implements OnInit{
   private readonly _snackBar = inject(MatSnackBar);
   private readonly router = inject(Router);
   private readonly authService = inject(AuthenticationService);
-  private readonly tokenService = inject(TokenService);
   private readonly destroyRef = inject(DestroyRef);
   errorMessage = signal('');
   errorMsg: Array<string> = [];
