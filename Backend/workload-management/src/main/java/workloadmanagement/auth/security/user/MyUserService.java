@@ -1,8 +1,7 @@
-package workloadmanagement.auth.security;
+package workloadmanagement.auth.security.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import workloadmanagement.repo.IMyUserRepo;
 
 @Service
 @RequiredArgsConstructor

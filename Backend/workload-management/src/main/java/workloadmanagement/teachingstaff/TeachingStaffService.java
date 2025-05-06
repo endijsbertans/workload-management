@@ -15,12 +15,11 @@ import workloadmanagement.academicrank.AcademicRankResponse;
 import workloadmanagement.academicrank.AcademicRankService;
 import workloadmanagement.auth.AuthenticationService;
 import workloadmanagement.auth.RegistrationRequest;
-import workloadmanagement.auth.security.MyUser;
-import workloadmanagement.auth.security.MyUserService;
+import workloadmanagement.auth.security.user.MyUser;
+import workloadmanagement.auth.security.user.MyUserService;
 import workloadmanagement.faculty.Faculty;
 import workloadmanagement.faculty.FacultyResponse;
 import workloadmanagement.faculty.FacultyService;
-import workloadmanagement.repo.ITeachingStaffRepo;
 import workloadmanagement.statustype.StatusType;
 import workloadmanagement.statustype.StatusTypeService;
 
@@ -153,11 +152,10 @@ public class TeachingStaffService{
                             if(csvLine.getEmail() != null && !csvLine.getEmail().isEmpty()) {
                                 // Build registration request with role
                                 String role = csvLine.getRole();
-                                var registrationRequestBuilder = RegistrationRequest.builder()
+                                var registrationRequest = RegistrationRequest.builder()
                                         .email(csvLine.getEmail())
-                                        .role(role);
-
-                                var registrationRequest = registrationRequestBuilder.build();
+                                        .role(role)
+                                        .build();
                                 authService.registerUser(registrationRequest, staff);
                                 MyUser user = userService.findByEmail(csvLine.getEmail());
                                 staff.setUser(user);

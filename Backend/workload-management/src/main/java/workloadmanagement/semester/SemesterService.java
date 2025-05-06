@@ -4,7 +4,6 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import workloadmanagement.repo.ISemesterRepo;
 
 import java.util.List;
 import java.util.Optional;

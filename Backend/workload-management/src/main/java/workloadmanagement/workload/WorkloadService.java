@@ -9,20 +9,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import workloadmanagement.auth.security.MyUser;
+import workloadmanagement.auth.security.user.MyUser;
 import workloadmanagement.myclass.MyClass;
 import workloadmanagement.myclass.MyClassService;
 
 import workloadmanagement.academicrank.academicrankDetails.AcademicRankDetails;
 import workloadmanagement.academicrank.academicrankDetails.AcademicRankDetailsService;
 
-import workloadmanagement.repo.ITeachingStaffRepo;
+import workloadmanagement.teachingstaff.ITeachingStaffRepo;
 import workloadmanagement.semester.Semester;
 import workloadmanagement.semester.SemesterService;
 import workloadmanagement.common.PageResponse;
 import workloadmanagement.course.Course;
 import workloadmanagement.course.CourseService;
-import workloadmanagement.repo.IWorkloadRepo;
 import workloadmanagement.teachingstaff.TeachingStaff;
 import workloadmanagement.teachingstaff.TeachingStaffService;
 
@@ -87,7 +86,7 @@ public PageResponse<WorkloadResponse> findAllWorkloads(Pageable pageable, Map<St
             //  user filter
             predicates.add(criteriaBuilder.equal(root.get("teachingStaff"), staff));
 
-            // dditional filters
+            // additional filters
             return buildFilterPredicate(filters, root, criteriaBuilder, predicates);
         }, pageable);
     }
@@ -187,7 +186,6 @@ public PageResponse<WorkloadResponse> findAllWorkloads(Pageable pageable, Map<St
                     break;
             }
         } catch (Exception e) {
-
         }
     }
     public Integer update(Integer workloadId, WorkloadRequest request) {

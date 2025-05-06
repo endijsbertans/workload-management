@@ -4,11 +4,9 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import workloadmanagement.auth.security.MyUser;
-import workloadmanagement.repo.ITeachingStaffRepo;
-import workloadmanagement.semester.SemesterService;
+import workloadmanagement.auth.security.user.MyUser;
+import workloadmanagement.teachingstaff.ITeachingStaffRepo;
 import workloadmanagement.teachingstaff.TeachingStaff;
-import workloadmanagement.teachingstaff.TeachingStaffService;
 
 import java.util.List;
 

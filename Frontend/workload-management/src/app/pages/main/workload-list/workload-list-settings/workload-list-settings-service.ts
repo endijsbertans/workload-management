@@ -119,7 +119,7 @@ export class WorkloadListSettingsService {
     const isAdmin = signal(this.tokenService.isAdmin());
     if (isAdmin()) {
       return [
-        {collection: "columnsForTeacher", name: "Docenti"},
+        {collection: "columnsForTeacher", name: "Docētāji"},
         {collection: "columnsForCourse", name: "StudijuPriekšmeti"},
         {collection: "columnsForCalc", name: "Aprēķini"},
         {collection: "columnsForWorkloadClasses", name: "Kursi"},

@@ -1,8 +1,7 @@
-package workloadmanagement.repo;
+package workloadmanagement.faculty;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import workloadmanagement.faculty.Faculty;
 
 import java.util.List;
 

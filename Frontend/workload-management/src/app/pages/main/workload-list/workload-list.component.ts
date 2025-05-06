@@ -102,8 +102,6 @@ export class WorkloadListComponent implements OnInit {
     this.dataSource.sort = this.sort;
     this.setupFiltering();
 
-    // Load semesters first, which will then trigger findAllWorkloads
-    // after selecting the appropriate semester
     this.loadSemesters();
 
     this.router.events.subscribe(event => {
@@ -126,7 +124,7 @@ export class WorkloadListComponent implements OnInit {
           if (currentYearSemester) {
             this.selectedSemester.set(currentYearSemester);
           } else {
-            // Otherwise, select the most recent semester (assuming they're sorted by year)
+            // Otherwise, select the most recent semester
             const sortedSemesters = [...semesters].sort((a, b) => (b.year || 0) - (a.year || 0));
             this.selectedSemester.set(sortedSemesters[0]);
           }

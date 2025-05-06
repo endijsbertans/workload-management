@@ -8,14 +8,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import workloadmanagement.auth.security.MyUser;
+import workloadmanagement.auth.security.user.MyUser;
 import workloadmanagement.semester.Semester;
 import workloadmanagement.semester.SemesterService;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("workload-stats")

@@ -1,4 +1,4 @@
-package workloadmanagement.repo;
+package workloadmanagement.workload;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 import workloadmanagement.semester.Semester;
 import workloadmanagement.teachingstaff.TeachingStaff;
-import workloadmanagement.workload.Workload;
 
 import java.util.List;
 

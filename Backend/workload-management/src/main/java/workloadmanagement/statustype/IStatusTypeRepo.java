@@ -1,8 +1,7 @@
-package workloadmanagement.repo;
+package workloadmanagement.statustype;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import workloadmanagement.statustype.StatusType;
 
 import java.util.List;
 

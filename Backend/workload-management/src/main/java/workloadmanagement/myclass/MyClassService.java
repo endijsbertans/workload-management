@@ -10,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 import workloadmanagement.faculty.Faculty;
 import workloadmanagement.faculty.FacultyResponse;
 import workloadmanagement.faculty.FacultyService;
-import workloadmanagement.repo.IMyClassRepo;
 
 import java.io.*;
 import java.util.ArrayList;

@@ -10,15 +10,15 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import workloadmanagement.auth.security.MyAuthority;
+import workloadmanagement.auth.security.authority.MyAuthority;
 import workloadmanagement.email.EmailService;
 import workloadmanagement.email.EmailTemplateName;
 import workloadmanagement.auth.security.JwtService;
 import workloadmanagement.auth.security.MyToken;
-import workloadmanagement.repo.IMyAuthorityRepo;
-import workloadmanagement.auth.security.MyUser;
-import workloadmanagement.repo.IMyUserRepo;
-import workloadmanagement.repo.ITokenRepo;
+import workloadmanagement.auth.security.authority.IMyAuthorityRepo;
+import workloadmanagement.auth.security.user.MyUser;
+import workloadmanagement.auth.security.user.IMyUserRepo;
+import workloadmanagement.auth.security.ITokenRepo;
 import workloadmanagement.teachingstaff.TeachingStaff;
 
 import java.security.SecureRandom;
@@ -84,7 +84,7 @@ public class AuthenticationService {
                 EmailTemplateName.ACTIVATE_ACCOUNT,
                 activationUrl + newToken,
                 newToken,
-                "Account activation"
+                "Verifikācijas kods"
         );
     }
 

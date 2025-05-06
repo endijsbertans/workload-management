@@ -1,7 +1,6 @@
-package workloadmanagement.repo;
+package workloadmanagement.auth.security.authority;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import workloadmanagement.auth.security.MyAuthority;
 
 import java.util.Optional;
 

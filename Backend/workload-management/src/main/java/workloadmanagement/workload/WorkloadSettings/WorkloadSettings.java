@@ -2,8 +2,6 @@ package workloadmanagement.workload.WorkloadSettings;
 
 import jakarta.persistence.*;
 import lombok.*;
-import workloadmanagement.auth.security.MyUser;
-import workloadmanagement.faculty.Faculty;
 import workloadmanagement.teachingstaff.TeachingStaff;
 
 import java.util.ArrayList;

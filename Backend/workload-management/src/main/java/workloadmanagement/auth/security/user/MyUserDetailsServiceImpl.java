@@ -1,4 +1,4 @@
-package workloadmanagement.service.impl;
+package workloadmanagement.auth.security.user;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -6,7 +6,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import workloadmanagement.repo.IMyUserRepo;
 
 @Service
 @RequiredArgsConstructor

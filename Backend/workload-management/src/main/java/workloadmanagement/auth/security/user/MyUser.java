@@ -1,4 +1,4 @@
-package workloadmanagement.auth.security;
+package workloadmanagement.auth.security.user;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -10,6 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import workloadmanagement.auth.security.authority.MyAuthority;
 import workloadmanagement.teachingstaff.TeachingStaff;
 
 import javax.security.auth.Subject;

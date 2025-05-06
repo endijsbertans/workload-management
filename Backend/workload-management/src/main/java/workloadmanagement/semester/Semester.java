@@ -6,7 +6,7 @@ import lombok.*;
 import java.time.LocalDate;
 
 
-@Entity
+@Entity // by default takes class name as its database name so in this case “Semester”
 @Getter
 @Setter
 @AllArgsConstructor
@@ -14,10 +14,12 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @ToString
 public class Semester {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id // marks semesterId as primary key
+    @GeneratedValue
+            (strategy = GenerationType.IDENTITY) // passes id generation to database
     private int semesterId;
     private SemesterEnum semesterName;
     private int semesterYear;
     private boolean isDeleted;
 }
+

@@ -1,8 +1,7 @@
-package workloadmanagement.repo;
+package workloadmanagement.academicrank;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import workloadmanagement.academicrank.AcademicRank;
 
 import java.util.List;
 

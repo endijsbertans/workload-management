@@ -3,7 +3,6 @@ package workloadmanagement.faculty;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import workloadmanagement.repo.IFacultyRepo;
 
 
 import java.util.List;

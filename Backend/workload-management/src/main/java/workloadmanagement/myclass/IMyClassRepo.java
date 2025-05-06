@@ -1,10 +1,8 @@
-package workloadmanagement.repo;
+package workloadmanagement.myclass;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import workloadmanagement.faculty.Faculty;
-import workloadmanagement.myclass.Degree;
-import workloadmanagement.myclass.MyClass;
 
 import java.util.List;
 import java.util.Optional;

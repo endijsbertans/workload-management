@@ -5,6 +5,8 @@ import workloadmanagement.academicrank.AcademicRank;
 import workloadmanagement.statustype.StatusType;
 import workloadmanagement.teachingstaff.TeachingStaffService.TStaffEntities;
 
+import java.util.Optional;
+
 @Service
 public class TeachingStaffMapper {
 
@@ -35,7 +37,11 @@ public class TeachingStaffMapper {
                 .staffFullName(teachingStaff.getStaffFullName())
                 .rankFullName(teachingStaff.getRankFullName())
                 .isDeleted(teachingStaff.isDeleted())
-                .role(teachingStaff.getUser().getAuthorities().stream().toList().get(0).getAuthority())
+                .role(Optional.ofNullable(teachingStaff.getUser())
+                        .map(user -> user.getAuthorities().stream().findFirst()
+                                .map(auth -> auth.getAuthority())
+                                .orElse(null))
+                        .orElse(null))
                 //.staffPhoto() TODO
                 .build();
     }
