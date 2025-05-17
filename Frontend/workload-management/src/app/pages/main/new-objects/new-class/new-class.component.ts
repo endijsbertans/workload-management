@@ -146,7 +146,7 @@ export class NewClassComponent implements OnInit {
         this.navigateBackFromCreateMode();
       },
       error: (err) => {
-        this._snackBar.open(err.error.errorMsg || "Kļūda izveidojot grupu", "Aizvērt", { duration: 5000 });
+        this._snackBar.open(err.error.errorMsg ?? "Kļūda izveidojot grupu", "Aizvērt", { duration: 5000 });
       }
     });
   }
@@ -162,7 +162,7 @@ export class NewClassComponent implements OnInit {
       },
       error: (err) => {
         console.error(err);
-        this._snackBar.open(err.error.errorMsg || "Kļūda atjaunojot grupu", "Aizvērt", { duration: 5000 });
+        this._snackBar.open(err.error.errorMsg ?? "Kļūda atjaunojot grupu", "Aizvērt", { duration: 5000 });
       }
     });
   }

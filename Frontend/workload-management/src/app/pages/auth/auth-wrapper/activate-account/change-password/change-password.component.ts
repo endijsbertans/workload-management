@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, signal, Input} from '@angular/core';
+import { Component, inject, signal, Input} from '@angular/core';
 import {
   AbstractControl,
   FormControl,
@@ -10,8 +10,6 @@ import {
 } from "@angular/forms";
 import { Router } from "@angular/router";
 import { AuthenticationService } from "../../../../../services/services/authentication.service";
-import { TokenService } from "../../../../../services/token/token.service";
-import { TokenExpirationService } from "../../../../../services/guard/token-expiration.service";
 import { MatIcon } from "@angular/material/icon";
 import { MatError, MatFormField, MatLabel, MatSuffix } from "@angular/material/form-field";
 import { MatInput } from "@angular/material/input";

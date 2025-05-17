@@ -26,7 +26,6 @@ import {CourseService} from "../../../../../services/services/course.service";
 import {MyClassService} from "../../../../../services/services/my-class.service";
 import {AcademicRankService} from "../../../../../services/services/academic-rank.service";
 import {SemesterControllerService} from "../../../../../services/services/semester-controller.service";
-import {WorkloadService} from "../../../../../services/services/workload.service";
 import {NewTeachingStaffComponent} from "../../../new-objects/new-teaching-staff/new-teaching-staff.component";
 import {NewCourseComponent} from "../../../new-objects/new-course/new-course.component";
 import {NewClassComponent} from "../../../new-objects/new-class/new-class.component";

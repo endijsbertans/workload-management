@@ -1,5 +1,5 @@
 import {Component, inject} from '@angular/core';
-import {ActivatedRoute, Router, RouterOutlet} from "@angular/router";
+import { Router, RouterOutlet} from "@angular/router";
 
 @Component({
   selector: 'app-auth-wrapper',

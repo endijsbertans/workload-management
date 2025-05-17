@@ -1,7 +1,7 @@
 import {Component, DestroyRef, inject, OnInit, signal} from '@angular/core';
 import {AuthenticationRequest} from "../../../../services/models/authentication-request";
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {debounceTime, of} from "rxjs";
+import {debounceTime} from "rxjs";
 import {Router, RouterLink} from "@angular/router";
 import {AuthenticationService} from "../../../../services/services/authentication.service";
 import {TokenService} from "../../../../services/token/token.service";

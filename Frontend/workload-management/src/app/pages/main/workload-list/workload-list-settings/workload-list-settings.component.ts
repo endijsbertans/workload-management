@@ -56,11 +56,11 @@ export class WorkloadListSettingsComponent {
     const selectedSetting = event.value;
     if (selectedSetting) {
       this.selectedSetting.set(selectedSetting);
-      this.isDefault.set(selectedSetting.default || false);
+      this.isDefault.set(selectedSetting.default ?? false);
 
       this.loadedSettings.set(this.columnSettingsService.listSettings().map(col => ({
         ...col,
-        visible: selectedSetting.visibleColumns?.includes(col.pathTo) || false
+        visible: selectedSetting.visibleColumns?.includes(col.pathTo) ?? false
       })));
 
       this.hasUnsavedChanges.set(false);

@@ -12,8 +12,7 @@ import {
   ColumnsForStatusTypeResponse,
   ColumnsForSemesterResponse, ColumnsForAcademicRankDetailsResponse, ColumnsForFacultyResponse
 } from '../new-objects/object-columns';
-import { Router, RouterOutlet } from '@angular/router';
-import { NavigationEnd } from '@angular/router';
+import { Router, RouterOutlet,NavigationEnd } from '@angular/router';
 import {TeachingStaffService} from "../../../services/services/teaching-staff.service";
 import {CourseService} from "../../../services/services/course.service";
 import {MyClassService} from "../../../services/services/my-class.service";

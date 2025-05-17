@@ -103,7 +103,7 @@ export class NewAcademicRankComponent implements OnInit {
         this.navigateBackFromCreateMode();
       },
       error: (err) => {
-        this._snackBar.open(err.error.errorMsg || "Kļūda izveidojot amatu", "Aizvērt", { duration: 5000 });
+        this._snackBar.open(err.error.errorMsg ?? "Kļūda izveidojot amatu", "Aizvērt", { duration: 5000 });
       }
     });
   }
@@ -119,7 +119,7 @@ export class NewAcademicRankComponent implements OnInit {
       },
       error: (err) => {
         console.error(err);
-        this._snackBar.open(err.error.errorMsg || "Kļūda atjaunojot amatu", "Aizvērt", { duration: 5000 });
+        this._snackBar.open(err.error.errorMsg ?? "Kļūda atjaunojot amatu", "Aizvērt", { duration: 5000 });
       }
     });
   }

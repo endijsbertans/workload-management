@@ -1,4 +1,4 @@
-import {Component, DestroyRef, EventEmitter, inject, OnInit, Output, signal} from '@angular/core';
+import {Component, EventEmitter, inject, OnInit, Output, signal} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatButton} from "@angular/material/button";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -145,7 +145,7 @@ export class NewCourseComponent implements OnInit {
       },
       error: (err) => {
         console.error(err);
-        this._snackBar.open(err.error.errorMsg || "Kļūda atjaunojot kursu", "Aizvērt", {duration: 5000});
+        this._snackBar.open(err.error.errorMsg ?? "Kļūda atjaunojot kursu", "Aizvērt", {duration: 5000});
       }
     });
   }

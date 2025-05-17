@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, OnInit, Output, signal } from '@angular/core';
+import { Component, EventEmitter, inject, Output, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { RegistrationRequest } from "../../../../services/models/registration-request";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -22,7 +22,7 @@ import { MatOptionModule } from "@angular/material/core";
   standalone: true,
   styleUrls: ['./new-user.component.scss', '.../new-object-style.scss']
 })
-export class NewUserComponent implements OnInit {
+export class NewUserComponent {
   @Output() emitUserAuthDetails = new EventEmitter<RegistrationRequest>();
   @Output() emitCancel = new EventEmitter();
   private readonly _snackBar = inject(MatSnackBar);
@@ -43,7 +43,6 @@ export class NewUserComponent implements OnInit {
     { value: 'ROLE_DIRECTOR', label: 'Direktors' }
   ];
 
-  ngOnInit(): void {}
 
   setFormValues(email: string,  role?: string) {
     let roleValue = 'ROLE_TEACHINGSTAFF';
@@ -73,7 +72,7 @@ export class NewUserComponent implements OnInit {
 
     if (emailValue) {
       this.authDetailsRequest.email = emailValue;
-      this.authDetailsRequest.role = roleValue || 'ROLE_TEACHINGSTAFF';
+      this.authDetailsRequest.role = roleValue ?? 'ROLE_TEACHINGSTAFF';
 
       this.emitUserAuthDetails.emit({ ...this.authDetailsRequest });
       this._snackBar.open("Saglabāts", "Aizvērt", { duration: 5000 });

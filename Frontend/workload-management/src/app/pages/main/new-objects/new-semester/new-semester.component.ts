@@ -297,7 +297,7 @@ export class NewSemesterComponent implements OnInit{
       },
       error: (err) => {
         console.error('Error creating semester:', err);
-        this._snackBar.open(err.error?.errorMsg || "Kļūda veidojot semestri", "Aizvērt", { duration: 5000 });
+        this._snackBar.open(err.error?.errorMsg ?? "Kļūda veidojot semestri", "Aizvērt", { duration: 5000 });
         this.loading.set(false);
       },
       complete: () => {

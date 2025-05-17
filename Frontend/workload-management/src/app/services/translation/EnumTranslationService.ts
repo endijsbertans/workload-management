@@ -23,7 +23,7 @@ export class EnumTranslationService {
     degree: Degree,
     budgetPositions: BudgetPosition
   };
-  private translations: { [key: string]: { [key: string]: string } } = {
+  private readonly translations: { [key: string]: { [key: string]: string } } = {
     degree: {
       [Degree.BACHELOR]: 'Bakalaurs',
       [Degree.MASTER]: 'Maģistrs',

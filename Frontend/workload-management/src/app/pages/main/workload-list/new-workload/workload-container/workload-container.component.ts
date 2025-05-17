@@ -53,7 +53,6 @@ export class WorkloadContainerComponent implements OnInit{
         if (workload) {
           this.editMode = true;
           this.initialWorkload.set(workload);
-          console.log("TESTESTEST  " + workload);
         }
       },
       error: (err) => {
@@ -77,7 +76,7 @@ export class WorkloadContainerComponent implements OnInit{
         },
         error: err => {
           console.error('Error updating workload:', err);
-          this._snackBar.open(err.error?.errorMsg || "Kļūda atjaunojot datus", "Aizvērt", { duration: 5000 });
+          this._snackBar.open(err.error?.errorMsg ?? "Kļūda atjaunojot datus", "Aizvērt", { duration: 5000 });
         }
       });
     } else {
@@ -90,7 +89,7 @@ export class WorkloadContainerComponent implements OnInit{
         },
         error: err => {
           console.error('Error creating workload:', err);
-          this._snackBar.open(err.error?.errorMsg || "Kļūda saglabājot datus", "Aizvērt", { duration: 5000 });
+          this._snackBar.open(err.error?.errorMsg ?? "Kļūda saglabājot datus", "Aizvērt", { duration: 5000 });
         }
       });
     }

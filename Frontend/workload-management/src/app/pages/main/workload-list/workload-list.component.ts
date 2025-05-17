@@ -125,7 +125,7 @@ export class WorkloadListComponent implements OnInit {
             this.selectedSemester.set(currentYearSemester);
           } else {
             // Otherwise, select the most recent semester
-            const sortedSemesters = [...semesters].sort((a, b) => (b.year || 0) - (a.year || 0));
+            const sortedSemesters = [...semesters].sort((a, b) => (b.year ?? 0) - (a.year ?? 0));
             this.selectedSemester.set(sortedSemesters[0]);
           }
           this.findAllWorkloads();
@@ -155,7 +155,7 @@ export class WorkloadListComponent implements OnInit {
     // Add semester filter if selected
     if (this.selectedSemester()) {
       filtersObject['semester.semesterId'] = {
-        value: this.selectedSemester()?.semesterId?.toString() || '',
+        value: this.selectedSemester()?.semesterId?.toString() ?? '',
         operator: 'equals'
       };
     }

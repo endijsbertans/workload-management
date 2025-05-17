@@ -70,7 +70,7 @@ export class DashboardComponent implements OnInit{
             this.selectedSemesterId = currentSemester.semesterId;
           } else {
             // Otherwise, select the most recent semester
-            const sortedSemesters = [...semesters].sort((a, b) => (b.year || 0) - (a.year || 0));
+            const sortedSemesters = [...semesters].sort((a, b) => (b.year ?? 0) - (a.year ?? 0));
             this.selectedSemesterId = sortedSemesters[0].semesterId;
           }
 

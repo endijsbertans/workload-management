@@ -49,7 +49,7 @@ export class ObjectListComponent {
   private readonly semesterService = inject(SemesterControllerService);
   private readonly _snackBar = inject(MatSnackBar);
   enumService = inject(EnumTranslationService)
-  private router = inject(Router);
+  private readonly router = inject(Router);
 
   getDataItems(): any[] {
     switch (this.selectedTableType) {
@@ -197,7 +197,7 @@ export class ObjectListComponent {
         error: (err) => {
           console.error('Error deleting item:', err);
           this._snackBar.open(
-            err.error?.errorMsg || "Kļūda dzēšot ierakstu",
+            err.error?.errorMsg ?? "Kļūda dzēšot ierakstu",
             "Aizvērt",
             { duration: 5000 }
           );

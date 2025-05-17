@@ -163,7 +163,7 @@ export class NewAcademicRankDetailsComponent implements OnInit{
       },
       error: (err) => {
         console.error(err);
-        this._snackBar.open(err.error.errorMsg || "Kļūda atjaunojot amata detaļas", "Aizvērt", { duration: 5000 });
+        this._snackBar.open(err.error.errorMsg ?? "Kļūda atjaunojot amata detaļas", "Aizvērt", { duration: 5000 });
       }
     });
   }

@@ -1,5 +1,5 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute} from "@angular/router";
 import {AuthenticationService} from "../../../../services/services/authentication.service";
 import {CodeInputModule} from "angular-code-input";
 import {MatSnackBar} from "@angular/material/snack-bar";

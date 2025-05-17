@@ -266,7 +266,7 @@ export class NewTeachingStaffComponent implements OnInit {
       setTimeout(() => {
         if (this.userComponent) {
           this.userComponent.setFormValues(
-            this.userAuthDetails()?.email || '',
+            this.userAuthDetails()?.email ?? '',
             this.userAuthDetails()?.role
           );
         }
