@@ -65,5 +65,5 @@ public class Workload {
     private List<MyClass> myClasses = new ArrayList<>();
 
     @Transient
-    public double getMonthSum(){ return workingMonths + vacationMonths;}
+    public int getMonthSum(){ return workingMonths + vacationMonths;}
 }

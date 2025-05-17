@@ -9,20 +9,20 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import workloadmanagement.auth.security.MyUser;
+
+import workloadmanagement.academicrank.academicrankdetails.AcademicRankDetails;
+import workloadmanagement.academicrank.academicrankdetails.AcademicRankDetailsService;
+import workloadmanagement.auth.security.user.MyUser;
 import workloadmanagement.myclass.MyClass;
 import workloadmanagement.myclass.MyClassService;
 
-import workloadmanagement.academicrank.academicrankDetails.AcademicRankDetails;
-import workloadmanagement.academicrank.academicrankDetails.AcademicRankDetailsService;
-
-import workloadmanagement.repo.ITeachingStaffRepo;
 import workloadmanagement.semester.Semester;
 import workloadmanagement.semester.SemesterService;
 import workloadmanagement.common.PageResponse;
 import workloadmanagement.course.Course;
 import workloadmanagement.course.CourseService;
-import workloadmanagement.repo.IWorkloadRepo;
+
+import workloadmanagement.teachingstaff.ITeachingStaffRepo;
 import workloadmanagement.teachingstaff.TeachingStaff;
 import workloadmanagement.teachingstaff.TeachingStaffService;
 
@@ -116,11 +116,19 @@ public PageResponse<WorkloadResponse> findAllWorkloads(Pageable pageable, Map<St
             // Special handling for MyClass filtering (many-to-many relationship)
             if (column.startsWith("class")) {
                 jakarta.persistence.criteria.Join<Workload, MyClass> classJoin = root.join("myClasses", JoinType.LEFT);
-                addPredicate(predicates, criteriaBuilder, classJoin.get(column), filter);
+                try {
+                    addPredicate(predicates, criteriaBuilder, classJoin.get(column), filter);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
             // Handle other nested properties like "teachingStaff.name"
             else if (column.contains(".")) {
-                applyNestedFilter(column, filter, root, criteriaBuilder, predicates);
+                try {
+                    applyNestedFilter(column, filter, root, criteriaBuilder, predicates);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             } else {
                 // Handle simple properties
                 try {
@@ -137,7 +145,7 @@ public PageResponse<WorkloadResponse> findAllWorkloads(Pageable pageable, Map<St
             FilterCriteria filter,
             jakarta.persistence.criteria.Root<Workload> root,
             CriteriaBuilder criteriaBuilder,
-            List<jakarta.persistence.criteria.Predicate> predicates) {
+            List<jakarta.persistence.criteria.Predicate> predicates) throws Exception {
 
         String[] parts = column.split("\\.");
         jakarta.persistence.criteria.Join<?, ?> join = null;
@@ -157,7 +165,7 @@ public PageResponse<WorkloadResponse> findAllWorkloads(Pageable pageable, Map<St
     private void addPredicate(List<jakarta.persistence.criteria.Predicate> predicates,
                               CriteriaBuilder criteriaBuilder,
                               Path<Object> path,
-                              FilterCriteria filter) {
+                              FilterCriteria filter) throws Exception {
         String operator = filter.getOperator() != null ? filter.getOperator() : "contains";
         String value = filter.getValue();
         if (value == null || value.isEmpty()) {
@@ -185,9 +193,11 @@ public PageResponse<WorkloadResponse> findAllWorkloads(Pageable pageable, Map<St
                             criteriaBuilder.lower(path.as(String.class)),
                             "%" + value.toLowerCase()));
                     break;
+                default:
+                    throw new IllegalArgumentException("Unsupported operator: " + operator);
             }
         } catch (Exception e) {
-
+            throw new Exception("Error creating predicate for operator: " + operator, e);
         }
     }
     public Integer update(Integer workloadId, WorkloadRequest request) {
@@ -312,16 +322,10 @@ public PageResponse<WorkloadResponse> findAllWorkloads(Pageable pageable, Map<St
     // Dashboard API methods
     public Map<String, Object> getWorkloadSummary(Semester semester, MyUser user) {
         List<Workload> workloads;
-        boolean isAdmin = user.getAuthorities().stream()
-                .anyMatch(authority -> authority.getAuthority().equals("ADMIN"));
 
-        if (isAdmin) {
-            workloads = workloadRepo.findBySemester(semester);
-        } else {
-            TeachingStaff staff = teachingStaffRepo.findByUser(user)
-                    .orElseThrow(() -> new EntityNotFoundException("No teaching staff found for user: " + user.getEmail()));
-            workloads = workloadRepo.findByTeachingStaffAndSemester(staff, semester);
-        }
+        TeachingStaff staff = teachingStaffRepo.findByUser(user)
+                .orElseThrow(() -> new EntityNotFoundException("No teaching staff found for user: " + user.getEmail()));
+        workloads = workloadRepo.findByTeachingStaffAndSemester(staff, semester);
 
         Map<String, Object> summary = new HashMap<>();
 
@@ -354,16 +358,10 @@ public PageResponse<WorkloadResponse> findAllWorkloads(Pageable pageable, Map<St
 
     public List<Map<String, Object>> getClassDistribution(Semester semester, MyUser user) {
         List<Workload> workloads;
-        boolean isAdmin = user.getAuthorities().stream()
-                .anyMatch(authority -> authority.getAuthority().equals("ADMIN"));
 
-        if (isAdmin) {
-            workloads = workloadRepo.findBySemester(semester);
-        } else {
-            TeachingStaff staff = teachingStaffRepo.findByUser(user)
-                    .orElseThrow(() -> new EntityNotFoundException("No teaching staff found for user: " + user.getEmail()));
-            workloads = workloadRepo.findByTeachingStaffAndSemester(staff, semester);
-        }
+        TeachingStaff staff = teachingStaffRepo.findByUser(user)
+                .orElseThrow(() -> new EntityNotFoundException("No teaching staff found for user: " + user.getEmail()));
+        workloads = workloadRepo.findByTeachingStaffAndSemester(staff, semester);
 
         Map<String, Double> classDistribution = new HashMap<>();
 
@@ -419,16 +417,11 @@ public PageResponse<WorkloadResponse> findAllWorkloads(Pageable pageable, Map<St
 
     public List<Map<String, Object>> getFacultyDistribution(Semester semester, MyUser user) {
         List<Workload> workloads;
-        boolean isAdmin = user.getAuthorities().stream()
-                .anyMatch(authority -> authority.getAuthority().equals("ADMIN"));
 
-        if (isAdmin) {
-            workloads = workloadRepo.findBySemester(semester);
-        } else {
-            TeachingStaff staff = teachingStaffRepo.findByUser(user)
-                    .orElseThrow(() -> new EntityNotFoundException("No teaching staff found for user: " + user.getEmail()));
-            workloads = workloadRepo.findByTeachingStaffAndSemester(staff, semester);
-        }
+        TeachingStaff staff = teachingStaffRepo.findByUser(user)
+                .orElseThrow(() -> new EntityNotFoundException("No teaching staff found for user: " + user.getEmail()));
+        workloads = workloadRepo.findByTeachingStaffAndSemester(staff, semester);
+
 
         Map<String, Double> facultyDistribution = new HashMap<>();
 
@@ -451,45 +444,4 @@ public PageResponse<WorkloadResponse> findAllWorkloads(Pageable pageable, Map<St
         return result;
     }
 
-    public List<Map<String, Object>> getTeacherComparison(Semester semester, MyUser user) {
-        List<Workload> workloads;
-        boolean isAdmin = user.getAuthorities().stream()
-                .anyMatch(authority -> authority.getAuthority().equals("ADMIN"));
-
-        if (isAdmin) {
-            workloads = workloadRepo.findBySemester(semester);
-        } else {
-            TeachingStaff staff = teachingStaffRepo.findByUser(user)
-                    .orElseThrow(() -> new EntityNotFoundException("No teaching staff found for user: " + user.getEmail()));
-            workloads = workloadRepo.findByTeachingStaffAndSemester(staff, semester);
-            return Collections.emptyList(); // Non-admin users don't get comparison data
-        }
-
-        Map<Integer, Map<String, Object>> teacherData = new HashMap<>();
-
-        for (Workload workload : workloads) {
-            TeachingStaff teacher = workload.getTeachingStaff();
-            if (teacher != null) {
-                int teacherId = teacher.getTeachingStaffId();
-                Map<String, Object> data = teacherData.computeIfAbsent(teacherId, k -> {
-                    Map<String, Object> newData = new HashMap<>();
-                    newData.put("teacherId", teacherId);
-                    newData.put("teacherName", teacher.getStaffFullName());
-                    newData.put("totalCreditPoints", 0.0);
-                    newData.put("totalContactHours", 0.0);
-                    newData.put("totalExpectedSalary", 0.0);
-                    newData.put("monthlyExpectedSalary", 0.0);
-                    return newData;
-                });
-
-                data.put("totalCreditPoints", (double) data.get("totalCreditPoints") + workload.getTotalCreditPoints());
-                data.put("totalContactHours", (double) data.get("totalContactHours") + workload.getContactHours());
-                data.put("totalExpectedSalary", (double) data.get("totalExpectedSalary") + workload.getExpectedSalary());
-                // Calculate monthly salary (assuming 5 months per semester)
-                data.put("monthlyExpectedSalary", (double) data.get("totalExpectedSalary") / 5.0);
-            }
-        }
-
-        return new ArrayList<>(teacherData.values());
-    }
 }

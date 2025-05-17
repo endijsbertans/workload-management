@@ -3,8 +3,6 @@ package workloadmanagement.semester;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
-
 
 @Entity
 @Getter

@@ -36,7 +36,7 @@ public class TeachingStaffMapper {
                 .rankFullName(teachingStaff.getRankFullName())
                 .isDeleted(teachingStaff.isDeleted())
                 .role(teachingStaff.getUser().getAuthorities().stream().toList().get(0).getAuthority())
-                //.staffPhoto() TODO
+
                 .build();
     }
     public TeachingStaff toTeachingStaff(TeachingStaffCsvRepresentation csvRepresentation, TStaffEntities tStaffEntities) {
