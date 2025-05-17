@@ -7,30 +7,21 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import workloadmanagement.academicrank.IAcademicRankRepo;
-import workloadmanagement.auth.security.authority.IMyAuthorityRepo;
-import workloadmanagement.auth.security.user.IMyUserRepo;
-import workloadmanagement.course.ICourseRepo;
-import workloadmanagement.faculty.IFacultyRepo;
 import workloadmanagement.myclass.Degree;
-import workloadmanagement.myclass.IMyClassRepo;
 import workloadmanagement.myclass.MyClass;
 import workloadmanagement.academicrank.AcademicRank;
-import workloadmanagement.academicrank.academicrankdetails.AcademicRankDetails;
-import workloadmanagement.academicrank.academicrankdetails.IAcademicRankDetailsRepo;
-import workloadmanagement.semester.ISemesterRepo;
+import workloadmanagement.academicrank.academicrankDetails.AcademicRankDetails;
+import workloadmanagement.academicrank.academicrankDetails.IAcademicRankDetailsRepo;
 import workloadmanagement.semester.Semester;
 import workloadmanagement.semester.SemesterEnum;
-import workloadmanagement.auth.security.authority.MyAuthority;
-import workloadmanagement.auth.security.user.MyUser;
+import workloadmanagement.auth.security.MyAuthority;
+import workloadmanagement.auth.security.MyUser;
 import workloadmanagement.course.Course;
 import workloadmanagement.faculty.Faculty;
-import workloadmanagement.statustype.IStatusTypeRepo;
+import workloadmanagement.repo.*;
 import workloadmanagement.statustype.StatusType;
-import workloadmanagement.teachingstaff.ITeachingStaffRepo;
 import workloadmanagement.teachingstaff.TeachingStaff;
 import workloadmanagement.workload.BudgetPositions;
-import workloadmanagement.workload.IWorkloadRepo;
 import workloadmanagement.workload.Workload;
 
 import java.util.List;
@@ -60,7 +51,9 @@ public class WorkloadManagementApplication {
 
 	) {
 		return args -> {
-
+			if (myAuthorityRepo.findByTitle("USER").isEmpty()) {
+//				myAuthorityRepo.save(MyAuthority.builder().title("USER").build());
+			}
 					var authorities = myAuthorityRepo.save(MyAuthority.builder().title("ROLE_TEACHINGSTAFF").build());
 					var authorities2 = myAuthorityRepo.save(MyAuthority.builder().title("ROLE_ADMIN").build());
 					var authorities3 = myAuthorityRepo.save(MyAuthority.builder().title("ROLE_DIRECTOR").build());
@@ -83,7 +76,7 @@ public class WorkloadManagementApplication {
 					userRepo.save(u2);
 					myAuthorityRepo.save(authorities2);
 					Semester s1 = Semester.builder()
-							.semesterName(SemesterEnum.PAVASARIS)
+							.semesterName(SemesterEnum.pavasaris)
 							.semesterYear(2024)
 							.build();
 					semesterRepo.save(s1);
@@ -219,6 +212,7 @@ public class WorkloadManagementApplication {
 									.build();
 					workloadRepo.save(w1);
 					myClassRepo.save(ac1);
+					System.out.println(w1);
 
 			};
 		}
