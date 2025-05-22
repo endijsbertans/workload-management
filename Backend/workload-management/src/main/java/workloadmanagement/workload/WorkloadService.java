@@ -32,8 +32,8 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class WorkloadService {
-    private static final String NO_TEACHING_STAFF_FOUND = "No teaching staff found for user: %s";
-
+    private static final String NO_TEACHING_STAFF_FOUND = "No teaching staff found for user:";
+    private static final String CREDIT_POINTS = "creditPoints";
     private final WorkloadMapper workloadMapper;
     private final IWorkloadRepo workloadRepo;
     private final TeachingStaffService teachingStaffService;
@@ -51,7 +51,7 @@ public class WorkloadService {
     public WorkloadResponse findById(Integer workloadId) {
         return workloadRepo.findById(workloadId)
                 .map(workloadMapper::toWorkloadResponse)
-                .orElseThrow(() -> new EntityNotFoundException("Workload with id: " + workloadId + " not found."));
+                .orElseThrow(() -> new EntityNotFoundException(String.valueOf(workloadId)));
     }
 
 public PageResponse<WorkloadResponse> findAllWorkloads(Pageable pageable, Map<String, FilterCriteria> filters) {
@@ -208,7 +208,7 @@ public PageResponse<WorkloadResponse> findAllWorkloads(Pageable pageable, Map<St
     }
     public Integer update(Integer workloadId, WorkloadRequest request) {
         Workload existingWorkload = workloadRepo.findById(workloadId)
-                .orElseThrow(() -> new EntityNotFoundException("Workload with id: " + workloadId + " not found."));
+                .orElseThrow(() -> new EntityNotFoundException(String.valueOf(workloadId)));
         WorkloadEntities wEntities = resolveEntities(request);
 
         Workload updatedWorkload = workloadMapper.toWorkload(wEntities, request);
@@ -218,7 +218,7 @@ public PageResponse<WorkloadResponse> findAllWorkloads(Pageable pageable, Map<St
     }
     public Integer delete(Integer workloadId) {
         Workload existingWorkload = workloadRepo.findById(workloadId)
-                .orElseThrow(() -> new EntityNotFoundException("Workload with id: " + workloadId + " not found."));
+                .orElseThrow(() -> new EntityNotFoundException(String.valueOf(workloadId)));
         workloadRepo.delete(existingWorkload);
         return workloadId;
     }
@@ -383,7 +383,7 @@ public PageResponse<WorkloadResponse> findAllWorkloads(Pageable pageable, Map<St
         for (Map.Entry<String, Double> entry : classDistribution.entrySet()) {
             Map<String, Object> item = new HashMap<>();
             item.put("className", entry.getKey());
-            item.put("creditPoints", entry.getValue());
+            item.put(CREDIT_POINTS, entry.getValue());
             result.add(item);
         }
 
@@ -412,7 +412,7 @@ public PageResponse<WorkloadResponse> findAllWorkloads(Pageable pageable, Map<St
         for (Map.Entry<String, Double> entry : courseDistribution.entrySet()) {
             Map<String, Object> item = new HashMap<>();
             item.put("courseName", entry.getKey());
-            item.put("creditPoints", entry.getValue());
+            item.put(CREDIT_POINTS, entry.getValue());
             result.add(item);
         }
 
@@ -441,7 +441,7 @@ public PageResponse<WorkloadResponse> findAllWorkloads(Pageable pageable, Map<St
         for (Map.Entry<String, Double> entry : facultyDistribution.entrySet()) {
             Map<String, Object> item = new HashMap<>();
             item.put("faculty", entry.getKey());
-            item.put("creditPoints", entry.getValue());
+            item.put(CREDIT_POINTS, entry.getValue());
             result.add(item);
         }
 
