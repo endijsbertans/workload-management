@@ -65,16 +65,16 @@ public class WorkloadManagementApplication {
 					var authorities3 = myAuthorityRepo.save(MyAuthority.builder().title("ROLE_DIRECTOR").build());
 					MyUser u1 = MyUser.builder()
 							.email("endijsbertans@gmail.com")
-							.password(passwordEncoder.encode("123456789"))
+							.password(passwordEncoder.encode("Vea2024"))
 							.accountLocked(false)
 							.enabled(true)
-							.authorities((List.of(authorities)))
+							.authorities((List.of(authorities, authorities3)))
 							.build();
 					userRepo.save(u1);
 					myAuthorityRepo.save(authorities);
 					MyUser u2 = MyUser.builder()
 							.email("bertansendijs@gmail.com")
-							.password(passwordEncoder.encode("123456789"))
+							.password(passwordEncoder.encode("Vea2024"))
 							.accountLocked(false)
 							.enabled(true)
 							.authorities((List.of(authorities2)))

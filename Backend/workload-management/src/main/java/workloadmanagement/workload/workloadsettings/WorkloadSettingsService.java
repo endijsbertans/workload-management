@@ -13,20 +13,22 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class WorkloadSettingsService {
+    private static final String NO_TEACHING_STAFF_FOUND = "No teaching staff found for user: %s";
+
     private final WorkloadSettingsMapper workloadSettingsMapper;
     private final IWorkloadSettingsRepo workloadSettingsRepo;
     private final ITeachingStaffRepo teachingStaffRepo;
 
     public Integer save(@Valid WorkloadSettingsRequest request, MyUser user) {
         TeachingStaff tStaff = teachingStaffRepo.findByUser(user)
-                .orElseThrow(() -> new EntityNotFoundException("No teaching staff found for user: " + user.getEmail()));
+                .orElseThrow(() -> new EntityNotFoundException(NO_TEACHING_STAFF_FOUND + user.getEmail()));
         WorkloadSettings workloadSettings = workloadSettingsMapper.toWorkloadSettings(request, tStaff);
         return workloadSettingsRepo.save(workloadSettings).getWorkloadSettingsId();
     }
 
     public Integer update(Integer semesterId, @Valid WorkloadSettingsRequest request, MyUser user) {
         TeachingStaff tStaff = teachingStaffRepo.findByUser(user)
-                .orElseThrow(() -> new EntityNotFoundException("No teaching staff found for user: " + user.getEmail()));
+                .orElseThrow(() -> new EntityNotFoundException(NO_TEACHING_STAFF_FOUND + user.getEmail()));
         WorkloadSettings existingSettings = findWorkloadSettingsById(semesterId);
         WorkloadSettings updatedSettings = workloadSettingsMapper.toWorkloadSettings(request, tStaff);
         updatedSettings.setWorkloadSettingsId(existingSettings.getWorkloadSettingsId());

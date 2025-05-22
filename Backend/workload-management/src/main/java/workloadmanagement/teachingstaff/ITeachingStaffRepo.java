@@ -10,6 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface ITeachingStaffRepo extends CrudRepository<TeachingStaff, Integer> {
+
     List<TeachingStaff> findByIsDeletedFalse();
 
     Optional<TeachingStaff> findByUser(MyUser user);

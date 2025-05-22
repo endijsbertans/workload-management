@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 class WorkloadManagementApplicationTests {
 
 	@Test
-	void contextLoads() {
+	void contextLoads() { // not enough time to write tests
 	}
 
 }

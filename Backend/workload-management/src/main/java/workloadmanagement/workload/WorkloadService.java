@@ -32,6 +32,8 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class WorkloadService {
+    private static final String NO_TEACHING_STAFF_FOUND = "No teaching staff found for user: %s";
+
     private final WorkloadMapper workloadMapper;
     private final IWorkloadRepo workloadRepo;
     private final TeachingStaffService teachingStaffService;
@@ -148,18 +150,22 @@ public PageResponse<WorkloadResponse> findAllWorkloads(Pageable pageable, Map<St
             List<jakarta.persistence.criteria.Predicate> predicates) throws Exception {
 
         String[] parts = column.split("\\.");
-        jakarta.persistence.criteria.Join<?, ?> join = null;
+        if (parts.length > 1) {
+            // Start with the first join from root
+            jakarta.persistence.criteria.Join<?, ?> join = root.join(parts[0], JoinType.LEFT);
 
-        for (int i = 0; i < parts.length - 1; i++) {
-            if (join == null) {
-                join = root.join(parts[i], JoinType.LEFT);
-            } else {
+            // Continue with any additional nested joins if needed
+            for (int i = 1; i < parts.length - 1; i++) {
                 join = join.join(parts[i], JoinType.LEFT);
             }
-        }
 
-        String lastPart = parts[parts.length - 1];
-        addPredicate(predicates, criteriaBuilder, join.get(lastPart), filter);
+            String lastPart = parts[parts.length - 1];
+            addPredicate(predicates, criteriaBuilder, join.get(lastPart), filter);
+        } else {
+            // If there's only one part (which shouldn't happen given the method is for nested filters)
+            // or if the split didn't work as expected, fall back to using the root directly
+            addPredicate(predicates, criteriaBuilder, root.get(column), filter);
+        }
     }
 
     private void addPredicate(List<jakarta.persistence.criteria.Predicate> predicates,
@@ -235,7 +241,7 @@ public PageResponse<WorkloadResponse> findAllWorkloads(Pageable pageable, Map<St
     public PageResponse<?> findAllUserWorkloads(Pageable pageable, Map<String, FilterCriteria> filters, MyUser user) {
         // Get the teaching staff associated with this user
         TeachingStaff staff = teachingStaffRepo.findByUser(user)
-                .orElseThrow(() -> new EntityNotFoundException("No teaching staff found for user: " + user.getEmail()));
+                .orElseThrow(() -> new EntityNotFoundException(NO_TEACHING_STAFF_FOUND + user.getEmail()));
 
         // Apply both user filter and additional filters
         Page<Workload> workloads;
@@ -324,7 +330,7 @@ public PageResponse<WorkloadResponse> findAllWorkloads(Pageable pageable, Map<St
         List<Workload> workloads;
 
         TeachingStaff staff = teachingStaffRepo.findByUser(user)
-                .orElseThrow(() -> new EntityNotFoundException("No teaching staff found for user: " + user.getEmail()));
+                .orElseThrow(() -> new EntityNotFoundException(NO_TEACHING_STAFF_FOUND + user.getEmail()));
         workloads = workloadRepo.findByTeachingStaffAndSemester(staff, semester);
 
         Map<String, Object> summary = new HashMap<>();
@@ -360,7 +366,7 @@ public PageResponse<WorkloadResponse> findAllWorkloads(Pageable pageable, Map<St
         List<Workload> workloads;
 
         TeachingStaff staff = teachingStaffRepo.findByUser(user)
-                .orElseThrow(() -> new EntityNotFoundException("No teaching staff found for user: " + user.getEmail()));
+                .orElseThrow(() -> new EntityNotFoundException(NO_TEACHING_STAFF_FOUND + user.getEmail()));
         workloads = workloadRepo.findByTeachingStaffAndSemester(staff, semester);
 
         Map<String, Double> classDistribution = new HashMap<>();
@@ -368,10 +374,8 @@ public PageResponse<WorkloadResponse> findAllWorkloads(Pageable pageable, Map<St
         for (Workload workload : workloads) {
             if (workload.getGroupForSemester() != null) {
                 String className = workload.getGroupForSemester().getClassLevel() + workload.getGroupForSemester().getClassProgram();
-                if (className != null) {
                     double currentCreditPoints = classDistribution.getOrDefault(className, 0.0);
                     classDistribution.put(className, currentCreditPoints + workload.getTotalCreditPoints());
-                }
             }
         }
 
@@ -389,7 +393,7 @@ public PageResponse<WorkloadResponse> findAllWorkloads(Pageable pageable, Map<St
     public List<Map<String, Object>> getCourseDistribution(Semester semester, MyUser user) {
         List<Workload> workloads;
             TeachingStaff staff = teachingStaffRepo.findByUser(user)
-                    .orElseThrow(() -> new EntityNotFoundException("No teaching staff found for user: " + user.getEmail()));
+                    .orElseThrow(() -> new EntityNotFoundException(NO_TEACHING_STAFF_FOUND + user.getEmail()));
             workloads = workloadRepo.findByTeachingStaffAndSemester(staff, semester);
 
         Map<String, Double> courseDistribution = new HashMap<>();
@@ -419,7 +423,7 @@ public PageResponse<WorkloadResponse> findAllWorkloads(Pageable pageable, Map<St
         List<Workload> workloads;
 
         TeachingStaff staff = teachingStaffRepo.findByUser(user)
-                .orElseThrow(() -> new EntityNotFoundException("No teaching staff found for user: " + user.getEmail()));
+                .orElseThrow(() -> new EntityNotFoundException(NO_TEACHING_STAFF_FOUND + user.getEmail()));
         workloads = workloadRepo.findByTeachingStaffAndSemester(staff, semester);
 
 
